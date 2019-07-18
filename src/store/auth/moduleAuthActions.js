@@ -8,6 +8,7 @@
 ==========================================================================================*/
 import router from '@/router';
 import Vue from 'vue';
+
 export default {
   login({ commit, state, dispatch}, payload) {
 
@@ -53,21 +54,27 @@ export default {
     });
   },
   updateUser({ commit }, payload) {
-    Vue.axios.get('me').then((res) => {
-      commit('UPDATE_AUTHENTICATED_USER', res.data.data);
-      // If reload is required to get fresh data after update
-      // Reload currentz page
-      if(payload.isReloadRequired) {
-        router.push(router.currentRoute.query.to || '/');
-      }
-    }).catch(() => {
-      payload.notify({
-        time: 8800,
-        title: 'Error',
-        text: 'Error',
-        iconPack: 'feather',
-        icon: 'icon-alert-circle',
-        color: 'danger'
+    return new Promise((resolve) => {
+      Vue.axios.get('me').then((res) => {
+        commit('UPDATE_AUTHENTICATED_USER', res.data.data);
+        // If reload is required to get fresh data after update
+        // Reload currentz page
+        if(payload.isReloadRequired) {
+          router.push(router.currentRoute.query.to || '/');
+        }
+        resolve(true);
+      }).catch(() => {
+        if (payload.hasOwnProperty('notify')) {
+          payload.notify({
+            time: 3000,
+            title: 'Error!',
+            text: 'Không thể lấy được dữ liệu, vui lòng đăng xuất và đăng nhập lại.',
+            iconPack: 'feather',
+            icon: 'icon-alert-circle',
+            color: 'danger'
+          });
+        }
+        router.push({ path: '/pages/login', query: { to: payload.to.path } });
       });
     });
   },

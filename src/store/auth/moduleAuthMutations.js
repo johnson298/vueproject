@@ -10,6 +10,7 @@ import Vue from 'vue';
 
 export default {
   UPDATE_AUTHENTICATED_USER(state, user) {
+    state.currentUser = user;
     localStorage.setItem('user', JSON.stringify(user));
   },
   UPDATE_TOKEN(state, access_token) {
