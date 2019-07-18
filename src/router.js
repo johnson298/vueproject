@@ -33,7 +33,7 @@ const router = new Router({
 
     {
     // =============================================================================
-    // MAIN LAYOUT ROUTES
+    // MAIN LAYOUT ROUTES requiresAuth: true
     // =============================================================================
       path: '',
       component: () => import('./layouts/main/Main.vue'),
@@ -50,6 +50,7 @@ const router = new Router({
               { title: 'Dashboard', url: '/' },
             ],
             pageTitle: 'Dashboard',
+            authRequired: true,
           },
         },
         {
@@ -60,13 +61,14 @@ const router = new Router({
             breadcrumb: [
               { title: 'Nhân viên', url: '/' }
             ],
-            pageTitle: 'Nhân viên'
+            pageTitle: 'Nhân viên',
+            authRequired: true,
           },
         },
-      ],
+      ]
     },
     // =============================================================================
-    // FULL PAGE LAYOUTS
+    // FULL PAGE LAYOUTS requiresAuth: false
     // =============================================================================
     {
       path: '',
@@ -104,23 +106,11 @@ router.afterEach(() => {
 });
 
 router.beforeEach((to, from, next) => {
-  if (
-    to.path === "/pages/login" ||
-    to.path === "/pages/forgot-password" ||
-    to.path === "/pages/error-404" ||
-    to.path === "/pages/error-500" ||
-    to.path === "/pages/register" ||
-    to.path === "/callback" ||
-    to.path === "/pages/comingsoon" ||
-    (auth.isAuthenticated())
-  ) {
+  if (to.matched.some(m => m.meta.authRequired)) {
+    return auth.isAuthenticated(next, to);
+  } else {
     return next();
   }
-
-  router.push({ path: '/pages/login', query: { to: to.path } });
-  // Specify the current path as the customState parameter, meaning it
-  // will be returned to the application after auth
-  // auth.login({ target: to.path });
 });
 
 export default router;

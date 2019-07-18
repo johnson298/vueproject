@@ -1,7 +1,12 @@
-.is-current {
-  background-color: #7367F0!important;
+.vs-pagination--nav {
+  padding: 5px;
 
-  > a {
-    color: #ffffff;
+  .is-current {
+    background-color: #7367F0!important;
+
+    > a {
+      color: #ffffff;
+    }
   }
+
 }

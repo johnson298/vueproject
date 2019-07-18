@@ -1,4 +1,6 @@
 import EventEmitter from 'events';
+import store from '../store/store';
+
 const loginEvent = 'loginEvent';
 
 class AuthService extends EventEmitter {
@@ -17,8 +19,19 @@ class AuthService extends EventEmitter {
     this.emit(loginEvent, { loggedIn: false });
   }
 
-  isAuthenticated() {
-    return !!localStorage.getItem('access_token');
+  isAuthenticated(callback, to) {
+    return new Promise(() => {
+      if (store.state.auth.currentUser) {
+        callback();
+      } else {
+        store.dispatch('auth/updateUser', {
+          isReloadRequired: false,
+          to: to
+        }).then(() => {
+          callback();
+        });
+      }
+    });
   }
 }
 
