@@ -1,22 +1,3 @@
-/*=========================================================================================
-  File Name: router.js
-  Description: Routes for vue-router. Lazy loading is enabled.
-  Object Strucutre:
-                    path => router path
-                    name => router name
-                    component(lazy loading) => component to load
-                    meta : {
-                      rule => which user can have access (ACL)
-                      breadcrumb => Add breadcrumb to specific page
-                      pageTitle => Display title besides breadcrumb
-                    }
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
-
-
 import Vue from 'vue';
 import Router from 'vue-router';
 import auth from "@/auth/authService";
@@ -49,8 +30,7 @@ const router = new Router({
             breadcrumb: [
               { title: 'Dashboard', url: '/' },
             ],
-            pageTitle: 'Dashboard',
-            authRequired: true,
+            pageTitle: 'Dashboard'
           },
         },
         {
@@ -59,13 +39,15 @@ const router = new Router({
           component: () => import('./views/employees/DataListListView.vue'),
           meta: {
             breadcrumb: [
-              { title: 'Nhân viên', url: '/' }
+              { title: 'Nhân viên', url: '/' },
             ],
-            pageTitle: 'Nhân viên',
-            authRequired: true,
+            pageTitle: 'Nhân viên'
           },
         },
-      ]
+      ],
+      meta: {
+        authRequired: true
+      }
     },
     // =============================================================================
     // FULL PAGE LAYOUTS requiresAuth: false
@@ -87,7 +69,10 @@ const router = new Router({
           name: 'pageError404',
           component: () => import('@/views/pages/Error404.vue')
         },
-      ]
+      ],
+      meta: {
+        authRequired: false,
+      }
     },
     // Redirect to 404 page, if no match found
     {
@@ -98,16 +83,20 @@ const router = new Router({
 });
 
 router.afterEach(() => {
-  // Remove initial loading
   const appLoading = document.getElementById('loading-bg');
   if (appLoading) {
     appLoading.style.display = "none";
   }
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (to.matched.some(m => m.meta.authRequired)) {
-    return auth.isAuthenticated(next, to);
+    if (await auth.isAuthenticated()) {
+      return next();
+    }
+    else {
+      return router.push({ path: '/pages/login', query: { to: to.path } });
+    }
   } else {
     return next();
   }

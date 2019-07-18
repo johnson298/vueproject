@@ -1,18 +1,9 @@
-<!-- =========================================================================================
-  File Name: DataListListView.vue
-  Description: Data List - List View
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
   <div id="data-list-list-view" class="data-list-container">
 
     <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" />
 
-    <vs-table ref="table" multiple v-model="selected" :data="users">
+    <vs-table :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="users" search>
 
       <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
@@ -54,39 +45,41 @@
 
       <template slot="thead">
         <vs-th sort-key="name">Name</vs-th>
-        <vs-th sort-key="category">Email</vs-th>
-        <vs-th sort-key="popularity">Created at</vs-th>
-        <vs-th sort-key="order_status">Updated at</vs-th>
-        <vs-th sort-key="price">Action</vs-th>
+        <vs-th sort-key="email">Email</vs-th>
+        <vs-th sort-key="created_at">Created at</vs-th>
+        <vs-th sort-key="updated_at">Updated at</vs-th>
+        <vs-th >Action</vs-th>
       </template>
 
       <template slot-scope="{data}">
-          <tbody>
-            <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+        <colgroup ref="colgroup">
+          <col class="col"/>
+          <col class="col"/>
+          <col class="col"/>
+          <col class="col"/>
+        </colgroup>
+        <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
+          <vs-td>
+            <p class="product-name font-medium">{{ tr.name }}</p>
+          </vs-td>
 
-              <vs-td>
-                <p class="product-name font-medium">{{ tr.name }}</p>
-              </vs-td>
+          <vs-td>
+            <p class="product-category">{{ tr.email }}</p>
+          </vs-td>
 
-              <vs-td>
-                <p class="product-category">{{ tr.email }}</p>
-              </vs-td>
+          <vs-td>
+            <p class="product-category">{{ tr.created_at }}</p>
+          </vs-td>
 
-              <vs-td>
-                <p class="product-category">{{ tr.created_at }}</p>
-              </vs-td>
+          <vs-td>
+            <p class="product-category">{{ tr.created_at }}</p>
+          </vs-td>
 
-              <vs-td>
-                <p class="product-category">{{ tr.created_at }}</p>
-              </vs-td>
+          <vs-td>
 
-              <vs-td>
-
-              </vs-td>
-
-            </vs-tr>
-          </tbody>
-        </template>
+          </vs-td>
+        </vs-tr>
+      </template>
     </vs-table>
     <div class="con-vs-pagination vs-pagination-primary">
       <nav class="vs-pagination--nav">
@@ -115,6 +108,7 @@ export default {
   },
   data() {
     return {
+      timer: null,
       selected: [],
       users: [],
       pagination: {
@@ -124,6 +118,11 @@ export default {
         currentPage: 0,
         totalPages: 0,
         links: []
+      },
+      searchTerm: '',
+      order: {
+        orderBy: 'id',
+        orderType: 'desc'
       },
       isMounted: false,
       addNewDataSidebar: false,
@@ -148,7 +147,10 @@ export default {
       thisIns.$vs.loading({ color: '#7367F0' });
       this.$http.get('users', {
         params: {
-          page: page
+          page: page,
+          search: this.searchTerm,
+          orderBy: this.order.orderBy,
+          sortedBy: this.order.orderType,
         }
       }).then(function (response) {
         thisIns.users = thisIns.formatData(response.data.data);
@@ -164,6 +166,19 @@ export default {
         }).finally(function () {
           thisIns.$vs.loading.close();
         });
+    },
+    handleSearch(searching) {
+      let thisInt = this;
+      thisInt.searchTerm = searching;
+      clearTimeout(this.timer);
+      this.timer = setTimeout(function () {
+        thisInt.getData();
+      }, 500);
+    },
+    handleSort(key, active) {
+      this.order.orderBy = key;
+      this.order.orderType = active ? 'desc' : 'asc';
+      this.getData(this.pagination.currentPage);
     }
   },
   created() {
