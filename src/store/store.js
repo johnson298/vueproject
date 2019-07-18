@@ -9,6 +9,7 @@ import moduleAuth from './auth/moduleAuth.js';
 import moduleEmployees from './employees/module';
 import moduleStudents from './students/module';
 import modulePrograms from './programs/module';
+import moduleBranches from './branches/module';
 
 Vue.use(Vuex);
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     employees: moduleEmployees,
     students: moduleStudents,
     programs: modulePrograms,
+    branches: moduleBranches,
   },
   strict: process.env.NODE_ENV !== 'production'
 });
