@@ -1,17 +1,8 @@
-/*=========================================================================================
-  File Name: moduleAuthActions.js
-  Description: Auth Module Actions
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
 import router from '@/router';
 import Vue from 'vue';
 
 export default {
   login({ commit, state, dispatch}, payload) {
-
     // If user is already logged in notify and exit
     if (state.isUserLoggedIn()) {
       payload.notify({
@@ -29,19 +20,11 @@ export default {
       email: payload.userDetails.email,
       password: payload.userDetails.password
     }).then((result) => {
-      // Set FLAG username update required for updating username
-      let isUsernameUpdateRequired = false;
-      // if username update is not required
-      // just reload the page to get fresh data
-      // set new user data in localstorage
-      if(!isUsernameUpdateRequired) {
-        // router.push(router.currentRoute.query.to || '/');
-        commit('UPDATE_TOKEN', result.data.data.access_token);
-        dispatch('updateUser', {
-          isReloadRequired: true,
-          notify: payload.notify
-        });
-      }
+      commit('UPDATE_TOKEN', result.data.data.access_token);
+      dispatch('updateUser', {
+        isReloadRequired: true,
+        notify: payload.notify
+      });
     }).catch(error => {
       payload.notify({
         time: 3000,
@@ -53,7 +36,8 @@ export default {
       });
     });
   },
-  updateUser({ commit }, payload) {
+
+  async updateUser({ commit }, payload) {
     return new Promise((resolve) => {
       Vue.axios.get('me').then((res) => {
         commit('UPDATE_AUTHENTICATED_USER', res.data.data);
@@ -74,11 +58,9 @@ export default {
             color: 'danger'
           });
         }
-        router.push({ path: '/pages/login', query: { to: payload.to.path } });
+        localStorage.removeItem('user');
+        resolve(false);
       });
     });
-  },
-  updateAuthenticatedUser({ commit }, payload) {
-    commit('UPDATE_AUTHENTICATED_USER', payload);
   }
 };

@@ -18,20 +18,6 @@ import 'vuesax/dist/vuesax.css'; // Vuesax
 
 Vue.use(Vuesax);
 
-import axios from 'axios';
-import VueAxios from 'vue-axios';
-axios.defaults.baseURL = process.env.VUE_APP_URL;
-axios.defaults.headers.common['Accept'] = 'application/json';
-axios.defaults.headers.common['Content-Type'] = 'application/json';
-
-let access_token = localStorage.getItem('access_token');
-
-if (access_token) {
-  axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
-}
-
-Vue.use(VueAxios, axios);
-
 import AuthPlugin from "./plugins/auth";
 Vue.use(AuthPlugin);
 
@@ -59,6 +45,7 @@ import router from './router';
 // Vuex Store
 import store from './store/store';
 
+import './config';
 
 // Vuesax Admin Filters
 import './filters/filters';

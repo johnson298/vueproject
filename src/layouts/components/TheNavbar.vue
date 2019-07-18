@@ -297,8 +297,7 @@ export default {
       this.showBookmarkPagesDropdown = false;
     },
     logout() {
-      localStorage.removeItem('user');
-      localStorage.removeItem('access_token');
+      this.$auth.logOut();
       this.$router.push('/pages/login');
     }
   },

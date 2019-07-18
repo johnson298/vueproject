@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: Login.vue
-    Description: Login Page
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <div class="h-screen flex w-full bg-img" id="page-login">
         <div class="vx-col sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 mx-auto self-center">
@@ -23,26 +13,31 @@
                                     <h4 class="mb-4">Login</h4>
                                     <p>Welcome back, please login to your account.</p>
                                 </div>
+                              <form action="">
                                 <vs-input
-                                    v-validate="'required|email|min:3'"
-                                    data-vv-validate-on="blur"
-                                    name="email"
-                                    icon="icon icon-user"
-                                    icon-pack="feather"
-                                    label-placeholder="Email"
-                                    v-model="email"
-                                    class="w-full no-icon-border"/>
+                                  onfocus=""
+                                  v-validate="'required|email|min:3'"
+                                  data-vv-validate-on="blur"
+                                  name="email"
+                                  icon="icon icon-user"
+                                  icon-pack="feather"
+                                  label-placeholder="Email"
+                                  v-model="email"
+                                  class="w-full no-icon-border"
+                                  autocomplete="email"/>
 
                                 <vs-input
-                                    data-vv-validate-on="blur"
-                                    v-validate="'required|min:8'"
-                                    type="password"
-                                    name="password"
-                                    icon="icon icon-lock"
-                                    icon-pack="feather"
-                                    label-placeholder="Password"
-                                    v-model="password"
-                                    class="w-full mt-6 no-icon-border" />
+                                  autocomplete="new-password"
+                                  data-vv-validate-on="blur"
+                                  v-validate="'required|min:8'"
+                                  type="password"
+                                  name="password"
+                                  icon="icon icon-lock"
+                                  icon-pack="feather"
+                                  label-placeholder="Password"
+                                  v-model="password"
+                                  class="w-full mt-6 no-icon-border" />
+                              </form>
 
                                 <div class="flex flex-wrap justify-between my-5">
                                     <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox>

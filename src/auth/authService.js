@@ -1,8 +1,6 @@
 import EventEmitter from 'events';
 import store from '../store/store';
 
-const loginEvent = 'loginEvent';
-
 class AuthService extends EventEmitter {
   renewTokens() {
     // reject can be used as parameter in promise for using reject
@@ -13,26 +11,20 @@ class AuthService extends EventEmitter {
     });
   }
 
-  logOut() {
+  logOut = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user');
-    this.emit(loginEvent, { loggedIn: false });
-  }
+  };
 
-  isAuthenticated(callback, to) {
-    return new Promise(() => {
-      if (store.state.auth.currentUser) {
-        callback();
-      } else {
-        store.dispatch('auth/updateUser', {
-          isReloadRequired: false,
-          to: to
-        }).then(() => {
-          callback();
-        });
-      }
-    });
-  }
+  isAuthenticated = async () => {
+    if (store.state.auth.currentUser) {
+      return true;
+    } else {
+      return await store.dispatch('auth/updateUser', {
+        isReloadRequired: false
+      });
+    }
+  };
 }
 
 export default new AuthService();
