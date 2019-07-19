@@ -8,7 +8,13 @@
       color: #ffffff;
     }
   }
-
+  .vs-pagination--li  {
+    a {
+      width: 100%;
+      text-align: center;
+      padding: 5px 0;
+    }
+  }
 }
 
 .vs-table-text {

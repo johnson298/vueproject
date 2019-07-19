@@ -3,7 +3,7 @@
 
     <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" />
 
-    <vs-table :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="users" search>
+    <vs-table :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="users" search id="table">
 
       <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
@@ -182,7 +182,7 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({ color: '#7367F0' });
+      thisIns.$vs.loading({color: '#7367F0', text: 'Loading...' });
       this.$http.get('users', {
         params: {
           page: page,
@@ -219,11 +219,9 @@ export default {
       this.getData(this.pagination.currentPage);
     }
   },
-  created() {
-    this.getData();
-  },
   mounted() {
     this.isMounted = true;
+    this.getData();
   }
 };
 </script>

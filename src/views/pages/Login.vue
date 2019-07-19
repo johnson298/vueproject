@@ -101,13 +101,16 @@ export default {
   },
   methods: {
     login() {
+      let thisInt = this;
+      thisInt.$vs.loading({ color: '#7367F0', text: 'Signing in...' });
       const payload = {
         checkbox_remember_me: this.checkbox_remember_me,
         userDetails: {
           email: this.email,
           password: this.password
         },
-        notify: this.$vs.notify
+        notify: this.$vs.notify,
+        loading: this.$vs.loading,
       };
       this.$store.dispatch('auth/login', payload);
     },

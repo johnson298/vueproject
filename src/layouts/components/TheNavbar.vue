@@ -1,14 +1,3 @@
-<!-- =========================================================================================
-	File Name: TheNavbar.vue
-	Description: Navbar component
-	Component Name: TheNavbar
-	----------------------------------------------------------------------------------------
-	Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-	Author: Pixinvent
-	Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
 <div class="relative">
 	<div class="vx-navbar-wrapper">
@@ -90,25 +79,25 @@
 						</li>
 					</ul>
 					</VuePerfectScrollbar>
-                    <div class="
-                        checkout-footer
-                        fixed
-                        bottom-0
-                        rounded-b-lg
-                        text-primary
-                        w-full
-                        p-2
-                        font-semibold
-                        text-center
-                        border
-                        border-b-0
-                        border-l-0
-                        border-r-0
-                        border-solid
-                        d-theme-border-grey-light
-                        cursor-pointer">
-                        <span>View All Notifications</span>
-                    </div>
+            <div class="
+                checkout-footer
+                fixed
+                bottom-0
+                rounded-b-lg
+                text-primary
+                w-full
+                p-2
+                font-semibold
+                text-center
+                border
+                border-b-0
+                border-l-0
+                border-r-0
+                border-solid
+                d-theme-border-grey-light
+                cursor-pointer">
+                <span>View All Notifications</span>
+            </div>
 				</vs-dropdown-menu>
 			</vs-dropdown>
 
@@ -296,9 +285,13 @@ export default {
     outside: function() {
       this.showBookmarkPagesDropdown = false;
     },
-    logout() {
-      this.$auth.logOut();
-      this.$router.push('/pages/login');
+    async logout() {
+      this.$vs.loading({color: '#7367F0', text: 'Signing out...' });
+      await this.$auth.logOut();
+      setTimeout(()=> {
+        this.$vs.loading.close();
+        this.$router.push('/pages/login');
+      }, 1000);
     }
   },
   directives: {
