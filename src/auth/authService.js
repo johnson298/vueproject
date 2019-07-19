@@ -11,9 +11,9 @@ class AuthService extends EventEmitter {
     });
   }
 
-  logOut = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user');
+  logOut = async () => {
+    await localStorage.removeItem('access_token');
+    await localStorage.removeItem('user');
   };
 
   isAuthenticated = async () => {

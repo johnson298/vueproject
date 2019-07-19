@@ -34,6 +34,8 @@ export default {
         icon: 'icon-alert-circle',
         color: 'danger'
       });
+    }).finally(() => {
+      payload.loading.close();
     });
   },
 
