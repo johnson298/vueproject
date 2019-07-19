@@ -34,6 +34,23 @@
             </vs-dropdown-menu>
           </vs-dropdown>
 
+          <!-- ACTION - DROPDOWN -->
+          <vs-dropdown class="cursor-pointer mr-4 mb-4">
+
+            <div class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32">
+              <span class="mr-2">Views</span>
+              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
+            </div>
+
+            <vs-dropdown-menu>
+              <div class="col p-2">
+                <div v-for="(value, index) in views" :key="index" class="p-1">
+                  <vs-checkbox v-model="value.viewable">{{ value.text }}</vs-checkbox>
+                </div>
+              </div>
+            </vs-dropdown-menu>
+          </vs-dropdown>
+
           <!-- ADD NEW -->
           <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addNewDataSidebar = true">
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
@@ -44,38 +61,47 @@
       </div>
 
       <template slot="thead">
-        <vs-th sort-key="name">Name</vs-th>
-        <vs-th sort-key="email">Email</vs-th>
-        <vs-th sort-key="created_at">Created at</vs-th>
-        <vs-th sort-key="updated_at">Updated at</vs-th>
-        <vs-th >Action</vs-th>
+        <vs-th :sort-key="value.sortKey" v-for="(value, index) in views" :key="index" v-if="value.viewable">{{ value.text }}</vs-th>
       </template>
 
       <template slot-scope="{data}">
-        <colgroup ref="colgroup">
-          <col class="col"/>
-          <col class="col"/>
-          <col class="col"/>
-          <col class="col"/>
-        </colgroup>
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td>
+          <vs-td v-if="views.code.viewable">
+            <p class="product-name font-medium">{{ tr.code }}</p>
+          </vs-td>
+          <vs-td v-if="views.name.viewable">
             <p class="product-name font-medium">{{ tr.name }}</p>
           </vs-td>
 
-          <vs-td>
+          <vs-td v-if="views.email.viewable">
             <p class="product-category">{{ tr.email }}</p>
           </vs-td>
 
-          <vs-td>
+          <vs-td v-if="views.birthday.viewable">
+            <p class="product-category">{{ tr.birthday }}</p>
+          </vs-td>
+
+          <vs-td v-if="views.phone.viewable">
+            <p class="product-category">{{ tr.phone }}</p>
+          </vs-td>
+
+          <vs-td v-if="views.facebook.viewable">
+            <p class="product-category"><a :href="tr.facebook" target="_blank">Link</a></p>
+          </vs-td>
+
+          <vs-td v-if="views.address.viewable">
+            <p class="product-category">{{ tr.address }}</p>
+          </vs-td>
+
+          <vs-td v-if="views.updated_at.viewable">
+            <p class="product-category">{{ tr.updated_at }}</p>
+          </vs-td>
+
+          <vs-td v-if="views.created_at.viewable">
             <p class="product-category">{{ tr.created_at }}</p>
           </vs-td>
 
-          <vs-td>
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
-          <vs-td>
+          <vs-td v-if="views.action.viewable">
 
           </vs-td>
         </vs-tr>
@@ -123,6 +149,18 @@ export default {
       order: {
         orderBy: 'id',
         orderType: 'desc'
+      },
+      views: {
+        code: { text: 'Code', viewable: true, sortKey: 'code' },
+        name: { text: 'Name', viewable: true, sortKey: 'name' },
+        email: { text: 'Email', viewable: true, sortKey: 'email' },
+        birthday: { text: 'Birthday', viewable: true, sortKey: 'birthday' },
+        phone: { text: 'Phone', viewable: true, sortKey: 'phone' },
+        facebook: { text: 'Facebook', viewable: true, sortKey: '' },
+        address: { text: 'Address', viewable: false, sortKey: '' },
+        created_at: { text: 'Created at', viewable: false, sortKey: 'created_at' },
+        updated_at: { text: 'Updated at', viewable: true, sortKey: 'updated_at' },
+        action: { text: 'Action', viewable: true, sortKey: '' },
       },
       isMounted: false,
       addNewDataSidebar: false,
