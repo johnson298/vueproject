@@ -21,15 +21,33 @@
 
 export default [
   {
+    name: "Dashboard",
+    header: "Dashboard"
+  },
+  {
     url: "/",
     name: "Dashboard",
     slug: "home",
     icon: "HomeIcon",
   },
   {
+    name: "emp",
+    header: "nhân sự"
+  },
+  {
     url: "/employees",
     name: "Nhân viên",
     slug: "employees",
     icon: "FileIcon",
+  },
+  {
+    name: "students",
+    header: "Học viên"
+  },
+  {
+    url: "/students",
+    name: "Học viên",
+    slug: "students",
+    icon: "UserIcon",
   },
 ];
