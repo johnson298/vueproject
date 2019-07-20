@@ -1,7 +1,7 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
 
-    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" />
+    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData"/>
 
     <vs-table :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="users" search id="table">
 
@@ -69,6 +69,11 @@
           <vs-td v-if="views.code.viewable">
             <p class="product-name font-medium">{{ tr.code }}</p>
           </vs-td>
+
+          <vs-td v-if="views.avatar.viewable">
+            <p class="product-name font-medium"><img :src="tr.avatar" :alt="tr.name" width="50px;"></p>
+          </vs-td>
+
           <vs-td v-if="views.name.viewable">
             <p class="product-name font-medium">{{ tr.name }}</p>
           </vs-td>
@@ -152,6 +157,7 @@ export default {
       },
       views: {
         code: { text: 'Code', viewable: true, sortKey: 'code' },
+        avatar: { text: 'Avatar', viewable: true, sortKey: '' },
         name: { text: 'Name', viewable: true, sortKey: 'name' },
         email: { text: 'Email', viewable: true, sortKey: 'email' },
         birthday: { text: 'Birthday', viewable: true, sortKey: 'birthday' },
