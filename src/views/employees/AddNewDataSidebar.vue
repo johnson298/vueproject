@@ -228,7 +228,7 @@ newVar = {
     },
     remove: function () {
       this.employee.facebook = '';
-      this.position = '1';
+      this.employee.position = '1';
       this.employee.birthday = '';
       this.employee.facebook = '';
       this.employee.address = '';
