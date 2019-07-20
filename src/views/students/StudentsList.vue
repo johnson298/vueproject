@@ -70,9 +70,9 @@
             <p class="product-name font-medium">{{ tr.code }}</p>
           </vs-td>
           <vs-td v-if="views.avatar.viewable">
-            <p class="product-name font-medium"><img :src="tr.avatar" :alt="tr.name" width="50px;"></p>
+            <p class="product-name font-medium"><img :src="tr.avatar" :alt="tr.name" class="img-round"/></p>
           </vs-td>
-          
+
           <vs-td v-if="views.name.viewable">
             <p class="product-name font-medium">{{ tr.name }}</p>
           </vs-td>

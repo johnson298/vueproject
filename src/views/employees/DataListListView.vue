@@ -71,7 +71,7 @@
           </vs-td>
 
           <vs-td v-if="views.avatar.viewable">
-            <p class="product-name font-medium"><img :src="tr.avatar" :alt="tr.name" width="50px;"></p>
+            <p class="product-name font-medium"><img :src="tr.avatar" :alt="tr.name" class="img-round"/></p>
           </vs-td>
 
           <vs-td v-if="views.name.viewable">
@@ -188,7 +188,7 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({color: '#7367F0', text: 'Loading...' });
+      thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
       this.$http.get('users', {
         params: {
           page: page,

@@ -28,6 +28,26 @@ const state = {
   // Can be used to get current window with
   // Note: Above breakpoint state is for internal use of sidebar component
   windowWidth: null,
+  model: {
+    employees: {
+      levels: [
+        { text: 'Đại học', value: 1},
+        { text: 'Cao đẳng', value: 2},
+        { text: 'Khác', value: 3},
+      ],
+      positions: [
+        { text: 'Giáo viên', value: 1},
+        { text: 'Tư vấn', value: 2},
+        { text: 'Kế toán', value: 3},
+        { text: 'Quản lý', value: 4},
+        { text: 'Khác', value: 5},
+      ],
+      majors: [
+        { text: 'Có', value: 1 },
+        { text: 'Không', value: 2 },
+      ],
+    }
+  }
 };
 
 export default state;
