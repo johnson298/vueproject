@@ -28,8 +28,8 @@
               </div>
           </div>
 
-          <div style="margin-top: 20px">
-              <h4 style="margin-top: 10px">Thông tin cá nhân</h4>
+          <div class="information">
+              <h4 class="information_h4">Thông tin cá nhân</h4>
               <!--Mã nhân viên-->
               <div>
                   <vs-input label="Mã nhân viên" name="code" v-model="employee.code" class="mt-5 w-full" v-validate="'required|min:5'"/>
@@ -56,33 +56,33 @@
                   <vs-input label="Birthday" name="birthday" type="date" v-model="employee.birthday" class=" mt-5 w-full mydatepicker" />
               </div>
               <!--ảnh đại diện-->
-              <div style="margin-bottom: 10px">
-                  <div style="margin-top: 10px;margin-bottom: 10px"><label class="control-label">Ảnh đại diện</label></div>
-                  <input type="file" id="file" ref="file" accept="image/*" class="form-control"
+              <div>
+                  <div class="avatar"><label class="control-label">Ảnh đại diện</label></div>
+                  <input type="file" id="file" ref="file" accept="image/*" class="form-control file_avatar"
                          @change="changeAvatar">
               </div>
           </div>
-          <div style="margin-top: 20px">
-              <h4 style="margin-top: 10px">Thông tin học vấn</h4>
+          <div >
+              <h4 >Thông tin học vấn</h4>
               <!--trình độ học vấn-->
               <vs-select v-model="employee.level" label="Trình độ học vấn" class="mt-5 w-full">
                   <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in levels" />
               </vs-select>
               <!--chức vụ-->
-              <div style="margin-top: 5px">
+              <div class="position">
                   <vs-select v-model="employee.position" label="Chức vụ" class="mt-5 w-full">
                       <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in positions" />
                   </vs-select>
               </div>
               <!--nghiệm vụ-->
-              <div style="margin-top: 5px">
+              <div >
                   <vs-select v-model="employee.major" label="Nghiệp vụ" class="mt-5 w-full">
                       <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in majors" />
                   </vs-select>
               </div>
               <!--nghi chú-->
               <div>
-                  <label style="margin-top: 10px;">Note</label>
+                  <div class="note"><label >Note</label></div>
                   <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="employee.note" class="mt-5 w-full" />
               </div>
           </div>
@@ -98,7 +98,6 @@
 
 <script>
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
-import Datepicker from 'vuejs-datepicker';
 let newVar;
 newVar = {
   props: {
@@ -167,7 +166,6 @@ newVar = {
   },
   components: {
     VuePerfectScrollbar,
-    Datepicker,
   },
 
   methods: {
@@ -271,11 +269,32 @@ export default newVar;
         width: 100%;
         margin: 0;
       }
-    }
-  }
+}
+}
 }
 
 .scroll-area--data-list-add-new {
-    height: calc(100% - 4.3rem);
+height: calc(100% - 4.3rem);
 }
+</style>
+<style>
+    .vs-sidebar--items .avatar {
+        margin-bottom: 5px;
+        margin-top: 10px;
+    }
+    .vs-sidebar--items .note{
+        margin-top: 10px;
+    }
+    .vs-sidebar--items .file_avatar{
+        margin-bottom: 10px;
+    }
+    .vs-sidebar--items .information{
+        margin-top: 20px;
+    }
+    .vs-sidebar--items .information_h4{
+        margin-top: 10px;
+    }
+    .vs-sidebar--items .position{
+        margin-top: 5px;
+    }
 </style>
