@@ -39,7 +39,7 @@ export default {
     });
   },
 
-  async updateUser({ commit }, payload) {
+  async updateUser({ commit, dispatch }, payload) {
     return new Promise((resolve) => {
       Vue.axios.get('me').then((res) => {
         commit('UPDATE_AUTHENTICATED_USER', res.data.data);
@@ -61,6 +61,7 @@ export default {
           });
         }
         localStorage.removeItem('user');
+        dispatch('clearData');
         resolve(false);
       });
     });

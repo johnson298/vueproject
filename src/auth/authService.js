@@ -14,6 +14,7 @@ class AuthService extends EventEmitter {
   logOut = async () => {
     await localStorage.removeItem('access_token');
     await localStorage.removeItem('user');
+    store.dispatch('clearData');
   };
 
   isAuthenticated = async () => {
