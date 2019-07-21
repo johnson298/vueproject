@@ -66,6 +66,17 @@ const router = new Router({
             pageTitle: 'Học viên'
           }
         },
+        {
+          path: '/students/:student',
+          name: 'student',
+          component: () => import('./views/students/DetailStudent.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Chi tiết học viên', url: '/'}
+            ],
+            pageTitle: 'Chi tiết học viên'
+          }
+        },
       ],
       meta: {
         authRequired: true

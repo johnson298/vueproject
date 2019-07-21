@@ -235,32 +235,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.add-new-data-sidebar {
-  /deep/ .vs-sidebar--background {
-    z-index: 52010;
-  }
+  .add-new-data-sidebar {
+    /deep/ .vs-sidebar--background {
+      z-index: 52010;
+    }
 
-  /deep/ .vs-sidebar {
-    z-index: 52010;
-    width: 400px;
-    max-width: 90vw;
+    /deep/ .vs-sidebar {
+      z-index: 52010;
+      width: 400px;
+      max-width: 90vw;
 
-    .img-upload {
-      margin-top: 2rem;
+      .img-upload {
+        margin-top: 2rem;
 
-      .con-img-upload {
-        padding: 0;
-      }
+        .con-img-upload {
+          padding: 0;
+        }
 
-      .con-input-upload {
-        width: 100%;
-        margin: 0;
+        .con-input-upload {
+          width: 100%;
+          margin: 0;
+        }
       }
     }
   }
-}
 
-.scroll-area--data-list-add-new {
-  height: calc(100% - 4.3rem);
-}
+  .scroll-area--data-list-add-new {
+    height: calc(100% - 4.3rem);
+  }
 </style>

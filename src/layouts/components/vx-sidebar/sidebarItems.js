@@ -38,7 +38,7 @@ export default [
     url: "/employees",
     name: "Nhân viên",
     slug: "employees",
-    icon: "FileIcon",
+    icon: "UsersIcon",
   },
   {
     name: "students",
