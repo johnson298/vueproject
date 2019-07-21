@@ -141,13 +141,14 @@ import { mapState } from 'vuex';
 
 export default {
   components: {
-    AddNewDataSidebar,
+    AddNewDataSidebar
   },
   data() {
     return {
       activeConfirm:false,
       timer: null,
       selected: [],
+      isMounted: false,
       addNewDataSidebar: false,
       prev: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_left</i></button>",
       next: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-next\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_right</i></button>"
@@ -209,7 +210,7 @@ export default {
       }).then(function (response) {
         thisIns.$store.dispatch('employees/updateTable', {
           users: thisIns.formatData(response.data.data),
-          pagination: response.data.pagination,
+          pagination: response.data.pagination
         });
       })
         .catch(function (error) {

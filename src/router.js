@@ -45,6 +45,17 @@ const router = new Router({
           },
         },
         {
+          path: '/employees/:employee',
+          name: 'employee',
+          component: () => import('./views/employees/DetailEmployee.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Chi tiết nhân viên', url: '/'}
+            ],
+            pageTitle: 'Chi tiết nhân viên'
+          }
+        },
+        {
           path: '/students',
           name: 'students',
           component: () => import('./views/students/StudentsList.vue'),
