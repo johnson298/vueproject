@@ -23,7 +23,6 @@ const state = {
 
   starredPages: navbarSearchAndPinList.data.filter((page) => page.highlightAction),
   userRole: null,
-  currentUser: null,
 
   // Can be used to get current window with
   // Note: Above breakpoint state is for internal use of sidebar component
