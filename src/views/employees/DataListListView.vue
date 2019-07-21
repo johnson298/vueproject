@@ -3,7 +3,7 @@
 
     <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData"/>
 
-    <vs-table :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="users" search id="table">
+    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="users" search id="table" maxItems="10">
 
       <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
@@ -45,7 +45,7 @@
             <vs-dropdown-menu>
               <div class="col p-2">
                 <div v-for="(value, index) in views" :key="index" class="p-1">
-                  <vs-checkbox v-model="value.viewable">{{ value.text }}</vs-checkbox>
+                  <vs-checkbox :value="value.viewable" @change="updateViews(index, $event)">{{ value.text }}</vs-checkbox>
                 </div>
               </div>
             </vs-dropdown-menu>
@@ -71,7 +71,7 @@
           </vs-td>
 
           <vs-td v-if="views.avatar.viewable">
-            <p class="product-name font-medium"><img :src="tr.avatar" :alt="tr.name" width="50px;"></p>
+            <p class="product-name font-medium"><img :src="tr.avatar" :alt="tr.name" class="img-round"/></p>
           </vs-td>
 
           <vs-td v-if="views.name.viewable">
@@ -111,7 +111,7 @@
           </vs-td>
         </vs-tr>
       </template>
-    </vs-table>
+    </vs-table-custom>
     <div class="con-vs-pagination vs-pagination-primary">
       <nav class="vs-pagination--nav">
         <paginate
@@ -124,6 +124,8 @@
           :prev-text="prev"
           :next-text="next"
           :click-handler="getData"
+          :value="pagination.currentPage"
+          ref="paginate"
         />
       </nav>
     </div>
@@ -132,6 +134,7 @@
 
 <script>
 import AddNewDataSidebar from './AddNewDataSidebar.vue';
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -141,33 +144,6 @@ export default {
     return {
       timer: null,
       selected: [],
-      users: [],
-      pagination: {
-        count: 0,
-        total: 0,
-        perPage: 0,
-        currentPage: 0,
-        totalPages: 0,
-        links: []
-      },
-      searchTerm: '',
-      order: {
-        orderBy: 'id',
-        orderType: 'desc'
-      },
-      views: {
-        code: { text: 'Code', viewable: true, sortKey: 'code' },
-        avatar: { text: 'Avatar', viewable: true, sortKey: '' },
-        name: { text: 'Name', viewable: true, sortKey: 'name' },
-        email: { text: 'Email', viewable: true, sortKey: 'email' },
-        birthday: { text: 'Birthday', viewable: true, sortKey: 'birthday' },
-        phone: { text: 'Phone', viewable: true, sortKey: 'phone' },
-        facebook: { text: 'Facebook', viewable: true, sortKey: '' },
-        address: { text: 'Address', viewable: false, sortKey: '' },
-        created_at: { text: 'Created at', viewable: false, sortKey: 'created_at' },
-        updated_at: { text: 'Updated at', viewable: true, sortKey: 'updated_at' },
-        action: { text: 'Action', viewable: true, sortKey: '' },
-      },
       isMounted: false,
       addNewDataSidebar: false,
       prev: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_left</i></button>",
@@ -175,20 +151,21 @@ export default {
     };
   },
   computed: {
-    currentPage() {
-      if(this.isMounted) {
-        return this.$refs.table.currentx;
-      }
-      return 0;
-    },
+    ...mapState('employees', ['users', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
   methods: {
+    updateViews(index, e){
+      this.$store.dispatch('employees/updateViews', {
+        index: index,
+        viewable: e.target.checked
+      });
+    },
     formatData(data) {
       return data;
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({color: '#7367F0', text: 'Loading...' });
+      thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
       this.$http.get('users', {
         params: {
           page: page,
@@ -197,8 +174,10 @@ export default {
           sortedBy: this.order.orderType,
         }
       }).then(function (response) {
-        thisIns.users = thisIns.formatData(response.data.data);
-        thisIns.pagination = response.data.pagination;
+        thisIns.$store.dispatch('employees/updateTable', {
+          users: thisIns.formatData(response.data.data),
+          pagination: response.data.pagination
+        });
       })
         .catch(function (error) {
           thisIns.$vs.notify({
@@ -212,22 +191,38 @@ export default {
         });
     },
     handleSearch(searching) {
+      if (!this.needReload) {
+        this.$store.dispatch('employees/updateNeedReload', true);
+        return false;
+      }
       let thisInt = this;
-      thisInt.searchTerm = searching;
+      this.$store.dispatch('employees/updateSearch', {
+        searchTerm: searching
+      });
       clearTimeout(this.timer);
       this.timer = setTimeout(function () {
         thisInt.getData();
       }, 500);
     },
     handleSort(key, active) {
-      this.order.orderBy = key;
-      this.order.orderType = active ? 'desc' : 'asc';
+      this.$store.dispatch('employees/updateOrder', {
+        order: {
+          orderBy: key,
+          orderType: active ? 'desc' : 'asc',
+        }
+      });
       this.getData(this.pagination.currentPage);
     }
   },
   mounted() {
+    this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    this.getData();
+    if (this.users.length === 0) {
+      this.getData();
+    }
+  },
+  destroyed() {
+    this.$store.dispatch('employees/updateNeedReload', false);
   }
 };
 </script>
