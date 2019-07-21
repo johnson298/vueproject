@@ -14,5 +14,9 @@ export default {
   },
   UPDATE_NEED_RELOAD(state, payload){
     state.needReload = payload;
+  },
+  // eslint-disable-next-line
+  RESET(state){
+    state.users = [];
   }
 };

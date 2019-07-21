@@ -40,6 +40,10 @@ const actions = {
   arrangeStarredPagesMore({ commit }, list) {
     commit('ARRANGE_STARRED_PAGES_MORE', list);
   },
+  clearData({commit}){
+    commit('employees/RESET');
+    commit('students/RESET');
+  }
 };
 
 export default actions;
