@@ -1,7 +1,7 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
 
-    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" />
+    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData" />
 
     <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="users" search id="table" maxItems="10">
 
@@ -54,7 +54,7 @@
           <!-- ADD NEW -->
           <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addNewDataSidebar = true">
               <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-              <span class="ml-2 text-base text-primary">Add New</span>
+              <span class="ml-2 text-base text-primary">Thêm Học Viên</span>
           </div>
         </div>
 
@@ -118,7 +118,7 @@
           </vs-td>
 
           <vs-td v-if="views.action.viewable">
-
+            <vs-button color="danger" size="small" @click="deleteStudent(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>
       </template>
@@ -165,6 +165,37 @@ export default {
     ...mapState('students', ['users', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
   methods: {
+    deleteStudent(student){
+      this.$vs.dialog({
+        type:'confirm',
+        color: 'danger',
+        title: `Xóa nhân viên`,
+        text: 'Bạn có chắc muốn xóa ' + student.name,
+        accept:this.studentAlert,
+        parameters: [student.id]
+      });
+    },
+    studentAlert(student_id ){
+      this.$http.delete('students/'+ student_id).then( () => {
+        this.$vs.notify({
+          color:'success',
+          title:'Xóa nhân viên',
+          text:'Bạn đã xóa thành công',
+          icon: 'verified_user',
+        });
+        this.getData();
+      }
+      ).catch(() => {
+        this.$vs.notify({
+          title: 'Error!',
+          text: 'Bạn không xóa thành công',
+          iconPack: 'feather',
+          icon: 'fa fa-lg fa-exclamation-triangle',
+          color: 'danger'
+        });
+      });
+
+    },
     updateViews(index, e){
       this.$store.dispatch('students/updateViews', {
         index: index,

@@ -45,6 +45,18 @@ const state = {
         { text: 'Có', value: 1 },
         { text: 'Không', value: 2 },
       ],
+    },
+    students : {
+      gender : [
+        { text: 'Nam', value: 0},
+        { text: 'Nữ', value: 1},
+      ],
+      source : [
+        { text: 'Facebook', value: 1},
+        { text: 'Bạn bè', value: 2},
+        { text: 'Trang chủ', value: 3},
+        { text: 'Khác', value: 4},
+      ]
     }
   }
 };
