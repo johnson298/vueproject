@@ -53,11 +53,10 @@
 
           <!-- ADD NEW -->
           <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addNewDataSidebar = true">
-              <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-              <span class="ml-2 text-base text-primary">Add New</span>
+            <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
+            <span class="ml-2 text-base text-primary">Thêm nhân viên</span>
           </div>
         </div>
-
       </div>
 
       <template slot="thead">
@@ -107,7 +106,11 @@
           </vs-td>
 
           <vs-td v-if="views.action.viewable">
-
+            <router-link
+              tag="button"
+              :to="'/employees/' + tr.id "
+              class="vs-component vs-button vs-button-primary vs-button-filled small">Chi tiết</router-link>
+              <vs-button color="danger" size="small" @click="deleteEmployee(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>
       </template>
@@ -115,17 +118,17 @@
     <div class="con-vs-pagination vs-pagination-primary">
       <nav class="vs-pagination--nav">
         <paginate
-          :page-count="pagination.totalPages"
-          :page-range="3"
-          :margin-pages="2"
-          :active-class="'is-current'"
-          :container-class="'vs-pagination--ul'"
-          :page-class="'item-pagination vs-pagination--li'"
-          :prev-text="prev"
-          :next-text="next"
-          :click-handler="getData"
-          :value="pagination.currentPage"
-          ref="paginate"
+            :page-count="pagination.totalPages"
+            :page-range="3"
+            :margin-pages="2"
+            :active-class="'is-current'"
+            :container-class="'vs-pagination--ul'"
+            :page-class="'item-pagination vs-pagination--li'"
+            :prev-text="prev"
+            :next-text="next"
+            :click-handler="getData"
+            :value="pagination.currentPage"
+            ref="paginate"
         />
       </nav>
     </div>
@@ -138,13 +141,13 @@ import { mapState } from 'vuex';
 
 export default {
   components: {
-    AddNewDataSidebar
+    AddNewDataSidebar,
   },
   data() {
     return {
+      activeConfirm:false,
       timer: null,
       selected: [],
-      isMounted: false,
       addNewDataSidebar: false,
       prev: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_left</i></button>",
       next: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-next\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_right</i></button>"
@@ -154,6 +157,36 @@ export default {
     ...mapState('employees', ['users', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
   methods: {
+    deleteEmployee(user){
+      this.$vs.dialog({
+        type:'confirm',
+        color: 'danger',
+        title: `Xóa nhân viên`,
+        text: 'Bạn có chắc muốn xóa ' + user.name,
+        accept:this.employeeAlert,
+        parameters: [user.id]
+      });
+    },
+    employeeAlert(user_id){
+      this.$http.delete('users/'+ user_id).then( () => {
+        this.$vs.notify({
+          color:'success',
+          title:'Xóa nhân viên',
+          text:'Bạn đã xóa thành công',
+          icon: 'verified_user',
+        });
+        this.getData();
+      }
+      ).catch(() => {
+        this.$vs.notify({
+          title: 'Error!',
+          text: 'Bạn không xóa thành công',
+          iconPack: 'feather',
+          icon: 'fa fa-lg fa-exclamation-triangle',
+          color: 'danger'
+        });
+      });
+    },
     updateViews(index, e){
       this.$store.dispatch('employees/updateViews', {
         index: index,
@@ -176,7 +209,7 @@ export default {
       }).then(function (response) {
         thisIns.$store.dispatch('employees/updateTable', {
           users: thisIns.formatData(response.data.data),
-          pagination: response.data.pagination
+          pagination: response.data.pagination,
         });
       })
         .catch(function (error) {
