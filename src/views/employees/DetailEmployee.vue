@@ -1,9 +1,9 @@
 <template>
-<div id="profile-page">
+  <div id="profile-page">
 
     <!-- PROFILE HEADER -->
     <div class="cover-container rounded-t-lg img-profile-cus">
-        <img class="user-profile-img" :src="user.avatar" alt="user-profile-cover">
+      <img class="user-profile-img" :src="user.avatar" alt="user-profile-cover">
     </div>
     <h2 class="text-center m-5 d-flex">{{user.name}}</h2>
 
@@ -353,5 +353,5 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-}
+  }
 </style>
