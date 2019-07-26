@@ -1,5 +1,5 @@
 <template>
-  <vs-sidebar click-not-close position-right parent="body" default-index="1" color="primary" class="add-new-data-sidebar items-no-padding" spacer v-model="isSidebarActiveLocal">
+<vs-sidebar click-not-close position-right parent="body" default-index="1" color="primary" class="add-new-data-sidebar items-no-padding" spacer v-model="isSidebarActiveLocal">
     <div class="mt-6 flex items-center justify-between px-6">
       <h4>Thêm nhân viên</h4>
       <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
@@ -8,98 +8,93 @@
 
     <VuePerfectScrollbar class="scroll-area--data-list-add-new pt-4 pb-6" :settings="settings">
 
-      <div class="p-6">
-        <form>
+        <div class="p-6">
+            <form>
 
-          <div>
-            <h4 class="text-center uppercase">Thông tin đăng nhập</h4>
-            <!--Email-->
-            <div>
-              <vs-input label="Email" name="email" v-model="employee.email" class="mt-5 w-full" v-validate="'required|email'" autocomplete="email"/>
-              <small class="text-danger">{{ errors.first('email') }}</small>
-            </div>
-            <!--Password-->
-            <div>
-              <vs-input label="Mật khẩu" name="password" type="password" v-model="employee.password"
-                        class="mt-5 w-full" v-validate="'required|min:8'" autocomplete="new-password"/>
-              <small class="text-danger">{{ errors.first('password') }}</small>
-            </div>
-            <!--Nhập lại mật khẩu-->
-            <div>
-              <vs-input label="Nhập lại mật khẩu" name="password_confirmation" autocomplete="new-password"
-                        type="password" v-model="employee.password_confirmation" class="mt-5 w-full"/>
-            </div>
-          </div>
+                <div>
+                    <h4 class="text-center uppercase">Thông tin đăng nhập</h4>
+                    <!--Email-->
+                    <div>
+                        <vs-input label="Email" name="email" v-model="employee.email" class="mt-5 w-full" v-validate="'required|email'" autocomplete="email" />
+                        <small class="text-danger">{{ errors.first('email') }}</small>
+                    </div>
+                    <!--Password-->
+                    <div>
+                        <vs-input label="Mật khẩu" name="password" type="password" v-model="employee.password" class="mt-5 w-full" v-validate="'required|min:8'" autocomplete="new-password" />
+                        <small class="text-danger">{{ errors.first('password') }}</small>
+                    </div>
+                    <!--Nhập lại mật khẩu-->
+                    <div>
+                        <vs-input label="Nhập lại mật khẩu" name="password_confirmation" autocomplete="new-password" type="password" v-model="employee.password_confirmation" class="mt-5 w-full" />
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <h4 class="text-center uppercase">Thông tin cá nhân</h4>
+                    <!--Mã nhân viên-->
+                    <div>
+                        <vs-input label="Mã nhân viên" name="code" v-model="employee.code" class="mt-5 w-full" v-validate="'required|min:5'" />
+                        <small class="text-danger">{{ errors.first('code') }}</small>
+                    </div>
+                    <!-- NAME -->
+                    <div>
+                        <vs-input label="Tên nhân viên" name="name" v-model="employee.name" class="mt-5 w-full" v-validate="'required'" />
+                        <small class="text-danger">{{ errors.first('name') }}</small>
+                    </div>
+                    <!--địa chỉ-->
+                    <div>
+                        <vs-input label="Địa chỉ" name="address" type="text" v-model="employee.address" class="mt-5 w-full" />
+                    </div>
+                    <!--số điện thoại-->
+                    <div>
+                        <vs-input label="Số điện thoại" name="phone" type="text" v-model="employee.phone" class="mt-5 w-full" />
+                    </div>
+                    <!--facebook-->
+                    <div>
+                        <vs-input label="Facebook" name="facebook" type="text" v-model="employee.facebook" class="mt-5 w-full" />
+                    </div>
+                    <div>
+                        <vs-input label="Ngày sinh" name="birthday" type="date" v-model="employee.birthday" class=" mt-5 w-full mydatepicker" />
+                    </div>
+                    <!--ảnh đại diện-->
+                    <div>
+                        <div class="mt-5"><label class="vs-input--label">Ảnh đại diện</label></div>
+                        <input type="file" id="file" ref="file" accept="image/*" class="form-control file_avatar" @change="changeAvatar">
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <h4 class="text-center uppercase">Thông tin học vấn</h4>
+                    <!--trình độ học vấn-->
+                    <vs-select v-model="employee.level" label="Trình độ học vấn" class="mt-5 w-full">
+                        <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in levels" />
+                    </vs-select>
+                    <!--chức vụ-->
+                    <div class="position">
+                        <vs-select v-model="employee.position" label="Chức vụ" class="mt-5 w-full">
+                            <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in positions" />
+                        </vs-select>
+                    </div>
+                    <!--nghiệm vụ-->
+                    <div>
+                        <vs-select v-model="employee.major" label="Nghiệp vụ" class="mt-5 w-full">
+                            <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in majors" />
+                        </vs-select>
+                    </div>
+                    <!--nghi chú-->
+                    <div>
+                        <div class="note"><label class="vs-input--label">Note</label></div>
+                        <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="employee.note" class="w-full" :rows="5" />
+                    </div>
+                </div>
 
-          <div class="mt-8">
-            <h4 class="text-center uppercase">Thông tin cá nhân</h4>
-            <!--Mã nhân viên-->
-            <div>
-              <vs-input label="Mã nhân viên" name="code" v-model="employee.code" class="mt-5 w-full" v-validate="'required|min:5'"/>
-              <small class="text-danger">{{ errors.first('code') }}</small>
-            </div>
-            <!-- NAME -->
-            <div>
-              <vs-input label="Tên" name="name" v-model="employee.name" class="mt-5 w-full" v-validate="'required'" />
-              <small class="text-danger">{{ errors.first('name') }}</small>
-            </div>
-            <!--địa chỉ-->
-            <div>
-              <vs-input label="Địa chỉ" name="address" type="text" v-model="employee.address" class="mt-5 w-full" />
-            </div>
-            <!--số điện thoại-->
-            <div>
-              <vs-input label="Số điện thoại" name="phone" type="text" v-model="employee.phone" class="mt-5 w-full" />
-            </div>
-            <!--facebook-->
-            <div>
-              <vs-input label="Facebook" name="facebook" type="text" v-model="employee.facebook" class="mt-5 w-full" />
-            </div>
-            <div>
-              <vs-input label="Ngày sinh" name="birthday" type="date" v-model="employee.birthday" class=" mt-5 w-full mydatepicker" />
-            </div>
-            <!--ảnh đại diện-->
-            <div>
-              <div class="mt-5"><label class="vs-input--label">Ảnh đại diện</label></div>
-              <input type="file" id="file" ref="file" accept="image/*" class="form-control file_avatar"
-                     @change="changeAvatar">
-            </div>
-
-          </div>
-          <div class="mt-8">
-            <h4 class="text-center uppercase">Thông tin học vấn</h4>
-            <!--trình độ học vấn-->
-            <vs-select v-model="employee.level" label="Trình độ học vấn" class="mt-5 w-full">
-              <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in levels" />
-            </vs-select>
-            <!--chức vụ-->
-            <div class="position">
-              <vs-select v-model="employee.position" label="Chức vụ" class="mt-5 w-full">
-                <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in positions" />
-              </vs-select>
-            </div>
-            <!--nghiệm vụ-->
-            <div >
-              <vs-select v-model="employee.major" label="Nghiệp vụ" class="mt-5 w-full">
-                <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in majors" />
-              </vs-select>
-            </div>
-            <!--nghi chú-->
-            <div>
-              <div class="note"><label class="vs-input--label">Nghi chú</label></div>
-              <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="employee.note" class="w-full" :rows="5"/>
-            </div>
-          </div>
-
-        </form>
-      </div>
+            </form>
+        </div>
     </VuePerfectScrollbar>
 
     <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
-      <vs-button class="mr-6 vs-con-loading__container" @click="createEmployee" :disabled="errors.any()" ref="addButton" id="button-with-loading">Add Data</vs-button>
-      <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Cancel</vs-button>
+        <vs-button class="mr-6 vs-con-loading__container" @click="createEmployee" :disabled="errors.any()" ref="addButton" id="button-with-loading">Add Data</vs-button>
+        <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Cancel</vs-button>
     </div>
-  </vs-sidebar>
+</vs-sidebar>
 </template>
 
 <script>
@@ -240,32 +235,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .add-new-data-sidebar {
-    /deep/ .vs-sidebar--background {
-      z-index: 52010;
-    }
+.add-new-data-sidebar {
+  /deep/ .vs-sidebar--background {
+    z-index: 52010;
+  }
 
-    /deep/ .vs-sidebar {
-      z-index: 52010;
-      width: 400px;
-      max-width: 90vw;
+  /deep/ .vs-sidebar {
+    z-index: 52010;
+    width: 400px;
+    max-width: 90vw;
 
-      .img-upload {
-        margin-top: 2rem;
+    .img-upload {
+      margin-top: 2rem;
 
-        .con-img-upload {
-          padding: 0;
-        }
+      .con-img-upload {
+        padding: 0;
+      }
 
-        .con-input-upload {
-          width: 100%;
-          margin: 0;
-        }
+      .con-input-upload {
+        width: 100%;
+        margin: 0;
       }
     }
   }
+}
 
-  .scroll-area--data-list-add-new {
-    height: calc(100% - 4.3rem);
-  }
+.scroll-area--data-list-add-new {
+  height: calc(100% - 4.3rem);
+}
 </style>
