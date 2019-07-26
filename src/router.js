@@ -77,6 +77,39 @@ const router = new Router({
             pageTitle: 'Chi tiết học viên'
           }
         },
+        {
+          path: '/students/:student',
+          name: 'student',
+          component: () => import('./views/students/DetailStudent.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Chi tiết học viên', url: '/'}
+            ],
+            pageTitle: 'Chi tiết học viên'
+          }
+        },
+        {
+          path: '/students/:student',
+          name: 'student',
+          component: () => import('./views/students/DetailStudent.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Chi tiết học viên', url: '/'}
+            ],
+            pageTitle: 'Chi tiết học viên'
+          }
+        },
+        {
+          path: '/programs',
+          name: 'programs',
+          component: () => import('./views/programs/ProgramsList.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Chương trình học', url: '/'}
+            ],
+            pageTitle: 'Chương trình học'
+          }
+        },
       ],
       meta: {
         authRequired: true

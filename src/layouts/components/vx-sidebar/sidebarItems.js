@@ -50,4 +50,24 @@ export default [
     slug: "students",
     icon: "UserIcon",
   },
+  {
+    name: "branches",
+    header: "Chi nhánh"
+  },
+  {
+    url: "/branches",
+    name: "Chi nhánh",
+    slug: "branchs",
+    icon: "GitPullRequestIcon",
+  },
+  {
+    name: "programs",
+    header: "Chương trình học"
+  },
+  {
+    url: "/programs",
+    name: "Chương trình học",
+    slug: "programs",
+    icon: "MenuIcon",
+  },
 ];
