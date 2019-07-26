@@ -70,7 +70,7 @@
           </vs-td>
 
           <vs-td v-if="views.avatar.viewable">
-            <p class="product-name font-medium"><img :src="tr.avatar" :alt="tr.name" class="img-round"/></p>
+            <vs-avatar size="55px" :src="tr.avatar" :alt="tr.name" />
           </vs-td>
 
           <vs-td v-if="views.name.viewable">
@@ -105,11 +105,11 @@
             <p class="product-category">{{ tr.created_at }}</p>
           </vs-td>
 
-          <vs-td v-if="views.action.viewable">
+          <vs-td v-if="views.action.viewable" class="d-flex-span">
             <router-link
               tag="button"
               :to="'/employees/' + tr.id "
-              class="vs-component vs-button vs-button-primary vs-button-filled small">Chi tiết</router-link>
+              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-eye"></i></router-link>
               <vs-button color="danger" size="small" @click="deleteEmployee(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>
@@ -338,6 +338,14 @@ export default {
 
     .vs-table--pagination {
       justify-content: center;
+    }
+  }
+}
+.d-flex-span{
+  span{
+    display: flex;
+    button{
+      margin: 3px;
     }
   }
 }
