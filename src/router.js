@@ -18,6 +18,9 @@ const router = new Router({
     // =============================================================================
       path: '',
       component: () => import('./layouts/main/Main.vue'),
+      meta: {
+        authRequired: true
+      },
       children: [
       // =============================================================================
       // Theme Routes
@@ -95,15 +98,12 @@ const router = new Router({
           component: () => import('./views/branches/DataListListView.vue'),
           meta: {
             breadcrumb: [
-              { title: 'Chi nhánh', url: '/'}
+              {title: 'Chi nhánh', url: '/'}
             ],
             pageTitle: 'Chi nhánh'
           }
         },
       ],
-      meta: {
-        authRequired: true
-      }
     },
     // =============================================================================
     // FULL PAGE LAYOUTS requiresAuth: false
