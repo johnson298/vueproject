@@ -118,6 +118,7 @@
           </vs-td>
 
           <vs-td v-if="views.action.viewable">
+            <router-link tag="button" :to="'/students/' + tr.id " class="vs-component vs-button vs-button-primary vs-button-filled small">Chi tiết</router-link>
             <vs-button color="danger" size="small" @click="deleteStudent(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>

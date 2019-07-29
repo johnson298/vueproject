@@ -3,9 +3,9 @@
 
     <!-- PROFILE HEADER -->
     <div class="cover-container rounded-t-lg img-profile-cus">
-      <img class="user-profile-img" :src="user.avatar" alt="user-profile-cover">
+        <img class="user-profile-img" :src="student.avatar" alt="user-profile-cover">
     </div>
-    <h2 class="text-center m-5 d-flex">{{user.name}}</h2>
+    <h2 class="text-center m-5 d-flex">{{student.name}}</h2>
 
     <!-- COL AREA -->
     <vx-card code-toggler class="custom-card">
@@ -16,33 +16,43 @@
                         <div class="vx-row">
                             <div class="vx-col md:w-1/2 w-full mb-base">
                                 <div class="vx-col mb-6">
-                                    <h2>Thông tin nhân viên</h2>
+                                    <h2>Thông tin học viên</h2>
                                 </div>
                                 <div>
-                                    <vs-input label="Mã nhân viên" class="mt-5 w-full" v-model="user.code" disabled />
+                                    <vs-input label="Mã học viên" v-model="student.code" class="mt-5 w-full" disabled />
                                 </div>
                                 <div>
-                                    <vs-input label="Tên nhân viên" class="mt-5 w-full" v-model="user.name" />
+                                    <vs-input label="Tên học viên" v-model="student.name" class="mt-5 w-full" />
                                 </div>
                                 <div>
-                                    <vs-input label="Địa chỉ" class="mt-5 w-full" v-model="user.address" />
+                                    <vs-input label="Địa chỉ" v-model="student.address" class="mt-5 w-full" />
                                 </div>
                                 <div>
-                                    <vs-input label="Số điện thoại" class="mt-5 w-full" v-model="user.phone" />
+                                    <vs-input label="Điện thoại" v-model="student.phone" class="mt-5 w-full" />
                                 </div>
                                 <div>
-                                    <vs-input label="Facebook" class="mt-5 w-full" v-model="user.facebook" />
+                                    <vs-input label="Facebook" v-model="student.facebook" class="mt-5 w-full" />
                                 </div>
                                 <div>
-                                    <vs-input label="Ngày sinh" type="date" class="mt-5 w-full" v-model="user.birthday" />
+                                    <vs-input label="Ngày sinh" v-model="student.birthday" class="mt-5 w-full" type="date" />
                                 </div>
                                 <div>
                                     <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
                                         <label for="" class="vs-input--label">Ảnh đại diện</label>
                                         <div class="vs-con-input">
-                                            <input type="file" ref="file" accept="image/*" @change="changeAvatar" class="vs-inputx vs-input--input normal hasValue">
+                                            <input type="file" id="file" ref="file" accept="image/*" @change="changeAvatar" class="vs-inputx vs-input--input normal hasValue">
                                         </div>
                                     </div>
+                                </div>
+                                <div>
+                                    <vs-input label="Trường" v-model="student.school" class="mt-5 w-full" />
+                                </div>
+                                <div>
+                                    <vs-input label="Lớp" v-model="student.class" class="mt-5 w-full" />
+                                </div>
+                                <div>
+                                    <div class="note mt-5"><label class="vs-input--label">Ghi chú</label></div>
+                                    <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="student.note" class="w-full" :rows="5" />
                                 </div>
                             </div>
                             <div class="vx-col md:w-1/2 w-full mb-base">
@@ -50,35 +60,20 @@
                                     <h2>Thông tin đăng nhập</h2>
                                 </div>
                                 <div>
-                                    <vs-input label="Email" class="mt-5 w-full" v-model="user.email" />
+                                    <vs-input label="Email" v-model="student.email" class="mt-5 w-full" />
                                 </div>
                                 <div>
-                                    <vs-input label="Mật khẩu" type="password" class="mt-5 w-full" v-model="user.password" />
+                                    <vs-input label="Mật khẩu" type="password" class="mt-5 w-full" v-model="student.password" />
                                 </div>
                                 <div>
-                                    <vs-input label="Nhập lại khẩu" type="password" class="mt-5 w-full" v-model="user.password_confirmation" />
+                                    <vs-input label="Nhập lại khẩu" type="password" class="mt-5 w-full" v-model="student.password_confirmation" />
                                 </div>
-                                <div class="vx-col mb-6 mt-5">
-                                    <h2>Thông tin học vấn</h2>
-                                </div>
-                                <vs-select v-model="user.level" label="Trình độ học vấn" class="mt-5 w-full">
-                                    <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item,index) in levels" />
-                                </vs-select>
-                                <vs-select v-model="user.position" label="Chức vụ" class="mt-5 w-full">
-                                    <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item,index) in positions" />
-                                </vs-select>
-                                <vs-select v-model="user.major" label="Nghiệp vụ" class="mt-5 w-full">
-                                    <vs-select-item :key="index" :value="item.value" :text="item.text" v-for="(item,index) in majors" />
-                                </vs-select>
-                                <div>
-                                    <div class="note mt-5"><label class="vs-input--label">Ghi chú</label></div>
-                                    <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="user.note" class="w-full" :rows="5" />
-                                </div>
+
                             </div>
                         </div>
                         <vs-row vs-type="flex" vs-justify="space-between">
                             <vs-col vs-offset="10" vs-w="2">
-                                <button id="update-loading" class="vs-component vs-button vs-button-primary vs-button-filled" ref="addButton" @click="updateUser(user)">Cập nhật</button>
+                                <button id="update-loading" class="vs-component vs-button vs-button-primary vs-button-filled" ref="addButton" @click="updateStudent(student)">Cập nhật</button>
                             </vs-col>
                         </vs-row>
                     </div>
@@ -112,7 +107,7 @@ export default {
       levels: this.$store.state.model.employees.levels,
       positions: this.$store.state.model.employees.positions,
       majors: this.$store.state.model.employees.majors,
-      user: {
+      student: {
         birthday: '',
         facebook: '',
         address: '',
@@ -131,22 +126,23 @@ export default {
     };
   },
   created() {
-    this.userInfo();
+    this.studentInfo();
   },
   filters: {
     trim: function (string) {
       return string.trim();
     }
+
   },
   methods: {
     changeAvatar() {
-      this.user.avatar = this.$refs.file.files[0];
+      this.student.avatar = this.$refs.file.files[0];
     },
 
-    userInfo() {
+    studentInfo() {
       let vm = this;
-      this.$http.get('users/' + this.$route.params.employee).then(function (response) {
-        vm.user = response.data.data;
+      this.$http.get('students/' + this.$route.params.student).then(function (response) {
+        vm.student = response.data.data;
       }).catch(() => {
         this.$router.push('/pages/error-404');
         this.$vs.notify({
@@ -160,28 +156,29 @@ export default {
     },
     formData() {
       let formData = new FormData();
-      Object.keys(this.user).map(key => {
+      Object.keys(this.student).map(key => {
         if (key != 'metadata') {
-          formData.append(key, this.user[key]);
+          formData.append(key, this.student[key]);
         }
-      });
-      if (typeof this.user.avatar === 'string') {
+      }); 
+      if (typeof this.student.avatar === 'string') {
         formData.append('avatar', '');
       }
       formData.append('_method', 'PUT');
       return formData;
     },
-    updateUser(user) {
+    updateStudent(student) {
       this.$vs.loading({
         background: 'primary',
         color: '#fff',
         container: '#update-loading',
         scale: 0.45
       });
-      this.$http.post('users/' + user.id, this.formData(), {
+      this.$http.post('students/' + student.id, this.formData(), {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
+
       })
         .then(() => {
           this.$vs.notify({
@@ -193,6 +190,7 @@ export default {
           });
         })
         .catch((error) => {
+       
           if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {
             let message = error.response.data.error.validation[Object.keys(error.response.data.error.validation)[0]][0];
             this.$vs.notify({
