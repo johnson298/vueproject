@@ -43,6 +43,7 @@ const actions = {
   clearData({commit}){
     commit('employees/RESET');
     commit('students/RESET');
+    commit('programs/RESET');
   }
 };
 
