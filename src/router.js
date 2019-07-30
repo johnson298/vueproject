@@ -41,7 +41,8 @@ const router = new Router({
             breadcrumb: [
               { title: 'Nhân viên', url: '/' },
             ],
-            pageTitle: 'Nhân viên'
+            pageTitle: 'Nhân viên',
+            authRequired: true,
           },
         },
         {
@@ -78,28 +79,6 @@ const router = new Router({
           }
         },
         {
-          path: '/students/:student',
-          name: 'student',
-          component: () => import('./views/students/DetailStudent.vue'),
-          meta: {
-            breadcrumb: [
-              { title: 'Chi tiết học viên', url: '/'}
-            ],
-            pageTitle: 'Chi tiết học viên'
-          }
-        },
-        {
-          path: '/students/:student',
-          name: 'student',
-          component: () => import('./views/students/DetailStudent.vue'),
-          meta: {
-            breadcrumb: [
-              { title: 'Chi tiết học viên', url: '/'}
-            ],
-            pageTitle: 'Chi tiết học viên'
-          }
-        },
-        {
           path: '/programs',
           name: 'programs',
           component: () => import('./views/programs/ProgramsList.vue'),
@@ -108,6 +87,17 @@ const router = new Router({
               { title: 'Chương trình học', url: '/'}
             ],
             pageTitle: 'Chương trình học'
+          }
+        },
+        {
+          path: '/branches',
+          name: 'branches',
+          component: () => import('./views/branches/DataListListView.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Chi nhánh', url: '/'}
+            ],
+            pageTitle: 'Chi nhánh'
           }
         },
       ],
