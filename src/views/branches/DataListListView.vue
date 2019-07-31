@@ -84,7 +84,8 @@
           </vs-td>
 
           <vs-td v-if="views.action.viewable">
-            <vs-button color="primary" size="small" @click="detailBranches(tr)"> Chi tiết</vs-button>
+              <vs-button color="primary" size="small" @click="detailBranches(tr)"
+                         class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-eye"></i></vs-button>
             <vs-button color="danger" size="small" @click="deleteBranches(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>

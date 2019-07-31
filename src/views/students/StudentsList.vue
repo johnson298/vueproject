@@ -350,12 +350,4 @@ export default {
     }
   }
 }
-.d-flex-span{
-  span{
-    display: flex;
-    button{
-      margin: 3px;
-    }
-  }
-}
 </style>
