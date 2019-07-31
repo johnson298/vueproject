@@ -83,7 +83,7 @@
             <p class="product-category">{{ tr.created_at }}</p>
           </vs-td>
 
-          <vs-td v-if="views.action.viewable">
+          <vs-td v-if="views.action.viewable" class="d-flex-span">
               <vs-button color="primary" size="small" @click="detailBranches(tr)"
                          class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-eye"></i></vs-button>
             <vs-button color="danger" size="small" @click="deleteBranches(tr)" icon="delete_forever"></vs-button>
@@ -326,6 +326,14 @@ export default {
 
     .vs-table--pagination {
       justify-content: center;
+    }
+  }
+}
+.d-flex-span{
+  span{
+    display: flex;
+    button{
+      margin: 3px;
     }
   }
 }
