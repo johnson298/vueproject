@@ -126,7 +126,18 @@ const router = new Router({
             },
           ]
         },
-      ]
+        {
+          path: '/courses',
+          name: 'courses',
+          component: () => import('./views/courses/DataListListView.vue'),
+          meta: {
+            breadcrumb: [
+              {title: 'Lớp học ', url: '/'}
+            ],
+            pageTitle: 'Lớp học'
+          }
+        },
+      ],
     },
     // =============================================================================
     // FULL PAGE LAYOUTS requiresAuth: false

@@ -40,6 +40,16 @@ export default [
     icon: "MenuIcon",
   },
   {
+    name : "courses",
+    header : "Lớp Học"
+  },
+  {
+    url : "/courses",
+    name: "Lớp học",
+    slug : "course",
+    icon : "UserIcon"
+  },
+  {
     name: "setting",
     header: "Cấu hình"
   },
