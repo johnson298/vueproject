@@ -93,17 +93,40 @@ const router = new Router({
           }
         },
         {
-          path: '/branches',
-          name: 'branches',
-          component: () => import('./views/branches/DataListListView.vue'),
+          path: '/settings',
+          component: () => import('./views/settings/Settings.vue'),
           meta: {
             breadcrumb: [
-              {title: 'Chi nhánh', url: '/'}
+              { title: 'Cài đặt', url: '/'}
             ],
-            pageTitle: 'Chi nhánh'
-          }
+            pageTitle: 'Cài đặt'
+          },
+          children: [
+            {
+              path: '',
+              name: 'SettingsSystems',
+              component: () => import('./views/settings/systems/SettingsSystems.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Cài đặt hệ thống', url: '/'}
+                ],
+                pageTitle: 'Cài đặt hệ thống'
+              }
+            },
+            {
+              path: 'branchs',
+              name: 'SettingsBranch',
+              component: () => import('./views/settings/branches/DataListListView.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Cài đặt chi nhánh', url: '/'}
+                ],
+                pageTitle: 'Cài đặt chi nhánh'
+              }
+            },
+          ]
         },
-      ],
+      ]
     },
     // =============================================================================
     // FULL PAGE LAYOUTS requiresAuth: false

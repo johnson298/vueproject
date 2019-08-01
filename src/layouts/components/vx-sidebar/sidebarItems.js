@@ -30,16 +30,6 @@ export default [
     icon: "UserIcon",
   },
   {
-    name: "branches",
-    header: "Chi nhánh"
-  },
-  {
-    url: "/branches",
-    name: "Chi nhánh",
-    slug: "branches",
-    icon: "GitPullRequestIcon",
-  },
-  {
     name: "programs",
     header: "Chương trình học"
   },
@@ -48,5 +38,15 @@ export default [
     name: "Chương trình học",
     slug: "programs",
     icon: "MenuIcon",
+  },
+  {
+    name: "setting",
+    header: "Cấu hình"
+  },
+  {
+    url: "/settings",
+    name: "Cài đặt",
+    slug: "settings",
+    icon: "SettingsIcon",
   },
 ];
