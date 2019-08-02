@@ -114,14 +114,25 @@ const router = new Router({
               }
             },
             {
-              path: 'branchs',
-              name: 'SettingsBranch',
+              path: 'branches',
+              name: 'SettingsBranches',
               component: () => import('./views/settings/branches/DataListListView.vue'),
               meta: {
                 breadcrumb: [
                   { title: 'Cài đặt chi nhánh', url: '/'}
                 ],
                 pageTitle: 'Cài đặt chi nhánh'
+              }
+            },
+            {
+              path: 'coupons',
+              name: 'SettingsCoupons',
+              component: () => import('./views/settings/coupons/CouponsList.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Khuyến mại', url: '/'}
+                ],
+                pageTitle: 'Khuyến mại'
               }
             },
           ]

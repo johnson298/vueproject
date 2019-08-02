@@ -93,7 +93,7 @@
 
                 <vs-td v-if="views.action.viewable" class="d-flex-span">
                     <vs-button color="primary" size="small" @click="getIdProgram(tr.id)"
-                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-eye"></i></vs-button>
+                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
                     <vs-button color="danger" size="small" @click="deleteProgram(tr)" icon="delete_forever"></vs-button>
                 </vs-td>
             </vs-tr>
