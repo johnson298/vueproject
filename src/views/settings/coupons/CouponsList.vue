@@ -1,10 +1,10 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
 
-    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData"/>
-    <edit-branches-sidebar :isSidebarEditActive="editBranchesSidebar" @closeSidebar="editBranchesSidebar = false" :branchesGetInfo="branchesGetInfo" :getData="getData" />
+    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData" />
+    <edit-coupon-sidebar :isSidebarEditActive="editCouponSidebar" @closeSidebar="editCouponSidebar = false" :couponInfo="couponGetInfo" :getData="getData" />
 
-    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="branches" search id="table" maxItems="10">
+    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="coupons" search id="table" maxItems="10">
 
       <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
@@ -54,10 +54,11 @@
 
           <!-- ADD NEW -->
           <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addNewDataSidebar = true">
-            <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-            <span class="ml-2 text-base text-primary">Thêm chi nhánh</span>
+              <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
+              <span class="ml-2 text-base text-primary">Thêm khuyến mại</span>
           </div>
         </div>
+
       </div>
 
       <template slot="thead">
@@ -66,13 +67,23 @@
 
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-
-          <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.name }}</p>
+          <vs-td v-if="views.type.viewable">
+            <p class="product-name font-medium">{{ tr.type }}</p>
+          </vs-td>
+          <vs-td v-if="views.discount_rate.viewable">
+            <p class="product-name font-medium">{{ tr.discount_rate }}%</p>
           </vs-td>
 
-          <vs-td v-if="views.address.viewable">
-            <p class="product-category">{{ tr.address }}</p>
+          <vs-td v-if="views.discount_amount.viewable">
+            <p class="product-name font-medium">{{ formatPrice(tr.discount_amount) }}</p>
+          </vs-td>
+
+          <vs-td v-if="views.status.viewable">
+            <p class="product-category">{{ tr.status }}</p>
+          </vs-td>
+
+          <vs-td v-if="views.note.viewable">
+            <p class="product-category">{{ tr.note }}</p>
           </vs-td>
 
           <vs-td v-if="views.updated_at.viewable">
@@ -84,9 +95,9 @@
           </vs-td>
 
           <vs-td v-if="views.action.viewable" class="d-flex-span">
-              <vs-button color="primary" size="small" @click="detailBranches(tr)"
-                         class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
-            <vs-button color="danger" size="small" @click="deleteBranches(tr)" icon="delete_forever"></vs-button>
+            <vs-button color="primary" size="small" @click="getIdCoupon(tr.id)"
+            class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
+            <vs-button color="danger" size="small" @click="deleteCoupon(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>
       </template>
@@ -94,17 +105,17 @@
     <div class="con-vs-pagination vs-pagination-primary">
       <nav class="vs-pagination--nav">
         <paginate
-            :page-count="pagination.totalPages"
-            :page-range="3"
-            :margin-pages="2"
-            :active-class="'is-current'"
-            :container-class="'vs-pagination--ul'"
-            :page-class="'item-pagination vs-pagination--li'"
-            :prev-text="prev"
-            :next-text="next"
-            :click-handler="getData"
-            :value="pagination.currentPage"
-            ref="paginate"
+          :page-count="pagination.totalPages"
+          :page-range="3"
+          :margin-pages="2"
+          :active-class="'is-current'"
+          :container-class="'vs-pagination--ul'"
+          :page-class="'item-pagination vs-pagination--li'"
+          :prev-text="prev"
+          :next-text="next"
+          :click-handler="getData"
+          :value="pagination.currentPage"
+          ref="paginate"
         />
       </nav>
     </div>
@@ -113,54 +124,52 @@
 
 <script>
 import AddNewDataSidebar from './AddNewDataSidebar.vue';
-import EditBranchesSidebar from './EditBranches.vue';
-
+import EditCouponSidebar from './EditCoupon.vue';
 import { mapState } from 'vuex';
 
 export default {
   components: {
-    AddNewDataSidebar,
-    EditBranchesSidebar
+    EditCouponSidebar,
+    AddNewDataSidebar
   },
   data() {
     return {
-      branchesGetInfo: {},
-      activeConfirm:false,
       timer: null,
       selected: [],
       isMounted: false,
       addNewDataSidebar: false,
-      editBranchesSidebar:false,
+      editCouponSidebar: false,
+      couponGetInfo: {},
       prev: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_left</i></button>",
       next: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-next\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_right</i></button>"
     };
   },
   computed: {
-    ...mapState('branches', ['branches', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
+    ...mapState('coupons', ['coupons', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
   methods: {
-    detailBranches(branches){
-      this.editBranchesSidebar = true;
+    getIdCoupon(id) {
+      this.editCouponSidebar = true;
       var vm = this;
-      this.$http.get('branches/' + branches.id).then(function (response) {
-        vm.branchesGetInfo = response.data.data;
+      this.$http.get('coupons/' + id).then(function (response) {
+        vm.couponGetInfo = response.data.data;
       });
     },
-    deleteBranches(branches){
+    deleteCoupon(coupon){
       this.$vs.dialog({
         type:'confirm',
         color: 'danger',
-        title: `Xóa chi nhánh`,
-        text: 'Bạn có chắc muốn xóa ' + branches.name,
-        accept:this.branchesAlert,
-        parameters: [branches.id]
+        title: `Xóa nhân viên`,
+        text: 'Bạn có chắc muốn xóa ' + coupon.type,
+        accept:this.couponAlert,
+        parameters: [coupon.id]
       });
     },
-    branchesAlert(branches){
-      this.$http.delete('branches/'+ branches).then( () => {
+    couponAlert(coupon_id ){
+      this.$http.delete('coupons/'+ coupon_id).then( () => {
         this.$vs.notify({
           color:'success',
-          title:'Xóa chi nhánh',
+          title:'Xóa nhân viên',
           text:'Bạn đã xóa thành công',
           icon: 'verified_user',
         });
@@ -175,9 +184,10 @@ export default {
           color: 'danger'
         });
       });
+
     },
     updateViews(index, e){
-      this.$store.dispatch('branches/updateViews', {
+      this.$store.dispatch('coupons/updateViews', {
         index: index,
         viewable: e.target.checked
       });
@@ -188,7 +198,7 @@ export default {
     getData(page = 1) {
       const thisIns = this;
       thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
-      this.$http.get('branches', {
+      this.$http.get('coupons', {
         params: {
           page: page,
           search: this.searchTerm,
@@ -196,9 +206,9 @@ export default {
           sortedBy: this.order.orderType,
         }
       }).then(function (response) {
-        thisIns.$store.dispatch('branches/updateTable', {
-          branches: thisIns.formatData(response.data.data),
-          pagination: response.data.pagination,
+        thisIns.$store.dispatch('coupons/updateTable', {
+          coupons: thisIns.formatData(response.data.data),
+          pagination: response.data.pagination
         });
       })
         .catch(function (error) {
@@ -214,11 +224,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch('branches/updateNeedReload', true);
+        this.$store.dispatch('coupons/updateNeedReload', true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch('branches/updateSearch', {
+      this.$store.dispatch('coupons/updateSearch', {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -227,7 +237,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch('branches/updateOrder', {
+      this.$store.dispatch('coupons/updateOrder', {
         order: {
           orderBy: key,
           orderType: active ? 'desc' : 'asc',
@@ -239,12 +249,12 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.branches.length === 0) {
+    if (this.coupons.length === 0) {
       this.getData();
     }
   },
   destroyed() {
-    this.$store.dispatch('branches/updateNeedReload', false);
+    this.$store.dispatch('coupons/updateNeedReload', false);
   }
 };
 </script>

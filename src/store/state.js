@@ -65,6 +65,16 @@ const state = {
         { text: 'Đã hoàn thành', value: 3},
         { text: 'Đã hủy', value: 4},
       ]
+    },
+    coupons : {
+      type: [
+        { text: 'Theo tỉ lệ', value: 1},
+        { text: 'Theo số tiền', value: 2}
+      ],
+      status: [
+        { text: 'unavailable', value: 1},
+        { text: 'Trạng thái khuyến mại', value: 2},
+      ],
     }
   }
 };
