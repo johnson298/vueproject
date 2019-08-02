@@ -45,6 +45,7 @@ const actions = {
     commit('students/RESET');
     commit('programs/RESET');
     commit('branches/RESET');
+    commit('courses/RESET');
   }
 };
 

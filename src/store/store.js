@@ -10,6 +10,7 @@ import moduleEmployees from './employees/module';
 import moduleStudents from './students/module';
 import modulePrograms from './programs/module';
 import moduleBranches from './branches/module';
+import moduleCourses from  './courses/module';
 
 Vue.use(Vuex);
 
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     students: moduleStudents,
     programs: modulePrograms,
     branches: moduleBranches,
+    courses : moduleCourses,
   },
   strict: process.env.NODE_ENV !== 'production'
 });

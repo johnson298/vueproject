@@ -19,21 +19,21 @@ import SettingsSidebar from "./SettingsSidebar.vue";
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import themeConfig from '@/../themeConfig.js';
 export default {
-    data() {
-        return {
-            clickNotClose: true,
-            isSidebarActive: true,
-            settings: {
-                maxScrollbarLength: 60,
-                wheelSpeed: 0.30,
-            },
-            routerTransition: themeConfig.routerTransition || 'zoom-fade',
-        };
-    },
-    components: {
-        SettingsSidebar,
-        VuePerfectScrollbar
-    },
+  data() {
+    return {
+      clickNotClose: true,
+      isSidebarActive: true,
+      settings: {
+        maxScrollbarLength: 60,
+        wheelSpeed: 0.30,
+      },
+      routerTransition: themeConfig.routerTransition || 'zoom-fade',
+    };
+  },
+  components: {
+    SettingsSidebar,
+    VuePerfectScrollbar
+  },
 };
 </script>
 

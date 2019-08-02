@@ -57,6 +57,14 @@ const state = {
         { text: 'Trang chủ', value: 3},
         { text: 'Khác', value: 4},
       ]
+    },
+    courses : {
+      status: [
+        { text: 'Mở', value: 1},
+        { text: 'Đang hoạt động', value: 2},
+        { text: 'Đã hoàn thành', value: 3},
+        { text: 'Đã hủy', value: 4},
+      ]
     }
   }
 };
