@@ -148,6 +148,17 @@ const router = new Router({
             pageTitle: 'Lớp học'
           }
         },
+        {
+          path: '/courses/:course',
+          name: 'detailcourses',
+          component: () => import('./views/courses/DetailCourses.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Chi tiết lớp học', url: '/'}
+            ],
+            pageTitle: 'Chi tiết lớp học'
+          }
+        },
       ],
     },
     // =============================================================================

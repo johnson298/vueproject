@@ -1,5 +1,5 @@
 export default {
-  students: [],
+  registers: [],
   pagination: {
     count: 0,
     total: 0,

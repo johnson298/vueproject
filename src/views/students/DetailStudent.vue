@@ -86,7 +86,7 @@
                 <vs-tab label="Lớp đang tham gia">
                     <div class="tab-text">
                         <div class="">
-                            ...
+                            <CoursesList/>
                         </div>
                     </div>
                 </vs-tab>
@@ -98,6 +98,7 @@
 
 <script>
 import 'video.js/dist/video-js.css';
+import CoursesList from './CoursesList';
 
 export default {
   data() {
@@ -124,6 +125,9 @@ export default {
         major: 0,
       },
     };
+  },
+  components: {
+    CoursesList
   },
   created() {
     this.studentInfo();

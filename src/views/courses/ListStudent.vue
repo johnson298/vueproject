@@ -1,9 +1,10 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
 
-    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData" />
-
-    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="students" search id="table" maxItems="10">
+    <vs-popup fullscreen classContent="popup-example" title="Thêm học viên vào lớp học" :active.sync="popupAllstudent">
+        <GetAllStudents :active.sync="popupAllstudent" />
+    </vs-popup>
+    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="registers" search id="table" maxItems="10">
 
       <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
@@ -52,12 +53,11 @@
           </vs-dropdown>
 
           <!-- ADD NEW -->
-          <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addNewDataSidebar = true">
-              <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-              <span class="ml-2 text-base text-primary">Thêm Học Viên</span>
+          <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="popupAllstudent=true">
+            <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
+            <span class="ml-2 text-base text-primary">Thêm lớp học</span>
           </div>
         </div>
-
       </div>
 
       <template slot="thead">
@@ -67,58 +67,58 @@
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
           <vs-td v-if="views.code.viewable">
-            <p class="product-name font-medium">{{ tr.code }}</p>
+            <p class="product-name font-medium">{{ tr.student.code }}</p>
           </vs-td>
           <vs-td v-if="views.avatar.viewable">
-            <vs-avatar size="55px" :src="tr.avatar" :alt="tr.name" />
+            <vs-avatar size="55px" :src="tr.student.avatar" :alt="tr.student.avatar" />
           </vs-td>
 
           <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.name }}</p>
+            <p class="product-name font-medium">{{ tr.student.name }}</p>
           </vs-td>
 
           <vs-td v-if="views.email.viewable">
-            <p class="product-category">{{ tr.email }}</p>
+            <p class="product-category">{{ tr.student.email }}</p>
           </vs-td>
 
           <vs-td v-if="views.birthday.viewable">
-            <p class="product-category">{{ tr.birthday }}</p>
+            <p class="product-category">{{ tr.student.birthday }}</p>
           </vs-td>
 
           <vs-td v-if="views.phone.viewable">
-            <p class="product-category">{{ tr.phone }}</p>
+            <p class="product-category">{{ tr.student.phone }}</p>
           </vs-td>
 
           <vs-td v-if="views.facebook.viewable">
-            <p class="product-category"><a :href="tr.facebook" target="_blank">Link</a></p>
+            <p class="product-category"><a :href="tr.student.facebook" target="_blank">Link</a></p>
           </vs-td>
 
           <vs-td v-if="views.address.viewable">
-            <p class="product-category">{{ tr.address }}</p>
+            <p class="product-category">{{ tr.student.address }}</p>
           </vs-td>
 
           <vs-td v-if="views.source.viewable">
-            <p class="product-category">{{ tr.source }}</p>
+            <p class="product-category">{{ tr.student.source }}</p>
           </vs-td>
 
           <vs-td v-if="views.class.viewable">
-            <p class="product-category">{{ tr.class }}</p>
+            <p class="product-category">{{ tr.student.class }}</p>
           </vs-td>
 
           <vs-td v-if="views.school.viewable">
-            <p class="product-category">{{ tr.school }}</p>
+            <p class="product-category">{{ tr.student.school }}</p>
           </vs-td>
 
           <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
+            <p class="product-category">{{ tr.student.updated_at }}</p>
           </vs-td>
 
           <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
+            <p class="product-category">{{ tr.student.created_at }}</p>
           </vs-td>
 
           <vs-td v-if="views.action.viewable" class="d-flex-span">
-            <router-link tag="button" :to="'/students/' + tr.id " class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-eye"></i></router-link>
+              <router-link tag="button" :to="'/students/' + tr.student.id " class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-eye"></i></router-link>
             <vs-button color="danger" size="small" @click="deleteStudent(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>
@@ -127,17 +127,17 @@
     <div class="con-vs-pagination vs-pagination-primary">
       <nav class="vs-pagination--nav">
         <paginate
-          :page-count="pagination.totalPages"
-          :page-range="3"
-          :margin-pages="2"
-          :active-class="'is-current'"
-          :container-class="'vs-pagination--ul'"
-          :page-class="'item-pagination vs-pagination--li'"
-          :prev-text="prev"
-          :next-text="next"
-          :click-handler="getData"
-          :value="pagination.currentPage"
-          ref="paginate"
+            :page-count="pagination.totalPages"
+            :page-range="3"
+            :margin-pages="2"
+            :active-class="'is-current'"
+            :container-class="'vs-pagination--ul'"
+            :page-class="'item-pagination vs-pagination--li'"
+            :prev-text="prev"
+            :next-text="next"
+            :click-handler="getData"
+            :value="pagination.currentPage"
+            ref="paginate"
         />
       </nav>
     </div>
@@ -145,15 +145,17 @@
 </template>
 
 <script>
-import AddNewDataSidebar from './AddNewDataSidebar.vue';
+import GetAllStudents from './GetAllStudents';
 import { mapState } from 'vuex';
 
 export default {
   components: {
-    AddNewDataSidebar
+    GetAllStudents
   },
   data() {
     return {
+      popupAllstudent: false,
+      activeConfirm:false,
       timer: null,
       selected: [],
       isMounted: false,
@@ -163,24 +165,27 @@ export default {
     };
   },
   computed: {
-    ...mapState('students', ['students', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
+    ...mapState('registers', ['registers', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
+  },
+  created(){
+    this.getData();
   },
   methods: {
-    deleteStudent(student){
+    deleteStudent(user){
       this.$vs.dialog({
         type:'confirm',
         color: 'danger',
-        title: `Xóa nhân viên`,
-        text: 'Bạn có chắc muốn xóa ' + student.name,
+        title: `Xóa học viên`,
+        text: 'Bạn có chắc muốn xóa ' + user.student.name,
         accept:this.studentAlert,
-        parameters: [student.id]
+        parameters: [user.id]
       });
     },
-    studentAlert(student_id ){
-      this.$http.delete('students/'+ student_id).then( () => {
+    studentAlert(user_id ){
+      this.$http.delete('courses/' + this.$route.params.course + '/registers/' + user_id).then( () => {
         this.$vs.notify({
           color:'success',
-          title:'Xóa nhân viên',
+          title:'Xóa học viên',
           text:'Bạn đã xóa thành công',
           icon: 'verified_user',
         });
@@ -198,7 +203,7 @@ export default {
 
     },
     updateViews(index, e){
-      this.$store.dispatch('students/updateViews', {
+      this.$store.dispatch('registers/updateViews', {
         index: index,
         viewable: e.target.checked
       });
@@ -209,7 +214,7 @@ export default {
     getData(page = 1) {
       const thisIns = this;
       thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
-      this.$http.get('students', {
+      this.$http.get('courses/' + this.$route.params.course + '/registers', {
         params: {
           page: page,
           search: this.searchTerm,
@@ -217,8 +222,8 @@ export default {
           sortedBy: this.order.orderType,
         }
       }).then(function (response) {
-        thisIns.$store.dispatch('students/updateTable', {
-          students: thisIns.formatData(response.data.data),
+        thisIns.$store.dispatch('registers/updateTable', {
+          registers: thisIns.formatData(response.data.data),
           pagination: response.data.pagination
         });
       })
@@ -235,11 +240,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch('students/updateNeedReload', true);
+        this.$store.dispatch('registers/updateNeedReload', true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch('students/updateSearch', {
+      this.$store.dispatch('registers/updateSearch', {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -248,7 +253,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch('students/updateOrder', {
+      this.$store.dispatch('registers/updateOrder', {
         order: {
           orderBy: key,
           orderType: active ? 'desc' : 'asc',
@@ -260,12 +265,12 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.students.length === 0) {
+    if (this.registers.length === 0) {
       this.getData();
     }
   },
   destroyed() {
-    this.$store.dispatch('students/updateNeedReload', false);
+    this.$store.dispatch('registers/updateNeedReload', false);
   }
 };
 </script>

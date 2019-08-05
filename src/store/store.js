@@ -12,6 +12,7 @@ import modulePrograms from './programs/module';
 import moduleBranches from './branches/module';
 import moduleCoupons from './coupons/module';
 import moduleCourses from  './courses/module';
+import moduleRegisters from  './registers/module';
 
 Vue.use(Vuex);
 
@@ -28,6 +29,7 @@ export default new Vuex.Store({
     branches: moduleBranches,
     coupons: moduleCoupons,
     courses : moduleCourses,
+    registers : moduleRegisters,
   },
   strict: process.env.NODE_ENV !== 'production'
 });
