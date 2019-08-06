@@ -1,7 +1,7 @@
 <template>
     <vs-sidebar click-not-close position-right parent="body" default-index="1" color="primary" class="add-new-data-sidebar items-no-padding" spacer v-model="isSidebarActiveLocal">
         <div class="mt-6 flex items-center justify-between px-6">
-            <h4>Chỉnh sửa lớp học</h4>
+            <h4>Chỉnh sửa thông tin giảng viên</h4>
             <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
         </div>
         <vs-divider class="mb-0"></vs-divider>
@@ -10,47 +10,22 @@
             <div class="p-6">
                 <form>
                     <div>
-                        <h4 class="text-center uppercase">Thông tin lớp học</h4>
-                        <!--Ten chương trình-->
-                        <div>
-                            <vs-input label="Tên lớp học" name="name" type="text" v-model="coursesGetInfo.name" class="mt-5 w-full" />
-                        </div>
-                        <!--học phí-->
-                        <div>
-                            <vs-input label="Học phí" name="price" type="text" v-model="coursesGetInfo.price" class="mt-5 w-full" />
-                        </div>
-                        <div>
-                            <vs-input label="Ngày bắt đầu " name="start_at" v-model="coursesGetInfo.start_at" type="date" class="mt-5 w-full"  />
-                        </div>
-                        <!--Ngày kết thúc-->
-                        <div>
-                            <vs-input label="Ngày kết thúc " name="end_at" v-model="coursesGetInfo.end_at" type="date" class="mt-5 w-full" />
-                        </div>
-                        <!--trạng thái-->
-                        <vs-select v-model="coursesGetInfo.status" label="Trạng thái" class="mt-5 w-full">
-                            <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in status" />
-                        </vs-select>
-                        <!--chương chình học-->
-                        <vs-select v-model="coursesGetInfo.program_id" label="Chương trình học" class="mt-5 w-full">
-                            <vs-select-item
-                                    :key="item.id"
-                                    :value="item.id"
-                                    :text="item.name"
-                                    v-for="item in programs"
-                            />
-                        </vs-select>
-                        <!--chin nhánh-->
-                        <vs-select v-model="coursesGetInfo.branch_id" label="Chi nhánh" class="mt-5 w-full">
-                            <vs-select-item
-                                    :key="item.id"
-                                    :value="item.id"
-                                    :text="item.name"
-                                    v-for="item in branches"
-                            />
-                        </vs-select>
+                        <h4 class="text-center uppercase">Thông tin giảng viên</h4>
 
+                        <vs-select v-model="teacherGetInfo.user_id" disabled label="Tên giáo viên" class="mt-5 w-full">
+                            <vs-select-item
+                                    :key="item.id"
+                                    :value="item.id"
+                                    :text="item.name"
+                                    v-for="item in teachers"
+                            />
+                        </vs-select>
+                        <vs-select v-model="teacherGetInfo.role" label="Vai trò" class="mt-5 w-full">
+                            <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in role" />
+                        </vs-select>
                         <div>
-                            <vs-input label="Thời lượng " name="number_of_lessons" v-model="coursesGetInfo.number_of_lessons" type="number" class="mt-5 w-full" />
+                            <div class="note"><label class="vs-input--label">Note</label></div>
+                            <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="teacherGetInfo.note" class="w-full" :rows="5" />
                         </div>
                     </div>
                 </form>
@@ -58,7 +33,7 @@
         </VuePerfectScrollbar>
 
         <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
-            <vs-button class="mr-6 vs-con-loading__container" :disabled="errors.any()" id="button-with-loading" @click="updateCourse(coursesGetInfo)">Chỉnh sửa</vs-button>
+            <vs-button class="mr-6 vs-con-loading__container" :disabled="errors.any()" id="button-with-loading" @click="updateTeacher(teacherGetInfo)">Chỉnh sửa</vs-button>
             <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Hủy</vs-button>
         </div>
     </vs-sidebar>
@@ -77,48 +52,32 @@ export default {
       type: Function,
       required: true
     },
-    coursesGetInfo: {
+    teacherGetInfo: {
       required: false
     }
   },
   methods: {
-    getPrograms(){
-      this.$http.get('/programs')
+    getTeachers(){
+      this.$http.get('users')
         .then(function (response) {
-          this.programs=response.data.data;
-        }.bind(this))
-        .catch(function () {
-
-        });
+          this.teachers=response.data.data;
+        }.bind(this));
     },
-    getBranches(){
-      this.$http.get('branches')
-        .then(function (response) {
-          this.branches=response.data.data;
-        }.bind(this))
-        .catch(function () {
-
-        });
-    },
-    updateCourse(course) {
+    updateTeacher(teacher) {
       this.$vs.loading({
         background: 'primary',
         color: '#fff',
         container: '#button-with-loading',
         scale: 0.45
       });
-      this.$http.put('courses/' + course.id, {
-        name: course.name,
-        price : course.price,
-        start_at : course.start_at,
-        status : course.status,
-        end_at : course.end_at,
-        program_id : course.program_id,
-        branch_id : course.branch_id,
-        number_of_lessons : course.number_of_lessons
+      this.$http.put('courses/'+ this.$route.params.course + '/teachers/' + teacher.id, {
+        user_id: teacher.user_id,
+        role : teacher.role,
+        note : teacher.note
       }, {
       })
         .then(() => {
+          this.isSidebarActiveLocal = false;
           this.getData();
           this.$vs.notify({
             title: 'Đã sửa thành công',
@@ -154,8 +113,7 @@ export default {
     },
   },
   mounted(){
-    this.getPrograms();
-    this.getBranches();
+    this.getTeachers();
   },
   data() {
     return {
@@ -164,9 +122,8 @@ export default {
         maxScrollbarLength: 60,
         wheelSpeed: .60,
       },
-      status: this.$store.state.model.courses.status,
-      programs: [],
-      branches : [],
+      teachers: [],
+      role : this.$store.state.model.teachers.role,
     };
   },
   computed: {

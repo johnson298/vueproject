@@ -75,6 +75,12 @@ const state = {
         { text: 'unavailable', value: 1},
         { text: 'Trạng thái khuyến mại', value: 2},
       ],
+    },
+    teachers : {
+      role :[
+        { text: 'Giảng viên', value: 1},
+        { text: 'Trợ giảng', value: 2}
+      ]
     }
   }
 };
