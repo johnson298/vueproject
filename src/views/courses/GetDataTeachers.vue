@@ -55,7 +55,7 @@
                     <!-- ADD NEW -->
                     <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addNewDataSidebar = true">
                         <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-                        <span class="ml-2 text-base text-primary">Thêm giáo viên giảng vào lớp</span>
+                        <span class="ml-2 text-base text-primary">Thêm giáo viên vào lớp</span>
                     </div>
                 </div>
             </div>
@@ -66,44 +66,17 @@
 
             <template slot-scope="{data}">
                 <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-                    <vs-td v-if="views.code.viewable">
-                        <p class="product-name font-medium">{{ tr.user.code }}</p>
-                    </vs-td>
-
-                    <vs-td v-if="views.avatar.viewable">
-                        <vs-avatar size="55px" :src="tr.user.avatar" :alt="tr.user.name" />
-                    </vs-td>
 
                     <vs-td v-if="views.name.viewable">
                         <p class="product-name font-medium">{{ tr.user.name }}</p>
                     </vs-td>
 
-                    <vs-td v-if="views.email.viewable">
-                        <p class="product-category">{{ tr.user.email }}</p>
-                    </vs-td>
-
-                    <vs-td v-if="views.birthday.viewable">
-                        <p class="product-category">{{ tr.user.birthday }}</p>
-                    </vs-td>
-
-                    <vs-td v-if="views.phone.viewable">
-                        <p class="product-category">{{ tr.user.phone }}</p>
-                    </vs-td>
-
-                    <vs-td v-if="views.facebook.viewable">
-                        <p class="product-category"><a :href="tr.user.facebook" target="_blank">Link</a></p>
-                    </vs-td>
-
-                    <vs-td v-if="views.address.viewable">
-                        <p class="product-category">{{ tr.user.address }}</p>
-                    </vs-td>
-
                     <vs-td v-if="views.updated_at.viewable">
-                        <p class="product-category">{{ tr.user.updated_at }}</p>
+                        <p class="product-category">{{ tr.updated_at }}</p>
                     </vs-td>
 
                     <vs-td v-if="views.created_at.viewable">
-                        <p class="product-category">{{ tr.user.created_at }}</p>
+                        <p class="product-category">{{ tr.created_at }}</p>
                     </vs-td>
 
                     <vs-td v-if="views.action.viewable" class="d-flex-span">
