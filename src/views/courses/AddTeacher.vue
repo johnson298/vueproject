@@ -11,14 +11,52 @@
             <div class="p-6">
                 <form>
                     <div>
-                        <vs-select v-model="teacher.user_id" label="Tên giáo viên" class="mt-5 w-full">
-                            <vs-select-item
-                                    :key="item.id"
-                                    :value="item.id"
-                                    :text="item.name"
-                                    v-for="item in teachers"
-                            />
-                        </vs-select>
+                      <div>
+                        <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+                          <label class="vs-input--label">Giáo viên</label>
+                          <vue-simple-suggest
+                            v-model="selectedTeacher"
+                            mode="select"
+                            ref="suggestComponentTeacher"
+                            placeholder="Search information..."
+                            value-attribute="id"
+                            display-attribute="name"
+                            :list="getTeachers"
+                            :debounce="200"
+                            :filter-by-query="false"
+                            @select="onSuggestSelectTeacher">
+                            <div class="g">
+                              <input type="text" placeholder="Search information...">
+                            </div>
+                            <template slot="misc-item-above" slot-scope="{ suggestions, query }">
+                              <div class="misc-item">
+                                <span>You're searching for '{{ query }}'.</span>
+                              </div>
+
+                              <template v-if="suggestions.length > 0">
+                                <div class="misc-item">
+                                  <span>{{ suggestions.length }} suggestions are shown...</span>
+                                </div>
+                                <hr>
+                              </template>
+
+                              <div class="misc-item" v-else-if="!loading">
+                                <span>No results</span>
+                              </div>
+                            </template>
+
+                            <div slot="suggestion-item" slot-scope="{ suggestion, query }">
+                              <div class="text">
+                                <span>{{ suggestion.code }} - {{ suggestion.name | truncate(30) }}</span>
+                              </div>
+                            </div>
+
+                            <div class="misc-item" slot="misc-item-below" slot-scope="{ suggestions }" v-if="loading">
+                              <span>Loading...</span>
+                            </div>
+                          </vue-simple-suggest>
+                        </div>
+                      </div>
                         <!--giá khóa học  -->
                         <vs-select v-model="teacher.role" label="Vai trò " class="mt-5 w-full">
                             <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in role" />
@@ -55,6 +93,8 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      selectedTeacher: null,
       teacher: {
         user_id : null,
         role : 1,
@@ -87,11 +127,26 @@ export default {
   },
 
   methods: {
-    getTeachers(){
-      this.$http.get('users')
-        .then(function (response) {
-          this.teachers=response.data.data;
-        }.bind(this));
+    onSuggestSelectTeacher(suggest) {
+      if (suggest) {
+        this.teacher.user_id = suggest.id;
+      }
+    },
+    getTeachers(search = ''){
+      let vm = this;
+      return new Promise((resolve, reject) => {
+        this.$http.get(`courses/${this.$route.params.course}/users`, {
+          params: {
+            search: search
+          }
+        })
+          .then(function (response) {
+            resolve(response.data.data);
+          }).catch((e) => {
+            vm.loading = false;
+            reject(e);
+          });
+      });
     },
     initValues() {
       this.teacher = {
@@ -99,6 +154,7 @@ export default {
         role : 1,
         note : ''
       };
+      this.selectedTeacher = null;
     },
     addTeacher() {
       this.$vs.loading({

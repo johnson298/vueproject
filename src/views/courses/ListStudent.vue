@@ -167,9 +167,6 @@ export default {
   computed: {
     ...mapState('registers', ['registers', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
-  created(){
-    this.getData();
-  },
   methods: {
     deleteStudent(user){
       this.$vs.dialog({
