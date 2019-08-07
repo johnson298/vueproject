@@ -31,24 +31,98 @@
                             <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in status" />
                         </vs-select>
                         <!--chương chình học-->
-                        <vs-select v-model="coursesGetInfo.program_id" label="Chương trình học" class="mt-5 w-full">
-                            <vs-select-item
-                                    :key="item.id"
-                                    :value="item.id"
-                                    :text="item.name"
-                                    v-for="item in programs"
-                            />
-                        </vs-select>
-                        <!--chin nhánh-->
-                        <vs-select v-model="coursesGetInfo.branch_id" label="Chi nhánh" class="mt-5 w-full">
-                            <vs-select-item
-                                    :key="item.id"
-                                    :value="item.id"
-                                    :text="item.name"
-                                    v-for="item in branches"
-                            />
-                        </vs-select>
+                        <div>
+                            <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+                                <label class="vs-input--label">Chương trình học</label>
+                                <vue-simple-suggest
+                                        v-model="selectedProgram"
+                                        mode="select"
+                                        ref="suggestComponentPrograms"
+                                        placeholder="Search information..."
+                                        value-attribute="id"
+                                        display-attribute="name"
+                                        :list="getPrograms"
+                                        :debounce="200"
+                                        :filter-by-query="false"
+                                        @select="onSuggestSelectProgram">
+                                    <div class="g">
+                                        <input type="text" :value="coursesGetInfo.program.name" placeholder="Search information...">
+                                    </div>
+                                    <template slot="misc-item-above" slot-scope="{ suggestions, query }">
+                                        <div class="misc-item">
+                                            <span>You're searching for '{{ query }}'.</span>
+                                        </div>
 
+                                        <template v-if="suggestions.length > 0">
+                                            <div class="misc-item">
+                                                <span>{{ suggestions.length }} suggestions are shown...</span>
+                                            </div>
+                                            <hr>
+                                        </template>
+
+                                        <div class="misc-item" v-else-if="!loading">
+                                            <span>No results</span>
+                                        </div>
+                                    </template>
+
+                                    <div slot="suggestion-item" slot-scope="{ suggestion, query }">
+                                        <div class="text">
+                                            <span>{{ suggestion.name | truncate(40) }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="misc-item" slot="misc-item-below" slot-scope="{ suggestions }" v-if="loading">
+                                        <span>Loading...</span>
+                                    </div>
+                                </vue-simple-suggest>
+                            </div>
+                        </div>
+                        <!--chin nhánh-->
+                        <div v-if="coursesGetInfo.id">
+                            <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+                                <label class="vs-input--label">Chi nhánh</label>
+                                <vue-simple-suggest v-model="selectedBranch"
+                                                    mode="select"
+                                                    ref="suggestComponentBranches"
+                                                    placeholder="Search information..."
+                                                    value-attribute="id"
+                                                    display-attribute="name"
+                                                    :list="getBranches"
+                                                    :debounce="200"
+                                                    :filter-by-query="false"
+                                                    @select="onSuggestSelectBranch">
+                                    <div class="g">
+                                        <input type="text" :value="coursesGetInfo.branch.name" placeholder="Search information...">
+                                    </div>
+                                    <template slot="misc-item-above" slot-scope="{ suggestions, query }">
+                                        <div class="misc-item">
+                                            <span>You're searching for '{{ query }}'.</span>
+                                        </div>
+
+                                        <template v-if="suggestions.length > 0">
+                                            <div class="misc-item">
+                                                <span>{{ suggestions.length }} suggestions are shown...</span>
+                                            </div>
+                                            <hr>
+                                        </template>
+
+                                        <div class="misc-item" v-else-if="!loading">
+                                            <span>No results</span>
+                                        </div>
+                                    </template>
+
+                                    <div slot="suggestion-item" slot-scope="{ suggestion, query }">
+                                        <div class="text">
+                                            <span>{{ suggestion.name | truncate(40) }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="misc-item" slot="misc-item-below" slot-scope="{ suggestions }" v-if="loading">
+                                        <span>Loading...</span>
+                                    </div>
+                                </vue-simple-suggest>
+                            </div>
+                        </div>
                         <div>
                             <vs-input label="Thời lượng " name="number_of_lessons" v-model="coursesGetInfo.number_of_lessons" type="number" class="mt-5 w-full" />
                         </div>
@@ -81,24 +155,51 @@ export default {
       required: false
     }
   },
+  created (){
+    this.onSuggestSelectProgram();
+  },
   methods: {
-    getPrograms(){
-      this.$http.get('/programs')
-        .then(function (response) {
-          this.programs=response.data.data;
-        }.bind(this))
-        .catch(function () {
-
-        });
+    onSuggestSelectProgram(suggest) {
+      if (suggest) {
+        this.courses.program_id = suggest.id;
+      }
     },
-    getBranches(){
-      this.$http.get('branches')
-        .then(function (response) {
-          this.branches=response.data.data;
-        }.bind(this))
-        .catch(function () {
-
-        });
+    onSuggestSelectBranch(suggest) {
+      if (suggest) {
+        this.courses.branch_id = suggest.id;
+      }
+    },
+    getPrograms(search = ''){
+      let vm = this;
+      return new Promise((resolve, reject) => {
+        this.$http.get('programs', {
+          params: {
+            search: search
+          }
+        })
+          .then(function (response) {
+            resolve(response.data.data);
+          }).catch((e) => {
+            vm.loading = false;
+            reject(e);
+          });
+      });
+    },
+    getBranches(search = ''){
+      let vm = this;
+      return new Promise((resolve, reject) => {
+        this.$http.get('branches', {
+          params: {
+            search: search
+          }
+        })
+          .then(function (response) {
+            resolve(response.data.data);
+          }).catch((e) => {
+            vm.loading = false;
+            reject(e);
+          });
+      });
     },
     updateCourse(course) {
       this.$vs.loading({
@@ -113,12 +214,13 @@ export default {
         start_at : course.start_at,
         status : course.status,
         end_at : course.end_at,
-        program_id : course.program_id,
-        branch_id : course.branch_id,
+        program_id : this.courses.program_id || this.coursesGetInfo.program_id,
+        branch_id : this.courses.branch_id || this.coursesGetInfo.branch_id,
         number_of_lessons : course.number_of_lessons
       }, {
       })
         .then(() => {
+          this.isSidebarActiveLocal = false;
           this.getData();
           this.$vs.notify({
             title: 'Đã sửa thành công',
@@ -165,8 +267,13 @@ export default {
         wheelSpeed: .60,
       },
       status: this.$store.state.model.courses.status,
-      programs: [],
-      branches : [],
+      selectedProgram : null,
+      selectedBranch : null,
+      loading: false,
+      courses : {
+        program_id : null,
+        branch_id :null,
+      }
     };
   },
   computed: {

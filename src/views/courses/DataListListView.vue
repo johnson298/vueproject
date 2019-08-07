@@ -111,7 +111,7 @@
                     <router-link tag="button" :to="'/courses/' + tr.id"
                     class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small">
                     <i class="feather icon-eye"></i></router-link>
-                    <vs-button color="primary" size="small" @click="editCourse(tr)" class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
+                    <vs-button color="primary" size="small" @click="detailCourse(tr)" class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
                     <vs-button color="danger" size="small" @click="deleteCourse(tr)" icon="delete_forever"></vs-button>
                 </vs-td>
             </vs-tr>
@@ -149,7 +149,10 @@ export default {
   },
   data: function () {
     return {
-      coursesGetInfo: {},
+      coursesGetInfo: {
+        program: {name: ''},
+        branch : {name : ''}
+      },
       activeConfirm: false,
       timer: null,
       selected: [],
@@ -172,7 +175,10 @@ export default {
       this.editCourseSidebar = true;
       var vm = this;
       this.$http.get('courses/' + course.id).then(function (response) {
-        vm.coursesGetInfo = response.data.data;
+        if(response.data.data.id){
+          vm.coursesGetInfo = response.data.data;
+        }
+
       });
     },
     deleteCourse(course) {

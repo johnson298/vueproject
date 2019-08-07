@@ -14,16 +14,9 @@ export default {
     orderType: 'desc',
   },
   views: {
-    code: { text: 'Code', viewable: true, sortKey: 'code' },
-    avatar: { text: 'Avatar', viewable: true, sortKey: '' },
     name: { text: 'Name', viewable: true, sortKey: 'name' },
-    email: { text: 'Email', viewable: true, sortKey: 'email' },
-    birthday: { text: 'Birthday', viewable: true, sortKey: 'birthday' },
-    phone: { text: 'Phone', viewable: true, sortKey: 'phone' },
-    facebook: { text: 'Facebook', viewable: true, sortKey: '' },
-    address: { text: 'Address', viewable: false, sortKey: '' },
-    created_at: { text: 'Created at', viewable: false, sortKey: 'created_at' },
-    updated_at: { text: 'Updated at', viewable: true, sortKey: 'updated_at' },
+    created_at: { text: 'Updated at', viewable: true, sortKey: 'updated_at' },
+    updated_at: { text: 'Created at', viewable: true, sortKey: 'created_at' },
     action: { text: 'Action', viewable: true, sortKey: '' },
   },
   needReload: false

@@ -169,8 +169,6 @@ export default {
       },
       selectedProgram: null,
       selectedBranch: null,
-      programs: [],
-      branches : [],
       status : this.$store.state.model.courses.status,
       disabled: true,
       settings: { // perfectscrollbar settings
@@ -278,7 +276,8 @@ export default {
             color: 'success'
           });
           this.callback();
-          this.initValues();
+          this.initValues()
+          this.isSidebarActiveLocal = false;
         })
         .catch((error) => {
           if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {
