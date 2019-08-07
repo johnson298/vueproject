@@ -1,9 +1,6 @@
 <template>
 <div id="data-list-list-view" class="data-list-container">
 
-    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData" />
-
-    <edit-course-sidebar :isSidebarEditActive="editCourseSidebar" @closeSidebar="editCourseSidebar = false" :coursesGetInfo="coursesGetInfo" :getData="getData" />
     <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="courses" search id="table" maxItems="10">
 
         <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
@@ -108,53 +105,27 @@
                 </vs-td>
 
                 <vs-td v-if="views.action.viewable" class="d-flex-span">
-                    <router-link tag="button" :to="'/courses/' + tr.id"
-                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small">
-                    <i class="feather icon-eye"></i></router-link>
-                    <vs-button color="primary" size="small" @click="editCourse(tr)" class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
                     <vs-button color="danger" size="small" @click="deleteCourse(tr)" icon="delete_forever"></vs-button>
                 </vs-td>
             </vs-tr>
         </template>
     </vs-table-custom>
     <div class="con-vs-pagination vs-pagination-primary">
-      <nav class="vs-pagination--nav">
-        <paginate
-            :page-count="pagination.totalPages"
-            :page-range="3"
-            :margin-pages="2"
-            :active-class="'is-current'"
-            :container-class="'vs-pagination--ul'"
-            :page-class="'item-pagination vs-pagination--li'"
-            :prev-text="prev"
-            :next-text="next"
-            :click-handler="getData"
-            :value="pagination.currentPage"
-            ref="paginate"
-        />
-      </nav>
+        <nav class="vs-pagination--nav">
+            <paginate :page-count="pagination.totalPages" :page-range="3" :margin-pages="2" :active-class="'is-current'" :container-class="'vs-pagination--ul'" :page-class="'item-pagination vs-pagination--li'" :prev-text="prev" :next-text="next" :click-handler="getData" :value="pagination.currentPage" ref="paginate" />
+        </nav>
     </div>
-  </div>
+</div>
 </template>
 
 <script>
-import VuePerfectScrollbar from 'vue-perfect-scrollbar';
-import AddNewDataSidebar from './AddNewDataSidebar.vue';
-import EditCourseSidebar from './EditCourse.vue';
-import GetAllStudents from './GetAllStudents';
-import { mapState } from 'vuex';
+import {
+  mapState
+} from 'vuex';
 
 export default {
-  components: {
-    VuePerfectScrollbar,
-    AddNewDataSidebar,
-    EditCourseSidebar,
-    GetAllStudents
-  },
   data: function () {
     return {
-      idCourse: 0,
-      popupActive2: false,
       coursesGetInfo: {},
       activeConfirm: false,
       timer: null,
@@ -164,23 +135,16 @@ export default {
       editCourseSidebar: false,
       prev: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_left</i></button>",
       next: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-next\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_right</i></button>",
-      settings: { // perfectscrollbar settings
-        maxScrollbarLength: 60,
-        wheelSpeed: .60,
-      },
     };
   },
   computed: {
     ...mapState('courses', ['courses', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
   methods: {
-    getIdCourse(id){
-      this.idCourse = id;
-    },
-    editCourse(course) {
+    detailCourse() {
       this.editCourseSidebar = true;
       var vm = this;
-      this.$http.get('courses/' + course.id).then(function (response) {
+      this.$http.get('courses/').then(function (response) {
         vm.coursesGetInfo = response.data.data;
       });
     },
@@ -292,83 +256,90 @@ export default {
 
 <style lang="scss">
 #data-list-list-view {
-  .vs-con-table {
+    .vs-con-table {
 
-    .vs-table--header {
-      display: flex;
-      flex-wrap: wrap-reverse;
-      margin-left: 1.5rem;
-      margin-right: 1.5rem;
-      > span {
-        display: flex;
-        flex-grow: 1;
-      }
+        .vs-table--header {
+            display: flex;
+            flex-wrap: wrap-reverse;
+            margin-left: 1.5rem;
+            margin-right: 1.5rem;
 
-      .vs-table--search{
-        padding-top: 0;
-
-        .vs-table--search-input {
-          padding: 0.9rem 2.5rem;
-          font-size: 1rem;
-
-          &+i {
-            left: 1rem;
-          }
-
-          &:focus+i {
-            left: 1rem;
-          }
-        }
-      }
-    }
-
-    .vs-table {
-      border-collapse: separate;
-      border-spacing: 0 1.3rem;
-      padding: 0 1rem;
-
-      tr{
-          box-shadow: 0 4px 20px 0 rgba(0,0,0,.05);
-          td{
-            padding: 20px;
-            &:first-child{
-              border-top-left-radius: .5rem;
-              border-bottom-left-radius: .5rem;
+            >span {
+                display: flex;
+                flex-grow: 1;
             }
-            &:last-child{
-              border-top-right-radius: .5rem;
-              border-bottom-right-radius: .5rem;
+
+            .vs-table--search {
+                padding-top: 0;
+
+                .vs-table--search-input {
+                    padding: 0.9rem 2.5rem;
+                    font-size: 1rem;
+
+                    &+i {
+                        left: 1rem;
+                    }
+
+                    &:focus+i {
+                        left: 1rem;
+                    }
+                }
             }
-          }
-          td.td-check{
-            padding: 20px !important;
-          }
-      }
-    }
-
-    .vs-table--thead{
-      th {
-        padding-top: 0;
-        padding-bottom: 0;
-
-        .vs-table-text{
-          text-transform: uppercase;
-          font-weight: 600;
         }
-      }
-      th.td-check{
-        padding: 0 15px !important;
-      }
-      tr{
-        background: none;
-        box-shadow: none;
-      }
-    }
 
-    .vs-table--pagination {
-      justify-content: center;
+        .vs-table {
+            border-collapse: separate;
+            border-spacing: 0 1.3rem;
+            padding: 0 1rem;
+
+            tr {
+                box-shadow: 0 4px 20px 0 rgba(0, 0, 0, .05);
+
+                td {
+                    padding: 20px;
+
+                    &:first-child {
+                        border-top-left-radius: .5rem;
+                        border-bottom-left-radius: .5rem;
+                    }
+
+                    &:last-child {
+                        border-top-right-radius: .5rem;
+                        border-bottom-right-radius: .5rem;
+                    }
+                }
+
+                td.td-check {
+                    padding: 20px !important;
+                }
+            }
+        }
+
+        .vs-table--thead {
+            th {
+                padding-top: 0;
+                padding-bottom: 0;
+
+                .vs-table-text {
+                    text-transform: uppercase;
+                    font-weight: 600;
+                }
+            }
+
+            th.td-check {
+                padding: 0 15px !important;
+            }
+
+            tr {
+                background: none;
+                box-shadow: none;
+            }
+        }
+
+        .vs-table--pagination {
+            justify-content: center;
+        }
     }
-  }
 }
 
 .d-flex-span {
@@ -379,5 +350,12 @@ export default {
             margin: 3px;
         }
     }
+}
+.con-vs-popup{
+
+  .vs-popup{
+    width: 1140px;
+  }
+
 }
 </style>

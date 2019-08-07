@@ -1,6 +1,6 @@
 export default {
   UPDATE_TABLE(state, payload) {
-    state.students = payload.students;
+    state.registers = payload.registers;
     state.pagination = payload.pagination;
   },
   UPDATE_ORDER(state, payload){
@@ -17,6 +17,6 @@ export default {
   },
   // eslint-disable-next-line
   RESET(state){
-    state.students = [];
+    state.registers = [];
   }
 };
