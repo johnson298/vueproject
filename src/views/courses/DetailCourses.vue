@@ -9,7 +9,7 @@
                 <vs-tab label="Danh sách học viên">
                     <ListStudent/>
                 </vs-tab>
-                <vs-tab label="Dang sách giáo viên">
+                <vs-tab label="Danh sách giáo viên">
                     <GetDataTeachers/>
                 </vs-tab>
                 <vs-tab label="Lịch sử">
