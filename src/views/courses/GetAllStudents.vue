@@ -80,9 +80,6 @@
 
 <script>
 import AddNewDataSidebar from './AddNewDataSidebar.vue';
-import {
-  mapState
-} from 'vuex';
 
 export default {
   components: {
@@ -90,6 +87,36 @@ export default {
   },
   data() {
     return {
+      students: [],
+      pagination: {
+        count: 0,
+        total: 0,
+        perPage: 0,
+        currentPage: 0,
+        totalPages: 0,
+        links: []
+      },
+      searchTerm: '',
+      order: {
+        orderBy: 'id',
+        orderType: 'desc'
+      },
+      views: {
+        code: { text: 'Code', viewable: true, sortKey: 'code' },
+        avatar: { text: 'Avatar', viewable: true, sortKey: '' },
+        name: { text: 'Name', viewable: true, sortKey: 'name' },
+        email: { text: 'Email', viewable: true, sortKey: 'email' },
+        birthday: { text: 'Birthday', viewable: false, sortKey: 'birthday' },
+        phone: { text: 'Phone', viewable: true, sortKey: 'phone' },
+        facebook: { text: 'Facebook', viewable: false, sortKey: '' },
+        address: { text: 'Address', viewable: false, sortKey: '' },
+        source: { text: 'Source', viewable: false, sortKey: 'source' },
+        class: { text: 'Class', viewable: false, sortKey: '' },
+        school: { text: 'School', viewable: false, sortKey: '' },
+        created_at: { text: 'Created at', viewable: true, sortKey: 'created_at' },
+        updated_at: { text: 'Updated at', viewable: false, sortKey: 'updated_at' },
+        action: { text: 'Action', viewable: true, sortKey: '' },
+      },
       show: false,
       timer: null,
       selected: [],
@@ -99,19 +126,7 @@ export default {
       next: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-next\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_right</i></button>"
     };
   },
-  computed: {
-    ...mapState('students', ['students', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
-  },
-  created() {
-
-  },
   methods: {
-    updateViews(index, e) {
-      this.$store.dispatch('students/updateViews', {
-        index: index,
-        viewable: e.target.checked
-      });
-    },
     formatData(data) {
       return data;
     },
@@ -121,7 +136,7 @@ export default {
         color: '#7367F0',
         text: 'Loading...'
       });
-      this.$http.get('students', {
+      this.$http.get(`courses/${this.$route.params.course}/students`, {
         params: {
           page: page,
           search: this.searchTerm,
@@ -129,10 +144,8 @@ export default {
           sortedBy: this.order.orderType,
         }
       }).then(function (response) {
-        thisIns.$store.dispatch('students/updateTable', {
-          students: thisIns.formatData(response.data.data),
-          pagination: response.data.pagination
-        });
+        thisIns.students = thisIns.formatData(response.data.data);
+        thisIns.pagination = response.data.pagination;
       })
         .catch(function (error) {
           thisIns.$vs.notify({
@@ -147,26 +160,18 @@ export default {
         });
     },
     handleSearch(searching) {
-      if (!this.needReload) {
-        this.$store.dispatch('students/updateNeedReload', true);
-        return false;
-      }
       let thisInt = this;
-      this.$store.dispatch('students/updateSearch', {
-        searchTerm: searching
-      });
+      this.searchTerm = searching;
       clearTimeout(this.timer);
       this.timer = setTimeout(function () {
         thisInt.getData();
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch('students/updateOrder', {
-        order: {
-          orderBy: key,
-          orderType: active ? 'desc' : 'asc',
-        }
-      });
+      this.order = {
+        orderBy: key,
+        orderType: active ? 'desc' : 'asc',
+      };
       this.getData(this.pagination.currentPage);
     },
     addStudentsCourse(idStudent) {
@@ -217,9 +222,6 @@ export default {
       this.getData();
     }
   },
-  destroyed() {
-    this.$store.dispatch('students/updateNeedReload', false);
-  }
 };
 </script>
 
