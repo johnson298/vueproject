@@ -1,111 +1,111 @@
 <template>
-<div id="data-list-list-view" class="data-list-container">
+  <div id="data-list-list-view" class="data-list-container">
 
-    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData" />
+    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData"/>
 
     <edit-course-sidebar :isSidebarEditActive="editCourseSidebar" @closeSidebar="editCourseSidebar = false" :coursesGetInfo="coursesGetInfo" :getData="getData" />
     <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="courses" search id="table" maxItems="10">
 
-        <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
+      <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
-            <div class="flex flex-wrap-reverse items-center">
+        <div class="flex flex-wrap-reverse items-center">
 
-                <!-- ACTION - DROPDOWN -->
-                <vs-dropdown vs-trigger-click class="cursor-pointer mr-4 mb-4">
+          <!-- ACTION - DROPDOWN -->
+          <vs-dropdown vs-trigger-click class="cursor-pointer mr-4 mb-4">
 
-                    <div class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32">
-                        <span class="mr-2">Actions</span>
-                        <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
-                    </div>
-
-                    <vs-dropdown-menu>
-
-                        <vs-dropdown-item>
-                            <span>Delete</span>
-                        </vs-dropdown-item>
-                        <vs-dropdown-item>
-                            <span>Archive</span>
-                        </vs-dropdown-item>
-                        <vs-dropdown-item>
-                            <span>Print</span>
-                        </vs-dropdown-item>
-                        <vs-dropdown-item>
-                            <span>Another Action</span>
-                        </vs-dropdown-item>
-                    </vs-dropdown-menu>
-                </vs-dropdown>
-
-                <!-- ACTION - DROPDOWN -->
-                <vs-dropdown class="cursor-pointer mr-4 mb-4">
-
-                    <div class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32">
-                        <span class="mr-2">Views</span>
-                        <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
-                    </div>
-
-                    <vs-dropdown-menu>
-                        <div class="col p-2">
-                            <div v-for="(value, index) in views" :key="index" class="p-1">
-                                <vs-checkbox :value="value.viewable" @change="updateViews(index, $event)">{{ value.text }}</vs-checkbox>
-                            </div>
-                        </div>
-                    </vs-dropdown-menu>
-                </vs-dropdown>
-
-                <!-- ADD NEW -->
-                <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addNewDataSidebar = true">
-                    <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-                    <span class="ml-2 text-base text-primary">Thêm lớp học</span>
-                </div>
+            <div class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32">
+              <span class="mr-2">Actions</span>
+              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
             </div>
+
+            <vs-dropdown-menu>
+
+              <vs-dropdown-item>
+                <span>Delete</span>
+              </vs-dropdown-item>
+              <vs-dropdown-item>
+                <span>Archive</span>
+              </vs-dropdown-item>
+              <vs-dropdown-item>
+                <span>Print</span>
+              </vs-dropdown-item>
+              <vs-dropdown-item>
+                <span>Another Action</span>
+              </vs-dropdown-item>
+            </vs-dropdown-menu>
+          </vs-dropdown>
+
+          <!-- ACTION - DROPDOWN -->
+          <vs-dropdown class="cursor-pointer mr-4 mb-4">
+
+            <div class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32">
+              <span class="mr-2">Views</span>
+              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
+            </div>
+
+            <vs-dropdown-menu>
+              <div class="col p-2">
+                <div v-for="(value, index) in views" :key="index" class="p-1">
+                  <vs-checkbox :value="value.viewable" @change="updateViews(index, $event)">{{ value.text }}</vs-checkbox>
+                </div>
+              </div>
+            </vs-dropdown-menu>
+          </vs-dropdown>
+
+          <!-- ADD NEW -->
+          <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addNewDataSidebar = true">
+            <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
+            <span class="ml-2 text-base text-primary">Thêm lớp học</span>
+          </div>
         </div>
+      </div>
 
-        <template slot="thead">
-            <vs-th :sort-key="value.sortKey" v-for="(value, index) in views" :key="index" v-if="value.viewable">{{ value.text }}</vs-th>
-        </template>
+      <template slot="thead">
+        <vs-th :sort-key="value.sortKey" v-for="(value, index) in views" :key="index" v-if="value.viewable">{{ value.text }}</vs-th>
+      </template>
 
-        <template slot-scope="{data}">
-            <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
+      <template slot-scope="{data}">
+        <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
 
-                <vs-td v-if="views.name.viewable">
-                    <p class="product-name font-medium">{{ tr.name }}</p>
-                </vs-td>
+          <vs-td v-if="views.name.viewable">
+            <p class="product-name font-medium">{{ tr.name }}</p>
+          </vs-td>
 
-                <vs-td v-if="views.price.viewable">
-                    <p class="product-category">{{ formatPrice(tr.price) }}</p>
-                </vs-td>
+          <vs-td v-if="views.price.viewable">
+            <p class="product-category">{{ formatPrice(tr.price) }}</p>
+          </vs-td>
 
-                <vs-td v-if="views.program_id.viewable">
-                    <p class="product-category">{{ tr.program_id }}</p>
-                </vs-td>
+          <vs-td v-if="views.program_id.viewable">
+            <p class="product-category">{{ tr.program_id }}</p>
+          </vs-td>
 
-                <vs-td v-if="views.branch_id.viewable">
-                    <p class="product-category">{{ tr.branch_id }}</p>
-                </vs-td>
+          <vs-td v-if="views.branch_id.viewable">
+            <p class="product-category">{{ tr.branch_id }}</p>
+          </vs-td>
 
-                <vs-td v-if="views.start_at.viewable">
-                    <p class="product-category">{{ tr.start_at }}</p>
-                </vs-td>
+          <vs-td v-if="views.start_at.viewable">
+            <p class="product-category">{{ tr.start_at }}</p>
+          </vs-td>
 
-                <vs-td v-if="views.end_at.viewable">
-                    <p class="product-category">{{ tr.end_at }}</p>
-                </vs-td>
+          <vs-td v-if="views.end_at.viewable">
+            <p class="product-category">{{ tr.end_at }}</p>
+          </vs-td>
 
-                <vs-td v-if="views.number_of_lessons.viewable">
-                    <p class="product-category">{{ tr.number_of_lessons }}</p>
-                </vs-td>
+          <vs-td v-if="views.number_of_lessons.viewable">
+            <p class="product-category">{{ tr.number_of_lessons }}</p>
+          </vs-td>
 
-                <vs-td v-if="views.status.viewable">
-                    <p class="product-category">{{ tr.status }}</p>
-                </vs-td>
+          <vs-td v-if="views.status.viewable">
+            <p class="product-category">{{ tr.status }}</p>
+          </vs-td>
 
-                <vs-td v-if="views.created_at.viewable">
-                    <p class="product-category">{{ tr.created_at }}</p>
-                </vs-td>
+          <vs-td v-if="views.created_at.viewable">
+            <p class="product-category">{{ tr.created_at }}</p>
+          </vs-td>
 
-                <vs-td v-if="views.updated_at.viewable">
-                    <p class="product-category">{{ tr.updated_at }}</p>
-                </vs-td>
+          <vs-td v-if="views.updated_at.viewable">
+            <p class="product-category">{{ tr.updated_at }}</p>
+          </vs-td>
 
                 <vs-td v-if="views.action.viewable" class="d-flex-span">
                     <router-link tag="button" :to="'/courses/' + tr.id"
@@ -161,10 +161,6 @@ export default {
       editCourseSidebar: false,
       prev: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_left</i></button>",
       next: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-next\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_right</i></button>",
-      settings: { // perfectscrollbar settings
-        maxScrollbarLength: 60,
-        wheelSpeed: .60,
-      },
     };
   },
   computed: {
@@ -181,22 +177,22 @@ export default {
 
       });
     },
-    deleteCourse(course) {
+    deleteCourse(course){
       this.$vs.dialog({
-        type: 'confirm',
+        type:'confirm',
         color: 'danger',
         title: `Xóa lớp học`,
         text: 'Bạn có chắc muốn xóa ' + course.name,
-        accept: this.courseAlert,
+        accept:this.courseAlert,
         parameters: [course.id]
       });
     },
-    courseAlert(course) {
-      this.$http.delete('courses/' + course).then(() => {
+    courseAlert(course){
+      this.$http.delete('courses/'+ course).then( () => {
         this.$vs.notify({
-          color: 'success',
-          title: 'Xóa lớp học',
-          text: 'Bạn đã xóa thành công',
+          color:'success',
+          title:'Xóa lớp học',
+          text:'Bạn đã xóa thành công',
           icon: 'verified_user',
         });
         this.getData();
@@ -210,7 +206,7 @@ export default {
         });
       });
     },
-    updateViews(index, e) {
+    updateViews(index, e){
       this.$store.dispatch('courses/updateViews', {
         index: index,
         viewable: e.target.checked
@@ -221,10 +217,7 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({
-        color: '#7367F0',
-        text: 'Loading...'
-      });
+      thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
       this.$http.get('courses', {
         params: {
           page: page,
@@ -240,12 +233,11 @@ export default {
       })
         .catch(function (error) {
           thisIns.$vs.notify({
-            title: 'Error',
+            title:'Error',
             text: error,
-            color: 'danger',
+            color:'danger',
             iconPack: 'feather',
-            icon: 'icon-alert-circle'
-          });
+            icon:'icon-alert-circle'});
         }).finally(function () {
           thisIns.$vs.loading.close();
         });

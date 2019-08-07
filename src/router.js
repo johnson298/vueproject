@@ -157,7 +157,53 @@ const router = new Router({
               { title: 'Chi tiết lớp học', url: '/'}
             ],
             pageTitle: 'Chi tiết lớp học'
-          }
+          },
+          children: [
+            {
+              path: '',
+              name: 'statisticcourse',
+              component: () => import('./views/courses/statistic/StatisticCourse.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Thống kê lớp học', url: '/'}
+                ],
+                pageTitle: 'Thống kê lớp học'
+              },
+            },
+            {
+              path: 'student',
+              name: 'studentregisters',
+              component: () => import('./views/courses/ListStudent.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Học viên trong lớp', url: '/'}
+                ],
+                pageTitle: 'Học viên trong lớp'
+              },
+            },
+            {
+              path: 'teacher',
+              name: 'teacherregisters',
+              component: () => import('./views/courses/GetDataTeachers.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Giáo viên viên trong lớp', url: '/'}
+                ],
+                pageTitle: 'Giáo viên trong lớp'
+              },
+            },
+            {
+              path: 'history',
+              name: 'historycourse',
+              component: () => import('./views/courses/HistoryCourse.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Lịch sử lớp học', url: '/'}
+                ],
+                pageTitle: 'Lịch sử lớp học'
+              },
+            },
+          ]
         },
       ],
     },

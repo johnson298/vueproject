@@ -276,7 +276,7 @@ export default {
             color: 'success'
           });
           this.callback();
-          this.initValues()
+          this.initValues();
           this.isSidebarActiveLocal = false;
         })
         .catch((error) => {
