@@ -9,6 +9,9 @@
                 <vs-tab label="Danh sách học viên">
                     <ListStudent/>
                 </vs-tab>
+                <vs-tab label="Dang sách giáo viên">
+                    <GetDataTeachers/>
+                </vs-tab>
                 <vs-tab label="Lịch sử">
                     <div class="tab-text">
                         ...
@@ -30,6 +33,7 @@
 <script>
 import 'video.js/dist/video-js.css';
 import ListStudent from './ListStudent.vue';
+import GetDataTeachers from './GetDataTeachers.vue';
 
 export default {
   data() {
@@ -40,7 +44,8 @@ export default {
     };
   },
   components: {
-    ListStudent
+    ListStudent,
+    GetDataTeachers
   },
   created() {
     let vm = this;

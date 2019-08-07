@@ -138,23 +138,17 @@
 </template>
 
 <script>
-import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import AddNewDataSidebar from './AddNewDataSidebar.vue';
 import EditCourseSidebar from './EditCourse.vue';
-import GetAllStudents from './GetAllStudents';
 import { mapState } from 'vuex';
 
 export default {
   components: {
-    VuePerfectScrollbar,
     AddNewDataSidebar,
     EditCourseSidebar,
-    GetAllStudents
   },
   data: function () {
     return {
-      idCourse: 0,
-      popupActive2: false,
       coursesGetInfo: {},
       activeConfirm: false,
       timer: null,
@@ -174,10 +168,7 @@ export default {
     ...mapState('courses', ['courses', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
   methods: {
-    getIdCourse(id){
-      this.idCourse = id;
-    },
-    editCourse(course) {
+    detailCourse(course){
       this.editCourseSidebar = true;
       var vm = this;
       this.$http.get('courses/' + course.id).then(function (response) {
