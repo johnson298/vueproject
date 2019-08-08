@@ -12,19 +12,14 @@
                     <div>
                         <h4 class="text-center uppercase">Thông tin giảng viên</h4>
 
-                        <vs-select v-model="teacherGetInfo.user_id" disabled label="Tên giáo viên" class="mt-5 w-full">
-                            <vs-select-item
-                                    :key="item.id"
-                                    :value="item.id"
-                                    :text="item.name"
-                                    v-for="item in teachers"
-                            />
-                        </vs-select>
+                        <div>
+                            <vs-input label="Giáo viên" :value="teacherGetInfo.user.name" disabled class="mt-5 w-full" />
+                        </div>
                         <vs-select v-model="teacherGetInfo.role" label="Vai trò" class="mt-5 w-full">
                             <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in role" />
                         </vs-select>
                         <div>
-                            <div class="note"><label class="vs-input--label">Note</label></div>
+                            <div class="note mt-5"><label class="vs-input--label">Note</label></div>
                             <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="teacherGetInfo.note" class="w-full" :rows="5" />
                         </div>
                     </div>
@@ -57,11 +52,21 @@ export default {
     }
   },
   methods: {
-    getTeachers(){
-      this.$http.get('users')
-        .then(function (response) {
-          this.teachers=response.data.data;
-        }.bind(this));
+    getTeachers(search = ''){
+      let vm = this;
+      return new Promise((resolve, reject) => {
+        this.$http.get(`courses/${this.$route.params.course}/users`, {
+          params: {
+            search: search
+          }
+        })
+          .then(function (response) {
+            resolve(response.data.data);
+          }).catch((e) => {
+            vm.loading = false;
+            reject(e);
+          });
+      });
     },
     updateTeacher(teacher) {
       this.$vs.loading({
@@ -122,7 +127,6 @@ export default {
         maxScrollbarLength: 60,
         wheelSpeed: .60,
       },
-      teachers: [],
       role : this.$store.state.model.teachers.role,
     };
   },
@@ -167,6 +171,9 @@ export default {
                     margin: 0;
                 }
             }
+        }
+        input[disabled=disabled] {
+            background: #e6e6e6 !important;
         }
     }
 

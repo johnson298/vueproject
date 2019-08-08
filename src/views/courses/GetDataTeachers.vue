@@ -128,7 +128,9 @@ export default {
       isMounted: false,
       addNewDataSidebar: false,
       editTeacherCourse :false,
-      teacherGetInfo : [],
+      teacherGetInfo : {
+        user: {name: ''}
+      },
       prev: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_left</i></button>",
       next: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-next\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_right</i></button>"
     };
@@ -144,7 +146,9 @@ export default {
       this.editTeacherCourse = true;
       var vm = this;
       this.$http.get('courses/'+ this.$route.params.course + '/teachers/' + teacher.id).then(function (response) {
-        vm.teacherGetInfo = response.data.data;
+        if(response.data.data.id){
+          vm.teacherGetInfo = response.data.data;
+        }
       });
     },
     deleteTeacher(teacher){
