@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-	File Name: EchartsScatterChart.vue
-	Description: Create scatter chart
-	----------------------------------------------------------------------------------------
-	Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-	Author: Pixinvent
-	Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
 	<vx-card title="Scatter Chart" class="mb-base" code-toggler>
 
@@ -53,7 +43,7 @@ export default {
         [ 26424, 75.7, 57110117, 'United Kingdom', 1990 ],
         [ 37062, 75.4, 252847810, 'United States', 1990 ]
       ],
-      [ 
+      [
         [ 44056, 81.8, 23968973, 'Australia', 2015 ],
         [ 43294, 81.7, 35939927, 'Canada', 2015 ],
         [ 13334, 76.9, 1376048943, 'China', 2015 ],

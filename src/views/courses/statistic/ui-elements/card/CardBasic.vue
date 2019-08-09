@@ -1,12 +1,3 @@
-<!-- =========================================================================================
-    File Name: CardBasic.vue
-    Description: Basic Cards
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
     <div id="demo-basic-card">
         <div class="vx-row">

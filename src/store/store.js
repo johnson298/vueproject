@@ -14,6 +14,7 @@ import moduleCoupons from './coupons/module';
 import moduleCourses from  './courses/module';
 import moduleTeachers from './teachers/module';
 import moduleRegisters from  './registers/module';
+import moduleCalendar from  './calendar/moduleCalendar';
 import moduleRooms from  './rooms/module';
 import moduleInvoices from  './invoices/module';
 
@@ -34,8 +35,9 @@ export default new Vuex.Store({
     courses : moduleCourses,
     teachers : moduleTeachers,
     registers : moduleRegisters,
-    rooms : moduleRooms,
     invoices : moduleInvoices,
+    calendar : moduleCalendar,
+    rooms : moduleRooms
   },
   strict: process.env.NODE_ENV !== 'production'
 });

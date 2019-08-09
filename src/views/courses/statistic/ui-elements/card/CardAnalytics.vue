@@ -1,12 +1,3 @@
-    <!-- =========================================================================================
-    File Name: CardAnalytics.vue
-    Description: Analytic Cards
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
     <div id="demo-card-analytics">
         <!-- ROW 1 -->

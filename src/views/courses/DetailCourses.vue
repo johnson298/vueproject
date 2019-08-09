@@ -36,6 +36,13 @@
                                 class="vs-tabs--btn"
                                 >Lịch sử</router-link>
                         </li>
+                        <li class="vs-tabs--li">
+                            <router-link
+                                    tag="button"
+                                    :to="'/courses/' + $route.params.course + '/calendar'"
+                                    class="vs-tabs--btn"
+                            >Lịch học</router-link>
+                        </li>
                     </ul>
                 </div>
                 <div class="con-slot-tabs">
@@ -54,8 +61,8 @@
 <script>
 import themeConfig from '@/../themeConfig.js';
 import 'video.js/dist/video-js.css';
-import ListStudent from './ListStudent.vue';
-import GetDataTeachers from './GetDataTeachers.vue';
+import ListStudent from './students/ListStudent.vue';
+import GetDataTeachers from './teachers/GetDataTeachers.vue';
 
 export default {
   data() {

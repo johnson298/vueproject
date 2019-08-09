@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import AddNewDataSidebar from './AddNewDataSidebar.vue';
+import AddNewDataSidebar from '../AddNewDataSidebar.vue';
 
 export default {
   props: {

@@ -63,7 +63,6 @@
       <template slot="thead">
         <vs-th :sort-key="value.sortKey" v-for="(value, index) in views" :key="index" v-if="value.viewable">{{ value.text }}</vs-th>
       </template>
-
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
           <vs-td v-if="views.code.viewable">

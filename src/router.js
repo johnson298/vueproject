@@ -183,7 +183,7 @@ const router = new Router({
             {
               path: 'student',
               name: 'studentregisters',
-              component: () => import('./views/courses/ListStudent.vue'),
+              component: () => import('./views/courses/students/ListStudent.vue'),
               meta: {
                 breadcrumb: [
                   { title: 'Học viên trong lớp', url: '/'}
@@ -194,7 +194,7 @@ const router = new Router({
             {
               path: 'teacher',
               name: 'teacherregisters',
-              component: () => import('./views/courses/GetDataTeachers.vue'),
+              component: () => import('./views/courses/teachers/GetDataTeachers.vue'),
               meta: {
                 breadcrumb: [
                   { title: 'Giáo viên viên trong lớp', url: '/'}
@@ -203,9 +203,20 @@ const router = new Router({
               },
             },
             {
+              path: 'calendar',
+              name: 'calendar',
+              component: () => import('./views/courses/calendar/SimpleCalendar.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Lịch học', url: '/'}
+                ],
+                pageTitle: 'Lịch học'
+              },
+            },
+            {
               path: 'history',
               name: 'historycourse',
-              component: () => import('./views/courses/HistoryCourse.vue'),
+              component: () => import('./views/courses/history/HistoryCourse.vue'),
               meta: {
                 breadcrumb: [
                   { title: 'Lịch sử lớp học', url: '/'}
