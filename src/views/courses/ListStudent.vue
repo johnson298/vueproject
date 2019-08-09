@@ -2,7 +2,7 @@
   <div id="data-list-list-view" class="data-list-container">
 
     <vs-popup fullscreen classContent="popup-example" title="Thêm học viên vào lớp học" :active.sync="popupAllstudent">
-        <GetAllStudents :active.sync="popupAllstudent" />
+        <GetAllStudents :active.sync="popupAllstudent" :callback="getData"/>
     </vs-popup>
     <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="registers" search id="table" maxItems="10">
 
@@ -77,42 +77,6 @@
             <p class="product-name font-medium">{{ tr.student.name }}</p>
           </vs-td>
 
-          <vs-td v-if="views.email.viewable">
-            <p class="product-category">{{ tr.student.email }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.birthday.viewable">
-            <p class="product-category">{{ tr.student.birthday }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.phone.viewable">
-            <p class="product-category">{{ tr.student.phone }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.facebook.viewable">
-            <p class="product-category"><a :href="tr.student.facebook" target="_blank">Link</a></p>
-          </vs-td>
-
-          <vs-td v-if="views.address.viewable">
-            <p class="product-category">{{ tr.student.address }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.source.viewable">
-            <p class="product-category">{{ tr.student.source }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.class.viewable">
-            <p class="product-category">{{ tr.student.class }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.school.viewable">
-            <p class="product-category">{{ tr.student.school }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.student.updated_at }}</p>
-          </vs-td>
-
           <vs-td v-if="views.created_at.viewable">
             <p class="product-category">{{ tr.student.created_at }}</p>
           </vs-td>
@@ -167,6 +131,9 @@ export default {
   computed: {
     ...mapState('registers', ['registers', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
+  created(){
+    this.getData();
+  },
   methods: {
     deleteStudent(user){
       this.$vs.dialog({
@@ -179,7 +146,7 @@ export default {
       });
     },
     studentAlert(user_id ){
-      this.$http.delete('courses/' + this.$route.params.course + '/registers/' + user_id).then( () => {
+      this.$http.delete(`courses/${this.$route.params.course}/registers/${user_id}`).then( () => {
         this.$vs.notify({
           color:'success',
           title:'Xóa học viên',
@@ -211,7 +178,7 @@ export default {
     getData(page = 1) {
       const thisIns = this;
       thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
-      this.$http.get('courses/' + this.$route.params.course + '/registers', {
+      this.$http.get(`courses/${this.$route.params.course}/registers`, {
         params: {
           page: page,
           search: this.searchTerm,

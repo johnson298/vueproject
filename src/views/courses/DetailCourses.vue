@@ -2,35 +2,57 @@
 <div id="profile-page">
 
     <!-- COL AREA -->
-    <h2 class="text-center mb-10">Lớp: <span class="text-primary">{{course.name}}</span> </h2>
+    <h2 class="text-center mb-10">Lớp: {{course.name}} </h2>
     <vx-card code-toggler class="custom-card">
         <div class="mt-5 custom-tab">
-            <vs-tabs>
-                <vs-tab label="Danh sách học viên">
-                    <ListStudent/>
-                </vs-tab>
-                <vs-tab label="Danh sách giáo viên">
-                    <GetDataTeachers/>
-                </vs-tab>
-                <vs-tab label="Lịch sử">
-                    <div class="tab-text">
-                        ...
+            <div class="con-vs-tabs vs-tabs vs-tabs-primary vs-tabs-position-top">
+                <div class="con-ul-tabs">
+                    <ul class="ul-tabs vs-tabs--ul ul-tabs-left">
+                        <li class="vs-tabs--li">
+                            <router-link
+                                tag="button"
+                                :to="'/courses/' + $route.params.course"
+                                class="vs-tabs--btn"
+                                >Thống kê</router-link>
+                        </li>
+                        <li class="vs-tabs--li">
+                            <router-link
+                                tag="button"
+                                :to="'/courses/' + $route.params.course + '/student'"
+                                class="vs-tabs--btn"
+                                >Danh sách học viên</router-link>
+                        </li>
+                        <li class="vs-tabs--li">
+                            <router-link
+                                tag="button"
+                                :to="'/courses/' + $route.params.course + '/teacher'"
+                                class="vs-tabs--btn"
+                                >Danh sách giáo viên</router-link>
+                        </li>
+                        <li class="vs-tabs--li">
+                            <router-link
+                                tag="button"
+                                :to="'/courses/' + $route.params.course + '/history'"
+                                class="vs-tabs--btn"
+                                >Lịch sử</router-link>
+                        </li>
+                    </ul>
+                </div>
+                <div class="con-slot-tabs">
+                    <div class="con-tab vs-tabs--content">
+                        <transition :name="routerTransition" mode="out-in">
+                            <router-view></router-view>
+                        </transition>
                     </div>
-                </vs-tab>
-                <vs-tab label="Thống kê">
-                    <div class="tab-text">
-                        <div class="">
-                            ...
-                        </div>
-                    </div>
-                </vs-tab>
-            </vs-tabs>
+                </div>
+            </div>
         </div>
     </vx-card>
 </div>
 </template>
 
 <script>
+import themeConfig from '@/../themeConfig.js';
 import 'video.js/dist/video-js.css';
 import ListStudent from './ListStudent.vue';
 import GetDataTeachers from './GetDataTeachers.vue';
@@ -40,7 +62,8 @@ export default {
     return {
       isNavOpen: true,
       wasSidebarOpen: null,
-      course: {}
+      course: {},
+      routerTransition: themeConfig.routerTransition || 'zoom-fade',
     };
   },
   components: {
@@ -166,11 +189,16 @@ export default {
             justify-content: space-around;
             border-radius: 10px;
 
-            button {
-                font-size: 18px;
-                font-weight: bold;
-                padding-top: 22px;
-                padding-bottom: 22px;
+            li {
+                button {
+                    font-size: 18px;
+                    font-weight: bold;
+                    padding-top: 22px;
+                    padding-bottom: 22px;
+                }
+                .router-link-exact-active.router-link-active {
+                    color: #796df0;
+                }
             }
         }
     }

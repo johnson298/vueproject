@@ -82,8 +82,17 @@
 import AddNewDataSidebar from './AddNewDataSidebar.vue';
 
 export default {
+  props: {
+    callback: {
+      type: Function,
+      required: true
+    }
+  },
   components: {
     AddNewDataSidebar
+  },
+  created(){
+    this.getData();
   },
   data() {
     return {
@@ -189,6 +198,7 @@ export default {
             color: 'success'
           });
           this.getData();
+          this.callback();
         })
         .catch((error) => {
           if (error.response.data.error.hasOwnProperty('validation')) {
