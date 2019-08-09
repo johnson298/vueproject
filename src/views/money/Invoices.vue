@@ -1,10 +1,10 @@
 <template>
 <div id="data-list-list-view" class="data-list-container">
+    <vs-popup class="popup-custom-768" title="Thêm mới hóa đơn" :active.sync="addBill" >
+        <AddInvoice :callback="getData" :active.sync="addBill" />
+    </vs-popup>
 
-    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData" />
-    <edit-program-sidebar :isSidebarEditActive="editProgramSidebar" @closeSidebar="editProgramSidebar = false" :programInfo="programGetInfo" :getData="getData" />
-
-    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="programs" search id="table" maxItems="10">
+    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="invoices" search id="table" maxItems="10">
 
         <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
@@ -53,9 +53,9 @@
                 </vs-dropdown>
 
                 <!-- ADD NEW -->
-                <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addNewDataSidebar = true">
+                <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addBill=true">
                     <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-                    <span class="ml-2 text-base text-primary">Thêm chương trình học</span>
+                    <span class="ml-2 text-base text-primary">Thêm hóa đơn</span>
                 </div>
             </div>
 
@@ -66,20 +66,33 @@
         </template>
         <template slot-scope="{data}">
             <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-                <vs-td v-if="views.name.viewable">
-                    <p class="product-name font-medium">{{ tr.name }}</p>
+
+                <vs-td v-if="views.id.viewable">
+                    <p class="product-category">{{ tr.id }}</p>
                 </vs-td>
 
-                <vs-td v-if="views.description.viewable">
-                    <p class="product-category">{{ tr.description }}</p>
+                <vs-td v-if="views.student_id.viewable">
+                    <p class="product-category">{{ tr.student_id }}</p>
                 </vs-td>
 
-                <vs-td v-if="views.price.viewable">
-                    <p class="product-category">{{ tr.price }}</p>
+                <vs-td v-if="views.student_avatar.viewable">
+                    <vs-avatar size="55px" :src="tr.student.avatar" :alt="tr.student.name" />
                 </vs-td>
 
-                <vs-td v-if="views.number_of_lessons.viewable">
-                    <p class="product-category">{{ tr.number_of_lessons }}</p>
+                <vs-td v-if="views.student_name.viewable">
+                    <p class="product-category">{{ tr.student.name }}</p>
+                </vs-td>
+
+                <vs-td v-if="views.amount.viewable">
+                    <p class="product-category">{{ formatPrice(tr.amount) }}</p>
+                </vs-td>
+
+                <vs-td v-if="views.note.viewable">
+                    <p class="product-category">{{ tr.note }}</p>
+                </vs-td>
+
+                <vs-td v-if="views.source.viewable">
+                    <p class="product-category">{{ tr.source }}</p>
                 </vs-td>
 
                 <vs-td v-if="views.updated_at.viewable">
@@ -91,9 +104,7 @@
                 </vs-td>
 
                 <vs-td v-if="views.action.viewable" class="d-flex-span">
-                    <vs-button color="primary" size="small" @click="getIdProgram(tr.id)"
-                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
-                    <vs-button color="danger" size="small" @click="deleteProgram(tr)" icon="delete_forever"></vs-button>
+                    <vs-button color="danger" size="small" @click="deleteInvoice(tr)" icon="delete_forever"></vs-button>
                 </vs-td>
             </vs-tr>
         </template>
@@ -107,55 +118,45 @@
 </template>
 
 <script>
-import AddNewDataSidebar from './AddNewDataSidebar.vue';
-import EditProgramSidebar from './EditProgram.vue';
+import AddInvoice from './AddInvoice';
 import {
   mapState
 } from 'vuex';
 
 export default {
   components: {
-    AddNewDataSidebar,
-    EditProgramSidebar
+    AddInvoice
   },
   data() {
     return {
-      programGetInfo: {},
+      addBill: false,
+      invoiceGetInfo: {},
       timer: null,
       selected: [],
       isMounted: false,
-      addNewDataSidebar: false,
-      editProgramSidebar: false,
       prev: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_left</i></button>",
       next: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-next\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_right</i></button>"
     };
   },
   computed: {
-    ...mapState('programs', ['programs', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
+    ...mapState('invoices', ['invoices', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
   methods: {
-    getIdProgram(id) {
-      this.editProgramSidebar = true;
-      var vm = this;
-      this.$http.get('programs/' + id).then(function (response) {
-        vm.programGetInfo = response.data.data;
-      });
-    },
-    deleteProgram(program) {
+    deleteInvoice(invoice) {
       this.$vs.dialog({
         type: 'confirm',
         color: 'danger',
-        title: `Xóa chương trình học`,
-        text: 'Bạn có chắc muốn xóa: ' + program.name,
-        accept: this.programAlert,
-        parameters: [program.id]
+        title: `Xóa hóa đơn`,
+        text: 'Bạn có chắc muốn xóa hóa đơn này',
+        accept: this.invoiceAlert,
+        parameters: [invoice.id]
       });
     },
-    programAlert(program_id) {
-      this.$http.delete('programs/' + program_id).then(() => {
+    invoiceAlert(invoice_id) {
+      this.$http.delete('invoices/' + invoice_id).then(() => {
         this.$vs.notify({
           color: 'success',
-          title: 'Xóa chương trình học',
+          title: 'Xóa hóa đơn',
           text: 'Bạn đã xóa thành công',
           icon: 'verified_user',
         });
@@ -172,7 +173,7 @@ export default {
 
     },
     updateViews(index, e) {
-      this.$store.dispatch('programs/updateViews', {
+      this.$store.dispatch('invoices/updateViews', {
         index: index,
         viewable: e.target.checked
       });
@@ -186,7 +187,7 @@ export default {
         color: '#7367F0',
         text: 'Loading...'
       });
-      this.$http.get('programs', {
+      this.$http.get('invoices', {
         params: {
           page: page,
           search: this.searchTerm,
@@ -194,8 +195,8 @@ export default {
           sortedBy: this.order.orderType,
         }
       }).then(function (response) {
-        thisIns.$store.dispatch('programs/updateTable', {
-          programs: thisIns.formatData(response.data.data),
+        thisIns.$store.dispatch('invoices/updateTable', {
+          invoices: thisIns.formatData(response.data.data),
           pagination: response.data.pagination
         });
       })
@@ -213,11 +214,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch('programs/updateNeedReload', true);
+        this.$store.dispatch('invoices/updateNeedReload', true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch('programs/updateSearch', {
+      this.$store.dispatch('invoices/updateSearch', {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -226,7 +227,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch('programs/updateOrder', {
+      this.$store.dispatch('invoices/updateOrder', {
         order: {
           orderBy: key,
           orderType: active ? 'desc' : 'asc',
@@ -238,12 +239,12 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.programs.length === 0) {
+    if (this.invoices.length === 0) {
       this.getData();
     }
   },
   destroyed() {
-    this.$store.dispatch('programs/updateNeedReload', false);
+    this.$store.dispatch('invoices/updateNeedReload', false);
   }
 };
 </script>
@@ -342,5 +343,8 @@ export default {
       margin: 3px;
     }
   }
+}
+.popup-custom-768 > .vs-popup{
+    width: 768px !important;
 }
 </style>

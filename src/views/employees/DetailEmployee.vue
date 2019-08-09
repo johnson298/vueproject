@@ -3,7 +3,7 @@
 
     <!-- PROFILE HEADER -->
     <div class="cover-container rounded-t-lg img-profile-cus">
-      <img class="user-profile-img" :src="user.avatar" alt="user-profile-cover">
+        <img class="user-profile-img" :src="user.avatar" alt="user-profile-cover">
     </div>
     <h2 class="text-center m-5 d-flex">{{user.name}}</h2>
 
@@ -33,8 +33,9 @@
                                 <div>
                                     <vs-input label="Facebook" class="mt-5 w-full" v-model="user.facebook" />
                                 </div>
-                                <div>
-                                    <vs-input label="Ngày sinh" type="date" class="mt-5 w-full" v-model="user.birthday" />
+                                <div class="mt-5">
+                                    <label for="" class="vs-input--label">Ngày sinh</label>
+                                    <datepicker v-model="formatDate" :language="languages[language]" format="d MMMM yyyy" :value="user.birthday" class="w-full picker-custom"></datepicker>
                                 </div>
                                 <div>
                                     <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
@@ -102,11 +103,18 @@
 </template>
 
 <script>
+import Datepicker from 'vuejs-datepicker';
+import * as lang from 'vuejs-datepicker/src/locale';
 import 'video.js/dist/video-js.css';
 
 export default {
+  components: {
+    Datepicker,
+  },
   data() {
     return {
+      language: "vi",
+      languages: lang,
       isNavOpen: true,
       wasSidebarOpen: null,
       levels: this.$store.state.model.employees.levels,
@@ -132,6 +140,16 @@ export default {
   },
   created() {
     this.userInfo();
+  },
+  computed: {
+    formatDate:{
+      get(){
+        return this.user.birthday;
+      },
+      set(val){
+        this.user.birthday = this.formatDateUTC(val);
+      }
+    }
   },
   filters: {
     trim: function (string) {

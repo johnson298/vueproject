@@ -1,10 +1,11 @@
 <template>
-<vx-card title="Giới tính">
+<VxCardCustom title="Giới tính">
     <e-charts :options="pie" ref="pie" auto-resize />
-</vx-card>
+</VxCardCustom>
 </template>
 
 <script>
+import VxCardCustom from './vx-card/VxCardCustom.vue';
 import ECharts from 'vue-echarts/components/ECharts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
@@ -50,7 +51,8 @@ export default {
     };
   },
   components: {
-    ECharts
+    ECharts,
+    VxCardCustom
   },
   mounted() {
     let dataIndex = -1;

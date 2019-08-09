@@ -1,27 +1,19 @@
 export default [
   {
-    name: "Dashboard",
-    header: "Dashboard"
-  },
-  {
     url: "/",
-    name: "Dashboard",
+    name: "Tổng quan",
     slug: "home",
     icon: "HomeIcon",
   },
   {
-    name: "emp",
-    header: "nhân sự"
+    name: "user",
+    header: "tài khoản"
   },
   {
     url: "/employees",
     name: "Nhân viên",
     slug: "employees",
     icon: "UsersIcon",
-  },
-  {
-    name: "students",
-    header: "Học viên"
   },
   {
     url: "/students",
@@ -31,17 +23,13 @@ export default [
   },
   {
     name: "programs",
-    header: "Chương trình học"
+    header: "đào tạo"
   },
   {
     url: "/programs",
     name: "Chương trình học",
     slug: "programs",
     icon: "MenuIcon",
-  },
-  {
-    name : "courses",
-    header : "Lớp Học"
   },
   {
     url : "/courses",
@@ -58,5 +46,14 @@ export default [
     name: "Cài đặt",
     slug: "settings",
     icon: "SettingsIcon",
+  },
+  {
+    header: "Thu chi"
+  },
+  {
+    url: "/invoices",
+    name: "Thu học phí",
+    slug: "invoices",
+    icon: "CreditCardIcon",
   },
 ];

@@ -33,8 +33,14 @@
                                 <div>
                                     <vs-input label="Facebook" v-model="student.facebook" class="mt-5 w-full" />
                                 </div>
-                                <div>
-                                    <vs-input label="Ngày sinh" v-model="student.birthday" class="mt-5 w-full" type="date" />
+                                <div class="mt-5">
+                                  <label for="" class="vs-input--label">Ngày sinh</label>
+                                  <datepicker 
+                                    v-model="formatDate" 
+                                    :language="languages[language]" 
+                                    format="d MMMM yyyy" 
+                                    :value="student.birthday" 
+                                    class="w-full picker-custom"></datepicker>
                                 </div>
                                 <div>
                                     <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
@@ -47,15 +53,15 @@
                                 <div>
                                     <vs-input label="Trường" v-model="student.school" class="mt-5 w-full" />
                                 </div>
+                            </div>
+                            <div class="vx-col pt-8 md:w-1/2 w-full mb-base">
                                 <div>
-                                    <vs-input label="Lớp" v-model="student.class" class="mt-5 w-full" />
+                                    <vs-input label="Lớp" v-model="student.class" class="mt-6 w-full" />
                                 </div>
                                 <div>
                                     <div class="note mt-5"><label class="vs-input--label">Ghi chú</label></div>
                                     <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="student.note" class="w-full" :rows="5" />
                                 </div>
-                            </div>
-                            <div class="vx-col md:w-1/2 w-full mb-base">
                                 <div class="vx-col mb-6">
                                     <h2>Thông tin đăng nhập</h2>
                                 </div>
@@ -86,7 +92,7 @@
                 <vs-tab label="Lớp đang tham gia">
                     <div class="tab-text">
                         <div class="">
-                            <CoursesList/>
+                            <CoursesList />
                         </div>
                     </div>
                 </vs-tab>
@@ -97,12 +103,15 @@
 </template>
 
 <script>
-import 'video.js/dist/video-js.css';
+import Datepicker from 'vuejs-datepicker';
+import * as lang from 'vuejs-datepicker/src/locale';
 import CoursesList from './CoursesList';
 
 export default {
   data() {
     return {
+      language: "vi",
+      languages: lang,
       isNavOpen: true,
       wasSidebarOpen: null,
       levels: this.$store.state.model.employees.levels,
@@ -127,7 +136,18 @@ export default {
     };
   },
   components: {
-    CoursesList
+    CoursesList,
+    Datepicker
+  },
+  computed: {
+    formatDate: {
+      get() {
+        return this.student.birthday;
+      },
+      set(val) {
+        this.student.birthday = this.formatDateUTC(val);
+      }
+    }
   },
   created() {
     this.studentInfo();
@@ -142,7 +162,6 @@ export default {
     changeAvatar() {
       this.student.avatar = this.$refs.file.files[0];
     },
-
     studentInfo() {
       let vm = this;
       this.$http.get('students/' + this.$route.params.student).then(function (response) {
@@ -164,7 +183,7 @@ export default {
         if (key != 'metadata') {
           formData.append(key, this.student[key]);
         }
-      }); 
+      });
       if (typeof this.student.avatar === 'string') {
         formData.append('avatar', '');
       }
@@ -194,7 +213,7 @@ export default {
           });
         })
         .catch((error) => {
-       
+
           if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {
             let message = error.response.data.error.validation[Object.keys(error.response.data.error.validation)[0]][0];
             this.$vs.notify({
@@ -355,5 +374,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.picker-custom{
+  input{
+    width: 100%;
+  }
 }
 </style>
