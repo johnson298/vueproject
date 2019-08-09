@@ -123,6 +123,7 @@ export default {
   },
   data() {
     return {
+      course_id: this.$route.params.course,
       timer: null,
       selected: [],
       isMounted: false,
@@ -136,7 +137,15 @@ export default {
     };
   },
   computed: {
-    ...mapState('teachers', ['users', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
+    ...mapState('teachers', ['users', 'pagination', 'searchTerm', 'order', 'views', 'needReload']),
+    branch_id(){
+      return this.$store.state.getBranchId;
+    }
+  },
+  watch: {
+    branch_id(){
+      this.$router.push('/courses');
+    }
   },
   created(){
     this.getData();
@@ -145,7 +154,7 @@ export default {
     editTeacher(teacher){
       this.editTeacherCourse = true;
       var vm = this;
-      this.$http.get('courses/'+ this.$route.params.course + '/teachers/' + teacher.id).then(function (response) {
+      this.$http.get(`branches/${this.branch_id}/courses/${this.course_id}/teachers/${teacher.id}`).then(function (response) {
         if(response.data.data.id){
           vm.teacherGetInfo = response.data.data;
         }
@@ -162,7 +171,7 @@ export default {
       });
     },
     teacherAlert(user_id){
-      this.$http.delete('courses/'+ this.$route.params.course + '/teachers/' + user_id).then( () => {
+      this.$http.delete(`branches/${this.branch_id}/courses/${this.course_id}/teachers/${user_id}`).then( () => {
         this.$vs.notify({
           color:'success',
           title:'Xóa nhân viên',
@@ -193,7 +202,7 @@ export default {
     getData(page = 1) {
       const thisIns = this;
       thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
-      this.$http.get('courses/' + this.$route.params.course + '/teachers', {
+      this.$http.get(`branches/${this.branch_id}/courses/${this.course_id}/teachers`, {
         params: {
           page: page,
           search: this.searchTerm,

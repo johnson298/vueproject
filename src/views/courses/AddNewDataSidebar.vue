@@ -14,7 +14,7 @@
                     <h4 class="text-center uppercase">Thông tin lớp học</h4>
                     <!--tên chi nhánh-->
                     <div>
-                        <vs-input label="Tên lớp học" name="name" v-model="courses.name" class="mt-5 w-full" v-validate="'required|max:255'" />
+                        <vs-input label="Tên lớp học" name="name" v-model="courses.name" class="mt-5 w-full" v-validate="'required|max:255'" placeholder="nhập tên lớp học" />
                     </div>
                     <!--giá khóa học  -->
                     <div>
@@ -23,12 +23,12 @@
                     <!-- ngày bắt đầu học -->
                     <div class="mt-5">
                         <label for="" class="vs-input--label">Ngày bắt đầu</label>
-                        <datepicker v-model="formatDateStartAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.start_at" class="w-full picker-custom"></datepicker>
+                        <datepicker v-model="formatDateStartAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.start_at" class="w-full picker-custom" placeholder="chọn ngày bắt đầu"></datepicker>
                     </div>
                     <!--Ngày kết thúc-->
                     <div class="mt-5">
                         <label for="" class="vs-input--label">Ngày kết thúc</label>
-                        <datepicker v-model="formatDateEndAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.end_at" class="w-full picker-custom"></datepicker>
+                        <datepicker v-model="formatDateEndAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.end_at" class="w-full picker-custom" placeholder="chọn ngày kết thúc"></datepicker>
                     </div>
                     <!--trạng thái-->
                     <vs-select v-model="courses.status" label="Trạng thái" class="mt-5 w-full">
@@ -192,6 +192,9 @@ export default {
       set(val){
         this.courses.end_at = this.formatDateUTC(val);
       }
+    },
+    branchId(){
+      return this.$store.state.getBranchId;
     }
   },
   components: {
@@ -213,7 +216,7 @@ export default {
     getPrograms(search = '') {
       let vm = this;
       return new Promise((resolve, reject) => {
-        this.$http.get('programs', {
+        this.$http.get(`branches/${this.branchId}/programs`, {
           params: {
             search: search
           }
@@ -229,7 +232,7 @@ export default {
     getBranches(search = '') {
       let vm = this;
       return new Promise((resolve, reject) => {
-        this.$http.get('branches', {
+        this.$http.get(`branches/${this.branchId}/programs`, {
           params: {
             search: search
           }
@@ -261,7 +264,7 @@ export default {
         container: '#button-with-loading',
         scale: 0.45
       });
-      this.$http.post('courses', {
+      this.$http.post(`branches/${this.branchId}/courses`, {
         name: this.courses.name,
         program_id: this.courses.program_id,
         branch_id: this.courses.branch_id,

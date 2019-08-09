@@ -46,6 +46,11 @@ const actions = {
     commit('programs/RESET');
     commit('branches/RESET');
     commit('courses/RESET');
+  },
+
+  // change branch
+  changeBranchData({ commit }, payload){
+    commit('CHANGE_BRANCH', payload);
   }
 };
 

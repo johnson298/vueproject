@@ -1,7 +1,7 @@
 <template>
 <div id="data-list-list-view" class="data-list-container">
     <vs-popup class="popup-custom-768" title="Thêm mới hóa đơn" :active.sync="addBill" >
-        <AddInvoice :callback="getData" :active.sync="addBill" />
+        <AddInvoice :callback="getData" :active.sync="addBill" @closePopupInvoice="addBill = $event" />
     </vs-popup>
 
     <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="invoices" search id="table" maxItems="10">
@@ -39,7 +39,7 @@
                 <vs-dropdown class="cursor-pointer mr-4 mb-4">
 
                     <div class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32">
-                        <span class="mr-2">Views</span>
+                        <span class="mr-2">Xem</span>
                         <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
                     </div>
 
@@ -92,7 +92,13 @@
                 </vs-td>
 
                 <vs-td v-if="views.source.viewable">
-                    <p class="product-category">{{ tr.source }}</p>
+                    <p class="product-category">
+                      <vs-chip 
+                      :color="checkStatus(sourceInvoices,tr.source)=='Momo' ? 'primary' 
+                              : checkStatus(sourceInvoices,tr.source)=='Tiền mặt' ? 'success'
+                              : checkStatus(sourceInvoices,tr.source)=='Chuyển khoản' ? 'warning'
+                              : ''">{{ checkStatus(sourceInvoices,tr.source) }}</vs-chip>
+                      </p>
                 </vs-td>
 
                 <vs-td v-if="views.updated_at.viewable">
@@ -129,6 +135,7 @@ export default {
   },
   data() {
     return {
+      sourceInvoices: this.$store.state.model.invoices.source,
       addBill: false,
       invoiceGetInfo: {},
       timer: null,

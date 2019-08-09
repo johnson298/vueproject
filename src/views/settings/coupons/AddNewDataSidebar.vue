@@ -44,7 +44,7 @@
     </VuePerfectScrollbar>
 
     <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
-        <vs-button class="mr-6 vs-con-loading__container" @click="createCoupon" :disabled="errors.any()" ref="addButton" id="button-with-loading">Thêm khuyến mại</vs-button>
+        <vs-button class="mr-6 vs-con-loading__container" @click="createCoupon" :disabled="errors.any()" ref="addButton" id="button-with-loading">Thêm</vs-button>
         <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Hủy</vs-button>
     </div>
 </vs-sidebar>

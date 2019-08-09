@@ -16,7 +16,7 @@ export default {
   views: {
     type: { text: 'Kiểu khuyến mại', viewable: true, sortKey: 'type' },
     discount_rate: { text: 'chiết khấu(%)', viewable: true, sortKey: 'discount_rate' },
-    discount_amount: { text: 'khuyến mại theo số tiền($)', viewable: true, sortKey: 'discount_amount' },
+    discount_amount: { text: 'km theo số tiền(vnđ)', viewable: true, sortKey: 'discount_amount' },
     status: { text: 'Trạng thái', viewable: true, sortKey: 'status' },
     note: { text: 'Ghi chú', viewable: false, sortKey: 'note' },
     created_at: { text: 'Ngày tạo', viewable: false, sortKey: 'created_at' },

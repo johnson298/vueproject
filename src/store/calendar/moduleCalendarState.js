@@ -2,9 +2,8 @@ export default {
 
   // Common Labels for both calendars
   calendarLabels: [
-    { text: 'Business' ,value : 'business', color: 'success' },
-    { text: 'Work', value: 'work', color: 'warning'},
-    { text: 'Personal', value: 'personal', color: 'danger'},
+    { text: 'Lịch học' ,value : 'Lịch học', color: 'success' },
+    { text: 'Ngày hiện tại', value: 'Ngày hiện tại', color: 'primary'},
   ],
 
   calendarEvents: [

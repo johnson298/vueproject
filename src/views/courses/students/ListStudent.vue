@@ -128,7 +128,15 @@ export default {
     };
   },
   computed: {
-    ...mapState('registers', ['registers', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
+    ...mapState('registers', ['registers', 'pagination', 'searchTerm', 'order', 'views', 'needReload']),
+    branch_id(){
+      return this.$store.state.getBranchId;
+    }
+  },
+  watch: {
+    branch_id(){
+      this.$router.push('/courses');
+    }
   },
   created(){
     this.getData();
@@ -145,7 +153,7 @@ export default {
       });
     },
     studentAlert(user_id ){
-      this.$http.delete(`courses/${this.$route.params.course}/registers/${user_id}`).then( () => {
+      this.$http.delete(`branches/${this.branch_id}/courses/${this.$route.params.course}/registers/${user_id}`).then( () => {
         this.$vs.notify({
           color:'success',
           title:'Xóa học viên',
@@ -177,7 +185,7 @@ export default {
     getData(page = 1) {
       const thisIns = this;
       thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
-      this.$http.get(`courses/${this.$route.params.course}/registers`, {
+      this.$http.get(`branches/${this.branch_id}/courses/${this.$route.params.course}/registers`, {
         params: {
           page: page,
           search: this.searchTerm,

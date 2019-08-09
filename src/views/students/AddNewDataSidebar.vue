@@ -15,17 +15,17 @@
                     <h4 class="text-center uppercase">Thông tin đăng nhập</h4>
                     <!--Email-->
                     <div>
-                        <vs-input label="Email" name="email" v-model="student.email" class="mt-5 w-full" v-validate="'required|email'" autocomplete="email" />
+                        <vs-input label="Email" name="email" v-model="student.email" class="mt-5 w-full" v-validate="'required|email'" autocomplete="email" placeholder="Demo@gmail.com" />
                         <small class="text-danger">{{ errors.first('email') }}</small>
                     </div>
                     <!--Password-->
                     <div>
-                        <vs-input label="Mật khẩu" name="password" type="password" v-model="student.password" class="mt-5 w-full" v-validate="'required|min:8'" autocomplete="new-password" />
+                        <vs-input label="Mật khẩu" name="password" type="password" v-model="student.password" class="mt-5 w-full" v-validate="'required|min:8'" autocomplete="new-password" placeholder="Nhập mật khẩu (8 ký tự)" />
                         <small class="text-danger">{{ errors.first('password') }}</small>
                     </div>
                     <!--Nhập lại mật khẩu-->
                     <div>
-                        <vs-input label="Nhập lại mật khẩu" name="password_confirmation" autocomplete="new-password" type="password" v-model="student.password_confirmation" class="mt-5 w-full" />
+                        <vs-input label="Nhập lại mật khẩu" name="password_confirmation" autocomplete="new-password" type="password" v-model="student.password_confirmation" class="mt-5 w-full" placeholder="Nhập lại mật khẩu" />
                     </div>
                 </div>
                 <div class="mt-8">
@@ -37,35 +37,33 @@
                     </div>
                     <!-- NAME -->
                     <div>
-                        <vs-input label="Tên" name="name" v-model="student.name" class="mt-5 w-full" v-validate="'required'" />
+                        <vs-input label="Tên" name="name" v-model="student.name" class="mt-5 w-full" v-validate="'required'" placeholder="Nhập tên học viên" />
                         <small class="text-danger">{{ errors.first('name') }}</small>
                     </div>
                     <!--địa chỉ-->
                     <div>
-                        <vs-input label="Địa chỉ" name="address" type="text" v-model="student.address" class="mt-5 w-full" />
+                        <vs-input label="Địa chỉ" name="address" type="text" v-model="student.address" class="mt-5 w-full" placeholder="Nhập địa chỉ" />
                     </div>
                     <!--số điện thoại-->
                     <div>
-                        <vs-input label="Số điện thoại" name="phone" type="text" v-model="student.phone" class="mt-5 w-full" />
+                        <vs-input label="Số điện thoại" name="phone" type="text" v-model="student.phone" class="mt-5 w-full" placeholder="0123456789" />
                     </div>
                     <!--facebook-->
                     <div>
-                        <vs-input label="Facebook" name="facebook" type="text" v-model="student.facebook" class="mt-5 w-full" />
+                        <vs-input label="Facebook" name="facebook" type="text" v-model="student.facebook" class="mt-5 w-full" placeholder="http://demo.com" />
                     </div>
-                    <!-- <div>
-              <vs-input label="Ngày sinh" name="birthday" type="date" v-model="student.birthday" class=" mt-5 w-full" />
-            </div> -->
+                    <!-- ngày sinh -->
                     <div class="mt-5">
                         <label for="" class="vs-input--label">Ngày sinh</label>
-                        <datepicker v-model="formatDate" :language="languages[language]" format="d MMMM yyyy" :value="student.birthday" class="w-full picker-custom"></datepicker>
+                        <datepicker v-model="formatDate" :language="languages[language]" format="d MMMM yyyy" :value="student.birthday" class="w-full picker-custom" placeholder="Chọn ngày sinh"></datepicker>
                     </div>
                     <!--trường-->
                     <div>
-                        <vs-input label="Trường" name="school" type="text" v-model="student.school" class=" mt-5 w-full" />
+                        <vs-input label="Trường" name="school" type="text" v-model="student.school" class=" mt-5 w-full" placeholder="Nhập tên trường"/>
                     </div>
                     <!--lớp-->
                     <div>
-                        <vs-input label="Lớp" name="class" type="text" v-model="student.class" class=" mt-5 w-full" />
+                        <vs-input label="Lớp" name="class" type="text" v-model="student.class" class=" mt-5 w-full" placeholder="Nhập tên lớp" />
                     </div>
                     <!--Giới tinh-->
                     <vs-select v-model="student.gender" label="Giới Tính" class="mt-5 w-full">
@@ -82,8 +80,8 @@
                     </div>
                     <!--nghi chú-->
                     <div>
-                        <div class="mt-5"><label class="vs-input--label">Note</label></div>
-                        <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="student.note" class="w-full" :rows="5" />
+                        <div class="mt-5"><label class="vs-input--label">Ghi chú</label></div>
+                        <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="student.note" class="w-full" :rows="5" placeholder="Nhập ghi chú"/>
                     </div>
                 </div>
             </form>
@@ -91,8 +89,8 @@
     </VuePerfectScrollbar>
 
     <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
-        <vs-button class="mr-6 vs-con-loading__container" @click="createStudent" :disabled="errors.any()" ref="addButton" id="button-with-loading">Add Data</vs-button>
-        <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Cancel</vs-button>
+        <vs-button class="mr-6 vs-con-loading__container" @click="createStudent" :disabled="errors.any()" ref="addButton" id="button-with-loading">thêm</vs-button>
+        <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">hủy</vs-button>
     </div>
 </vs-sidebar>
 </template>

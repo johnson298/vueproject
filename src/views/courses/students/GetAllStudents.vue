@@ -96,6 +96,7 @@ export default {
   },
   data() {
     return {
+      branch_id: this.$store.state.getBranchId,
       students: [],
       pagination: {
         count: 0,
@@ -145,7 +146,7 @@ export default {
         color: '#7367F0',
         text: 'Loading...'
       });
-      this.$http.get(`courses/${this.$route.params.course}/students`, {
+      this.$http.get(`students`, {
         params: {
           page: page,
           search: this.searchTerm,
@@ -184,7 +185,7 @@ export default {
       this.getData(this.pagination.currentPage);
     },
     addStudentsCourse(idStudent) {
-      this.$http.post('courses/' + this.$route.params.course + '/registers', {
+      this.$http.post(`branches/${this.branch_id}/courses/` + this.$route.params.course + '/registers', {
         student_id: idStudent || this.selected[0].id,
         coupon_id: null,
         status: 1

@@ -1,9 +1,10 @@
 <template>
-<div id="profile-page">{{DOCSO(2990000)}}
+<div id="profile-page">
 
     <!-- PROFILE HEADER -->
     <div class="cover-container rounded-t-lg img-profile-cus">
-        <img class="user-profile-img" :src="user.avatar" alt="user-profile-cover">
+        <img v-if="user.avatar.startsWith('http')" key="onlineImg" :src="user.avatar" class="user-profile-img" />
+        <img v-else key="localImg" :src="require(`@/assets/images/portrait/small/${activeUserImg}`)" class="user-profile-img" />
     </div>
     <h2 class="text-center m-5 d-flex">{{user.name}}</h2>
 
@@ -54,10 +55,10 @@
                                     <vs-input label="Email" class="mt-5 w-full" v-model="user.email" />
                                 </div>
                                 <div>
-                                    <vs-input label="Mật khẩu" type="password" class="mt-5 w-full" v-model="user.password" />
+                                    <vs-input label="Mật khẩu" type="password" class="mt-5 w-full" v-model="user.password" placeholder="Thêm mật khẩu mới" />
                                 </div>
                                 <div>
-                                    <vs-input label="Nhập lại khẩu" type="password" class="mt-5 w-full" v-model="user.password_confirmation" />
+                                    <vs-input label="Nhập lại khẩu" type="password" class="mt-5 w-full" v-model="user.password_confirmation" placeholder="Nhập lại mật khẩu" />
                                 </div>
                                 <div class="vx-col mb-6 mt-5">
                                     <h2>Thông tin học vấn</h2>
@@ -73,14 +74,13 @@
                                 </vs-select>
                                 <div>
                                     <div class="note mt-5"><label class="vs-input--label">Ghi chú</label></div>
-                                    <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="user.note" class="w-full" :rows="5" />
+                                    <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="user.note" class="w-full" :rows="5" placeholder="Nhập Ghi chú" />
                                 </div>
                             </div>
                         </div>
-                        <vs-row vs-type="flex" vs-justify="space-between">
-                            <vs-col vs-offset="10" vs-w="2">
+                        <vs-row vs-type="flex" vs-justify="flex-end">
                                 <button id="update-loading" class="vs-component vs-button vs-button-primary vs-button-filled" ref="addButton" @click="updateUser(user)">Cập nhật</button>
-                            </vs-col>
+                                <button class="ml-3 vs-component vs-button vs-button-danger vs-button-filled" ref="addButton" @click="userInfo()">Hủy</button>
                         </vs-row>
                     </div>
                 </vs-tab>
@@ -149,6 +149,9 @@ export default {
       set(val){
         this.user.birthday = this.formatDateUTC(val);
       }
+    },
+    activeUserImg() {
+      return this.$store.state.AppActiveUser.img;
     }
   },
   filters: {

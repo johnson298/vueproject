@@ -6,7 +6,7 @@
                 <div class="vs-component vs-con-input-label vs-input mb-5 w-full vs-input-primary">
                     <vue-simple-suggest v-model="selectedStudent" mode="select" ref="suggestComponentStudents" placeholder="Tìm học viên..." value-attribute="id" display-attribute="name" :list="getStudents" :debounce="200" :filter-by-query="false" @select="onSuggestSelectStudent">
                         <div class="g">
-                            <input type="text" placeholder="Tìm học viên...">
+                            <input type="text" v-model='searchData' placeholder="Tìm học viên...">
                         </div>
                         <template slot="misc-item-above" slot-scope="{ suggestions, query }">
                             <div class="misc-item">
@@ -95,10 +95,10 @@
                 <div class="vx-col w-full">
                     <vs-table :data="invoices.courses" class="table-border">
                         <template slot="thead">
-                            <vs-th>Tên CT</vs-th>
-                            <vs-th>Học phí <br> (vnđ)</vs-th>
-                            <vs-th>Công nợ <br> (vnđ)</vs-th>
-                            <vs-th>Thanh toán (vnđ)</vs-th>
+                            <vs-th class="p-2">Tên CT</vs-th>
+                            <vs-th class="p-2">Học phí <br> (vnđ)</vs-th>
+                            <vs-th class="p-2">Công nợ <br> (vnđ)</vs-th>
+                            <vs-th class="p-2">Thanh toán (vnđ)</vs-th>
                         </template>
 
                         <template slot-scope="{data}">
@@ -144,21 +144,15 @@
                     </vs-row>
                     <h5 class="mt-3 mb-3">Hình thức thanh toán</h5>
                     <ul class="d-flex">
-                        <li class="mr-5">
-                            <vs-radio v-model="invoices.source" vs-value="1">momo</vs-radio>
-                        </li>
-                        <li class="mr-5">
-                            <vs-radio v-model="invoices.source" vs-value="2">bằng tiền mặt</vs-radio>
-                        </li>
-                        <li class="mr-5">
-                            <vs-radio v-model="invoices.source" vs-value="3">bằng chuyển khoản</vs-radio>
+                        <li class="mr-5" v-for="(item, key) in sourceInvoices" :key="key">
+                            <vs-radio v-model="invoices.source" :vs-value="item.value">{{item.text}}</vs-radio>
                         </li>
                     </ul>
                 </div>
             </div>
             <div>
                 <div class="mt-5 note"><label class="vs-input--label">Ghi chú</label></div>
-                <vs-textarea v-model="invoices.note" style="border: solid 1px #dddddd; background: #fff" name="note" type="text" class="w-full" :rows="3" />
+                <vs-textarea v-model="invoices.note" style="border: solid 1px #dddddd; background: #fff" name="note" type="text" class="w-full" :rows="5" placeholder="nhập ghi chú" />
             </div>
 
         </vs-col>
@@ -182,6 +176,8 @@ export default {
   },
   data() {
     return {
+      sourceInvoices: this.$store.state.model.invoices.source,
+      searchData: '',
       disabled: 'disabled',
       selectedStudent: null,
       totalPrice: 0,
@@ -213,7 +209,8 @@ export default {
         source: 3,
         amount: 0
       };
-      null;
+      this.selectedStudent = null,
+      this.searchData = '';
     },
     createInvoice() {
       this.$vs.loading({
@@ -239,6 +236,7 @@ export default {
           });
           this.callback();
           this.initValues();
+          this.$emit('closePopupInvoice',false);
         })
         .catch((error) => {
           if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {

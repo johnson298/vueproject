@@ -19,12 +19,15 @@
                         <div>
                             <vs-input label="Học phí" name="price" type="text" v-model="coursesGetInfo.price" class="mt-5 w-full" />
                         </div>
-                        <div>
-                            <vs-input label="Ngày bắt đầu " name="start_at" v-model="coursesGetInfo.start_at" type="date" class="mt-5 w-full"  />
+                        <!-- ngày bắt đầu học -->
+                        <div class="mt-5">
+                            <label for="" class="vs-input--label">Ngày bắt đầu</label>
+                            <datepicker v-model="formatDateStartAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.start_at" class="w-full picker-custom" placeholder="chọn ngày bắt đầu"></datepicker>
                         </div>
                         <!--Ngày kết thúc-->
-                        <div>
-                            <vs-input label="Ngày kết thúc " name="end_at" v-model="coursesGetInfo.end_at" type="date" class="mt-5 w-full" />
+                        <div class="mt-5">
+                            <label for="" class="vs-input--label">Ngày kết thúc</label>
+                            <datepicker v-model="formatDateEndAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.end_at" class="w-full picker-custom" placeholder="chọn ngày kết thúc"></datepicker>
                         </div>
                         <!--trạng thái-->
                         <vs-select v-model="coursesGetInfo.status" label="Trạng thái" class="mt-5 w-full">
@@ -45,11 +48,8 @@
                                         :debounce="200"
                                         :filter-by-query="false"
                                         @select="onSuggestSelectProgram">
-                                    <div class="g" v-if="coursesGetInfo.program">
+                                    <div class="g">
                                         <input type="text" :value="coursesGetInfo.program.name" placeholder="Search information...">
-                                    </div>
-                                    <div class="g" v-else>
-                                        <input type="text" placeholder="Search information...">
                                     </div>
                                     <template slot="misc-item-above" slot-scope="{ suggestions, query }">
                                         <div class="misc-item">
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <!--chin nhánh-->
-                        <div>
+                        <div v-if="coursesGetInfo.id">
                             <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
                                 <label class="vs-input--label">Chi nhánh</label>
                                 <vue-simple-suggest v-model="selectedBranch"
@@ -94,10 +94,7 @@
                                                     :debounce="200"
                                                     :filter-by-query="false"
                                                     @select="onSuggestSelectBranch">
-                                    <div class="g" v-if="coursesGetInfo.branch">
-                                        <input type="text" :value="coursesGetInfo.branch.name" placeholder="Search information...">
-                                    </div>
-                                    <div class="g" v-else>
+                                    <div class="g">
                                         <input type="text" :value="coursesGetInfo.branch.name" placeholder="Search information...">
                                     </div>
                                     <template slot="misc-item-above" slot-scope="{ suggestions, query }">
@@ -163,7 +160,7 @@ export default {
       required: false
     }
   },
-  created() {
+  created (){
     this.onSuggestSelectProgram();
   },
   methods: {
@@ -180,7 +177,7 @@ export default {
     getPrograms(search = '') {
       let vm = this;
       return new Promise((resolve, reject) => {
-        this.$http.get('programs', {
+        this.$http.get(`branches/${this.branchId}/programs`, {
           params: {
             search: search
           }
@@ -193,7 +190,7 @@ export default {
           });
       });
     },
-    getBranches(search = '') {
+    getBranches(search = ''){
       let vm = this;
       return new Promise((resolve, reject) => {
         this.$http.get('branches', {
@@ -216,19 +213,19 @@ export default {
         container: '#button-with-loading',
         scale: 0.45
       });
-      this.$http.put('courses/' + course.id, {
+      this.$http.put(`branches/${this.branchId}/courses/${course.id}`, {
         name: course.name,
-        price: course.price,
-        start_at: course.start_at,
-        status: course.status,
-        end_at: course.end_at,
-        program_id: this.courses.program_id || this.coursesGetInfo.program_id,
-        branch_id: this.courses.branch_id || this.coursesGetInfo.branch_id,
-        number_of_lessons: course.number_of_lessons
-      }, {})
+        price : course.price,
+        start_at : course.start_at,
+        status : course.status,
+        end_at : course.end_at,
+        program_id : this.courses.program_id || this.coursesGetInfo.program_id,
+        branch_id : this.courses.branch_id || this.coursesGetInfo.branch_id,
+        number_of_lessons : course.number_of_lessons
+      }, {
+      })
         .then(() => {
           this.isSidebarActiveLocal = false;
-          this.getData();
           this.$vs.notify({
             title: 'Đã sửa thành công',
             text: 'OK',
@@ -236,6 +233,7 @@ export default {
             icon: 'fa fa-lg fa-check-circle',
             color: 'success'
           });
+          this.getData();
         })
         .catch((error) => {
 
@@ -262,7 +260,7 @@ export default {
         });
     },
   },
-  mounted() {
+  mounted(){
     this.getPrograms();
     this.getBranches();
   },
@@ -276,12 +274,12 @@ export default {
         wheelSpeed: .60,
       },
       status: this.$store.state.model.courses.status,
-      selectedProgram: null,
-      selectedBranch: null,
+      selectedProgram : null,
+      selectedBranch : null,
       loading: false,
-      courses: {
-        program_id: null,
-        branch_id: null,
+      courses : {
+        program_id : null,
+        branch_id :null,
       }
     };
   },
@@ -311,6 +309,9 @@ export default {
       set(val) {
         this.coursesGetInfo.end_at = this.formatDateUTC(val);
       }
+    },
+    branchId(){
+      return this.$store.state.getBranchId;
     }
   },
   components: {

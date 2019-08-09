@@ -47,24 +47,29 @@
 
             <vs-spacer></vs-spacer>
 
-            <vs-button type="line" class="bookmark-containerp-2 p-2 rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32">
-                <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-                    <span class="cursor-pointer flex ">
-                        <feather-icon icon="GitPullRequestIcon" class="icon-branch"></feather-icon> <span>Hà Nội</span>
-                    </span>
-                    <vs-dropdown-menu class="w-48 i18n-dropdown vx-navbar-dropdown">
-                        <vs-dropdown-item>
-                            <feather-icon icon="GitPullRequestIcon" class="icon-branch"></feather-icon> Hồ Chí Minh
-                        </vs-dropdown-item>
-                        <vs-dropdown-item>
-                            <feather-icon icon="GitPullRequestIcon" class="icon-branch"></feather-icon> Nam Định
-                        </vs-dropdown-item>
-                        <vs-dropdown-item>
-                            <feather-icon icon="GitPullRequestIcon" class="icon-branch"></feather-icon> Đà Nẵng
-                        </vs-dropdown-item>
-                    </vs-dropdown-menu>
-                </vs-dropdown>
+            <vs-button type="line" @click="changeBranchPopup = true">
+                <font-awesome-icon icon="sitemap" />
+                {{branchName}}
             </vs-button>
+            <vs-popup class="popup-custom-768" title="Chọn chi nhánh" :active.sync="changeBranchPopup">
+                <div class="vx-col w-full">
+                    <h5 class="mt-3 mb-3 text-center">Danh sách chi nhánh</h5>
+                    <vs-row class="d-flex row">
+                        <vs-col vs-w=6 class="mt-5" :key="index" v-for="(value,index) in branches">
+                            <vs-radio v-model="changeBranchId" :vs-value="value.id">
+                                {{value.name}}
+                            </vs-radio>
+                        </vs-col>
+                    </vs-row>
+                    <vs-divider/>
+                    <vs-row class="mt-5">
+                        <vs-col vs-w="12" vs-type="flex" vs-justify="flex-end">
+                            <vs-button @click="changeBranch">Thay đổi chi nhánh</vs-button>
+                        </vs-col>
+
+                    </vs-row>
+                </div>
+            </vs-popup>
             <!-- NOTIFICATIONS -->
             <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer ml-4">
                 <feather-icon icon="BellIcon" class="cursor-pointer mt-1 sm:mr-6 mr-2" :badge="unreadNotifications.length"></feather-icon>
@@ -115,7 +120,7 @@
             <div class="the-navbar__user-meta flex items-center">
                 <div class="text-right leading-tight hidden sm:block">
                     <p class="font-semibold">{{ user_displayName }}</p>
-                    <small>Available</small>
+                    <small>{{ checkStatus(userCurrent.positions, userCurrent.getPosition) }}</small>
                 </div>
                 <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
                     <div class="con-img ml-3">
@@ -124,7 +129,7 @@
                     </div>
                     <vs-dropdown-menu class="vx-navbar-dropdown">
                         <ul style="min-width: 9rem">
-                            <li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.push('/pages/profile')">
+                            <li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.push(`/employees/${userCurrent.id}`)">
                                 <feather-icon icon="UserIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Profile</span>
                             </li>
                             <li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.push('/apps/email')">
@@ -154,7 +159,8 @@
 import VxAutoSuggest from '@/components/vx-auto-suggest/VxAutoSuggest.vue';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import draggable from 'vuedraggable';
-
+import axios from 'axios';
+axios.defaults.baseURL = process.env.VUE_APP_URL;
 export default {
   name: "the-navbar",
   props: {
@@ -165,6 +171,15 @@ export default {
   },
   data() {
     return {
+      userCurrent: {
+        id: JSON.parse(localStorage.getItem('user')).id,
+        positions: this.$store.state.model.employees.positions,
+        getPosition: JSON.parse(localStorage.getItem('user')).position,
+      },
+      changeBranchPopup: false,
+      branchID: this.$store.state.getBranchId,
+      branchName: null,
+      branches: null,
       navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
       searchQuery: '',
       showFullSearch: false,
@@ -220,9 +235,21 @@ export default {
   watch: {
     '$route'() {
       if (this.showBookmarkPagesDropdown) this.showBookmarkPagesDropdown = false;
+    },
+    changeBranchId() {
+      this.getBranchName();
     }
   },
   computed: {
+    changeBranchId: {
+      get() {
+        return this.$store.state.getBranchId;
+      },
+      set(val) {
+        this.branchID = val;
+      }
+    },
+
     // HELPER
     sidebarWidth() {
       return this.$store.state.sidebarWidth;
@@ -270,7 +297,32 @@ export default {
       return JSON.parse(localStorage.getItem('user')).avatar || this.$store.state.AppActiveUser.img;
     }
   },
+  created() {
+    this.getAllBranches();
+    this.getBranchName();
+  },
   methods: {
+    changeBranch() {
+      this.$store.dispatch('changeBranchData', this.branchID);
+      this.$vs.notify({
+        title: 'Chuyển chi nhánh thành công',
+        text: `Chi nhánh hiện tại: ${this.branchName}`,
+        color: 'success',
+        iconPack: 'feather',
+        icon: 'icon-check'
+      });
+      this.changeBranchPopup = false;
+    },
+    getAllBranches() {
+      axios.get('branches').then((res) => {
+        this.branches = res.data.data;
+      });
+    },
+    getBranchName() {
+      axios.get(`branches/${this.branchID}`).then((res) => {
+        this.branchName = res.data.data.name;
+      });
+    },
     showSidebar() {
       this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true);
     },
@@ -367,8 +419,4 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-  .icon-branch{
-    transform: scale(0.7) translateY(-5px)
-  }
-</style>
+<style lang="scss"></style>
