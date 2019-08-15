@@ -125,6 +125,17 @@ const router = new Router({
               }
             },
             {
+              path: 'branches/:branch/rooms',
+              name: 'branch',
+              component: () => import('./views/settings/branches/rooms/BranchRooms.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Chi tiết phòng học', url: '/'}
+                ],
+                pageTitle: 'Chi tiết phòng học'
+              }
+            },
+            {
               path: 'coupons',
               name: 'SettingsCoupons',
               component: () => import('./views/settings/coupons/CouponsList.vue'),

@@ -14,6 +14,7 @@ import moduleCoupons from './coupons/module';
 import moduleCourses from  './courses/module';
 import moduleTeachers from './teachers/module';
 import moduleRegisters from  './registers/module';
+import moduleRooms from  './rooms/module';
 
 Vue.use(Vuex);
 
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     courses : moduleCourses,
     teachers : moduleTeachers,
     registers : moduleRegisters,
+    rooms : moduleRooms
   },
   strict: process.env.NODE_ENV !== 'production'
 });
