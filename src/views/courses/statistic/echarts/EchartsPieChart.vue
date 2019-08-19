@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-	File Name: EchartsPieChart.vue
-	Description: Create bar chart
-	----------------------------------------------------------------------------------------
-	Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-	Author: Pixinvent
-	Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
 	<vx-card title="Pie Chart" class="mb-base" code-toggler>
 
@@ -61,7 +51,7 @@ export default {
               }
             }
           }
-        ]       
+        ]
       },
     }
   },

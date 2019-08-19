@@ -1,12 +1,3 @@
-<!-- =========================================================================================
-    File Name: CardActions.vue
-    Description: Card with actions
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
     <div class="vx-row">
         <div class="vx-col w-full mb-base">

@@ -67,8 +67,6 @@ new Vue({
   render: h => h(App)
 }).$mount('#app');
 
-
-// Mixin golabal
 Vue.mixin({
   methods: {
     formatPrice(value) {
@@ -133,3 +131,8 @@ Vue.mixin({
 
   }
 });
+//vue blu
+import VueBlu from 'vue-blu';
+import 'vue-blu/dist/css/vue-blu.min.css';
+
+Vue.use(VueBlu);

@@ -1,5 +1,5 @@
 <template>
-<div id="profile-page">
+<div id="profile-page">{{DOCSO(2990000)}}
 
     <!-- PROFILE HEADER -->
     <div class="cover-container rounded-t-lg img-profile-cus">

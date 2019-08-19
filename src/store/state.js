@@ -81,6 +81,21 @@ const state = {
         { text: 'Giảng viên', value: 1},
         { text: 'Trợ giảng', value: 2}
       ]
+    },
+    calendar : {
+      class :[
+        { text: 'Ca sáng 7h-9h', value: 1},
+        { text: 'Ca sáng 9h-11h', value: 2},
+        { text: 'Ca chiều 13h-13h', value: 3},
+        { text: 'Ca chiều 15h-17h', value: 4},
+        { text: 'Ca tối 17h-19h', value: 5},
+        { text: 'Ca tối 19h-21h', value: 6},
+      ],
+      status : [
+        { text: 'Nghỉ', value: 1},
+        { text: 'Thay giảng viên', value: 2},
+        { text: 'Học bù', value: 3},
+      ]
     }
   }
 };

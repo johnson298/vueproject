@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-	File Name: EchartsPolarChart.vue
-	Description: Create polar chart
-	----------------------------------------------------------------------------------------
-	Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-	Author: Pixinvent
-	Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
 	<vx-card title="Polar Chart" class="" code-toggler>
 
