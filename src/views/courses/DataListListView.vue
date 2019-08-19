@@ -369,4 +369,7 @@ export default {
         }
     }
 }
+.vdp-datepicker.picker-custom input{
+    width: 100% !important;
+}
 </style>

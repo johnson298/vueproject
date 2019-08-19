@@ -1,5 +1,5 @@
 <template>
-<vx-card title="Quá trình học">
+<VxCardCustom title="Quá trình học">
     <template slot="actions">
         <feather-icon icon="HelpCircleIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
     </template>
@@ -20,10 +20,11 @@
             <p class="mb-4 text-3xl font-semibold">20</p>
         </div>
     </div>
-</vx-card>
+</VxCardCustom>
 </template>
 
 <script>
+import VxCardCustom from './vx-card/VxCardCustom';
 import VueApexCharts from 'vue-apexcharts';
 import analyticsData from './ui-elements/card/analyticsData.js';
 
@@ -35,6 +36,7 @@ export default {
   },
   components: {
     VueApexCharts,
+    VxCardCustom
   }
 };
 </script>

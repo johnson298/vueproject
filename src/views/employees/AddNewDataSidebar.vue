@@ -1,8 +1,8 @@
 <template>
 <vs-sidebar click-not-close position-right parent="body" default-index="1" color="primary" class="add-new-data-sidebar items-no-padding" spacer v-model="isSidebarActiveLocal">
     <div class="mt-6 flex items-center justify-between px-6">
-      <h4>Thêm nhân viên</h4>
-      <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
+        <h4>Thêm nhân viên</h4>
+        <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
     </div>
     <vs-divider class="mb-0"></vs-divider>
 
@@ -52,8 +52,9 @@
                     <div>
                         <vs-input label="Facebook" name="facebook" type="text" v-model="employee.facebook" class="mt-5 w-full" />
                     </div>
-                    <div>
-                        <vs-input label="Ngày sinh" name="birthday" type="date" v-model="employee.birthday" class=" mt-5 w-full mydatepicker" />
+                    <div class="mt-5">
+                        <label for="" class="vs-input--label">Ngày sinh</label>
+                        <datepicker v-model="formatDate" :language="languages[language]" format="d MMMM yyyy" :value="employee.birthday" class="w-full picker-custom"></datepicker>
                     </div>
                     <!--ảnh đại diện-->
                     <div>
@@ -81,7 +82,7 @@
                     </div>
                     <!--nghi chú-->
                     <div>
-                        <div class="note"><label class="vs-input--label">Note</label></div>
+                        <div class="mt-5 note"><label class="vs-input--label">Note</label></div>
                         <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="employee.note" class="w-full" :rows="5" />
                     </div>
                 </div>
@@ -98,6 +99,8 @@
 </template>
 
 <script>
+import Datepicker from 'vuejs-datepicker';
+import * as lang from 'vuejs-datepicker/src/locale';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 
 export default {
@@ -113,6 +116,8 @@ export default {
   },
   data() {
     return {
+      language: "vi",
+      languages: lang,
       employee: {
         birthday: '',
         facebook: '',
@@ -151,10 +156,19 @@ export default {
           this.initValues();
         }
       }
+    },
+    formatDate:{
+      get(){
+        return this.employee.birthday;
+      },
+      set(val){
+        this.employee.birthday = this.formatDateUTC(val);
+      }
     }
   },
   components: {
     VuePerfectScrollbar,
+    Datepicker
   },
 
   methods: {
@@ -195,7 +209,11 @@ export default {
         container: '#button-with-loading',
         scale: 0.45
       });
-      this.$http.post('users', this.formData(), { headers: { 'Content-Type': 'multipart/form-data' } })
+      this.$http.post('users', this.formData(), {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
         .then(() => {
           this.$vs.notify({
             title: 'Đã thêm mới thành công',
@@ -234,33 +252,37 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-  .add-new-data-sidebar {
+<style lang="scss">
+.add-new-data-sidebar {
     /deep/ .vs-sidebar--background {
-      z-index: 52010;
+        z-index: 52010;
     }
 
     /deep/ .vs-sidebar {
-      z-index: 52010;
-      width: 400px;
-      max-width: 90vw;
+        z-index: 52010;
+        width: 400px;
+        max-width: 90vw;
 
-      .img-upload {
-        margin-top: 2rem;
+        .img-upload {
+            margin-top: 2rem;
 
-        .con-img-upload {
-          padding: 0;
+            .con-img-upload {
+                padding: 0;
+            }
+
+            .con-input-upload {
+                width: 100%;
+                margin: 0;
+            }
         }
-
-        .con-input-upload {
-          width: 100%;
-          margin: 0;
-        }
-      }
     }
-  }
+}
 
-  .scroll-area--data-list-add-new {
+.scroll-area--data-list-add-new {
     height: calc(100% - 4.3rem);
-  }
+}
+
+.vdp-datepicker.picker-custom input{
+    width: 100% !important;
+}
 </style>

@@ -161,7 +161,6 @@ const router = new Router({
         },
         {
           path: '/courses/:course',
-          name: 'detailcourses',
           component: () => import('./views/courses/DetailCourses.vue'),
           meta: {
             breadcrumb: [
@@ -216,6 +215,16 @@ const router = new Router({
             },
           ]
         },
+        {
+          path: '/invoices',
+          component: () => import('./views/money/Invoices.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Thu chi', url: '/'}
+            ],
+            pageTitle: 'Thu chi'
+          },
+        }
       ],
     },
     // =============================================================================

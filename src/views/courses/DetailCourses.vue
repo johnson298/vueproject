@@ -2,7 +2,7 @@
 <div id="profile-page">
 
     <!-- COL AREA -->
-    <h2 class="text-center mb-10">Lớp: {{course.name}} </h2>
+    <h2 class="text-center mb-10">Lớp: {{course.name}}</h2>
     <vx-card code-toggler class="custom-card">
         <div class="mt-5 custom-tab">
             <div class="con-vs-tabs vs-tabs vs-tabs-primary vs-tabs-position-top">
@@ -204,16 +204,12 @@ export default {
     }
 }
 
-.vx-card {
-
-    .vx-card__header {
-        display: none;
-    }
-
+.custom-card > .vx-card__header{
+    display: none !important;
 }
 
-.vx-card.custom-card .vx-card__body {
-    padding: 0;
+.vx-card.custom-card .vx-card__collapsible-content > .vx-card__body {
+    padding: 0 !important;
 }
 
 .custom-tab .con-slot-tabs {

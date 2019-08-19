@@ -1,14 +1,3 @@
-<!-- =========================================================================================
-    File Name: VxSidebar.vue
-    Description: Sidebar Component
-    Component Name: VxSidebar
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
     <div class="parentx">
         <vs-sidebar v-hammer:swipe.left="onSwipeLeft" ref="mainSidebar" :parent="parent" :hiddenBackground="clickNotClose" :reduce="reduce" default-index="-1" class="sidebarx main-menu-sidebar items-no-padding" v-model="isSidebarActive" :click-not-close="clickNotClose" :reduce-not-rebound="reduceNotRebound">
