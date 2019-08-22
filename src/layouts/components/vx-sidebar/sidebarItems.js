@@ -38,6 +38,22 @@ export default [
     icon : "UserIcon"
   },
   {
+    name: "marketing",
+    header: "marketing"
+  },
+  {
+    url: "/customer",
+    name: "Khách hàng",
+    slug: "customer",
+    icon: "UsersIcon",
+  },
+  {
+    url: "/campaign",
+    name: "Chiến dịch",
+    slug: "campaign",
+    icon: "ActivityIcon",
+  },
+  {
     name: "setting",
     header: "Cấu hình"
   },

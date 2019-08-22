@@ -96,6 +96,26 @@ const state = {
         { text: 'Thay giảng viên', value: 2},
         { text: 'Học bù', value: 3},
       ]
+    },
+    customer:{
+      status:[
+        { text: 'Khách hàng chờ chăm sóc', value: 1},
+        { text: 'Đang chăm sóc', value: 2},
+        { text: 'Chăm sóc thành công', value: 3},
+        { text: 'Hủy tư vấn', value: 4},
+      ]
+    },
+    campaign: {
+      range_send:[
+        { text: 'Toàn bộ trung tâm', value: 1},
+        { text: 'Theo chi nhánh', value: 2},
+        { text: 'Theo chương trình học', value: 3},
+        { text: 'Theo lớp học', value: 4},
+      ],
+      position: [
+        { text: 'Giáo viên', value: 1},
+        { text: 'Học viên', value: 2},
+      ]
     }
   }
 };

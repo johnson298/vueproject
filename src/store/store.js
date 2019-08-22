@@ -17,6 +17,9 @@ import moduleRegisters from  './registers/module';
 import moduleCalendar from  './calendar/moduleCalendar';
 import moduleRooms from  './rooms/module';
 import moduleInvoices from  './invoices/module';
+import moduleCustomer from './customer/module';
+import moduleCustomerCare from './customer_care/module';
+import moduleCampaign from  './campaign/module';
 
 Vue.use(Vuex);
 
@@ -37,7 +40,10 @@ export default new Vuex.Store({
     registers : moduleRegisters,
     invoices : moduleInvoices,
     calendar : moduleCalendar,
-    rooms : moduleRooms
+    rooms : moduleRooms,
+    customer : moduleCustomer,
+    customer_care : moduleCustomerCare,
+    campaign : moduleCampaign
   },
   strict: process.env.NODE_ENV !== 'production'
 });
