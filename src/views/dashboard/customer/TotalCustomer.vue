@@ -1,13 +1,12 @@
 <template>
-<div>
-    <statistics-card-line icon="UsersIcon" statistic="92.6k" statisticTitle="Số học viên tham gia" :chartData="analyticsData.subscribersGained" type='area'></statistics-card-line>
-</div>
-
+    <div>
+        <statistics-card-line icon="UserPlusIcon" statistic="92.6k" statisticTitle="Tổng khách hàng" :chartData="analyticsData.subscribersGained" type='area'></statistics-card-line>
+    </div>
 </template>
 <script>
 import VueApexCharts from 'vue-apexcharts';
 import StatisticsCardLine from '@/components/statistics-cards/StatisticsCardLine.vue';
-import analyticsData from './ui-elements/card/analyticsData.js';
+import analyticsData from '../ui-elements/card/analyticsData.js';
 
 export default{
   data() {

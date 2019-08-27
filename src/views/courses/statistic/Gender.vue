@@ -1,5 +1,5 @@
 <template>
-<VxCardCustom title="Giới tính">
+<VxCardCustom title="Đáng giá lớp học">
     <e-charts :options="pie" ref="pie" auto-resize />
 </VxCardCustom>
 </template>
@@ -22,21 +22,31 @@ export default {
         legend: {
           orient: 'vertical',
           left: 'left',
-          data: ['Nữ', 'Nam']
+          data: ['Tốt', 'Khá','Trung bình','Yếu','Kém']
         },
         series: [{
-          name: 'Giới tính',
+          name: 'Đánh giá lớp học',
           type: 'pie',
           radius: '55%',
           center: ['50%', '60%'],
           color: ['#FF9F43', '#28C76F', '#EA5455', '#87ceeb', '#7367F0'],
           data: [{
             value: 234,
-            name: 'Nữ'
+            name: 'Tốt'
           },
           {
-            value: 1548,
-            name: 'Nam'
+            value: 300,
+            name: 'Khá'
+          },{
+            value: 500,
+            name: 'Trung bình'
+          },
+          {
+            value: 500,
+            name: 'Yếu'
+          },{
+            value: 100,
+            name: 'Kém'
           }
           ],
           itemStyle: {

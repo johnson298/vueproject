@@ -1,5 +1,9 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
+<pre>dddd
+      {{branchId}}
+    </pre>
+
 
     <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData"/>
 
@@ -59,7 +63,6 @@
           </div>
         </div>
       </div>
-
       <template slot="thead">
         <vs-th :sort-key="value.sortKey" v-for="(value, index) in views" :key="index" v-if="value.viewable">{{ value.text }}</vs-th>
       </template>
@@ -72,7 +75,8 @@
           </vs-td>
 
           <vs-td v-if="views.price.viewable">
-            <p class="product-category">{{ formatPrice(tr.price) }}</p>
+            <p class="product-category">
+              {{ formatPrice(tr.price) }}</p>
           </vs-td>
 
           <vs-td v-if="views.program_id.viewable">
@@ -149,12 +153,14 @@ export default {
   },
   data: function () {
     return {
+      branchId: 'adda',
       coursesGetInfo: {
         program: {name: ''},
         branch : {name : ''}
       },
       activeConfirm: false,
       timer: null,
+      branch_id : null,
       selected: [],
       isMounted: false,
       addNewDataSidebar: false,
@@ -166,15 +172,24 @@ export default {
   computed: {
     ...mapState('courses', ['courses', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
+  created(){
+    this.created();
+  },
   methods: {
+    created(){
+      let vm = this;
+      this.$http.get('/branches').then(function(response) {
+        return vm.branchId = response.data.data[0].id;
+        console.log(vm.branchId);
+      });
+    },
     detailCourse(course){
       this.editCourseSidebar = true;
       var vm = this;
-      this.$http.get('courses/' + course.id).then(function (response) {
+      this.$http.get('branches/1/courses/' + course.id).then(function (response) {
         if(response.data.data.id){
           vm.coursesGetInfo = response.data.data;
         }
-
       });
     },
     deleteCourse(course){
@@ -216,9 +231,15 @@ export default {
       return data;
     },
     getData(page = 1) {
+      console.log(this.branchId);
       const thisIns = this;
+
+      thisIns.branch_id = JSON.parse(localStorage.getItem('user')).branch_id;
+      if(thisIns.branch_id == null){
+        thisIns.branch_id =1;
+      }
       thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
-      this.$http.get('courses', {
+      this.$http.get('branches/'+ thisIns.branch_id +'/courses', {
         params: {
           page: page,
           search: this.searchTerm,
@@ -269,6 +290,7 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
+    this.created();
     if (this.courses.length === 0) {
       this.getData();
     }
