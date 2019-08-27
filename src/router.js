@@ -235,7 +235,39 @@ const router = new Router({
             ],
             pageTitle: 'Thu chi'
           },
-        }
+        },
+        {
+          path: '/customer',
+          component: () => import('./views/customer/CustomerList.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Khách hàng', url: '/'}
+            ],
+            pageTitle: 'Khách hàng'
+          },
+        },
+        {
+          path: '/customers',
+          name: 'customer',
+          component: () => import('./views/customer/DetailEmployee.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Chi tiết khách hàng', url: '/'}
+            ],
+            pageTitle: 'Chi tiết khách hàng'
+          }
+        },
+        {
+          path: '/campaign',
+          name: 'campaign',
+          component: () => import('./views/campaign/DataListListView.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Chi tiết chiến dịch', url: '/'}
+            ],
+            pageTitle: 'Chi tiết chiến dịch'
+          }
+        },
       ],
     },
     // =============================================================================

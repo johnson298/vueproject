@@ -61,6 +61,12 @@ Vue.use(VeeValidate);
 
 Vue.config.productionTip = false;
 
+// Vue Ckeditor
+import CKEditor from '@ckeditor/ckeditor5-vue';
+
+Vue.use( CKEditor );
+
+
 new Vue({
   router,
   store,
