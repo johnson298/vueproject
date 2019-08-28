@@ -1,7 +1,7 @@
 <template>
 <div class="layout--main" :class="[navbarClasses, footerClasses, {'app-page': isAppPage}]">
 
-    <vx-sidebar :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo.png')" title="Vuesax" parent=".layout--main" />
+    <vx-sidebar :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo.png')" title="" parent=".layout--main" />
 
     <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
 
@@ -20,7 +20,7 @@
                             </div>
                             <vx-breadcrumb class="ml-4 md:block hidden" v-if="$route.meta.breadcrumb" />
                             <div class="ml-auto md:block hidden cursor-pointer">
-                                <vs-button @click="backPage" class="window-back" radius><i class="vs-icon notranslate icon-scale material-icons null">arrow_back</i></vs-button>
+                                <vs-button @click="backPage" class="window-back back-page" radius><i class="vs-icon notranslate icon-scale material-icons null">arrow_back</i></vs-button>
                             </div>
                         </div>
                     </transition>

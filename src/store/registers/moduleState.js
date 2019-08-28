@@ -14,11 +14,11 @@ export default {
     orderType: 'desc'
   },
   views: {
-    code: { text: 'Code', viewable: true, sortKey: 'code' },
-    avatar: { text: 'Avatar', viewable: true, sortKey: '' },
-    name: { text: 'Name', viewable: true, sortKey: 'name' },
-    created_at: { text: 'Created at', viewable: true, sortKey: 'created_at' },
-    action: { text: 'Action', viewable: true, sortKey: '' },
+    code: { text: 'mã hv', viewable: true, sortKey: 'code' },
+    avatar: { text: 'ảnh', viewable: true, sortKey: '' },
+    name: { text: 'tên hv', viewable: true, sortKey: 'name' },
+    created_at: { text: 'ngày tạo', viewable: true, sortKey: 'created_at' },
+    action: { text: 'hành động', viewable: true, sortKey: '' },
   },
   needReload: false
 };

@@ -18,7 +18,7 @@ export default {
     description: { text: 'Mô tả', viewable: false, sortKey: 'description' },
     price: { text: 'Giá tiền', viewable: true, sortKey: 'price' },
     number_of_lessons: { text: 'Số bài học', viewable: true, sortKey: 'number_of_lessons' },
-    created_at: { text: 'Ngày tạo', viewable: true, sortKey: 'created_at' },
+    created_at: { text: 'Ngày tạo', viewable: false, sortKey: 'created_at' },
     updated_at: { text: 'Ngày cập nhật', viewable: false, sortKey: 'updated_at' },
     action: { text: 'Action', viewable: true, sortKey: '' },
   },

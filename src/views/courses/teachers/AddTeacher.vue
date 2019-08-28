@@ -3,7 +3,7 @@
         <div class="mt-6 flex items-center justify-between px-6">
             <h4>Thêm Giáo viên</h4>
             <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
-        </div>
+        </div><h1>dd{{branch_id}}</h1>
         <vs-divider class="mb-0"></vs-divider>
 
         <VuePerfectScrollbar class="scroll-area--data-list-add-new pt-4 pb-6" :settings="settings">
@@ -93,6 +93,8 @@ export default {
   },
   data() {
     return {
+      branch_id: this.$store.state.getBranchId,
+      course_id: this.$route.params.course,
       loading: false,
       selectedTeacher: null,
       teacher: {
@@ -135,7 +137,7 @@ export default {
     getTeachers(search = ''){
       let vm = this;
       return new Promise((resolve, reject) => {
-        this.$http.get(`courses/${this.$route.params.course}/users`, {
+        this.$http.get(`branches/${this.branch_id}/courses/${this.course_id}/users`, {
           params: {
             search: search
           }
@@ -163,7 +165,7 @@ export default {
         container: '#button-with-loading',
         scale: 0.45
       });
-      this.$http.post('courses/' + this.$route.params.course + '/teachers' , {
+      this.$http.post(`branches/${this.branch_id}/courses/${this.course_id}/teachers` , {
         user_id : this.teacher.user_id,
         role : this.teacher.role,
         note : this.teacher.note,

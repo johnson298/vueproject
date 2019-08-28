@@ -11,35 +11,35 @@
                         <li class="vs-tabs--li">
                             <router-link
                                 tag="button"
-                                :to="'/courses/' + $route.params.course"
+                                :to="`/courses/${$route.params.course}`"
                                 class="vs-tabs--btn"
                                 >Thống kê</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
                                 tag="button"
-                                :to="'/courses/' + $route.params.course + '/student'"
+                                :to="`/courses/${$route.params.course}/student`"
                                 class="vs-tabs--btn"
                                 >Danh sách học viên</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
                                 tag="button"
-                                :to="'/courses/' + $route.params.course + '/teacher'"
+                                :to="`/courses/${$route.params.course}/teacher`"
                                 class="vs-tabs--btn"
                                 >Danh sách giáo viên</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
                                 tag="button"
-                                :to="'/courses/' + $route.params.course + '/history'"
+                                :to="`/courses/${$route.params.course}/history`"
                                 class="vs-tabs--btn"
                                 >Lịch sử</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
                                     tag="button"
-                                    :to="'/courses/' + $route.params.course + '/calendar'"
+                                    :to="`/courses/${$route.params.course}/calendar`"
                                     class="vs-tabs--btn"
                             >Lịch học</router-link>
                         </li>
@@ -71,6 +71,7 @@ export default {
       wasSidebarOpen: null,
       course: {},
       routerTransition: themeConfig.routerTransition || 'zoom-fade',
+      branch_id: this.$store.state.getBranchId,
     };
   },
   components: {
@@ -79,7 +80,7 @@ export default {
   },
   created() {
     let vm = this;
-    this.$http.get('courses/' + this.$route.params.course).then(function (response) {
+    this.$http.get(`branches/${this.branch_id}/courses/` + this.$route.params.course).then(function (response) {
       vm.course = response.data.data;
     }).catch(() => {
       this.$router.push('/pages/error-404');

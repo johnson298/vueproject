@@ -14,21 +14,21 @@
                     <h4 class="text-center uppercase">Thông tin chương trình</h4>
                     <!-- tên chương trình -->
                     <div>
-                        <vs-input label="Tên chương trình" name="name" v-model="program.name" class="mt-5 w-full" v-validate="'required'" />
+                        <vs-input label="Tên chương trình" name="name" v-model="program.name" class="mt-5 w-full" v-validate="'required'" placeholder="nhập tên chương trình" />
                         <small class="text-danger">{{ errors.first('name') }}</small>
                     </div>
                     <!--Số bài học-->
                     <div>
-                        <vs-input label="Số bài học" name="number_of_lessons" type="number" v-model="program.number_of_lessons" class="mt-5 w-full" />
+                        <vs-input label="Số bài học" name="number_of_lessons" type="number" v-model="program.number_of_lessons" class="mt-5 w-full"/>
                     </div>
                     <!--Giá tiền-->
                     <div>
-                        <vs-input label="Giá tiền" name="price" type="number" v-model="program.price" class="mt-5 w-full" />
+                        <vs-input label="Giá tiền (vnđ)" name="price" type="number" v-model="program.price" class="mt-5 w-full" />
                     </div>
                     <!--mô tả-->
                     <div>
-                        <div class="mt-5 note"><label class="vs-input--label">Mô tả</label></div>
-                        <vs-textarea style="border: solid 1px #dddddd" name="description" type="text" v-model="program.description" class="w-full" :rows="5" />
+                        <div class="mt-5 note"><label class="vs-input--label">Ghi chú</label></div>
+                        <vs-textarea style="border: solid 1px #dddddd" name="description" type="text" v-model="program.description" class="w-full" :rows="5" placeholder="nhập ghi chú" />
                     </div>
                 </div>
 
@@ -37,8 +37,8 @@
     </VuePerfectScrollbar>
 
     <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
-        <vs-button class="mr-6 vs-con-loading__container" @click="createProgram" :disabled="errors.any()" ref="addButton" id="button-with-loading">Add Data</vs-button>
-        <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Cancel</vs-button>
+        <vs-button class="mr-6 vs-con-loading__container" @click="createProgram" :disabled="errors.any()" ref="addButton" id="button-with-loading">Thêm</vs-button>
+        <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Hủy</vs-button>
     </div>
 </vs-sidebar>
 </template>
@@ -62,8 +62,8 @@ export default {
       program: {
         name: '',
         description: '',
-        price: '',
-        number_of_lessons: ''
+        price: 0,
+        number_of_lessons: 0
       },
       disabled: true,
       settings: { // perfectscrollbar settings
@@ -83,6 +83,9 @@ export default {
           this.initValues();
         }
       }
+    },
+    branchId(){
+      return this.$store.state.getBranchId;
     }
   },
   components: {
@@ -112,7 +115,7 @@ export default {
         container: '#button-with-loading',
         scale: 0.45
       });
-      this.$http.post('programs', this.formData())
+      this.$http.post(`branches/${this.branchId}/programs`, this.formData())
         .then(() => {
           this.$vs.notify({
             title: 'Đã thêm mới thành công',

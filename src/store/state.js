@@ -3,6 +3,7 @@ import themeConfig from '@/../themeConfig.js';
 import colors from '@/../themeConfig.js';
 
 const state = {
+  getBranchId: (typeof JSON.parse(localStorage.getItem('user')) === 'undefined') ? 1 : JSON.parse(localStorage.getItem('user')) == null ? 1 : JSON.parse(localStorage.getItem('user')).branch_id === null ? 1 : JSON.parse(localStorage.getItem('user')).branch_id,
   isSidebarActive: true,
   breakpoint: null,
   sidebarWidth: "default",
@@ -15,7 +16,7 @@ const state = {
     id: 0,
     name: 'John Doe',
     about: 'Dessert chocolate cake lemon drops jujubes. Biscuit cupcake ice cream bear claw brownie brownie marshmallow.',
-    img: 'avatar-s-11.png',
+    img: 'default.png',
     status: 'online',
   },
 
@@ -72,8 +73,8 @@ const state = {
         { text: 'Theo số tiền', value: 2}
       ],
       status: [
-        { text: 'unavailable', value: 1},
-        { text: 'Trạng thái khuyến mại', value: 2},
+        { text: 'Không khả dụng', value: 1},
+        { text: 'Khuyến mại', value: 2},
       ],
     },
     teachers : {
@@ -115,6 +116,13 @@ const state = {
       position: [
         { text: 'Giáo viên', value: 1},
         { text: 'Học viên', value: 2},
+      ]
+    },
+    invoices: {
+      source: [
+        { text: 'Momo', value: 1},
+        { text: 'Tiền mặt', value: 2},
+        { text: 'Chuyển khoản', value: 3},
       ]
     }
   }

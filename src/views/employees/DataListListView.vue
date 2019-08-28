@@ -38,7 +38,7 @@
           <vs-dropdown class="cursor-pointer mr-4 mb-4">
 
             <div class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32">
-              <span class="mr-2">Views</span>
+              <span class="mr-2">Xem</span>
               <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
             </div>
 
@@ -75,6 +75,17 @@
 
           <vs-td v-if="views.name.viewable">
             <p class="product-name font-medium">{{ tr.name }}</p>
+          </vs-td>
+
+          <vs-td v-if="views.position.viewable">
+            <p class="product-name font-medium">
+              <vs-chip 
+              :color="checkStatus(positions,tr.position)=='Giáo viên' ? 'danger' 
+                      : checkStatus(positions,tr.position)=='Tư vấn' ? 'warning'
+                      : checkStatus(positions,tr.position)=='Kế toán' ? 'primary'
+                      : checkStatus(positions,tr.position)=='Quản lý' ? 'success'
+                      : ''">{{ checkStatus(positions,tr.position) }}</vs-chip>
+              </p>
           </vs-td>
 
           <vs-td v-if="views.email.viewable">
@@ -145,6 +156,7 @@ export default {
   },
   data() {
     return {
+      positions: this.$store.state.model.employees.positions,
       activeConfirm:false,
       timer: null,
       selected: [],
@@ -321,6 +333,7 @@ export default {
       th {
         padding-top: 0;
         padding-bottom: 0;
+        vertical-align: middle;
 
         .vs-table-text{
           text-transform: uppercase;

@@ -3,7 +3,8 @@
 
     <!-- PROFILE HEADER -->
     <div class="cover-container rounded-t-lg img-profile-cus">
-        <img class="user-profile-img" :src="student.avatar" alt="user-profile-cover">
+        <img v-if="student.avatar.startsWith('http')" key="onlineImg" :src="student.avatar" class="user-profile-img" />
+        <img v-else key="localImg" :src="require(`@/assets/images/portrait/small/${activeUserImg}`)" class="user-profile-img" />
     </div>
     <h2 class="text-center m-5 d-flex">{{student.name}}</h2>
 
@@ -69,17 +70,18 @@
                                     <vs-input label="Email" v-model="student.email" class="mt-5 w-full" />
                                 </div>
                                 <div>
-                                    <vs-input label="Mật khẩu" type="password" class="mt-5 w-full" v-model="student.password" />
+                                    <vs-input label="Mật khẩu" type="password" class="mt-5 w-full" v-model="student.password" placeholder="Nhập mật khẩu mới" />
                                 </div>
                                 <div>
-                                    <vs-input label="Nhập lại khẩu" type="password" class="mt-5 w-full" v-model="student.password_confirmation" />
+                                    <vs-input label="Nhập lại khẩu" type="password" class="mt-5 w-full" v-model="student.password_confirmation" placeholder="Nhập lại mật khẩu" />
                                 </div>
 
                             </div>
                         </div>
-                        <vs-row vs-type="flex" vs-justify="space-between">
+                        <vs-row vs-type="flex" vs-justify="flex-end">
                             <vs-col vs-offset="10" vs-w="2">
                                 <button id="update-loading" class="vs-component vs-button vs-button-primary vs-button-filled" ref="addButton" @click="updateStudent(student)">Cập nhật</button>
+                                <button class="ml-3 vs-component vs-button vs-button-danger vs-button-filled" ref="addButton" @click="studentInfo()">Hủy</button>
                             </vs-col>
                         </vs-row>
                     </div>
@@ -147,6 +149,9 @@ export default {
       set(val) {
         this.student.birthday = this.formatDateUTC(val);
       }
+    },
+    activeUserImg() {
+      return this.$store.state.AppActiveUser.img;
     }
   },
   created() {

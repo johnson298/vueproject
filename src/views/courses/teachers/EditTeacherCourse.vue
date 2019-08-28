@@ -51,11 +51,23 @@ export default {
       required: false
     }
   },
+  data() {
+    return {
+      disabled: true,
+      settings: { // perfectscrollbar settings
+        maxScrollbarLength: 60,
+        wheelSpeed: .60,
+      },
+      role : this.$store.state.model.teachers.role,
+      branch_id: this.$store.state.getBranchId,
+      course_id: this.$route.params.course,
+    };
+  },
   methods: {
     getTeachers(search = ''){
       let vm = this;
       return new Promise((resolve, reject) => {
-        this.$http.get(`courses/${this.$route.params.course}/users`, {
+        this.$http.get(`branches/${this.branch_id}/courses/${this.course_id}/users`, {
           params: {
             search: search
           }
@@ -75,7 +87,7 @@ export default {
         container: '#button-with-loading',
         scale: 0.45
       });
-      this.$http.put('courses/'+ this.$route.params.course + '/teachers/' + teacher.id, {
+      this.$http.put(`branches/${this.branch_id}/courses/${this.course_id}/teachers/${teacher.id}`, {
         user_id: teacher.user_id,
         role : teacher.role,
         note : teacher.note
@@ -119,16 +131,6 @@ export default {
   },
   mounted(){
     this.getTeachers();
-  },
-  data() {
-    return {
-      disabled: true,
-      settings: { // perfectscrollbar settings
-        maxScrollbarLength: 60,
-        wheelSpeed: .60,
-      },
-      role : this.$store.state.model.teachers.role,
-    };
   },
   computed: {
     isSidebarActiveLocal: {

@@ -54,6 +54,14 @@ import 'prismjs/themes/prism-tomorrow.css';
 // Feather font icon
 require('./assets/css/iconfont.css');
 
+// font awesome 
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUserSecret, faSitemap } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+library.add(faUserSecret, faSitemap);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 // VeeValidate
 import VeeValidate from 'vee-validate';
@@ -73,6 +81,8 @@ new Vue({
   render: h => h(App)
 }).$mount('#app');
 
+
+// Mixin golabal
 Vue.mixin({
   methods: {
     formatPrice(value) {
@@ -134,11 +144,14 @@ Vue.mixin({
       return str.replace(/\s+/g, ' ') + 'đồng';
 
     },
-
+    // check status (convert number to word)
+    checkStatus(arrCheck, x) {
+      var arrFilter = arrCheck.map(el => el.text);
+      let result = null; 
+      for (let i = 1; i <= arrFilter.length; i++) {
+        if (i === x) result = arrFilter[i-1];
+      }
+      return result;
+    }
   }
 });
-//vue blu
-import VueBlu from 'vue-blu';
-import 'vue-blu/dist/css/vue-blu.min.css';
-
-Vue.use(VueBlu);

@@ -160,7 +160,7 @@ const router = new Router({
           }
         },
         {
-          path: '/courses/:course',
+          path: 'courses/:course',
           component: () => import('./views/courses/DetailCourses.vue'),
           meta: {
             breadcrumb: [

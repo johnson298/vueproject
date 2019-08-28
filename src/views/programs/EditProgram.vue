@@ -79,7 +79,7 @@ export default {
         container: '#button-with-loading',
         scale: 0.45
       });
-      this.$http.post('programs/' + program.id, this.formData(), {
+      this.$http.post(`branches/${this.branchId}/programs/${program.id}`, this.formData(), {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
@@ -138,11 +138,17 @@ export default {
           this.$emit('closeSidebar');
         }
       }
+    },
+    branchId(){
+      return this.$store.state.getBranchId;
     }
   },
   components: {
     VuePerfectScrollbar,
   },
+  branchId(){
+    return this.$store.state.getBranchId;
+  }
 };
 </script>
 

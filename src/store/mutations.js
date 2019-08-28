@@ -77,6 +77,11 @@ const mutations = {
       state.starredPages.splice(10, 0, lastItemInStarredLimited);
     }
   },
+
+  // change branch
+  CHANGE_BRANCH(state, branch_id){
+    state.getBranchId = branch_id;
+  }
 };
 
 export default mutations;

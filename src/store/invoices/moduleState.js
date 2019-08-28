@@ -20,10 +20,10 @@ export default {
     student_name: { text: 'tên học viên', viewable: true, sortKey: 'student_name' },
     amount: { text: 'số tiền trả (vnđ)', viewable: true, sortKey: 'amount' },
     note: { text: 'ghi chú', viewable: false, sortKey: 'note' },
-    source: { text: 'phương thức chuyển tiền', viewable: true, sortKey: 'source' },
+    source: { text: 'pt thanh toán', viewable: true, sortKey: 'source' },
     created_at: { text: 'Ngày tạo', viewable: true, sortKey: 'created_at' },
     updated_at: { text: 'Ngày cập nhật', viewable: false, sortKey: 'updated_at' },
-    action: { text: 'Action', viewable: true, sortKey: '' },
+    action: { text: 'hành động', viewable: true, sortKey: '' },
   },
   needReload: false
 };

@@ -39,7 +39,7 @@
                 <vs-dropdown class="cursor-pointer mr-4 mb-4">
 
                     <div class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32">
-                        <span class="mr-2">Views</span>
+                        <span class="mr-2">Xem</span>
                         <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
                     </div>
 
@@ -75,7 +75,7 @@
                 </vs-td>
 
                 <vs-td v-if="views.price.viewable">
-                    <p class="product-category">{{ tr.price }}</p>
+                    <p class="product-category">{{ formatPrice(tr.price) }}</p>
                 </vs-td>
 
                 <vs-td v-if="views.number_of_lessons.viewable">
@@ -131,13 +131,16 @@ export default {
     };
   },
   computed: {
-    ...mapState('programs', ['programs', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
+    ...mapState('programs', ['programs', 'pagination', 'searchTerm', 'order', 'views', 'needReload']),
+    branchId(){
+      return this.$store.state.getBranchId;
+    }
   },
   methods: {
     getIdProgram(id) {
       this.editProgramSidebar = true;
       var vm = this;
-      this.$http.get('programs/' + id).then(function (response) {
+      this.$http.get(`branches/${this.branchId}/programs/${id}`).then(function (response) {
         vm.programGetInfo = response.data.data;
       });
     },
@@ -152,7 +155,7 @@ export default {
       });
     },
     programAlert(program_id) {
-      this.$http.delete('programs/' + program_id).then(() => {
+      this.$http.delete(`branches/${this.branchId}/programs/${program_id}`).then(() => {
         this.$vs.notify({
           color: 'success',
           title: 'Xóa chương trình học',
@@ -186,7 +189,7 @@ export default {
         color: '#7367F0',
         text: 'Loading...'
       });
-      this.$http.get('programs', {
+      this.$http.get(`branches/${this.branchId}/programs`, {
         params: {
           page: page,
           search: this.searchTerm,
@@ -244,7 +247,16 @@ export default {
   },
   destroyed() {
     this.$store.dispatch('programs/updateNeedReload', false);
-  }
+  },
+  created() {
+    this.getData();
+  },
+  watch: {
+    branchId(){
+      this.getData();
+      this.$store.dispatch('courses/updateNeedReload', true);
+    }
+  },
 };
 </script>
 
