@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: '/demo_its/',
+  publicPath: '/',
   css: {
     sourceMap: process.env.NODE_ENV !== 'production'
   }
