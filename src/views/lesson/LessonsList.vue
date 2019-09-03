@@ -2,8 +2,9 @@
 <div id="data-list-list-view" class="data-list-container">
 
     <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData" />
+    <edit-program-sidebar :isSidebarEditActive="editProgramSidebar" @closeSidebar="editProgramSidebar = false" :programInfo="programGetInfo" :getData="getData" />
 
-    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="users" search id="table" maxItems="10">
+    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="programs" search id="table" maxItems="10">
 
         <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
@@ -53,66 +54,31 @@
 
                 <!-- ADD NEW -->
                 <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addNewDataSidebar = true">
-                    <feather-icon icon="Upload" svgClasses="h-4 w-4" />
-                    <span class="ml-2 text-base text-primary">Thêm nhân viên</span>
+                    <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
+                    <span class="ml-2 text-base text-primary">Thêm bài học</span>
                 </div>
-            </div>
-            <div class="import-file">
-              <vx-tooltip text="Thêm dữ liệu" position="top">
-                <label for="file-upload" class="custom-file-upload rounded-full mb-3 mr-2">
-                    <i class="feather icon-upload-cloud"></i>
-                </label>
-                <input id="file-upload" type="file" />
-              </vx-tooltip>
             </div>
         </div>
 
         <template slot="thead">
             <vs-th :sort-key="value.sortKey" v-for="(value, index) in views" :key="index" v-if="value.viewable">{{ value.text }}</vs-th>
         </template>
-
         <template slot-scope="{data}">
             <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-                <vs-td v-if="views.code.viewable">
-                    <p class="product-name font-medium">{{ tr.code }}</p>
-                </vs-td>
-
-                <vs-td v-if="views.avatar.viewable">
-                    <vs-avatar size="55px" :src="tr.avatar" :alt="tr.name" />
-                </vs-td>
-
                 <vs-td v-if="views.name.viewable">
                     <p class="product-name font-medium">{{ tr.name }}</p>
                 </vs-td>
 
-                <vs-td v-if="views.position.viewable">
-                    <p class="product-name font-medium">
-                        <vs-chip :color="checkStatus(positions,tr.position)=='Giáo viên' ? 'danger'
-                      : checkStatus(positions,tr.position)=='Tư vấn' ? 'warning'
-                      : checkStatus(positions,tr.position)=='Kế toán' ? 'primary'
-                      : checkStatus(positions,tr.position)=='Quản lý' ? 'success'
-                      : ''">{{ checkStatus(positions,tr.position) }}</vs-chip>
-                    </p>
+                <vs-td v-if="views.description.viewable">
+                    <p class="product-category">{{ tr.description }}</p>
                 </vs-td>
 
-                <vs-td v-if="views.email.viewable">
-                    <p class="product-category">{{ tr.email }}</p>
+                <vs-td v-if="views.price.viewable">
+                    <p class="product-category">{{ formatPrice(tr.price) }}</p>
                 </vs-td>
 
-                <vs-td v-if="views.birthday.viewable">
-                    <p class="product-category">{{ tr.birthday }}</p>
-                </vs-td>
-
-                <vs-td v-if="views.phone.viewable">
-                    <p class="product-category">{{ tr.phone }}</p>
-                </vs-td>
-
-                <vs-td v-if="views.facebook.viewable">
-                    <p class="product-category"><a :href="tr.facebook" target="_blank">Link</a></p>
-                </vs-td>
-
-                <vs-td v-if="views.address.viewable">
-                    <p class="product-category">{{ tr.address }}</p>
+                <vs-td v-if="views.number_of_lessons.viewable">
+                    <p class="product-category">{{ tr.number_of_lessons }}</p>
                 </vs-td>
 
                 <vs-td v-if="views.updated_at.viewable">
@@ -124,8 +90,9 @@
                 </vs-td>
 
                 <vs-td v-if="views.action.viewable" class="d-flex-span">
-                    <router-link tag="button" :to="'/employees/' + tr.id " class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-eye"></i></router-link>
-                    <vs-button color="danger" size="small" @click="deleteEmployee(tr)" icon="delete_forever"></vs-button>
+                    <vs-button color="primary" size="small" @click="getIdProgram(tr.id)"
+                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
+                    <vs-button color="danger" size="small" @click="deleteProgram(tr)" icon="delete_forever"></vs-button>
                 </vs-td>
             </vs-tr>
         </template>
@@ -140,45 +107,57 @@
 
 <script>
 import AddNewDataSidebar from './AddNewDataSidebar.vue';
+import EditProgramSidebar from './EditProgram.vue';
 import {
   mapState
 } from 'vuex';
 
 export default {
   components: {
-    AddNewDataSidebar
+    AddNewDataSidebar,
+    EditProgramSidebar
   },
   data() {
     return {
-      positions: this.$store.state.model.employees.positions,
-      activeConfirm: false,
+      programGetInfo: {},
       timer: null,
       selected: [],
       isMounted: false,
       addNewDataSidebar: false,
+      editProgramSidebar: false,
       prev: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_left</i></button>",
       next: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-next\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_right</i></button>"
     };
   },
   computed: {
-    ...mapState('employees', ['users', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
+    ...mapState('programs', ['programs', 'pagination', 'searchTerm', 'order', 'views', 'needReload']),
+    branchId(){
+      return this.$store.state.getBranchId;
+    }
   },
   methods: {
-    deleteEmployee(user) {
+    getIdProgram(id) {
+      this.editProgramSidebar = true;
+      var vm = this;
+      this.$http.get(`branches/${this.branchId}/programs/${id}`).then(function (response) {
+        vm.programGetInfo = response.data.data;
+      });
+    },
+    deleteProgram(program) {
       this.$vs.dialog({
         type: 'confirm',
         color: 'danger',
-        title: `Xóa nhân viên`,
-        text: 'Bạn có chắc muốn xóa ' + user.name,
-        accept: this.employeeAlert,
-        parameters: [user.id]
+        title: `Xóa chương trình học`,
+        text: 'Bạn có chắc muốn xóa: ' + program.name,
+        accept: this.programAlert,
+        parameters: [program.id]
       });
     },
-    employeeAlert(user_id) {
-      this.$http.delete('users/' + user_id).then(() => {
+    programAlert(program_id) {
+      this.$http.delete(`branches/${this.branchId}/programs/${program_id}`).then(() => {
         this.$vs.notify({
           color: 'success',
-          title: 'Xóa nhân viên',
+          title: 'Xóa chương trình học',
           text: 'Bạn đã xóa thành công',
           icon: 'verified_user',
         });
@@ -192,9 +171,10 @@ export default {
           color: 'danger'
         });
       });
+
     },
     updateViews(index, e) {
-      this.$store.dispatch('employees/updateViews', {
+      this.$store.dispatch('programs/updateViews', {
         index: index,
         viewable: e.target.checked
       });
@@ -208,7 +188,7 @@ export default {
         color: '#7367F0',
         text: 'Loading...'
       });
-      this.$http.get('users', {
+      this.$http.get(`branches/${this.branchId}/programs`, {
         params: {
           page: page,
           search: this.searchTerm,
@@ -216,8 +196,8 @@ export default {
           sortedBy: this.order.orderType,
         }
       }).then(function (response) {
-        thisIns.$store.dispatch('employees/updateTable', {
-          users: thisIns.formatData(response.data.data),
+        thisIns.$store.dispatch('programs/updateTable', {
+          programs: thisIns.formatData(response.data.data),
           pagination: response.data.pagination
         });
       })
@@ -235,11 +215,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch('employees/updateNeedReload', true);
+        this.$store.dispatch('programs/updateNeedReload', true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch('employees/updateSearch', {
+      this.$store.dispatch('programs/updateSearch', {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -248,7 +228,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch('employees/updateOrder', {
+      this.$store.dispatch('programs/updateOrder', {
         order: {
           orderBy: key,
           orderType: active ? 'desc' : 'asc',
@@ -260,15 +240,21 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.users.length === 0) {
+    if (this.programs.length === 0) {
       this.getData();
     }
   },
   destroyed() {
-    this.$store.dispatch('employees/updateNeedReload', false);
+    this.$store.dispatch('programs/updateNeedReload', false);
   },
   created() {
     this.getData();
+  },
+  watch: {
+    branchId(){
+      this.getData();
+      this.$store.dispatch('courses/updateNeedReload', true);
+    }
   },
 };
 </script>
@@ -338,7 +324,6 @@ export default {
             th {
                 padding-top: 0;
                 padding-bottom: 0;
-                vertical-align: middle;
 
                 .vs-table-text {
                     text-transform: uppercase;
@@ -361,27 +346,12 @@ export default {
         }
     }
 }
-
-.d-flex-span {
-    span {
-        display: flex;
-
-        button {
-            margin: 3px;
-        }
+.d-flex-span{
+  span{
+    display: flex;
+    button{
+      margin: 3px;
     }
-}
-
-.import-file {
-    .custom-file-upload {
-        border: 1px solid #ccc;
-        display: inline-block;
-        padding: 6px 12px;
-        cursor: pointer;
-    }
-
-    input[type="file"] {
-        display: none;
-    }
+  }
 }
 </style>

@@ -1,12 +1,20 @@
 <template>
-    <div>
+    <div class="vx-card__body w-full p-5" style="background: #ffffff ; display: inline-block; box-shadow: 2px 2px 2px #dddddd;">
         <form>
-            <div >
+            <div>
                 <div class="vs-row">
-                    <div class="vs-col sm:w-1/2  w-full mb-5">
+                    <div class="vs-col sm:w-1/6">
+                        <vs-radio v-model="radios2" vs-value="1">Thêm thông báo</vs-radio>
+                    </div>
+                    <div class="vs-col sm:w-1/6">
+                        <vs-radio v-model="radios2" vs-value="2">Thêm đánh giá</vs-radio>
+                    </div>
+                </div>
+                <div class="vs-row ">
+                    <div class="vs-col sm:w-1/2 mt-5 w-full mb-5">
                         <vs-input label="Mã chiến dich" placeholder="Mã ID" class="w-full" disabled/>
                     </div>
-                    <div class="vs-col sm:w-1/2  w-full mb-5">
+                    <div class="vs-col sm:w-1/2 mt-5 w-full mb-5">
                         <vs-input label="Tên chiến dich" placeholder="Tên chiến dịch" class=" w-full"/>
                     </div>
                 </div>
@@ -30,13 +38,13 @@
                         <label class="vs-input--label">Hình thức gửi</label>
                         <div class="vs-row">
                             <div class="vs-col sm:w-1/3 pl-0">
+                                <vs-checkbox>App</vs-checkbox>
+                            </div>
+                            <div v-if="radios2 === '1'" class="vs-col sm:w-1/3 pl-0">
                                 <vs-checkbox>SMS</vs-checkbox>
                             </div>
-                            <div class="vs-col sm:w-1/3 pl-0">
+                            <div v-if="radios2 === '1'" class="vs-col sm:w-1/3 pl-0">
                                 <vs-checkbox>Email</vs-checkbox>
-                            </div>
-                            <div class="vs-col sm:w-1/3 pl-0">
-                                <vs-checkbox>App</vs-checkbox>
                             </div>
                         </div>
                     </div>
@@ -48,10 +56,82 @@
                                 <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in range_send" />
                             </vs-select>
                         </div>
-                        <div v-if="campaign.range_send ==2">
+                        <div v-if="campaign.range_send === 2">
                             <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
                                 <label class="vs-input--label">Chi nhánh</label>
                                 <vue-simple-suggest v-model="selectedBranch" mode="select" ref="suggestComponentBranches" placeholder="Search information..." value-attribute="id" display-attribute="name" :list="getBranches" :debounce="200" :filter-by-query="false" @select="onSuggestSelectBranch">
+                                    <div class="g">
+                                        <input type="text" placeholder="Search information...">
+                                    </div>
+                                    <template slot="misc-item-above" slot-scope="{ suggestions, query }">
+                                        <div class="misc-item">
+                                            <span>You're searching for '{{ query }}'.</span>
+                                        </div>
+
+                                        <template v-if="suggestions.length > 0">
+                                            <div class="misc-item">
+                                                <span>{{ suggestions.length }} suggestions are shown...</span>
+                                            </div>
+                                            <hr>
+                                        </template>
+
+                                        <div class="misc-item" v-else-if="!loading">
+                                            <span>No results</span>
+                                        </div>
+                                    </template>
+
+                                    <div slot="suggestion-item" slot-scope="{ suggestion, query }">
+                                        <div class="text">
+                                            <span>{{ suggestion.name | truncate(40) }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="misc-item" slot="misc-item-below" slot-scope="{ suggestions }" v-if="loading">
+                                        <span>Loading...</span>
+                                    </div>
+                                </vue-simple-suggest>
+                            </div>
+                        </div>
+                        <div v-if="campaign.range_send ===3">
+                            <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+                                <label class="vs-input--label">Chương trình học</label>
+                                <vue-simple-suggest v-model="selectedProgram" mode="select" ref="suggestComponentPrograms" placeholder="Search information..." value-attribute="id" display-attribute="name" :list="getPrograms" :debounce="200" :filter-by-query="false" @select="onSuggestSelectProgram">
+                                    <div class="g">
+                                        <input type="text" placeholder="Search information...">
+                                    </div>
+                                    <template slot="misc-item-above" slot-scope="{ suggestions, query }">
+                                        <div class="misc-item">
+                                            <span>You're searching for '{{ query }}'.</span>
+                                        </div>
+
+                                        <template v-if="suggestions.length > 0">
+                                            <div class="misc-item">
+                                                <span>{{ suggestions.length }} suggestions are shown...</span>
+                                            </div>
+                                            <hr>
+                                        </template>
+
+                                        <div class="misc-item" v-else-if="!loading">
+                                            <span>No results</span>
+                                        </div>
+                                    </template>
+
+                                    <div slot="suggestion-item" slot-scope="{ suggestion, query }">
+                                        <div class="text">
+                                            <span>{{ suggestion.name | truncate(40) }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="misc-item" slot="misc-item-below" slot-scope="{ suggestions }" v-if="loading">
+                                        <span>Loading...</span>
+                                    </div>
+                                </vue-simple-suggest>
+                            </div>
+                        </div>
+                        <div v-if="campaign.range_send ===4">
+                            <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
+                                <label class="vs-input--label">Lớp học</label>
+                                <vue-simple-suggest v-model="selectedCourses" mode="select" ref="suggestComponentCourses" placeholder="Search information..." value-attribute="id" display-attribute="name" :list="getCourses" :debounce="200" :filter-by-query="false" @select="onSuggestSelectCourses">
                                     <div class="g">
                                         <input type="text" placeholder="Search information...">
                                     </div>
@@ -90,19 +170,65 @@
                         <vs-textarea style="border: solid 1px #dddddd" placeholder="Mô tả ngắn..." name="note" type="text" class="w-full" :rows="4" />
                     </div>
                 </div>
-
-                <div class="vs-row">
+                <div class="vs-row mt-5 mb-5" v-if="radios2 === '1'">
                     <div class="vs-col w-full">
                         <div class=" note"><label class="vs-input--label">Nội dung</label></div>
                         <ckeditor :editor="editor" v-model="editorData" :config="editorConfig" class="w-full mt-5"></ckeditor>
                     </div>
                 </div>
+               <div v-if="radios2 != 1">
+                   <div class="vs-row" v-for="(row, index) in questions" :key="index">
+                       <div class="vs-col w-full mt-5">
+                           <div>
+                               <label class="vs-input--label"> Câu hỏi: {{index+1}}</label>
+                           </div>
+                           <div class="vs-row">
+                               <div class="vs-col sm:w-5/6 pl-0">
+                                   <vs-input placeholder="Câu hỏi ..." v-model="row.name" class="w-full"/>
+                               </div>
+                               <div class="vs-col sm:w-1/6 pl-0">
+                                   <vs-button color="danger" class="ml-3" icon="delete_forever"  @click.prevent="deleteRow(index)"></vs-button>
+                               </div>
+                           </div>
+                           <div class="vs-row" v-for="(answer, index) in row.answers" :key="index">
+                               <div class="vs-col mt-5 w-full">
+                                   <div class="vs-row">
+                                       <label class="vs-input--label"> Câu trả lời: {{index+1}}</label>
+                                   </div>
+                                   <div class="vs-row">
+                                       <div class="vs-col sm:w-1/10 pl-0 pr-0">
+                                           <vs-checkbox  v-model="answer.check"></vs-checkbox>
+                                       </div>
+                                       <div class="vs-col sm:w-2/3 pl-0 pr-0">
+                                           <vs-input placeholder="Câu trả lời..." v-model="answer.name" class=" w-full"/>
+                                       </div>
+                                       <div class="vs-col sm:w-1/10 ">
+                                           <div class="vs-row">
+                                               <div class="vs-col sm:w-1/2 pl-0">
+                                                   <vs-button color="success"  @click.prevent="addAnswer(row)"><i class="feather icon-plus"></i></vs-button>
+                                               </div>
+                                               <div class="vs-col sm:w-1/2 pl-0">
+                                                   <vs-button color="danger" class="ml-3" icon="delete_forever"  @click.prevent="deleteAnswer(row,index)"></vs-button>
+                                               </div>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
 
+                   <div class="vs-row">
+                       <div class="vs-col mt-5">
+                           <vs-button color="success"  @click.prevent="addRow">Thêm câu hỏi</vs-button>
+                       </div>
+                   </div>
+               </div>
             </div>
         </form>
         <vs-col class="mt-5" vs-w='12' vs-type="flex" vs-justify="flex-end">
-            <vs-button class="ml-3 vs-con-loading__container" type="filled" color="primary" @click="createInvoice" ref="addButton" id="btn-loading">Thêm</vs-button>
-            <vs-button class="ml-3" type="filled" color="danger" @click="$emit('update:active',false)">Hủy</vs-button>
+            <vs-button class="ml-3 vs-con-loading__container" type="filled" color="primary" @click="createCampaign" ref="addButton" id="btn-loading">Thêm</vs-button>
+            <vs-button class="ml-3" type="filled" color="danger" @click="backPage">Trở về</vs-button>
         </vs-col>
     </div>
 
@@ -127,6 +253,18 @@ export default {
   },
   data() {
     return {
+      questions: [
+        {
+          'name': '',
+          'answers': [
+            {
+              'name': '',
+              'check': false,
+            }
+          ]
+        }
+      ],
+      radios2:'1',
       datetime: null,
       configdateTimePicker: {
         enableTime: true,
@@ -142,13 +280,14 @@ export default {
       languages: lang,
       disabled: 'disabled',
       selectedBranch: null,
-      totalPrice: 0,
       loading: false,
       campaign: {
         birthday: '',
         range_send: 1,
         position :1
       },
+      selectedProgram: null,
+      selectedCourses: null,
       range_send: this.$store.state.model.campaign.range_send,
       position: this.$store.state.model.campaign.position,
     };
@@ -161,6 +300,9 @@ export default {
       set(val){
         this.customer.birthday = this.formatDateUTC(val);
       }
+    },
+    branchId(){
+      return this.$store.state.getBranchId;
     }
   },
   components: {
@@ -169,15 +311,74 @@ export default {
     flatPickr
   },
   methods: {
+    backPage: function () {
+      window.history.back();
+    },
+    addRow() {
+      this.questions.push({'name': '',answers: [{'name': '','check': false}]});
+    },
+    addAnswer(row){
+      row.answers.push({'name': '', check: false});
+    },
+    deleteRow: function(index) {
+      this.questions.splice(index, 1);
+    },
+    deleteAnswer(row,index){
+      if(index > 0){
+        row.answers.splice(index, 1);
+      }
+    },
+    onSuggestSelectProgram(suggest) {
+      if (suggest) {
+        this.courses.program_id = suggest.id;
+      }
+    },
     onSuggestSelectBranch(suggest) {
       if (suggest) {
         this.courses.branch_id = suggest.id;
       }
     },
+    onSuggestSelectCourses(suggest) {
+      if (suggest) {
+        this.courses.branch_id = suggest.id;
+      }
+    },
+    getCourses(search = '') {
+      let vm = this;
+      return new Promise((resolve, reject) => {
+        this.$http.get(`branches/${this.branchId}/courses`, {
+          params: {
+            search: search
+          }
+        })
+          .then(function (response) {
+            resolve(response.data.data);
+          }).catch((e) => {
+            vm.loading = false;
+            reject(e);
+          });
+      });
+    },
     getBranches(search = '') {
       let vm = this;
       return new Promise((resolve, reject) => {
         this.$http.get('branches', {
+          params: {
+            search: search
+          }
+        })
+          .then(function (response) {
+            resolve(response.data.data);
+          }).catch((e) => {
+            vm.loading = false;
+            reject(e);
+          });
+      });
+    },
+    getPrograms(search = '') {
+      let vm = this;
+      return new Promise((resolve, reject) => {
+        this.$http.get(`branches/${this.branchId}/programs`, {
           params: {
             search: search
           }
@@ -203,7 +404,7 @@ export default {
       };
       null;
     },
-    createInvoice() {
+    createCampaign() {
       this.$vs.loading({
         background: '#1E6DB5',
         color: '#fff',
@@ -251,29 +452,6 @@ export default {
           this.$vs.loading.close('#btn-loading > .con-vs-loading');
         });
     },
-    getStudents(search = '') {
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http.get('students', {
-          params: {
-            search: search
-          }
-        })
-          .then(function (response) {
-            resolve(response.data.data);
-
-          }).catch((e) => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
-
-    },
-    onSuggestSelectStudent(suggest) {
-      if (suggest) {
-        this.invoices.student_id = suggest.id;
-      }
-    },
   }
 };
 </script>
@@ -282,7 +460,6 @@ export default {
     .table-border {
         .vs-table--tbody {
             border: none;
-
             table {
                 th {
                     border: 1px solid #ccc;
@@ -315,7 +492,7 @@ export default {
     .vdp-datepicker.picker-custom input{
         width: 100% !important;
     }
-    .ck.ck-content{
-        height: 100px !important;
+    .ck-editor__editable_inline{
+        min-height: 200px !important;
     }
 </style>

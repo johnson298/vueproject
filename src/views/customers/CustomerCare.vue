@@ -4,7 +4,7 @@
             <AddCustomerCare :callback="getData" :active.sync="addCustomer"/>
         </vs-popup>
 
-        <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="users" search id="table" maxItems="10">
+        <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="customers_care" search id="table" maxItems="10">
 
             <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
@@ -60,18 +60,19 @@
                 </div>
             </div>
 
-            <template slot="thead">
-                <vs-th :sort-key="value.sortKey" v-for="(value, index) in views" :key="index" v-if="value.viewable">{{ value.text }}</vs-th>
+
+            <template style="padding-left: 10px" slot="thead">
+                <vs-th>Nội dung</vs-th>
+                <vs-th>Ngày cập nhật</vs-th>
+                <vs-th>Ngày tạo</vs-th>
+                <vs-th>Hành động</vs-th>
             </template>
 
             <template slot-scope="{data}">
                 <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
 
-                    <vs-td v-if="views.name.viewable">
-                        <p class="product-name font-medium">{{ tr.name }}</p>
-                    </vs-td>
                     <vs-td v-if="views.content.viewable">
-                        <p class="product-name font-medium">{{ tr.content }} nội dung</p>
+                        <p class="product-name font-medium">{{ tr.content }}</p>
                     </vs-td>
                     <vs-td v-if="views.updated_at.viewable">
                         <p class="product-category">{{ tr.updated_at }}</p>
@@ -121,6 +122,38 @@ export default {
   },
   data() {
     return {
+      customers_care: [
+        {
+          "content": "Bao gồm các chức năng quản lý thông tin học viên và tài khoản đăng nhập của học viên vào hệ thống. Lưu trữ và truy vấn nhanh khi cần thiết các thông tin quan trọng cá nhân cũng như tình trạng sức khỏe của học viên khi cần.",
+          "updated_at" : '20-08-2019',
+          "created_at" : '18-05-2018'
+        },
+        {
+          "content": "Bao gồm các chức năng quản lý thông tin học viên và tài khoản đăng nhập của học viên vào hệ thống. Lưu trữ và truy vấn nhanh khi cần thiết các thông tin quan trọng cá nhân cũng như tình trạng sức khỏe của học viên khi cần.",
+          "updated_at" : '20-08-2019',
+          "created_at" : '18-05-2018'
+        },
+        {
+          "content": "Bao gồm các chức năng quản lý thông tin học viên và tài khoản đăng nhập của học viên vào hệ thống. Lưu trữ và truy vấn nhanh khi cần thiết các thông tin quan trọng cá nhân cũng như tình trạng sức khỏe của học viên khi cần.",
+          "updated_at" : '20-08-2019',
+          "created_at" : '18-05-2018'
+        },
+        {
+          "content": "Bao gồm các chức năng quản lý thông tin học viên và tài khoản đăng nhập của học viên vào hệ thống. Lưu trữ và truy vấn nhanh khi cần thiết các thông tin quan trọng cá nhân cũng như tình trạng sức khỏe của học viên khi cần.",
+          "updated_at" : '20-08-2019',
+          "created_at" : '18-05-2018'
+        },
+        {
+          "content": "Bao gồm các chức năng quản lý thông tin học viên và tài khoản đăng nhập của học viên vào hệ thống. Lưu trữ và truy vấn nhanh khi cần thiết các thông tin quan trọng cá nhân cũng như tình trạng sức khỏe của học viên khi cần.",
+          "updated_at" : '20-08-2019',
+          "created_at" : '18-05-2018'
+        },
+        {
+          "content": "Bao gồm các chức năng quản lý thông tin học viên và tài khoản đăng nhập của học viên vào hệ thống. Lưu trữ và truy vấn nhanh khi cần thiết các thông tin quan trọng cá nhân cũng như tình trạng sức khỏe của học viên khi cần.",
+          "updated_at" : '20-08-2019',
+          "created_at" : '18-05-2018'
+        },
+      ],
       activeConfirm:false,
       timer: null,
       selected: [],

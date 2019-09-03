@@ -54,7 +54,9 @@ const router = new Router({
           component: () => import('./views/employees/DetailEmployee.vue'),
           meta: {
             breadcrumb: [
-              { title: 'Chi tiết nhân viên', url: '/'}
+              { title: 'Chi tiết nhân viên', url: '/'},
+              { title: 'Nhân viên', url: '/employees' },
+              { title: 'Chi tiết nhân viên', active: true  },
             ],
             pageTitle: 'Chi tiết nhân viên'
           },
@@ -115,7 +117,9 @@ const router = new Router({
           component: () => import('./views/students/DetailStudent.vue'),
           meta: {
             breadcrumb: [
-              { title: 'Chi tiết học viên', url: '/'}
+              { title: 'Chi tiết học viên', url: '/'},
+              { title: 'Học viên', url: '/students' },
+              { title:  'Chi tiết học viên',active: true},
             ],
             pageTitle: 'Chi tiết học viên'
           },
@@ -206,7 +210,9 @@ const router = new Router({
               component: () => import('./views/settings/branches/DataListListView.vue'),
               meta: {
                 breadcrumb: [
-                  { title: 'Cài đặt chi nhánh', url: '/'}
+                  { title: 'Cài đặt chi nhánh', url: '/'},
+                  { title: 'Cài đặt', url: '/settings' },
+                  { title:  'Chi nhánh',active: true},
                 ],
                 pageTitle: 'Cài đặt chi nhánh'
               }
@@ -217,7 +223,10 @@ const router = new Router({
               component: () => import('./views/settings/branches/rooms/BranchRooms.vue'),
               meta: {
                 breadcrumb: [
-                  { title: 'Chi tiết phòng học', url: '/'}
+                  { title: 'Chi tiết phòng học', url: '/'},
+                  { title: 'Cài đặt', url: '/settings' },
+                  { title: 'Chi nhánh', url: '/settings/branches' },
+                  { title:  'Phòng học',active: true},
                 ],
                 pageTitle: 'Chi tiết phòng học'
               }
@@ -228,7 +237,9 @@ const router = new Router({
               component: () => import('./views/settings/coupons/CouponsList.vue'),
               meta: {
                 breadcrumb: [
-                  { title: 'Khuyến mại', url: '/'}
+                  { title: 'Khuyến mại', url: '/'},
+                  { title: 'Cài đặt', url: '/settings' },
+                  { title:  'Khuyến mại',active: true},
                 ],
                 pageTitle: 'Khuyến mại'
               }
@@ -264,7 +275,10 @@ const router = new Router({
               component: () => import('./views/courses/statistic/StatisticCourse.vue'),
               meta: {
                 breadcrumb: [
-                  { title: 'Thống kê lớp học', url: '/'}
+                  { title: 'Thống kê lớp học', url: '/'},
+                  { title: 'Lớp học', url: '/courses' },
+                  { title:  'Thống kế lớp học',active: true},
+
                 ],
                 pageTitle: 'Thống kê lớp học'
               },
@@ -275,7 +289,9 @@ const router = new Router({
               component: () => import('./views/courses/students/ListStudent.vue'),
               meta: {
                 breadcrumb: [
-                  { title: 'Học viên trong lớp', url: '/'}
+                  { title: 'Học viên trong lớp', url: '/'},
+                  { title: 'Lớp học', url: '/courses' },
+                  { title:  'Học viên trong lớp',active: true},
                 ],
                 pageTitle: 'Học viên trong lớp'
               },
@@ -286,7 +302,9 @@ const router = new Router({
               component: () => import('./views/courses/teachers/GetDataTeachers.vue'),
               meta: {
                 breadcrumb: [
-                  { title: 'Giáo viên viên trong lớp', url: '/'}
+                  { title: 'Giáo viên trong lớp', url: '/'},
+                  { title: 'Lớp học', url: '/courses' },
+                  { title:  'Giáo viên trong lớp',active: true},
                 ],
                 pageTitle: 'Giáo viên trong lớp'
               },
@@ -297,7 +315,9 @@ const router = new Router({
               component: () => import('./views/courses/calendar/SimpleCalendar.vue'),
               meta: {
                 breadcrumb: [
-                  { title: 'Lịch học', url: '/'}
+                  { title: 'Lịch học', url: '/'},
+                  { title: 'Lớp học', url: '/courses' },
+                  { title:  'Lịch học',active: true},
                 ],
                 pageTitle: 'Lịch học'
               },
@@ -308,7 +328,9 @@ const router = new Router({
               component: () => import('./views/courses/history/HistoryCourse.vue'),
               meta: {
                 breadcrumb: [
-                  { title: 'Lịch sử lớp học', url: '/'}
+                  { title: 'Lịch sử lớp học', url: '/'},
+                  { title: 'Lớp học', url: '/courses' },
+                  { title:  'Lịch sử lớp học',active: true},
                 ],
                 pageTitle: 'Lịch sử lớp học'
               },
