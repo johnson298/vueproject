@@ -62,8 +62,8 @@ const state = {
     courses : {
       status: [
         { text: 'Mở', value: 1},
-        { text: 'Đang hoạt động', value: 2},
-        { text: 'Đã hoàn thành', value: 3},
+        { text: 'Hoạt động', value: 2},
+        { text: 'Hoàn thành', value: 3},
         { text: 'Đã hủy', value: 4},
       ]
     },

@@ -1,3 +1,45 @@
+// variables
+$primary: #1E6DB5;
+// mixins
+@mixin bgColor($color) {
+  background-color: $color;
+}
+@mixin scrollCustom {
+  &::-webkit-scrollbar-track{
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    @include bgColor(#F5F5F5);
+  }
+  &::-webkit-scrollbar{
+    width: 8px;
+    @include bgColor(#F5F5F5);
+    border-radius: 5px;
+  }
+  &::-webkit-scrollbar-thumb{
+    @include bgColor(#C1C1C1);
+    border-radius: 5px;
+  }
+}
+@mixin customTable {
+  tr{
+    th{
+      .vs-table-text{
+        .sort-th{
+          .up-sort{
+            font-size: 14px;
+          }
+          .down-sort{
+            font-size: 14px;
+          }
+        }
+      }
+    }
+    td{
+      padding: 2px !important;
+      padding-left: 8px !important;
+      padding-right: 6px !important;
+    }
+  }
+}
 #data-list-list-view{
 
   .vs-con-table{
@@ -5,24 +47,7 @@
     .vs-table{
       border-spacing: 0 5px !important;
 
-      tr{
-        th{
-          .vs-table-text{
-            .sort-th{
-              .up-sort{
-                font-size: 14px;
-              }
-              .down-sort{
-                font-size: 14px;
-              }
-            }
-          }
-        }
-        td{
-          padding: 2px !important;
-          padding-left: 10px !important;
-        }
-      }
+      @include customTable();
     }
     .vs-table--thead{
       th {
@@ -31,10 +56,13 @@
     }
   }
 }
+.vs-table--tbody-table{
+  @include customTable();
+}
 .header-sidebar {
   .logo{
     img{
-      transform: scale(2.5) translateX(32px);
+      transform: scale(3.6) translateX(22px);
     }
   }
 }
@@ -42,7 +70,7 @@
   padding: 5px;
 
   .is-current {
-    background-color: #7367F0!important;
+    background-color: $primary!important;
 
     > a {
       color: #ffffff;
@@ -75,6 +103,9 @@
 .popup-custom-1024>.vs-popup {
   width: 1024px !important;
 }
+.popup-custom-768>.vs-popup {
+  width: 768px !important;
+}
 .font-weight-600{
   font-weight: 600;
 }
@@ -84,8 +115,90 @@
 .back-page{
   width: 35px;
   height: 35px;
-  padding-top: 8px;
+  padding: {
+    top: 9px;
+    right: 12px;
+  };
 }
-.popup-custom-768>.vs-popup {
-  width: 768px !important;
+.con-vs-chip{
+  text-align: center;
 }
+.vx-card.text-center {
+  .vx-card__title{
+    width: 100%;
+    text-align: center;
+  }
+}
+.background-cover{
+  background-size: cover !important;
+}
+.d-flex{
+  display: flex;
+}
+
+body {
+  @include scrollCustom();
+}
+.scrollbar-custom{
+  .vs-popup--content{
+    @include scrollCustom();
+  }
+}
+
+/*=========================================================================================
+  File Name: _customize.scss
+  Description: custom color 
+=========================================================================================*/
+
+.main-menu-sidebar .vs-sidebar--item .router-link-active,
+.vs-chip-primary,
+.vs-button-primary.vs-button-filled,
+.bg-primary,
+.vs-pagination--li.is-current,
+.vs-pagination-primary .effect, 
+.vs-pagination-primary .vs-pagination--buttons:hover,
+.bg-primary-gradient,
+.vs-checkbox-small input:checked + .vs-checkbox,
+.vs-checkbox-primary .vs-checkbox--check,
+.hover\:bg-primary:hover,
+.dropdown-custom .vs-dropdown--menu--after{
+  background-color: $primary !important;
+}
+.vs-button-primary.vs-button-line,
+a:active,
+a:visited,
+a:hover, a{
+  color: $primary;
+}
+.main-menu-sidebar .header-sidebar .feather-icon svg{
+  color: $primary !important;
+}
+.text-primary,
+.vs-tabs-primary .activeChild button,
+.vs-tabs-primary button:not(:disabled):hover{
+  color: $primary !important;
+}
+.main-menu-sidebar .vs-sidebar--item .router-link-active,
+.bg-primary-gradient{
+  background: linear-gradient(118deg, rgba($primary, 1), rgba($primary, 0.7)) !important;
+  box-shadow: 0px 0px 10px 1px rgba($primary, 0.7) !important;
+}
+.vs-button-primary.vs-button-filled:hover{
+  box-shadow: 0 8px 25px -8px rgba($primary,1) !important;
+}
+.border-primary{
+  border-color: $primary !important;
+}
+.tr-table-state-primary, .vs-table-primary .is-selected{
+  background: rgba($primary,.05)!important;
+  box-shadow: 0 0 1px 0 rgba($primary,1)!important;
+  color: $primary;
+}
+.vs-checkbox-primary input:checked+.vs-checkbox {
+  border: 2px solid rgba($primary,1)!important;
+}
+.vs-input-primary .vs-input--input:focus{
+  border: 1px solid rgba($primary,1)!important;
+}
+
+/* END CUSTOM COLOR */

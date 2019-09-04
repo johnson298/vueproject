@@ -38,26 +38,64 @@ const router = new Router({
         },
         {
           path: '/employees',
-          name: 'employees',
           component: () => import('./views/employees/DataListListView.vue'),
           meta: {
             breadcrumb: [
-              { title: 'Nhân viên', url: '/' },
+              { title: 'Nhân viên', url: '/employees' },
+              { title:  'Tài khoản'},
+              { title: 'Nhân viên', active: true }
             ],
             pageTitle: 'Nhân viên',
             authRequired: true,
-          },
+          }
         },
         {
           path: '/employees/:employee',
-          name: 'employee',
           component: () => import('./views/employees/DetailEmployee.vue'),
           meta: {
             breadcrumb: [
               { title: 'Chi tiết nhân viên', url: '/'}
             ],
             pageTitle: 'Chi tiết nhân viên'
-          }
+          },
+          children: [
+            {
+              path: '',
+              name: 'infoEmployee',
+              component: () => import('./views/employees/infomation/EmployeeInfo.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Thông tin', active: true }
+                ],
+                pageTitle: 'Nhân viên',
+                authRequired: true,
+              },
+            },
+            {
+              path: 'history',
+              name: 'historyEmployee',
+              component: () => import('./views/employees/history/HistoryEmployee.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Lịch sử', active: true},
+                ],
+                pageTitle: 'Nhân viên',
+                authRequired: true,
+              },
+            },
+            {
+              path: 'courses',
+              name: 'coursesEmployee',
+              component: () => import('./views/employees/courses/CoursesList.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Lớp học đang tham gia', active: true },
+                ],
+                pageTitle: 'Nhân viên',
+                authRequired: true,
+              },
+            },
+          ]
         },
         {
           path: '/students',
@@ -65,21 +103,57 @@ const router = new Router({
           component: () => import('./views/students/StudentsList.vue'),
           meta: {
             breadcrumb: [
-              { title: 'Học viên', url: '/'}
+              { title: 'Học viên', url: '/students' },
+              { title:  'Tài khoản'},
+              { title: 'Học viên', active: true }
             ],
             pageTitle: 'Học viên'
           }
         },
         {
           path: '/students/:student',
-          name: 'student',
           component: () => import('./views/students/DetailStudent.vue'),
           meta: {
             breadcrumb: [
               { title: 'Chi tiết học viên', url: '/'}
             ],
             pageTitle: 'Chi tiết học viên'
-          }
+          },
+          children: [
+            {
+              path: '',
+              name: 'infoStudent',
+              component: () => import('./views/students/infomation/StudentInfo.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Thông tin học viên', url: '/'}
+                ],
+                pageTitle: 'Thông tin học viên'
+              }
+            },
+            {
+              path: 'history',
+              name: 'historyStudent',
+              component: () => import('./views/students/history/HistoryStudent.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Lịch sử học viên', url: '/'}
+                ],
+                pageTitle: 'Lịch sử học viên'
+              }
+            },
+            {
+              path: 'courses',
+              name: 'coursesStudent',
+              component: () => import('./views/students/courses/CoursesList.vue'),
+              meta: {
+                breadcrumb: [
+                  { title: 'Lớp học đang tham gia', url: '/'}
+                ],
+                pageTitle: 'Lớp học đang tham gia'
+              }
+            },
+          ],
         },
         {
           path: '/programs',
@@ -87,9 +161,22 @@ const router = new Router({
           component: () => import('./views/programs/ProgramsList.vue'),
           meta: {
             breadcrumb: [
-              { title: 'Chương trình học', url: '/'}
+              { title: 'Chương trình học', url: '/programs' },
+              { title:  'Đào tạo'},
+              { title: 'Chương trình học', active: true }
             ],
             pageTitle: 'Chương trình học'
+          }
+        },
+        {
+          path: '/programs/:program/lessons',
+          name: 'coursesOnline',
+          component: () => import('./views/programs/coursesOnline/LessonList.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Khóa học online', url: '/'}
+            ],
+            pageTitle: 'Khóa học online'
           }
         },
         {
@@ -154,7 +241,9 @@ const router = new Router({
           component: () => import('./views/courses/DataListListView.vue'),
           meta: {
             breadcrumb: [
-              {title: 'Lớp học ', url: '/'}
+              { title: 'Lớp học', url: '/courses' },
+              { title:  'Đào tạo'},
+              { title: 'Lớp học', active: true }
             ],
             pageTitle: 'Lớp học'
           }
@@ -227,13 +316,49 @@ const router = new Router({
           ]
         },
         {
-          path: '/invoices',
+          path: '/invoices/revenues',
           component: () => import('./views/money/Invoices.vue'),
           meta: {
             breadcrumb: [
-              { title: 'Thu chi', url: '/'}
+              { title: 'Thu học phí', url: '/invoices/revenues' },
+              { title:  'Thu chi'},
+              { title: 'Thu học phí', active: true }
             ],
-            pageTitle: 'Thu chi'
+            pageTitle: 'Thu học phí'
+          },
+        },
+        {
+          path: '/invoices/expenditures',
+          component: () => import('./views/expense/ExpenseList.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Chi tiêu', url: '/invoices/expenditures' },
+              { title:  'Thu chi'},
+              { title: 'Chi tiêu', active: true }
+            ],
+            pageTitle: 'Chi tiêu'
+          },
+        },
+        {
+          path: '/reports',
+          component: () => import('./views/reports/OverView.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Báo cáo', url: '/reports' },
+              { title:  'Thu chi'},
+              { title: 'Báo cáo', active: true }
+            ],
+            pageTitle: 'Báo cáo'
+          },
+        },
+        {
+          path: '/report/employee',
+          component: () => import('./views/reports/EmployeeReport.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Báo cáo nhân viên', url: '/'}
+            ],
+            pageTitle: 'Báo cáo nhân viên'
           },
         },
         {
@@ -268,6 +393,17 @@ const router = new Router({
             pageTitle: 'Chi tiết chiến dịch'
           }
         },
+        {
+          path: '/notifications',
+          name: 'notificationUser',
+          component: () => import('./views/notification/ListNotification.vue'),
+          meta: {
+            breadcrumb: [
+              { title: 'Thông báo', url: '/'}
+            ],
+            pageTitle: 'Thông báo'
+          }
+        }
       ],
     },
     // =============================================================================

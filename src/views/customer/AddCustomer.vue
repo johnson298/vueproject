@@ -31,7 +31,7 @@
             <div class="vs-col md:w-1/2 w-full mb-5">
                 <div class="w-full">
                     <label class="vs-input--label">Ngày sinh</label>
-                    <datepicker v-model="formatDate" :language="languages[language]" placeholder="Ngày sinh" format="d MMMM yyyy" :value="customer.birthday" class="w-full picker-custom"></datepicker>
+                    <datepicker :fullMonthName="true" v-model="formatDate" :language="languages[language]" placeholder="Ngày sinh" format="d MMMM yyyy" :value="customer.birthday" class="w-full picker-custom"></datepicker>
                 </div>
             </div>
         </div>

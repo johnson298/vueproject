@@ -3,7 +3,7 @@
         <div class="mt-6 flex items-center justify-between px-6">
             <h4>Thêm Giáo viên</h4>
             <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
-        </div><h1>dd{{branch_id}}</h1>
+        </div>
         <vs-divider class="mb-0"></vs-divider>
 
         <VuePerfectScrollbar class="scroll-area--data-list-add-new pt-4 pb-6" :settings="settings">

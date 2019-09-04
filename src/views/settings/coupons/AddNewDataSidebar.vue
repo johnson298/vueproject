@@ -107,7 +107,6 @@ export default {
         status: 1,
         note: ''
       };
-      this.$refs.file.value = null;
     },
     createCoupon() {
       this.$vs.loading({

@@ -18,23 +18,6 @@
                     </draggable>
                 </ul>
 
-                <!-- STARRED PAGES MORE -->
-                <div class="vx-navbar__starred-pages--more-dropdown" v-if="starredPagesMore.length">
-                    <vs-dropdown vs-custom-content vs-trigger-click>
-                        <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" class="cursor-pointer p-2"></feather-icon>
-                        <vs-dropdown-menu>
-                            <ul class="vx-navbar__starred-pages-more--list">
-                                <draggable v-model="starredPagesMore" :group="{name: 'pinList'}" class="cursor-move">
-                                    <li class="starred-page--more flex items-center cursor-pointer" v-for="page in starredPagesMore" :key="page.url" @click="$router.push(page.url)">
-                                        <feather-icon svgClasses="h-5 w-5" class="ml-2 mr-1" :icon="page.labelIcon"></feather-icon>
-                                        <span class="px-2 pt-2 pb-1">{{ page.label }}</span>
-                                    </li>
-                                </draggable>
-                            </ul>
-                        </vs-dropdown-menu>
-                    </vs-dropdown>
-                </div>
-
                 <!-- SEARCHBAR -->
                 <div class="search-full-container w-full h-full absolute left-0 rounded-lg" :class="{'flex': showFullSearch}" v-show="showFullSearch">
                     <vx-auto-suggest :autoFocus="showFullSearch" :data="navbarSearchAndPinList" @selected="selected" ref="navbarSearch" @closeSearchbar="showFullSearch = false" placeholder="Search..." class="w-full" inputClassses="w-full vs-input-no-border vs-input-no-shdow-focus no-icon-border" icon="SearchIcon" background-overlay></vx-auto-suggest>
@@ -66,7 +49,6 @@
                         <vs-col vs-w="12" vs-type="flex" vs-justify="flex-end">
                             <vs-button @click="changeBranch">Thay đổi chi nhánh</vs-button>
                         </vs-col>
-
                     </vs-row>
                 </div>
             </vs-popup>
@@ -76,14 +58,13 @@
                 <vs-dropdown-menu class="notification-dropdown dropdown-custom vx-navbar-dropdown">
 
                     <div class="notification-top text-center p-5 bg-primary text-white">
-                        <h3 class="text-white">{{ unreadNotifications.length }} New</h3>
-                        <p class="opacity-75">App Notifications</p>
+                        <h3 class="text-white">{{ unreadNotifications.length }} Thông báo mới</h3>
                     </div>
 
                     <VuePerfectScrollbar ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings">
                         <ul class="bordered-items">
                             <li v-for="ntf in unreadNotifications" :key="ntf.index" class="flex justify-between px-4 py-4 notification cursor-pointer">
-                                <div class="flex items-start">
+                                <div class="flex items-start" @click="pushNotification(ntf.title, ntf.msg, elapsedTime(ntf.time)); popupNotification = true">
                                     <feather-icon :icon="ntf.icon" :svgClasses="[`text-${ntf.category}`, 'stroke-current mr-1 h-6 w-6']"></feather-icon>
                                     <div class="mx-2">
                                         <span class="font-medium block notification-title" :class="[`text-${ntf.category}`]">{{ ntf.title }}</span>
@@ -94,6 +75,10 @@
                             </li>
                         </ul>
                     </VuePerfectScrollbar>
+                    <vs-popup class="holamundo" :title="contentNoti.title" :active.sync="popupNotification">
+                      <p>{{contentNoti.msg}}</p>
+                      <small>{{contentNoti.time}}</small>
+                    </vs-popup>
                     <div class="
                 checkout-footer
                 fixed
@@ -111,7 +96,10 @@
                 border-solid
                 d-theme-border-grey-light
                 cursor-pointer">
-                        <span>View All Notifications</span>
+                <router-link
+                  tag="span"
+                  to="/notifications"
+                  >Xem tất cả thông báo</router-link>
                     </div>
                 </vs-dropdown-menu>
             </vs-dropdown>
@@ -120,7 +108,7 @@
             <div class="the-navbar__user-meta flex items-center">
                 <div class="text-right leading-tight hidden sm:block">
                     <p class="font-semibold">{{ user_displayName }}</p>
-                    <small>{{ checkStatus(userCurrent.positions, userCurrent.getPosition) }}</small>
+                    <small>{{ checkStatus(currentUser.positions, currentUser.getPosition) }}</small>
                 </div>
                 <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
                     <div class="con-img ml-3">
@@ -129,21 +117,15 @@
                     </div>
                     <vs-dropdown-menu class="vx-navbar-dropdown">
                         <ul style="min-width: 9rem">
-                            <li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.push(`/employees/${userCurrent.id}`)">
-                                <feather-icon icon="UserIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Profile</span>
+                            <li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.replace('/')">
+                                <feather-icon icon="HomeIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Trang chủ</span>
                             </li>
-                            <li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.push('/apps/email')">
-                                <feather-icon icon="MailIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Inbox</span>
-                            </li>
-                            <li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.push('/apps/todo')">
-                                <feather-icon icon="CheckSquareIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Tasks</span>
-                            </li>
-                            <li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.push('/apps/chat')">
-                                <feather-icon icon="MessageSquareIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Chat</span>
+                            <li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="$router.replace(`/employees/${currentUser.id}`)">
+                                <feather-icon icon="UserIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Cá nhân</span>
                             </li>
                             <vs-divider class="m-1"></vs-divider>
                             <li class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white" @click="logout">
-                                <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Logout</span>
+                                <feather-icon icon="LogOutIcon" svgClasses="w-4 h-4"></feather-icon> <span class="ml-2">Đăng xuất</span>
                             </li>
                         </ul>
                     </vs-dropdown-menu>
@@ -171,7 +153,13 @@ export default {
   },
   data() {
     return {
-      userCurrent: {
+      contentNoti: {
+        title: null,
+        msg: null,
+        time: null
+      },
+      popupNotification: false,
+      currentUser: {
         id: JSON.parse(localStorage.getItem('user')).id,
         positions: this.$store.state.model.employees.positions,
         getPosition: JSON.parse(localStorage.getItem('user')).position,
@@ -185,43 +173,27 @@ export default {
       showFullSearch: false,
       unreadNotifications: [{
         index: 0,
-        title: 'New Message',
-        msg: 'Are your going to meet me tonight?',
+        title: 'Điểm danh',
+        msg: 'Có 10 học viên nghỉ ở lớp ABC d 10 học viên nghỉ ở lớp  10 học viên nghỉ ở lớp  10 học viên nghỉ ở lớp  10 học viên nghỉ ở lớp ',
         icon: 'MessageSquareIcon',
         time: 'Wed Jan 30 2019 07:45:23 GMT+0000 (GMT)',
         category: 'primary'
       },
       {
         index: 1,
-        title: 'New Order Recieved',
-        msg: 'You got new order of goods.',
+        title: 'Giảng dạy',
+        msg: 'Lớp B đổi giáo viên dạy học',
         icon: 'PackageIcon',
         time: 'Wed Jan 30 2019 07:45:23 GMT+0000 (GMT)',
         category: 'success'
       },
       {
         index: 2,
-        title: 'Server Limit Reached!',
-        msg: 'Server have 99% CPU usage.',
+        title: 'Lịch học',
+        msg: 'Nghỉ đột xuất lý do bão',
         icon: 'AlertOctagonIcon',
         time: 'Thu Jan 31 2019 07:45:23 GMT+0000 (GMT)',
         category: 'danger'
-      },
-      {
-        index: 3,
-        title: 'New Mail From Peter',
-        msg: 'Cake sesame snaps cupcake',
-        icon: 'MailIcon',
-        time: 'Fri Feb 01 2019 07:45:23 GMT+0000 (GMT)',
-        category: 'primary'
-      },
-      {
-        index: 4,
-        title: 'Bruce\'s Party',
-        msg: 'Chocolate cake oat cake tiramisu',
-        icon: 'CalendarIcon',
-        time: 'Fri Feb 02 2019 07:45:23 GMT+0000 (GMT)',
-        category: 'warning'
       },
       ],
       settings: { // perfectscrollbar settings
@@ -280,14 +252,6 @@ export default {
         this.$store.dispatch('arrangeStarredPagesLimited', list);
       }
     },
-    starredPagesMore: {
-      get() {
-        return this.starredPages.slice(10);
-      },
-      set(list) {
-        this.$store.dispatch('arrangeStarredPagesMore', list);
-      }
-    },
 
     // PROFILE
     user_displayName() {
@@ -302,6 +266,13 @@ export default {
     this.getBranchName();
   },
   methods: {
+    pushNotification(title, msg, time){
+      this.contentNoti = {
+        title: title,
+        msg: msg,
+        time: time
+      };
+    },
     changeBranch() {
       this.$store.dispatch('changeBranchData', this.branchID);
       this.$vs.notify({

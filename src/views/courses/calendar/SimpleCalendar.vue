@@ -18,7 +18,7 @@
                         <template>
 
                             <vs-button icon-pack="feather" icon="icon-plus" @click="addCalendar=true">Thêm lịch học</vs-button>
-                            <vs-popup class="holamundo" title="Thêm lịch học" :active.sync="addCalendar">
+                            <vs-popup class="holamundo scrollbar-custom" title="Thêm lịch học" :active.sync="addCalendar">
                                 <add-calendar :active.sync="addCalendar" :callback="getData" @closeAdd="addCalendar = $event" />
                             </vs-popup>
                         </template>
@@ -105,7 +105,7 @@ export default {
   methods: {
     getData() {
       this.calendarStudy = [];
-      this.$http.get(`branches/${this.branch_id}courses/${this.course_id}/calendar`)
+      this.$http.get(`branches/${this.branch_id}/courses/${this.course_id}/calendar`)
         .then(response => {
           const listData = response.data.data;
           let formatTime = (val) => {
@@ -115,7 +115,7 @@ export default {
           };
           for (let key in listData) {
             this.calendarStudy.push({
-              title: `${listData[key].title} ${formatTime(listData[key].start_at)}-${formatTime(listData[key].end_at)}`,
+              title: `${listData[key].title} (${formatTime(listData[key].start_at)}-${formatTime(listData[key].end_at)})`,
               startDate: listData[key].date,
               endDate: listData[key].date,
               url: null,

@@ -23,6 +23,7 @@ export default {
     phone: { text: 'điện thoại', viewable: true, sortKey: 'phone' },
     facebook: { text: 'Facebook', viewable: false, sortKey: '' },
     address: { text: 'địa chỉ', viewable: false, sortKey: '' },
+    status: { text: 'trạng thái', viewable: true, sortKey: '' },
     created_at: { text: 'ngày tạo', viewable: false, sortKey: 'created_at' },
     updated_at: { text: 'ngày cập nhật', viewable: false, sortKey: 'updated_at' },
     action: { text: 'hành động', viewable: true, sortKey: '' },

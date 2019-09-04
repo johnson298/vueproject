@@ -142,11 +142,6 @@ export default {
       return this.$store.state.getBranchId;
     }
   },
-  watch: {
-    branch_id(){
-      this.$router.push('/courses');
-    }
-  },
   created(){
     this.getData();
   },
