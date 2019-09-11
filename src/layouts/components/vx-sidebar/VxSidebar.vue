@@ -227,5 +227,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/scss/vuesax/components/vxSidebar.scss"
+@import "@/assets/scss/vuesax/components/vxSidebar.scss";
 </style>

@@ -55,7 +55,7 @@
           <!-- ADD NEW -->
           <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="popupAllstudent=true">
             <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-            <span class="ml-2 text-base text-primary">Thêm lớp học</span>
+            <span class="ml-2 text-base text-primary">Thêm học viên</span>
           </div>
         </div>
       </div>
@@ -131,11 +131,6 @@ export default {
     ...mapState('registers', ['registers', 'pagination', 'searchTerm', 'order', 'views', 'needReload']),
     branch_id(){
       return this.$store.state.getBranchId;
-    }
-  },
-  watch: {
-    branch_id(){
-      this.$router.push('/courses');
     }
   },
   created(){

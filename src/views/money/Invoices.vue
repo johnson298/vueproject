@@ -1,6 +1,6 @@
 <template>
 <div id="data-list-list-view" class="data-list-container">
-    <vs-popup class="popup-custom-768" title="Thêm mới hóa đơn" :active.sync="addBill" >
+    <vs-popup class="popup-custom-768" title="Thêm mới hóa đơn" :active.sync="addBill">
         <AddInvoice :callback="getData" :active.sync="addBill" @closePopupInvoice="addBill = $event" />
     </vs-popup>
 
@@ -93,12 +93,11 @@
 
                 <vs-td v-if="views.source.viewable">
                     <p class="product-category">
-                      <vs-chip 
-                      :color="checkStatus(sourceInvoices,tr.source)=='Momo' ? 'primary' 
+                        <vs-chip :color="checkStatus(sourceInvoices,tr.source)=='Momo' ? 'primary'
                               : checkStatus(sourceInvoices,tr.source)=='Tiền mặt' ? 'success'
                               : checkStatus(sourceInvoices,tr.source)=='Chuyển khoản' ? 'warning'
                               : ''">{{ checkStatus(sourceInvoices,tr.source) }}</vs-chip>
-                      </p>
+                    </p>
                 </vs-td>
 
                 <vs-td v-if="views.updated_at.viewable">
@@ -160,7 +159,7 @@ export default {
       });
     },
     invoiceAlert(invoice_id) {
-      this.$http.delete('invoices/' + invoice_id).then(() => {
+      this.$http.delete(`invoices/${invoice_id}?type=1`).then(() => {
         this.$vs.notify({
           color: 'success',
           title: 'Xóa hóa đơn',
@@ -194,7 +193,7 @@ export default {
         color: '#7367F0',
         text: 'Loading...'
       });
-      this.$http.get('invoices', {
+      this.$http.get('invoices?type=1', {
         params: {
           page: page,
           search: this.searchTerm,
@@ -343,15 +342,18 @@ export default {
         }
     }
 }
-.d-flex-span{
-  span{
-    display: flex;
-    button{
-      margin: 3px;
+
+.d-flex-span {
+    span {
+        display: flex;
+
+        button {
+            margin: 3px;
+        }
     }
-  }
 }
-.popup-custom-768 > .vs-popup{
+
+.popup-custom-768>.vs-popup {
     width: 768px !important;
 }
 </style>

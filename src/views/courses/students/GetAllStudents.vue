@@ -79,7 +79,6 @@
 </template>
 
 <script>
-import AddNewDataSidebar from '../AddNewDataSidebar.vue';
 
 export default {
   props: {
@@ -87,9 +86,6 @@ export default {
       type: Function,
       required: true
     }
-  },
-  components: {
-    AddNewDataSidebar
   },
   created(){
     this.getData();

@@ -41,7 +41,7 @@ export default {
 @import "@/assets/scss/vuesax/apps/todo.scss";
 
 .page-config-item.router-link-exact-active.router-link-active {
-    color: #7367F0 !important;
+    color: #1E6DB5 !important;
 }
 
 .page-config-item {

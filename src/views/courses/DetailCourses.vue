@@ -100,7 +100,6 @@ export default {
 
   },
   methods: {
-
     mounted() {
       this.wasSidebarOpen = this.$store.state.reduceButton;
       this.$store.commit('TOGGLE_REDUCE_BUTTON', false);
@@ -108,7 +107,17 @@ export default {
     beforeDestroy() {
       if (!this.wasSidebarOpen) this.$store.commit('TOGGLE_REDUCE_BUTTON', false);
     },
-  }
+  },
+  computed: {
+    branchId(){
+      return this.$store.state.getBranchId;
+    }
+  },
+  watch: {
+    branchId(){
+      this.$router.push('/courses');
+    }
+  },
 };
 </script>
 
@@ -205,7 +214,7 @@ export default {
                     padding-bottom: 22px;
                 }
                 .router-link-exact-active.router-link-active {
-                    color: #796df0;
+                    color: #1E6DB5;
                 }
             }
         }

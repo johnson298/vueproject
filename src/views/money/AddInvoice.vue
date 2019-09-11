@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div v-if="selectedStudent!=null && (typeof selectedStudent) === 'object'" key="check-course">
-                <vs-select v-if="selectedStudent.courses.length != 0" v-model="invoices.courses" label="Chọn chương trình học" class="mt-5 w-full">
+                <vs-select v-if="selectedStudent.courses.length != 0" v-model="invoices.courses" label="Chọn lớp học" class="mt-5 w-full">
                     <vs-select-item :key="item.id" :value="item" :text="item.name" v-for="item in selectedStudent.courses" />
                 </vs-select>
                 <div v-else key="check-course">
@@ -219,7 +219,7 @@ export default {
         container: '#btn-loading',
         scale: 0.45
       });
-      this.$http.post('invoices', {
+      this.$http.post('invoices?type=1', {
         student_id: this.selectedStudent.id,
         course_id: this.invoices.courses.id,
         note: this.invoices.note,

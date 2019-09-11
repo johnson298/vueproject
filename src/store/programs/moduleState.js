@@ -16,7 +16,7 @@ export default {
   views: {
     name: { text: 'Tên CT', viewable: true, sortKey: 'name' },
     description: { text: 'Mô tả', viewable: false, sortKey: 'description' },
-    price: { text: 'Giá tiền', viewable: true, sortKey: 'price' },
+    price: { text: 'Giá tiền(vnđ)', viewable: true, sortKey: 'price' },
     number_of_lessons: { text: 'Số bài học', viewable: true, sortKey: 'number_of_lessons' },
     created_at: { text: 'Ngày tạo', viewable: false, sortKey: 'created_at' },
     updated_at: { text: 'Ngày cập nhật', viewable: false, sortKey: 'updated_at' },

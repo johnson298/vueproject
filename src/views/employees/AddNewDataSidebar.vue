@@ -54,7 +54,7 @@
                     </div>
                     <div class="mt-5">
                         <label for="" class="vs-input--label">Ngày sinh</label>
-                        <datepicker v-model="formatDate" :language="languages[language]" format="d MMMM yyyy" :value="employee.birthday" class="w-full picker-custom" placeholder="Chọn ngày sinh"></datepicker>
+                        <datepicker :fullMonthName="true" v-model="formatDate" :language="languages[language]" format="d MMMM yyyy" :value="employee.birthday" class="w-full picker-custom" placeholder="Chọn ngày sinh"></datepicker>
                     </div>
                     <!--ảnh đại diện-->
                     <div>

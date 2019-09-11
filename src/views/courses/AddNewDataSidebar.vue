@@ -23,12 +23,12 @@
                     <!-- ngày bắt đầu học -->
                     <div class="mt-5">
                         <label for="" class="vs-input--label">Ngày bắt đầu</label>
-                        <datepicker v-model="formatDateStartAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.start_at" class="w-full picker-custom" placeholder="chọn ngày bắt đầu"></datepicker>
+                        <datepicker :fullMonthName="true" v-model="formatDateStartAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.start_at" class="w-full picker-custom" placeholder="chọn ngày bắt đầu"></datepicker>
                     </div>
                     <!--Ngày kết thúc-->
                     <div class="mt-5">
                         <label for="" class="vs-input--label">Ngày kết thúc</label>
-                        <datepicker v-model="formatDateEndAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.end_at" class="w-full picker-custom" placeholder="chọn ngày kết thúc"></datepicker>
+                        <datepicker :fullMonthName="true" v-model="formatDateEndAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.end_at" class="w-full picker-custom" placeholder="chọn ngày kết thúc"></datepicker>
                     </div>
                     <!--trạng thái-->
                     <vs-select v-model="courses.status" label="Trạng thái" class="mt-5 w-full">
@@ -256,6 +256,8 @@ export default {
         status: 1,
         number_of_lessons: 0
       };
+      this.selectedProgram = null;
+      this.selectedBranch = null;
     },
     createCourse() {
       this.$vs.loading({

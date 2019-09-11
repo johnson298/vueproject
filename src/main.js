@@ -50,17 +50,16 @@ Vue.use(VueHammer);
 import 'prismjs';
 import 'prismjs/themes/prism-tomorrow.css';
 
-
 // Feather font icon
 require('./assets/css/iconfont.css');
 
 // font awesome 
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUserSecret, faSitemap } from '@fortawesome/free-solid-svg-icons';
+import { faUserSecret, faSitemap, faPlayCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faUserSecret, faSitemap);
+library.add(faUserSecret, faSitemap, faPlayCircle);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 // VeeValidate

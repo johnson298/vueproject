@@ -14,11 +14,11 @@ export default {
     orderType: 'desc',
   },
   views: {
-    name: { text: 'Name', viewable: true, sortKey: 'name' },
+    name: { text: 'Tên chi nhánh', viewable: true, sortKey: 'name' },
     address: { text: 'Địa chỉ', viewable: true, sortKey: 'address' },
-    created_at: { text: 'Ngày tạo', viewable: true, sortKey: 'created_at' },
-    updated_at: { text: 'Ngày cập nhật', viewable: true, sortKey: 'updated_at' },
-    action: { text: 'Action', viewable: true, sortKey: '' },
+    created_at: { text: 'Ngày tạo', viewable: false, sortKey: 'created_at' },
+    updated_at: { text: 'Ngày cập nhật', viewable: false, sortKey: 'updated_at' },
+    action: { text: 'hành động', viewable: true, sortKey: '' },
   },
   needReload: false
 };

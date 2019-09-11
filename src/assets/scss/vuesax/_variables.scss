@@ -36,8 +36,12 @@ $black: #22292f;
 /*========================================================
         TYPOGRAPHY
 =========================================================*/
+@font-face {
+        font-family: "Barlow";
+        src: require('@/assets/fonts/Barlow-Medium.ttf');
+}
 
-$font-family-sans-serif:  "Montserrat", Helvetica, Arial, sans-serif !default;
+$font-family-sans-serif:  segoe ui, "Barlow", "Montserrat", Helvetica, Arial, sans-serif !default;
 $font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
 
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.

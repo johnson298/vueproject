@@ -29,7 +29,7 @@ export default [
     url : "/courses",
     name: "Lớp học",
     slug : "course",
-    icon : "UserIcon"
+    icon : "PackageIcon"
   },
   {
     url: "/programs",
@@ -41,10 +41,22 @@ export default [
     header: "Thu chi"
   },
   {
-    url: "/invoices",
+    url: "/invoices/revenues",
     name: "Thu học phí",
-    slug: "invoices",
+    slug: "revenues",
     icon: "CreditCardIcon",
+  },
+  {
+    url: "/invoices/expenditures",
+    name: "Chi tiêu",
+    slug: "expenditures",
+    icon: "CreditCardIcon",
+  },
+  {
+    url: "/reports",
+    name: "Báo cáo",
+    slug: "invoices",
+    icon: "MessageCircleIcon",
   },
   {
     name: "marketing",

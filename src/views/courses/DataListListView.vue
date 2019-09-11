@@ -98,8 +98,8 @@
             <p class="product-category">
               <vs-chip
               :color="checkStatus(statusCourse,tr.status)=='Mở' ? 'warning'
-                      : checkStatus(statusCourse,tr.status)=='Đang hoạt động' ? 'primary'
-                      : checkStatus(statusCourse,tr.status)=='Đã hoàn thành' ? 'success'
+                      : checkStatus(statusCourse,tr.status)=='Hoạt động' ? 'primary'
+                      : checkStatus(statusCourse,tr.status)=='Hoàn thành' ? 'success'
                       : 'danger'">{{ checkStatus(statusCourse,tr.status) }}</vs-chip>
               </p>
           </vs-td>
