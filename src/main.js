@@ -151,6 +151,17 @@ Vue.mixin({
         if (i === x) result = arrFilter[i-1];
       }
       return result;
+    },
+    checkStatusFrom0(arrCheck, x) {
+      var arrFilter = arrCheck.map(el => el.text);
+      let result = null; 
+      for (let i = 0; i <= arrFilter.length; i++) {
+        if (i === x) result = arrFilter[i];
+      }
+      return result;
+    },
+    toNumber(string){
+      return string.replace(/[^\d.-]/g, '');
     }
   }
 });

@@ -205,7 +205,7 @@ export default {
     },
     createInvoice() {
       this.$vs.loading({
-        background: 'primary',
+        background: '#1E6DB5',
         color: '#fff',
         container: '#btn-loading',
         scale: 0.45

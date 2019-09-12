@@ -17,7 +17,7 @@ import moduleRegisters from  './registers/module';
 import moduleCalendar from  './calendar/moduleCalendar';
 import moduleRooms from  './rooms/module';
 import moduleInvoices from  './invoices/module';
-import moduleCustomer from './customer/module';
+import moduleCustomers from './customers/module';
 import moduleCustomerCare from './customer_care/module';
 import moduleCampaign from  './campaign/module';
 import moduleCoursesEmployee from './courses_register/module';
@@ -43,7 +43,7 @@ export default new Vuex.Store({
     invoices : moduleInvoices,
     calendar : moduleCalendar,
     rooms : moduleRooms,
-    customer : moduleCustomer,
+    customers : moduleCustomers,
     customer_care : moduleCustomerCare,
     campaign : moduleCampaign,
     courses_register : moduleCoursesEmployee,

@@ -160,7 +160,7 @@ export default {
     },
     updateUser(user) {
       this.$vs.loading({
-        background: 'primary',
+        background: '#1E6DB5',
         color: '#fff',
         container: '#update-loading',
         scale: 0.45

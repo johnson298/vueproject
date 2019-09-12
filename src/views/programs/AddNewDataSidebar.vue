@@ -14,16 +14,16 @@
                     <h4 class="text-center uppercase">Thông tin chương trình</h4>
                     <!-- tên chương trình -->
                     <div>
-                        <vs-input label="Tên chương trình" name="name" v-model="program.name" class="mt-5 w-full" v-validate="'required'" placeholder="nhập tên chương trình" />
+                        <vs-input label="Tên chương trình *" name="name" v-model="program.name" class="mt-5 w-full" v-validate="'required'" placeholder="nhập tên chương trình" />
                         <small class="text-danger">{{ errors.first('name') }}</small>
                     </div>
                     <!--Số bài học-->
                     <div>
-                        <vs-input label="Số bài học" name="number_of_lessons" type="number" v-model="program.number_of_lessons" class="mt-5 w-full"/>
+                        <vs-input label="Số bài học *" name="number_of_lessons" type="number" v-model="program.number_of_lessons" class="mt-5 w-full"/>
                     </div>
                     <!--Giá tiền-->
                     <div>
-                        <vs-input label="Giá tiền (vnđ)" name="price" type="number" v-model="program.price" class="mt-5 w-full" />
+                        <vs-input label="Giá tiền (vnđ) *" name="price" type="number" v-model="program.price" class="mt-5 w-full" />
                     </div>
                     <!--mô tả-->
                     <div>
@@ -62,8 +62,8 @@ export default {
       program: {
         name: '',
         description: '',
-        price: 0,
-        number_of_lessons: 0
+        price: null,
+        number_of_lessons: null
       },
       disabled: true,
       settings: { // perfectscrollbar settings
@@ -110,7 +110,7 @@ export default {
     },
     createProgram() {
       this.$vs.loading({
-        background: 'primary',
+        background: '#1E6DB5',
         color: '#fff',
         container: '#button-with-loading',
         scale: 0.45

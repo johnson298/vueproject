@@ -111,12 +111,6 @@
                     <p class="product-category"><a :href="tr.facebook" target="_blank">Link</a></p>
                 </vs-td>
 
-                <vs-td v-if="views.status.viewable">
-                    <p class="product-category">
-                        <vs-chip color="success">hoạt động</vs-chip>
-                    </p>
-                </vs-td>
-
                 <vs-td v-if="views.address.viewable">
                     <p class="product-category">{{ tr.address }}</p>
                 </vs-td>
@@ -272,7 +266,10 @@ export default {
   },
   destroyed() {
     this.$store.dispatch('employees/updateNeedReload', false);
-  }
+  },
+  created() {
+    this.getData();
+  },
 };
 </script>
 

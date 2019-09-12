@@ -1,5 +1,5 @@
 <template>
-    <vx-card title="Khách hàng thêm mới">
+    <vx-card-custom title="Khách hàng thêm mới">
         <vs-table class="my-5" stripe :data="users">
 
             <template style="padding-left: 10px" slot="thead">
@@ -27,7 +27,7 @@
                 </vs-tr>
             </template>
         </vs-table>
-    </vx-card>
+    </vx-card-custom>
 </template>
 
 <script>

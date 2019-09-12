@@ -317,7 +317,7 @@ const router = new Router({
         },
         {
           path: '/invoices/revenues',
-          component: () => import('./views/money/Invoices.vue'),
+          component: () => import('./views/invoices/Invoices.vue'),
           meta: {
             breadcrumb: [
               { title: 'Thu học phí', url: '/invoices/revenues' },
@@ -362,25 +362,14 @@ const router = new Router({
           },
         },
         {
-          path: '/customer',
-          component: () => import('./views/customer/CustomerList.vue'),
+          path: '/customers',
+          component: () => import('./views/customers/CustomersList.vue'),
           meta: {
             breadcrumb: [
               { title: 'Khách hàng', url: '/'}
             ],
             pageTitle: 'Khách hàng'
           },
-        },
-        {
-          path: '/customers',
-          name: 'customer',
-          component: () => import('./views/customer/DetailEmployee.vue'),
-          meta: {
-            breadcrumb: [
-              { title: 'Chi tiết khách hàng', url: '/'}
-            ],
-            pageTitle: 'Chi tiết khách hàng'
-          }
         },
         {
           path: '/campaign',

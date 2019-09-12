@@ -56,7 +56,7 @@ const state = {
         { text: 'Facebook', value: 1},
         { text: 'Bạn bè', value: 2},
         { text: 'Trang chủ', value: 3},
-        { text: 'Khác', value: 4},
+        { text: 'Khách hàng', value: 4},
       ]
     },
     courses : {
@@ -100,9 +100,9 @@ const state = {
     },
     customer:{
       status:[
-        { text: 'Khách hàng chờ chăm sóc', value: 1},
+        { text: 'Chờ chăm sóc', value: 1},
         { text: 'Đang chăm sóc', value: 2},
-        { text: 'Chăm sóc thành công', value: 3},
+        { text: 'Thành công', value: 3},
         { text: 'Hủy tư vấn', value: 4},
       ]
     },

@@ -9,10 +9,12 @@ import Paginate from 'vuejs-paginate';
 import VsTable from './components/vs-table-custom/vsTable.vue';
 import vSelect from 'vue-select';
 import VueSimpleSuggest from 'vue-simple-suggest';
+import VxCardCustom from './components/vx-card-custom/VxCardCustom.vue';
 import 'vue-simple-suggest/dist/styles.css';
 
 Vue.component(VxTooltip.name, VxTooltip);
 Vue.component(VxCard.name, VxCard);
+Vue.component('vx-card-custom', VxCardCustom);
 Vue.component(VxList.name, VxList);
 Vue.component(VxBreadcrumb.name, VxBreadcrumb);
 Vue.component(FeatherIcon.name, FeatherIcon);

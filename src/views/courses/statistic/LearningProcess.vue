@@ -1,7 +1,7 @@
 <template>
 <VxCardCustom title="Quá trình học">
     <template slot="actions">
-        <feather-icon icon="HelpCircleIcon" svgClasses="w-6 h-6 text-grey"></feather-icon>
+        <feather-icon svgClasses="w-6 h-6 text-grey"></feather-icon>
     </template>
 
     <template slot="no-body">

@@ -1,7 +1,7 @@
 <template>
 <div id="data-list-list-view" class="data-list-container">
 
-    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData" />
+    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closePopupAdd="addNewDataSidebar = $event" :callback="getData" />
 
     <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="students" search id="table" maxItems="10">
 
@@ -273,7 +273,10 @@ export default {
   },
   destroyed() {
     this.$store.dispatch('students/updateNeedReload', false);
-  }
+  },
+  created() {
+    this.getData();
+  },
 };
 </script>
 
