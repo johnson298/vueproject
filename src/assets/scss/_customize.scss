@@ -40,6 +40,33 @@ $primary: #1E6DB5;
     }
   }
 }
+
+// END MINXINS
+
+body {
+  @include scrollCustom();
+  color: #000000;
+}
+.layout--main{
+  .main-menu-sidebar{
+    .vs-sidebar--item{
+      a{
+        color: #000000de;
+        font-weight: 500;
+      }
+    }
+  }
+}
+.product-category{
+  .con-vs-chip{
+    .text-chip{
+      font-weight: 600;
+    }
+  }
+}
+.vs-input--label {
+  color: rgba(0, 0, 0, 0.84);
+}
 #data-list-list-view{
 
   .vs-con-table{
@@ -136,9 +163,6 @@ $primary: #1E6DB5;
   display: flex;
 }
 
-body {
-  @include scrollCustom();
-}
 .scrollbar-custom{
   .vs-popup--content{
     @include scrollCustom();
@@ -161,7 +185,8 @@ body {
 .vs-checkbox-small input:checked + .vs-checkbox,
 .vs-checkbox-primary .vs-checkbox--check,
 .hover\:bg-primary:hover,
-.dropdown-custom .vs-dropdown--menu--after{
+.dropdown-custom .vs-dropdown--menu--after,
+.vs-radio-primary .vs-radio--circle{
   background-color: $primary !important;
 }
 .vs-button-primary.vs-button-line,

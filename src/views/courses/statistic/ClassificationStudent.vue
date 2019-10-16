@@ -15,7 +15,7 @@ export default {
         labels: ["Giỏi(9)", 'Khá(9-7)', "Trung bình(7-5)", "Yếu(4-3)", "Kém(3)"],
         datasets: [{
           label: "Biểu đồ điểm thi",
-          backgroundColor: ["#7367F0", "#28C76F", "#EA5455", "#FF9F43", "#1E1E1E"],
+          backgroundColor: ["#1E6DB5", "#28C76F", "#EA5455", "#FF9F43", "#1E1E1E"],
           data: [2478, 5267, 734, 784, 433]
         }]
       },

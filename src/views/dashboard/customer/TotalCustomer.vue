@@ -1,6 +1,6 @@
 <template>
     <div>
-        <statistics-card-line icon="UserPlusIcon" statistic="92.6k" statisticTitle="Tổng khách hàng" :chartData="analyticsData.subscribersGained" type='area'></statistics-card-line>
+        <statistics-card-line color='success' icon="UserPlusIcon" statistic="92.6k" statisticTitle="Tổng khách hàng" :chartData="analyticsData.subscribersGained" type='area'></statistics-card-line>
     </div>
 </template>
 <script>

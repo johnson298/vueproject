@@ -15,29 +15,24 @@
                     <h4 class="text-center uppercase">Thông tin đăng nhập</h4>
                     <!--Email-->
                     <div>
-                        <vs-input label="Email" name="email" v-model="student.email" class="mt-5 w-full" v-validate="'required|email'" autocomplete="email" placeholder="Demo@gmail.com" />
+                        <vs-input label="Email *" name="email" v-model="student.email" class="mt-5 w-full" v-validate="'required|email'" autocomplete="email" placeholder="Demo@gmail.com" />
                         <small class="text-danger">{{ errors.first('email') }}</small>
                     </div>
                     <!--Password-->
                     <div>
-                        <vs-input label="Mật khẩu" name="password" type="password" v-model="student.password" class="mt-5 w-full" v-validate="'required|min:8'" autocomplete="new-password" placeholder="Nhập mật khẩu (8 ký tự)" />
+                        <vs-input label="Mật khẩu *" name="password" type="password" v-model="student.password" class="mt-5 w-full" v-validate="'required|min:8'" autocomplete="new-password" placeholder="Nhập mật khẩu (8 ký tự)" />
                         <small class="text-danger">{{ errors.first('password') }}</small>
                     </div>
                     <!--Nhập lại mật khẩu-->
                     <div>
-                        <vs-input label="Nhập lại mật khẩu" name="password_confirmation" autocomplete="new-password" type="password" v-model="student.password_confirmation" class="mt-5 w-full" placeholder="Nhập lại mật khẩu" />
+                        <vs-input label="Nhập lại mật khẩu *" name="password_confirmation" autocomplete="new-password" type="password" v-model="student.password_confirmation" class="mt-5 w-full" placeholder="Nhập lại mật khẩu" />
                     </div>
                 </div>
                 <div class="mt-8">
                     <h4 class="text-center uppercase">Thông tin học viên</h4>
-                    <!--Mã nhân viên-->
-                    <div>
-                        <vs-input label="Mã học viên" name="code" v-model="student.code" disabled class="mt-5 w-full" />
-                        <small class="text-danger">{{ errors.first('code') }}</small>
-                    </div>
                     <!-- NAME -->
                     <div>
-                        <vs-input label="Tên" name="name" v-model="student.name" class="mt-5 w-full" v-validate="'required'" placeholder="Nhập tên học viên" />
+                        <vs-input label="Tên học viên *" name="name" v-model="student.name" class="mt-5 w-full" v-validate="'required'" placeholder="Nhập tên học viên" />
                         <small class="text-danger">{{ errors.first('name') }}</small>
                     </div>
                     <!--địa chỉ-->
@@ -202,7 +197,7 @@ export default {
     },
     createStudent() {
       this.$vs.loading({
-        background: 'primary',
+        background: '#1E6DB5',
         color: '#fff',
         container: '#button-with-loading',
         scale: 0.45

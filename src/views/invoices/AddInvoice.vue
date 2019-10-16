@@ -159,7 +159,7 @@
         <vs-col class="mt-5" vs-w='12' vs-type="flex" vs-justify="flex-end">
             <vs-button :disabled="(selectedStudent!=null && (typeof selectedStudent) === 'object') ? false : true" class="ml-3 vs-con-loading__container" type="filled" color="primary" @click="createInvoice" ref="addButton" id="btn-loading">Tạo hóa đơn</vs-button>
             <vs-button :disabled="(selectedStudent!=null && (typeof selectedStudent) === 'object') ? false : true" class="ml-3" type="filled" color="primary">Tạo & in hóa đơn</vs-button>
-            <vs-button class="ml-3" type="filled" color="danger" @click="$emit('update:active',false)">Hủy</vs-button>
+            <vs-button class="ml-3" type="filled" color="danger" @click="initValues();$emit('update:active',false)">Hủy</vs-button>
         </vs-col>
     </vs-row>
 </div>
@@ -214,7 +214,7 @@ export default {
     },
     createInvoice() {
       this.$vs.loading({
-        background: 'primary',
+        background: '#1E6DB5',
         color: '#fff',
         container: '#btn-loading',
         scale: 0.45

@@ -14,20 +14,20 @@
                     <h4 class="text-center uppercase">Thông tin lớp học</h4>
                     <!--tên chi nhánh-->
                     <div>
-                        <vs-input label="Tên lớp học" name="name" v-model="courses.name" class="mt-5 w-full" v-validate="'required|max:255'" placeholder="nhập tên lớp học" />
+                        <vs-input label="Tên lớp học *" name="name" v-model="courses.name" class="mt-5 w-full" v-validate="'required|max:255'" placeholder="nhập tên lớp học" />
                     </div>
                     <!--giá khóa học  -->
                     <div>
-                        <vs-input label="Học phí" name="price" v-model="courses.price" type="number" class="mt-5 w-full" v-validate="'required'" />
+                        <vs-input label="Học phí *" name="price" v-model="courses.price" type="number" class="mt-5 w-full" v-validate="'required'" />
                     </div>
                     <!-- ngày bắt đầu học -->
                     <div class="mt-5">
-                        <label for="" class="vs-input--label">Ngày bắt đầu</label>
+                        <label for="" class="vs-input--label">Ngày bắt đầu *</label>
                         <datepicker :fullMonthName="true" v-model="formatDateStartAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.start_at" class="w-full picker-custom" placeholder="chọn ngày bắt đầu"></datepicker>
                     </div>
                     <!--Ngày kết thúc-->
                     <div class="mt-5">
-                        <label for="" class="vs-input--label">Ngày kết thúc</label>
+                        <label for="" class="vs-input--label">Ngày kết thúc *</label>
                         <datepicker :fullMonthName="true" v-model="formatDateEndAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.end_at" class="w-full picker-custom" placeholder="chọn ngày kết thúc"></datepicker>
                     </div>
                     <!--trạng thái-->
@@ -37,7 +37,7 @@
 
                     <div>
                         <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
-                            <label class="vs-input--label">Chương trình học</label>
+                            <label class="vs-input--label">Chương trình học *</label>
                             <vue-simple-suggest v-model="selectedProgram" mode="select" ref="suggestComponentPrograms" placeholder="Search information..." value-attribute="id" display-attribute="name" :list="getPrograms" :debounce="200" :filter-by-query="false" @select="onSuggestSelectProgram">
                                 <div class="g">
                                     <input type="text" placeholder="Search information...">
@@ -110,7 +110,7 @@
                     </div>
 
                     <div>
-                        <vs-input label="Thời lượng" name="price" v-model="courses.number_of_lessons" type="number" class="mt-5 w-full" v-validate="'required'" />
+                        <vs-input label="Thời lượng *" name="price" v-model="courses.number_of_lessons" type="number" class="mt-5 w-full" v-validate="'required'" />
                     </div>
                 </div>
             </form>
@@ -261,7 +261,7 @@ export default {
     },
     createCourse() {
       this.$vs.loading({
-        background: 'primary',
+        background: '#1E6DB5',
         color: '#fff',
         container: '#button-with-loading',
         scale: 0.45

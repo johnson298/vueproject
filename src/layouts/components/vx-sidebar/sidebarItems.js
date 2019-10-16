@@ -63,9 +63,9 @@ export default [
     header: "marketing"
   },
   {
-    url: "/customer",
+    url: "/customers",
     name: "Khách hàng",
-    slug: "customer",
+    slug: "customers",
     icon: "UsersIcon",
   },
   {

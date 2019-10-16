@@ -1,9 +1,9 @@
 <template>
-        <vx-card title="Lớp học" class="mb-base">
+        <vx-card-custom title="Lớp học" class="mb-base">
                 <div class="mt-5">
                         <chartjs-component-pie-chart :height=250 :data="data" :options="options"></chartjs-component-pie-chart>
                 </div>
-        </vx-card>
+        </vx-card-custom>
 </template>
 
 <script>
@@ -15,7 +15,7 @@ export default {
         labels: ["Chờ mở", 'Đang mở', "Đã hoàn thành", "Hủy"],
         datasets: [{
           label: "Biểu đồ lớp học",
-          backgroundColor: ["#7367F0", "#28C76F", "#EA5455", "#FF9F43"],
+          backgroundColor: ["#1E6DB5", "#28C76F", "#EA5455", "#FF9F43"],
           data: [2478, 5267, 734, 784]
         }]
       },

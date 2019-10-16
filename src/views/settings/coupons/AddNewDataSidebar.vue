@@ -110,7 +110,7 @@ export default {
     },
     createCoupon() {
       this.$vs.loading({
-        background: 'primary',
+        background: '#1E6DB5',
         color: '#fff',
         container: '#button-with-loading',
         scale: 0.45

@@ -9,7 +9,7 @@
                     </div>
                     <div class="vx-row mb-6">
                         <div class="vx-col w-full">
-                            <vs-input class="w-full" placeholder="nhập tên mới" />
+                            <vs-input class="w-full" placeholder="Nhập tên mới" />
                         </div>
                     </div>
                     <div class="vx-card__title mb-3">
@@ -17,7 +17,7 @@
                     </div>
                     <div class="vx-row mb-6">
                         <div class="vx-col w-full">
-                            <vs-input class="w-full" placeholder="nhập url mới" />
+                            <vs-input class="w-full" placeholder="Nhập url mới" />
                         </div>
                     </div>
                     <div class="vx-card__title mb-3">
@@ -25,7 +25,15 @@
                     </div>
                     <div class="vx-row mb-6">
                         <div class="vx-col w-full">
-                            <vs-input class="w-full" placeholder="nhập email mới" />
+                            <vs-input class="w-full" placeholder="Nhập email mới" />
+                        </div>
+                    </div>
+                    <div class="vx-card__title mb-3">
+                        <h4 class="text-dark">ESMS</h4>
+                    </div>
+                    <div class="vx-row mb-6">
+                        <div class="vx-col w-full">
+                            <vs-input class="w-full" placeholder="Nhập link API" />
                         </div>
                     </div>
                 </vs-col>

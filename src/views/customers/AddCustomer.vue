@@ -2,69 +2,57 @@
     <div>
         <div class="vs-row">
             <div class="vs-col md:w-1/2 w-full mb-5">
-                <vs-input label="Mã khách hàng" placeholder="Mã ID" class="w-full" disabled/>
+                <vs-input label="Tên khách hàng *" placeholder="Tên khách hàng" class="w-full uniquesdfgh" v-model="customer.name"/>
             </div>
             <div class="vs-col md:w-1/2 w-full mb-5">
-                <vs-input label="Tên khách hàng" placeholder="Tên khách hàng" class="w-full"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="vs-col md:w-1/2 w-full mb-5">
-                <vs-input label="Email" placeholder="Email" class="w-full"/>
-            </div>
-            <div class="vs-col md:w-1/2 w-full mb-5">
-                <vs-input label="Số điện thoại" placeholder="Số điện thoại" type="number" class="w-full"/>
+                <vs-input label="Email *" placeholder="Email" class="w-full" v-model="customer.email"/>
             </div>
         </div>
         <div class="row">
             <div class="vs-col md:w-1/2 w-full mb-5">
-                <vs-input label="Zalo" placeholder="Zalo" class="w-full"/>
+                <vs-input label="Số điện thoại" placeholder="0987654321" type="number" class="w-full" v-model="customer.phone"/>
             </div>
             <div class="vs-col md:w-1/2 w-full mb-5">
-                <vs-input label="Địa chỉ" placeholder="Địa chỉ" class="w-full"/>
+                <vs-input label="Zalo" placeholder="Zalo" class="w-full" v-model="customer.zalo"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="vs-col md:w-1/2 w-full mb-5">
+                <vs-input label="Địa chỉ" placeholder="Nhập địa chỉ" class="w-full" v-model="customer.address"/>
+            </div>
+            <div class="vs-col md:w-1/2 w-full mb-5">
+                <vs-input label="Facebook" placeholder="http://demo.com" class="w-full" v-model="customer.facebook"/>
             </div>
         </div>
         <div class="vs-row w-full">
-            <div class="vs-col md:w-1/2 w-full mb-5">
-                <vs-input label="Giới tính" placeholder="Giới Tính" class="w-full"/>
-            </div>
             <div class="vs-col md:w-1/2 w-full mb-5">
                 <div class="w-full">
                     <label class="vs-input--label">Ngày sinh</label>
                     <datepicker :fullMonthName="true" v-model="formatDate" :language="languages[language]" placeholder="Ngày sinh" format="d MMMM yyyy" :value="customer.birthday" class="w-full picker-custom"></datepicker>
                 </div>
             </div>
-        </div>
-        <div class="vs-row">
             <div class="vs-col md:w-1/2 w-full mb-5">
-                <vs-input label="Facebook" placeholder="Facebook" class="w-full"/>
-            </div>
-            <div class="vs-col md:w-1/2 w-full mb-5">
-                <vs-select  label="Trạng thái" class="w-full">
-                    <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in status" />
+                <vs-select v-model="customer.gender" label="Giới tính" class="w-full">
+                    <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in genderCustomer" />
                 </vs-select>
             </div>
         </div>
         <div class="vs-row">
            <div class="vs-col w-full mb-5">
-               <div class="note"><label class="vs-input--label">Nghi chú</label></div>
-               <vs-textarea style="border: solid 1px #dddddd" name="note" placeholder="Nghi chú"  type="text" class="w-full" :rows="5" />
+               <div class="note"><label class="vs-input--label">Ghi chú</label></div>
+               <vs-textarea v-model="customer.note" style="border: solid 1px #dddddd" name="note" placeholder="Ghi chú"  type="text" class="w-full" :rows="5" />
            </div>
         </div>
         <vs-col class="mt-5" vs-w='12' vs-type="flex" vs-justify="flex-end">
-            <!--:disabled="(selectedStudent!=null && (typeof selectedStudent) === 'object') ? false : true" -->
-            <vs-button class="ml-3 vs-con-loading__container" type="filled" color="primary" @click="createInvoice" ref="addButton" id="btn-loading">Thêm khách hàng</vs-button>
-            <!--<vs-button :disabled="(selectedStudent!=null && (typeof selectedStudent) === 'object') ? false : true" class="ml-3" type="filled" color="primary">Tạo & in hóa đơn</vs-button>-->
-            <vs-button class="ml-3" type="filled" color="danger" @click="$emit('update:active',false)">Hủy</vs-button>
+            <vs-button ref="loadableButton" id="button-with-loading-create"  class="ml-3 vs-con-loading__container" type="filled" color="primary" @click="createCustomer">Thêm khách hàng</vs-button>
+            <vs-button class="ml-3" type="filled" color="danger" @click="initValues();$emit('update:active',false)">Hủy</vs-button>
         </vs-col>
     </div>
 </template>
 
 <script>
-import vSelect from 'vue-select';
 import Datepicker from 'vuejs-datepicker';
 import * as lang from 'vuejs-datepicker/src/locale';
-import 'video.js/dist/video-js.css';
 export default {
   props: {
     callback: {
@@ -74,17 +62,24 @@ export default {
   },
   data() {
     return {
-
       language: "vi",
       languages: lang,
-      disabled: 'disabled',
-      selectedStudent: null,
-      totalPrice: 0,
       loading: false,
       customer: {
-        birthday: '',
+        name: null,
+        email: null,
+        phone: null,
+        zalo: null,
+        address: null,
+        facebook: null,
+        birthday: null,
+        gender: 0,
+        note: null,
+        status: 1
       },
+      branchId: this.$store.state.getBranchId,
       status: this.$store.state.model.customer.status,
+      genderCustomer: this.$store.state.model.students.gender,
     };
   },
   computed: {
@@ -98,37 +93,31 @@ export default {
     }
   },
   components: {
-    'v-select': vSelect,
     Datepicker,
   },
   methods: {
     initValues() {
-      this.invoices = {
-        student_id: null,
-        courses: {
-          course_id: '',
-          price: ''
-        },
-        note: '',
-        source: 3,
-        amount: 0
+      this.customer = {
+        name: null,
+        email: null,
+        phone: null,
+        zalo: null,
+        address: null,
+        facebook: null,
+        birthday: null,
+        gender: 0,
+        note: null,
+        status: 1
       };
-      null;
     },
-    createInvoice() {
+    createCustomer() {
       this.$vs.loading({
-        background: 'primary',
+        background: '#1E6DB5',
         color: '#fff',
-        container: '#btn-loading',
+        container: '#button-with-loading-create',
         scale: 0.45
       });
-      this.$http.post('invoices', {
-        student_id: this.selectedStudent.id,
-        course_id: this.invoices.courses.id,
-        note: this.invoices.note,
-        source: this.invoices.source,
-        amount: this.invoices.amount
-      })
+      this.$http.post(`branches/${this.branchId}/customers`, this.customer)
         .then(() => {
           this.$vs.notify({
             title: 'Đã thêm mới thành công',
@@ -139,6 +128,7 @@ export default {
           });
           this.callback();
           this.initValues();
+          this.$emit('closePopup', false);
         })
         .catch((error) => {
           if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {
@@ -160,32 +150,9 @@ export default {
             });
           }
         }).finally(() => {
-          this.$vs.loading.close('#btn-loading > .con-vs-loading');
+          this.$vs.loading.close('#button-with-loading-create > .con-vs-loading');
         });
-    },
-    getStudents(search = '') {
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http.get('students', {
-          params: {
-            search: search
-          }
-        })
-          .then(function (response) {
-            resolve(response.data.data);
-
-          }).catch((e) => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
-
-    },
-    onSuggestSelectStudent(suggest) {
-      if (suggest) {
-        this.invoices.student_id = suggest.id;
-      }
-    },
+    }
   }
 };
 </script>

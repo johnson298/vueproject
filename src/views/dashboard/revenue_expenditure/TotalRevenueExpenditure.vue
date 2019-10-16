@@ -1,6 +1,6 @@
 <template>
     <div>
-        <vx-card title="Thu chi(tháng)">
+        <vx-card-custom title="Thu chi(tháng)">
             <template slot="actions">
                 <vs-dropdown vs-trigger-click class="cursor-pointer">
                     <small class="flex cursor-pointer" >Chọn biểu đồ <feather-icon icon='ChevronDownIcon' svgClasses='h-4 w-4' class='ml-1'></feather-icon></small>
@@ -52,7 +52,7 @@
                     <vue-apex-charts type=line height=266 :options="analyticsData.revenueComparisonLine.chartOptions" :series="analyticsData.revenueComparisonLine.series" />
                 </div>
             </div>
-        </vx-card>
+        </vx-card-custom>
     </div>
 </template>
 <script>
@@ -103,7 +103,7 @@ export default{
             gradient: {
               shade: 'dark',
               inverseColors: false,
-              gradientToColors: ['#7367F0', '#b8c2cc','#F97794'],
+              gradientToColors: ['#1E6DB5', '#b8c2cc','#F97794'],
               shadeIntensity: 1,
               type: 'horizontal',
               opacityFrom: 1,

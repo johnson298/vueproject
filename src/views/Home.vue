@@ -16,10 +16,10 @@
 		</div>
 
 		<div class="vx-row">
-			<vs-col vs-w='6' class="pr-0">
+			<vs-col vs-w='6'>
 				<TotalStudents/>
 			</vs-col>
-			<vs-col vs-w='6' class="pr-0">
+			<vs-col vs-w='6'>
 				<TotalCourses/>
 			</vs-col>
 		</div>
@@ -53,13 +53,13 @@
 				</vx-card>
 			</div>
 		</div>
-		<div class="vx-row mt-5">
+		<div class="vx-row mt-5 px-4">
 			<TableEmployees/>
 		</div>
-		<div class="vx-row mt-5">
+		<div class="vx-row mt-5 px-4">
 			<TableStudents/>
 		</div>
-		<div class="vx-row mt-5">
+		<div class="vx-row mt-5 px-4">
 			<TableCustomer/>
 		</div>
 	</div>

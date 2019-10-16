@@ -1,10 +1,18 @@
 <template>
 <div id="data-list-list-view" class="data-list-container">
-    <vs-popup class="popup-custom-768" title="Thêm mới khách hàng" :active.sync="addCustomer">
-        <AddCustomer :callback="getData" :active.sync="addCustomer" />
+    <vs-popup class="popup-custom-768" title="Thêm mới khách hàng" :active.sync="popupAddCustomer">
+        <add-customer :callback="getData" :active.sync="popupAddCustomer" @closePopup="popupAddCustomer = $event" />
+    </vs-popup>
+    
+    <vs-popup class="popup-custom-768" title="chuyển khách hàng thành học viên" :active.sync="popupConvertCustomer">
+        <convert-customer :callback="getData" :active.sync="popupConvertCustomer" :customerInfo="customerGetInfo" @closePopupConvert="popupConvertCustomer = $event"/>
     </vs-popup>
 
-    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="users" search id="table" maxItems="10">
+    <vs-popup class="popup-custom-768" title="Sửa khách hàng" :active.sync="popupEditCustomer">
+        <edit-customer :callback="getData" :active.sync="popupEditCustomer" :customerInfo="customerGetInfo" @closePopup="popupEditCustomer = $event"/>
+    </vs-popup>
+
+    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="customers" search id="table" maxItems="10">
 
         <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
@@ -53,7 +61,7 @@
                 </vs-dropdown>
 
                 <!-- ADD NEW -->
-                <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addCustomer = true">
+                <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="popupAddCustomer = true">
                     <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
                     <span class="ml-2 text-base text-primary">Thêm khách hàng</span>
                 </div>
@@ -78,10 +86,6 @@
                     <p class="product-name font-medium">{{ tr.code }}</p>
                 </vs-td>
 
-                <vs-td v-if="views.avatar.viewable">
-                    <vs-avatar size="55px" :src="tr.avatar" :alt="tr.name" />
-                </vs-td>
-
                 <vs-td v-if="views.name.viewable">
                     <p class="product-name font-medium">{{ tr.name }}</p>
                 </vs-td>
@@ -90,26 +94,44 @@
                     <p class="product-category">{{ tr.email }}</p>
                 </vs-td>
 
-                <vs-td v-if="views.birthday.viewable">
-                    <p class="product-category">{{ tr.birthday }}</p>
-                </vs-td>
-
                 <vs-td v-if="views.phone.viewable">
                     <p class="product-category">{{ tr.phone }}</p>
                 </vs-td>
-                <vs-td v-if="views.branch_id.viewable">
-                    <p class="product-category">{{ tr.branch_id }}</p>
+
+                <vs-td v-if="views.phone.viewable">
+                    <p class="product-category">{{ tr.zalo }}</p>
                 </vs-td>
-                <vs-td v-if="views.status.viewable">
-                    <p class="product-category">{{ tr.status }} mới thêm</p>
+
+                <vs-td v-if="views.address.viewable">
+                    <p class="product-category">{{ tr.address }}</p>
                 </vs-td>
 
                 <vs-td v-if="views.facebook.viewable">
                     <p class="product-category"><a :href="tr.facebook" target="_blank">Link</a></p>
                 </vs-td>
 
-                <vs-td v-if="views.address.viewable">
-                    <p class="product-category">{{ tr.address }}</p>
+                <vs-td v-if="views.birthday.viewable">
+                    <p class="product-category">{{ tr.birthday }}</p>
+                </vs-td>
+
+                <vs-td v-if="views.gender.viewable">
+                    <p class="product-name font-medium"> 
+                      <vs-chip :color="checkStatusFrom0(genderCustomer,tr.gender)=='Nam' ? 'success'
+                          : ''">{{ checkStatusFrom0(genderCustomer,tr.gender) }}</vs-chip> 
+                    </p>
+                </vs-td>
+
+                <vs-td v-if="views.status.viewable">
+                    <p class="product-name font-medium"> 
+                      <vs-chip :color="checkStatus(statusCustomer,tr.status)=='Đang chăm sóc' ? 'warning'
+                          : checkStatus(statusCustomer,tr.status)=='Thành công' ? 'success'
+                          : checkStatus(statusCustomer,tr.status)=='Hủy tư vấn' ? 'danger'
+                          : ''">{{ checkStatus(statusCustomer,tr.status) }}</vs-chip> 
+                    </p>
+                </vs-td>
+
+                <vs-td v-if="views.note.viewable">
+                    <p class="product-category">{{ tr.note }}</p>
                 </vs-td>
 
                 <vs-td v-if="views.updated_at.viewable">
@@ -121,9 +143,12 @@
                 </vs-td>
 
                 <vs-td v-if="views.action.viewable" class="d-flex-span">
-                    <router-link tag="button" :to="'/customers/'" class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small" title="Chi tiết khác hàng"><i class="feather icon-eye"></i></router-link>
-                    <vs-button title="Chuyển thành đối tác" class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-repeat"></i></vs-button>
-                    <vs-button color="danger" size="small" @click="deleteEmployee(tr)" icon="delete_forever"></vs-button>
+                  <vx-tooltip text="Chuyển thành học viên" position="top">
+                    <vs-button class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small" @click="getInfoCustomer(tr.id,'popupConvertCustomer')"><i class="feather icon-repeat"></i></vs-button>
+                  </vx-tooltip>
+                    <vs-button color="primary" size="small" @click="getInfoCustomer(tr.id,'popupEditCustomer')"
+                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
+                    <vs-button color="danger" size="small" @click="deleteCustomer(tr)" icon="delete_forever"></vs-button>
                 </vs-td>
             </vs-tr>
         </template>
@@ -138,44 +163,83 @@
 
 <script>
 import AddCustomer from './AddCustomer.vue';
+import EditCustomer from './EditCustomer.vue';
+import ConvertCustomer from './ConvertCustomer.vue';
 import {
   mapState
 } from 'vuex';
 
 export default {
   components: {
-    AddCustomer
+    'add-customer': AddCustomer,
+    'edit-customer': EditCustomer,
+    'convert-customer': ConvertCustomer
   },
   data() {
     return {
+      branchId: this.$store.state.getBranchId,
+      statusCustomer: this.$store.state.model.customer.status,
+      genderCustomer: this.$store.state.model.students.gender,
+      customerGetInfo: {},
       activeConfirm: false,
       timer: null,
       selected: [],
       isMounted: false,
-      addCustomer: false,
+      popupAddCustomer: false,
+      popupEditCustomer: false,
+      popupConvertCustomer: false,
       prev: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_left</i></button>",
       next: "<button class=\"vs-pagination--buttons btn-prev-pagination vs-pagination--button-next\"><i class=\"vs-icon notranslate icon-scale material-icons null\">chevron_right</i></button>"
     };
   },
   computed: {
-    ...mapState('customer', ['users', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
+    ...mapState('customers', ['customers', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
   methods: {
-    deleteEmployee(user) {
+    getInfoCustomer(id, popup) {
+      const thisIns = this;
+      thisIns.$vs.loading({
+        color: "#7367F0",
+        text: "Loading..."
+      });
+      thisIns.$http
+        .get(`branches/${this.branchId}/customers/${id}`)
+        .then(res => {
+          thisIns.customerGetInfo = res.data.data;
+        })
+        .catch(function (error) {
+          thisIns.$vs.notify({
+            title: "Error",
+            text: error,
+            color: "danger",
+            iconPack: "feather",
+            icon: "icon-alert-circle"
+          });
+        })
+        .finally(function () {
+          if(popup == 'popupConvertCustomer'){
+            thisIns.popupConvertCustomer = true;
+          } else{
+            thisIns.popupEditCustomer = true;
+          }
+          thisIns.$vs.loading.close();
+        });
+    },
+    deleteCustomer(customer) {
       this.$vs.dialog({
         type: 'confirm',
         color: 'danger',
-        title: `Xóa nhân viên`,
-        text: 'Bạn có chắc muốn xóa ' + user.name,
-        accept: this.employeeAlert,
-        parameters: [user.id]
+        title: `xóa khách hàng`,
+        text: `Bạn có chắc muốn xóa "${customer.name}" không ?`,
+        accept: this.customerAlert,
+        parameters: [customer.id]
       });
     },
-    employeeAlert(user_id) {
-      this.$http.delete('users/' + user_id).then(() => {
+    customerAlert(customer_id) {
+      this.$http.delete(`branches/${this.branchId}/customers/${customer_id}`).then(() => {
         this.$vs.notify({
           color: 'success',
-          title: 'Xóa nhân viên',
+          title: 'Xóa khách hàng',
           text: 'Bạn đã xóa thành công',
           icon: 'verified_user',
         });
@@ -191,7 +255,7 @@ export default {
       });
     },
     updateViews(index, e) {
-      this.$store.dispatch('customer/updateViews', {
+      this.$store.dispatch('customers/updateViews', {
         index: index,
         viewable: e.target.checked
       });
@@ -205,7 +269,7 @@ export default {
         color: '#7367F0',
         text: 'Loading...'
       });
-      this.$http.get('users', {
+      this.$http.get(`branches/${this.branchId}/customers`, {
         params: {
           page: page,
           search: this.searchTerm,
@@ -213,8 +277,8 @@ export default {
           sortedBy: this.order.orderType,
         }
       }).then(function (response) {
-        thisIns.$store.dispatch('customer/updateTable', {
-          users: thisIns.formatData(response.data.data),
+        thisIns.$store.dispatch('customers/updateTable', {
+          customers: thisIns.formatData(response.data.data),
           pagination: response.data.pagination
         });
       })
@@ -232,11 +296,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch('customer/updateNeedReload', true);
+        this.$store.dispatch('customers/updateNeedReload', true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch('customer/updateSearch', {
+      this.$store.dispatch('customers/updateSearch', {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -245,7 +309,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch('customer/updateOrder', {
+      this.$store.dispatch('customers/updateOrder', {
         order: {
           orderBy: key,
           orderType: active ? 'desc' : 'asc',
@@ -257,12 +321,12 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.users.length === 0) {
+    if (this.customers.length === 0) {
       this.getData();
     }
   },
   destroyed() {
-    this.$store.dispatch('customer/updateNeedReload', false);
+    this.$store.dispatch('customers/updateNeedReload', false);
   }
 };
 </script>
