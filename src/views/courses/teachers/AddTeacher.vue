@@ -25,6 +25,7 @@
                             :debounce="200"
                             :filter-by-query="false"
                             @select="onSuggestSelectTeacher">
+
                             <div class="g">
                               <input type="text" placeholder="Search information...">
                             </div>
@@ -152,7 +153,7 @@ export default {
     },
     initValues() {
       this.teacher = {
-        user_id : null,
+        user_id : '',
         role : 1,
         note : ''
       };

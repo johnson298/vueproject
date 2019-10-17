@@ -1,10 +1,7 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    <vs-popup class="popup-custom-1024" title="Thêm mới chiến dịch" :active.sync="addCampaigns" >
-      <AddCampaign :callback="getData" :active.sync="addCampaigns"/>
-    </vs-popup>
 
-    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="users" search id="table" maxItems="10">
+    <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="campaigns" search id="table" maxItems="10">
 
       <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
@@ -51,67 +48,72 @@
               </div>
             </vs-dropdown-menu>
           </vs-dropdown>
-
           <!-- ADD NEW -->
-          <div class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary" @click="addCampaigns = true">
+
+          <router-link id="add_campaign"
+                  tag="button"
+                  :to="'/add_campaign'" class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary">
             <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-            <span class="ml-2 text-base text-primary">Thêm chiến dịch</span>
-          </div>
+            <span class="ml-2 text-base text-primary" style="color: #636363 !important;">Thêm chiến dịch</span>
+          </router-link>
+
         </div>
       </div>
 
-      <template slot="thead">
-        <vs-th :sort-key="value.sortKey" v-for="(value, index) in views" :key="index" v-if="value.viewable">{{ value.text }}</vs-th>
+      <template style="padding-left: 10px" slot="thead">
+        <vs-th>Mã</vs-th>
+        <vs-th>Tên</vs-th>
+        <vs-th>Lên lịch</vs-th>
+        <vs-th>Chức vụ</vs-th>
+        <vs-th>Phạm vi gửi</vs-th>
+        <vs-th>Ngày cập nhật</vs-th>
+        <vs-th>Ngày tạo</vs-th>
+        <vs-th>Hành động</vs-th>
       </template>
 
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.code.viewable">
+          <vs-td  v-if="data[indextr].code">
             <p class="product-name font-medium">{{ tr.code }}</p>
           </vs-td>
-
-          <vs-td v-if="views.avatar.viewable">
-            <vs-avatar size="55px" :src="tr.avatar" :alt="tr.name" />
-          </vs-td>
-
-          <vs-td v-if="views.name.viewable">
+          <vs-td  v-if="data[indextr].name">
             <p class="product-name font-medium">{{ tr.name }}</p>
           </vs-td>
-
-          <vs-td v-if="views.email.viewable">
-            <p class="product-category">{{ tr.email }}</p>
+          <vs-td  v-if="data[indextr].schedule">
+            <p class="product-name font-medium">{{ tr.schedule }}</p>
           </vs-td>
-
-          <vs-td v-if="views.birthday.viewable">
-            <p class="product-category">{{ tr.birthday }}</p>
+          <vs-td  v-if="data[indextr].position">
+            <p class="product-name font-medium">
+            <vs-chip
+                    :color="checkStatus(position,tr.position)=='Giáo viên' ? 'warning'
+                      : checkStatus(position,tr.position)=='Học viên' ? 'primary'
+                      : ''">{{ checkStatus(position,tr.position) }}
+            </vs-chip>
+            </p>
           </vs-td>
-
-          <vs-td v-if="views.phone.viewable">
-            <p class="product-category">{{ tr.phone }}</p>
+          <vs-td  v-if="data[indextr].range_send">
+            <p class="product-name font-medium">
+              <vs-chip
+                      :color="checkStatus(range_send,tr.range_send)=='Toàn bộ trung tâm' ? 'warning'
+                      : checkStatus(range_send,tr.range_send)=='Theo chi nhánh' ? 'success'
+                      : checkStatus(range_send,tr.range_send)=='Theo chương trình học' ? 'primary'
+                      : checkStatus(range_send,tr.range_send)=='Theo lớp học' ? 'danger'
+                      : ''">{{ checkStatus(range_send,tr.range_send) }}
+              </vs-chip>
+            </p>
           </vs-td>
-
-          <vs-td v-if="views.facebook.viewable">
-            <p class="product-category"><a :href="tr.facebook" target="_blank">Link</a></p>
+          <vs-td  v-if="data[indextr].updated_at">
+            <p class="product-name font-medium">{{ tr.updated_at }}</p>
           </vs-td>
-
-          <vs-td v-if="views.address.viewable">
-            <p class="product-category">{{ tr.address }}</p>
+          <vs-td  v-if="data[indextr].created_at">
+            <p class="product-name font-medium">{{ tr.created_at }}</p>
           </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.action.viewable" class="d-flex-span">
+          <vs-td  class="d-flex-span">
             <router-link
                     tag="button"
-                    :to="'/employees/' + tr.id "
+                    :to="'/campaign/1111' "
                     class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-eye"></i></router-link>
-            <vs-button color="danger" size="small" @click="deleteEmployee(tr)" icon="delete_forever"></vs-button>
+            <vs-button color="danger" size="small" @click="deleteCampaign(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>
       </template>
@@ -146,6 +148,55 @@ export default {
   },
   data() {
     return {
+      campaigns: [
+        {
+          "code": "KH-001",
+          "name" : 'Hoàng tuấn',
+          "schedule": "21-08-2019",
+          "position" : 1,
+          'range_send':1,
+          "updated_at" : '20-08-2019',
+          "created_at" : '18-05-2018'
+        },
+        {
+          "code": "KH-002",
+          "name" : 'Nghỉ mùng 2/9',
+          "schedule": "21-08-2019",
+          "position" : 2,
+          'range_send':2,
+          "updated_at" : '20-08-2019',
+          "created_at" : '18-05-2018'
+        },
+        {
+          "code": "KH-003",
+          "name" : 'Quảng cáo its',
+          "schedule": "21-08-2019",
+          "position" : 1,
+          'range_send':3,
+          "updated_at" : '20-08-2019',
+          "created_at" : '18-05-2018'
+        },
+        {
+          "code": "KH-004",
+          "name" : 'Chạy ngay đi',
+          "schedule": "21-08-2019",
+          "position" : 1,
+          'range_send':4,
+          "updated_at" : '20-08-2019',
+          "created_at" : '18-05-2018'
+        },
+        {
+          "code": "KH-005",
+          "name" : 'Kakaka',
+          "schedule": "21-08-2019",
+          "position" : 1,
+          'range_send':3,
+          "updated_at" : '20-08-2019',
+          "created_at" : '18-05-2018'
+        },
+      ],
+      range_send: this.$store.state.model.campaign.range_send,
+      position: this.$store.state.model.campaign.position,
       activeConfirm:false,
       timer: null,
       selected: [],
@@ -159,17 +210,17 @@ export default {
     ...mapState('campaign', ['users', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
   methods: {
-    deleteEmployee(user){
+    deleteCampaign(user){
       this.$vs.dialog({
         type:'confirm',
         color: 'danger',
         title: `Xóa nhân viên`,
         text: 'Bạn có chắc muốn xóa ' + user.name,
-        accept:this.employeeAlert,
+        accept:this.campaignAlert,
         parameters: [user.id]
       });
     },
-    employeeAlert(user_id){
+    campaignAlert(user_id){
       this.$http.delete('users/'+ user_id).then( () => {
         this.$vs.notify({
           color:'success',
@@ -349,5 +400,14 @@ export default {
         margin: 3px;
       }
     }
+  }
+</style>
+<style>
+  #add_campaign{
+    height: 46px;
+    background: #ffffff;
+    border-style: none !important;
+    box-shadow: 2px 2px 2px 2px #dddddd;
+    color: #636363 !important;
   }
 </style>

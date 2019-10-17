@@ -232,7 +232,7 @@ export default {
     getBranches(search = '') {
       let vm = this;
       return new Promise((resolve, reject) => {
-        this.$http.get(`branches/${this.branchId}/programs`, {
+        this.$http.get(`branches/`, {
           params: {
             search: search
           }

@@ -38,10 +38,10 @@
             </div>
         </div>
         <div class="vs-row">
-           <div class="vs-col w-full mb-5">
-               <div class="note"><label class="vs-input--label">Ghi chú</label></div>
-               <vs-textarea v-model="customer.note" style="border: solid 1px #dddddd" name="note" placeholder="Ghi chú"  type="text" class="w-full" :rows="5" />
-           </div>
+            <div class="vs-col w-full mb-5">
+                <div class="note"><label class="vs-input--label">Ghi chú</label></div>
+                <vs-textarea v-model="customer.note" style="border: solid 1px #dddddd" name="note" placeholder="Ghi chú"  type="text" class="w-full" :rows="5" />
+            </div>
         </div>
         <vs-col class="mt-5" vs-w='12' vs-type="flex" vs-justify="flex-end">
             <vs-button ref="loadableButton" id="button-with-loading-create"  class="ml-3 vs-con-loading__container" type="filled" color="primary" @click="createCustomer">Thêm khách hàng</vs-button>
@@ -51,110 +51,110 @@
 </template>
 
 <script>
-import Datepicker from 'vuejs-datepicker';
-import * as lang from 'vuejs-datepicker/src/locale';
-export default {
-  props: {
-    callback: {
-      type: Function,
-      required: false
-    }
-  },
-  data() {
-    return {
-      language: "vi",
-      languages: lang,
-      loading: false,
-      customer: {
-        name: null,
-        email: null,
-        phone: null,
-        zalo: null,
-        address: null,
-        facebook: null,
-        birthday: null,
-        gender: 0,
-        note: null,
-        status: 1
-      },
-      branchId: this.$store.state.getBranchId,
-      status: this.$store.state.model.customer.status,
-      genderCustomer: this.$store.state.model.students.gender,
-    };
-  },
-  computed: {
-    formatDate:{
-      get(){
-        return this.customer.birthday;
-      },
-      set(val){
-        this.customer.birthday = this.formatDateUTC(val);
+  import Datepicker from 'vuejs-datepicker';
+  import * as lang from 'vuejs-datepicker/src/locale';
+  export default {
+    props: {
+      callback: {
+        type: Function,
+        required: false
       }
-    }
-  },
-  components: {
-    Datepicker,
-  },
-  methods: {
-    initValues() {
-      this.customer = {
-        name: null,
-        email: null,
-        phone: null,
-        zalo: null,
-        address: null,
-        facebook: null,
-        birthday: null,
-        gender: 0,
-        note: null,
-        status: 1
+    },
+    data() {
+      return {
+        language: "vi",
+        languages: lang,
+        loading: false,
+        customer: {
+          name: null,
+          email: null,
+          phone: null,
+          zalo: null,
+          address: null,
+          facebook: null,
+          birthday: null,
+          gender: 0,
+          note: null,
+          status: 1
+        },
+        branchId: this.$store.state.getBranchId,
+        status: this.$store.state.model.customer.status,
+        genderCustomer: this.$store.state.model.students.gender,
       };
     },
-    createCustomer() {
-      this.$vs.loading({
-        background: '#1E6DB5',
-        color: '#fff',
-        container: '#button-with-loading-create',
-        scale: 0.45
-      });
-      this.$http.post(`branches/${this.branchId}/customers`, this.customer)
-        .then(() => {
-          this.$vs.notify({
-            title: 'Đã thêm mới thành công',
-            text: 'OK',
-            iconPack: 'feather',
-            icon: 'fa fa-lg fa-check-circle',
-            color: 'success'
-          });
-          this.callback();
-          this.initValues();
-          this.$emit('closePopup', false);
-        })
-        .catch((error) => {
-          if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {
-            let message = error.response.data.error.validation[Object.keys(error.response.data.error.validation)[0]][0];
+    computed: {
+      formatDate:{
+        get(){
+          return this.customer.birthday;
+        },
+        set(val){
+          this.customer.birthday = this.formatDateUTC(val);
+        }
+      }
+    },
+    components: {
+      Datepicker,
+    },
+    methods: {
+      initValues() {
+        this.customer = {
+          name: null,
+          email: null,
+          phone: null,
+          zalo: null,
+          address: null,
+          facebook: null,
+          birthday: null,
+          gender: 0,
+          note: null,
+          status: 1
+        };
+      },
+      createCustomer() {
+        this.$vs.loading({
+          background: '#1E6DB5',
+          color: '#fff',
+          container: '#button-with-loading-create',
+          scale: 0.45
+        });
+        this.$http.post(`branches/${this.branchId}/customers`, this.customer)
+          .then(() => {
             this.$vs.notify({
-              title: 'Validation error!',
-              text: message,
+              title: 'Đã thêm mới thành công',
+              text: 'OK',
               iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
+              icon: 'fa fa-lg fa-check-circle',
+              color: 'success'
             });
-          } else {
-            this.$vs.notify({
-              title: 'Error!',
-              text: 'Thêm mới thất bại',
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          }
-        }).finally(() => {
+            this.callback();
+            this.initValues();
+            this.$emit('closePopup', false);
+          })
+          .catch((error) => {
+            if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {
+              let message = error.response.data.error.validation[Object.keys(error.response.data.error.validation)[0]][0];
+              this.$vs.notify({
+                title: 'Validation error!',
+                text: message,
+                iconPack: 'feather',
+                icon: 'fa fa-lg fa-exclamation-triangle',
+                color: 'danger'
+              });
+            } else {
+              this.$vs.notify({
+                title: 'Error!',
+                text: 'Thêm mới thất bại',
+                iconPack: 'feather',
+                icon: 'fa fa-lg fa-exclamation-triangle',
+                color: 'danger'
+              });
+            }
+          }).finally(() => {
           this.$vs.loading.close('#button-with-loading-create > .con-vs-loading');
         });
+      }
     }
-  }
-};
+  };
 </script>
 
 <style lang="scss" scoped>

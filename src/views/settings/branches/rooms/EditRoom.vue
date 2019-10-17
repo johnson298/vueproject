@@ -13,7 +13,7 @@
                         <h4 class="text-center uppercase">Thông tin phòng học</h4>
                         <!--Ten phòng học-->
                         <div>
-                            <vs-input label="Tên chương trình" name="name" type="text" v-model="rooms.name" class="mt-5 w-full" />
+                            <vs-input label="Tên phòng học" name="name" type="text" v-model="rooms.name" class="mt-5 w-full" />
                         </div>
                     </div>
                 </form>
