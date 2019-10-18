@@ -1,5 +1,5 @@
 export default {
-  registers: [],
+  registersAttendance: [],
   pagination: {
     count: 0,
     total: 0,
@@ -8,10 +8,10 @@ export default {
     totalPages: 0,
     links: []
   },
-  searchTerm: "",
+  searchTerm: '',
   order: {
-    orderBy: "id",
-    orderType: "desc"
+    orderBy: 'id',
+    orderType: 'desc',
   },
   views: {
     code: { text: "mã hv", viewable: true, sortKey: "code" },
@@ -20,6 +20,7 @@ export default {
     note: { text: "ghi chú", viewable: false, sortKey: "note" },
     created_at: { text: "ngày tạo", viewable: false, sortKey: "created_at" },
     updated_at: { text: "ngày cập nhật",  viewable: false, sortKey: "created_at" },
+    attendance: { text: "điểm danh", viewable: true, sortKey: "attendance" },
     action: { text: "hành động", viewable: true, sortKey: "" }
   },
   needReload: false

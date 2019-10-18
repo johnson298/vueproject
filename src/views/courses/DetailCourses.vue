@@ -17,17 +17,31 @@
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
+                                    tag="button"
+                                    :to="`/courses/${$route.params.course}/calendar`"
+                                    class="vs-tabs--btn"
+                            >Lịch học</router-link>
+                        </li>
+                        <li class="vs-tabs--li">
+                            <router-link
                                 tag="button"
-                                :to="`/courses/${$route.params.course}/student`"
+                                :to="`/courses/${$route.params.course}/students`"
                                 class="vs-tabs--btn"
                                 >Danh sách học viên</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
                                 tag="button"
-                                :to="`/courses/${$route.params.course}/teacher`"
+                                :to="`/courses/${$route.params.course}/teachers`"
                                 class="vs-tabs--btn"
                                 >Danh sách giáo viên</router-link>
+                        </li>
+                        <li class="vs-tabs--li">
+                            <router-link
+                                    tag="button"
+                                    :to="`/courses/${$route.params.course}/attendances`"
+                                    class="vs-tabs--btn"
+                            >Điểm danh</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
@@ -35,13 +49,6 @@
                                 :to="`/courses/${$route.params.course}/history`"
                                 class="vs-tabs--btn"
                                 >Lịch sử</router-link>
-                        </li>
-                        <li class="vs-tabs--li">
-                            <router-link
-                                    tag="button"
-                                    :to="`/courses/${$route.params.course}/calendar`"
-                                    class="vs-tabs--btn"
-                            >Lịch học</router-link>
                         </li>
                     </ul>
                 </div>

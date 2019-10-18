@@ -1,12 +1,13 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    <vs-popup
-      fullscreen
-      classContent="popup-example"
-      title="Thêm học viên vào lớp học"
-      :active.sync="popupAllstudent"
-    >
-      <GetAllStudents :active.sync="popupAllstudent" :callback="getData" />
+    <vs-popup class="popup-custom-768" title="Tạo mới điểm danh" :active.sync="popupAddNote">
+      <add-not-attendance
+        v-if="popupAddNote"
+        :callback="getData"
+        :getInfo="attendanceInfomation"
+        :active.sync="popupAddNote"
+        @closePopupAdd="popupAddNote = $event"
+      />
     </vs-popup>
     <vs-table-custom
       :sst="true"
@@ -15,7 +16,7 @@
       v-model="selected"
       @search="handleSearch"
       @sort="handleSort"
-      :data="registers"
+      :data="registersAttendance"
       search
       id="table"
       maxItems="10"
@@ -67,15 +68,6 @@
               </div>
             </vs-dropdown-menu>
           </vs-dropdown>
-
-          <!-- ADD NEW -->
-          <div
-            class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary"
-            @click="popupAllstudent=true"
-          >
-            <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-            <span class="ml-2 text-base text-primary">Thêm học viên</span>
-          </div>
         </div>
       </div>
 
@@ -101,66 +93,112 @@
           </vs-td>
 
           <vs-td v-if="views.note.viewable">
-            <p class="product-category">{{ tr.student.note }}</p>
+            <p class="product-category">{{ tr.note }}</p>
           </vs-td>
 
           <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.student.updated_at }}</p>
+            <p class="product-category">{{ tr.updated_at }}</p>
           </vs-td>
 
           <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.student.created_at }}</p>
+            <p class="product-category">{{ tr.created_at }}</p>
           </vs-td>
 
           <vs-td v-if="views.action.viewable" class="d-flex-span">
-            <router-link
-              tag="button"
-              :to="'/students/' + tr.student.id "
-              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"
-            >
-              <i class="feather icon-eye"></i>
-            </router-link>
-            <vs-button color="danger" size="small" @click="deleteStudent(tr)" icon="delete_forever"></vs-button>
+            <label class="vs-component con-vs-radio mr-5 vs-radio-success" checked="true">
+              <input
+                :name="tr.id"
+                type="radio"
+                :data-id="tr.id"
+                :data-name="tr.student.name"
+                class="vs-radio--input"
+                value="1"
+                :checked="tr.status==1?true:false"
+                @change="changeStatus"
+              />
+              <span class="vs-radio">
+                <span class="vs-radio--borde" style="border: 2px solid rgb(200, 200, 200);"></span>
+                <span class="vs-radio--circle"></span>
+              </span>
+              <span class="vs-radio--label">Có mặt</span>
+            </label>
+            <label class="vs-component con-vs-radio mr-5 vs-radio-warning">
+              <input
+                :name="tr.id"
+                type="radio"
+                :data-id="tr.id"
+                :data-name="tr.student.name"
+                class="vs-radio--input"
+                value="2"
+                :checked="tr.status==2?true:false"
+                @change="changeStatus"
+              />
+              <span class="vs-radio">
+                <span class="vs-radio--borde" style="border: 2px solid rgb(200, 200, 200);"></span>
+                <span class="vs-radio--circle"></span>
+              </span>
+              <span class="vs-radio--label">Đi trễ</span>
+            </label>
+            <label class="vs-component con-vs-radio mr-5 vs-radio-danger">
+              <input
+                :name="tr.id"
+                type="radio"
+                :data-id="tr.id"
+                :data-name="tr.student.name"
+                class="vs-radio--input"
+                value="3"
+                :checked="tr.status==3?true:false"
+                @change="changeStatus"
+              />
+              <span class="vs-radio">
+                <span class="vs-radio--borde" style="border: 2px solid rgb(200, 200, 200);"></span>
+                <span class="vs-radio--circle"></span>
+              </span>
+              <span class="vs-radio--label">Vắng mặt</span>
+            </label>
+          </vs-td>
+          <vs-td class="d-flex-span">
+            <vx-tooltip text="Ghi chú">
+              <vs-button
+                radius
+                color="success"
+                size="small"
+                @click="getInfo(tr.id, tr.note)"
+                class="vs-component vs-button vs-button-filled includeIcon includeIconOnly small"
+              >
+                <i class="feather icon-message-circle"></i>
+              </vs-button>
+            </vx-tooltip>
           </vs-td>
         </vs-tr>
       </template>
     </vs-table-custom>
-    <div class="con-vs-pagination vs-pagination-primary">
-      <nav class="vs-pagination--nav">
-        <paginate
-          :page-count="pagination.totalPages"
-          :page-range="3"
-          :margin-pages="2"
-          :active-class="'is-current'"
-          :container-class="'vs-pagination--ul'"
-          :page-class="'item-pagination vs-pagination--li'"
-          :prev-text="prev"
-          :next-text="next"
-          :click-handler="getData"
-          :value="pagination.currentPage"
-          ref="paginate"
-        />
-      </nav>
-    </div>
   </div>
 </template>
 
 <script>
-import GetAllStudents from "./GetAllStudents";
+import AddNoteAttendace from "./AddNoteAttendace";
 import { mapState } from "vuex";
 
 export default {
   components: {
-    GetAllStudents
+    "add-not-attendance": AddNoteAttendace
   },
   data() {
     return {
+      attendanceInfomation: null,
+      popupAddNote: false,
+      rboAttendance: 1,
+      attendanceId: this.$route.params.attendance,
+      courseId: this.$route.params.course,
       popupAllstudent: false,
       activeConfirm: false,
       timer: null,
       selected: [],
       isMounted: false,
       addNewDataSidebar: false,
+      checked: true,
+      radioTest: null,
       prev:
         '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev"><i class="vs-icon notranslate icon-scale material-icons null">chevron_left</i></button>',
       next:
@@ -168,8 +206,8 @@ export default {
     };
   },
   computed: {
-    ...mapState("registers", [
-      "registers",
+    ...mapState("registersAttendance", [
+      "registersAttendance",
       "pagination",
       "searchTerm",
       "order",
@@ -184,42 +222,61 @@ export default {
     this.getData();
   },
   methods: {
-    deleteStudent(user) {
-      this.$vs.dialog({
-        type: "confirm",
-        color: "danger",
-        title: `Xóa học viên`,
-        text: "Bạn có chắc muốn xóa " + user.student.name,
-        accept: this.studentAlert,
-        parameters: [user.id]
-      });
+    getInfo(id, note) {
+      this.popupAddNote = true;
+      this.attendanceInfomation = {
+        idStudentAttendace: id,
+        noteStudentAttendace: note
+      };
     },
-    studentAlert(user_id) {
+    changeStatus(event) {
+      let idItem = event.target.getAttribute("data-id");
+      let StatusItem = event.target.value;
+      const url = `branches/${this.branch_id}/courses/${this.courseId}/attendances/${this.attendanceId}/items/${idItem}`;
+      const thisIns = this;
       this.$http
-        .delete(
-          `branches/${this.branch_id}/courses/${this.$route.params.course}/registers/${user_id}`
-        )
+        .put(url, {
+          _method: "PUT",
+          status: StatusItem
+        })
         .then(() => {
           this.$vs.notify({
-            color: "success",
-            title: "Xóa học viên",
-            text: "Bạn đã xóa thành công",
-            icon: "verified_user"
-          });
-          this.getData();
-        })
-        .catch(() => {
-          this.$vs.notify({
-            title: "Error!",
-            text: "Bạn không xóa thành công",
+            title: "Cập nhật",
+            text: `Học viên ${event.target.getAttribute("data-name")} ${
+              StatusItem == 1
+                ? "có mặt"
+                : StatusItem == 2
+                  ? "đi trễ"
+                  : StatusItem == 3
+                    ? "vắng mặt"
+                    : ""
+            }`,
             iconPack: "feather",
-            icon: "fa fa-lg fa-exclamation-triangle",
-            color: "danger"
+            icon: "fa fa-lg fa-check-circle",
+            color: `${
+              StatusItem == 1
+                ? "success"
+                : StatusItem == 2
+                  ? "warning"
+                  : StatusItem == 3
+                    ? "danger"
+                    : ""
+            }`
           });
+        })
+        .catch(error => {
+          thisIns.$vs.notify({
+            title: "Đã xảy ra lỗi",
+            text: error,
+            color: "danger",
+            iconPack: "feather",
+            icon: "icon-alert-circle"
+          });
+          thisIns.getData();
         });
     },
     updateViews(index, e) {
-      this.$store.dispatch("registers/updateViews", {
+      this.$store.dispatch("registersAttendance/updateViews", {
         index: index,
         viewable: e.target.checked
       });
@@ -229,28 +286,30 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
+      thisIns.$store.dispatch("registersAttendance/updateTable", {
+        registersAttendance: [],
+        pagination: null
+      });
+      const url = `branches/${this.branch_id}/courses/${this.courseId}/attendances/${this.attendanceId}`;
       thisIns.$vs.loading({ color: "#7367F0", text: "Loading..." });
       this.$http
-        .get(
-          `branches/${this.branch_id}/courses/${this.$route.params.course}/registers`,
-          {
-            params: {
-              page: page,
-              search: this.searchTerm,
-              orderBy: this.order.orderBy,
-              sortedBy: this.order.orderType
-            }
+        .get(url, {
+          params: {
+            page: page,
+            search: this.searchTerm,
+            orderBy: this.order.orderBy,
+            sortedBy: this.order.orderType
           }
-        )
+        })
         .then(function(response) {
-          thisIns.$store.dispatch("registers/updateTable", {
-            registers: thisIns.formatData(response.data.data),
-            pagination: response.data.pagination
+          thisIns.$store.dispatch("registersAttendance/updateTable", {
+            registersAttendance: thisIns.formatData(response.data.data.items),
+            pagination: null
           });
         })
         .catch(function(error) {
           thisIns.$vs.notify({
-            title: "Error",
+            title: "Đã xảy ra lỗi",
             text: error,
             color: "danger",
             iconPack: "feather",
@@ -263,11 +322,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch("registers/updateNeedReload", true);
+        this.$store.dispatch("registersAttendance/updateNeedReload", true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch("registers/updateSearch", {
+      this.$store.dispatch("registersAttendance/updateSearch", {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -276,7 +335,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch("registers/updateOrder", {
+      this.$store.dispatch("registersAttendance/updateOrder", {
         order: {
           orderBy: key,
           orderType: active ? "desc" : "asc"
@@ -288,12 +347,12 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.registers.length === 0) {
+    if (this.registersAttendance.length === 0) {
       this.getData();
     }
   },
   destroyed() {
-    this.$store.dispatch("registers/updateNeedReload", false);
+    this.$store.dispatch("registersAttendance/updateNeedReload", false);
   }
 };
 </script>
@@ -383,6 +442,30 @@ export default {
     button {
       margin: 3px;
     }
+  }
+}
+.active.vs-radio-success {
+  .vs-radio--circle {
+    background: rgba(var(--vs-success), 1);
+    box-shadow: 0 3px 12px 0 rgba(var(--vs-success), 0.4);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.active.vs-radio-warning {
+  .vs-radio--circle {
+    background: rgba(var(--vs-warning), 1);
+    box-shadow: 0 3px 12px 0 rgba(var(--vs-warning), 0.4);
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.active.vs-radio-danger {
+  .vs-radio--circle {
+    background: rgba(var(--vs-danger), 1);
+    box-shadow: 0 3px 12px 0 rgba(var(--vs-danger), 0.4);
+    transform: scale(1);
+    opacity: 1;
   }
 }
 </style>
