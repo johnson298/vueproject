@@ -22,6 +22,8 @@ import moduleCustomerCare from './customer_care/module';
 import moduleCampaign from  './campaign/module';
 import moduleCoursesEmployee from './courses_register/module';
 import moduleExpense from './expense/module';
+import moduleAttendances from './attendances/module';
+import moduleRegisterAttendance from './registersAttendance/module';
 
 Vue.use(Vuex);
 
@@ -48,6 +50,8 @@ export default new Vuex.Store({
     campaign : moduleCampaign,
     courses_register : moduleCoursesEmployee,
     expense : moduleExpense,
+    attendances : moduleAttendances,
+    registersAttendance : moduleRegisterAttendance,
   },
   strict: process.env.NODE_ENV !== 'production'
 });
