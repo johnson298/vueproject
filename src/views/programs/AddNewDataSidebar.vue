@@ -15,7 +15,6 @@
                     <!-- tên chương trình -->
                     <div>
                         <vs-input label="Tên chương trình *" name="name" v-model="program.name" class="mt-5 w-full" v-validate="'required'" placeholder="nhập tên chương trình" />
-                        <small class="text-danger">{{ errors.first('name') }}</small>
                     </div>
                     <!--Số bài học-->
                     <div>
@@ -126,6 +125,7 @@ export default {
           });
           this.callback();
           this.initValues();
+          this.$emit('closeSidebar', false);
         })
         .catch((error) => {
           if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {

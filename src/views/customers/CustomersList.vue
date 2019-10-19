@@ -144,11 +144,11 @@
 
                 <vs-td v-if="views.action.viewable" class="d-flex-span">
                   <vx-tooltip text="Chuyển thành học viên" position="top">
-                    <vs-button class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small" @click="getInfoCustomer(tr.id,'popupConvertCustomer')"><i class="feather icon-repeat"></i></vs-button>
+                    <vs-button radius class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small" @click="getInfoCustomer(tr.id,'popupConvertCustomer')"><i class="feather icon-repeat"></i></vs-button>
                   </vx-tooltip>
-                    <vs-button color="primary" size="small" @click="getInfoCustomer(tr.id,'popupEditCustomer')"
+                    <vs-button radius color="primary" size="small" @click="getInfoCustomer(tr.id,'popupEditCustomer')"
                     class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
-                    <vs-button color="danger" size="small" @click="deleteCustomer(tr)" icon="delete_forever"></vs-button>
+                    <vs-button radius color="danger" size="small" @click="deleteCustomer(tr)" icon="delete_forever"></vs-button>
                 </vs-td>
             </vs-tr>
         </template>
@@ -177,7 +177,6 @@ export default {
   },
   data() {
     return {
-      branchId: this.$store.state.getBranchId,
       statusCustomer: this.$store.state.model.customer.status,
       genderCustomer: this.$store.state.model.students.gender,
       customerGetInfo: {},
@@ -193,7 +192,10 @@ export default {
     };
   },
   computed: {
-    ...mapState('customers', ['customers', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
+    ...mapState('customers', ['customers', 'pagination', 'searchTerm', 'order', 'views', 'needReload']),
+    branchId(){
+      return this.$store.state.getBranchId;
+    }
   },
   methods: {
     getInfoCustomer(id, popup) {
@@ -327,7 +329,13 @@ export default {
   },
   destroyed() {
     this.$store.dispatch('customers/updateNeedReload', false);
-  }
+  },
+  watch: {
+    branchId(){
+      this.getData();
+      this.$store.dispatch('customers/updateNeedReload', true);
+    }
+  },
 };
 </script>
 

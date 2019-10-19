@@ -81,8 +81,8 @@
 
                     <vs-td v-if="views.action.viewable" class="d-flex-span">
                         <vs-button color="primary" size="small" @click="editRoom(tr)" title="Chi tiết phòng học"
-                                   class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
-                        <vs-button color="danger" size="small" @click="deleteRoom(tr)" icon="delete_forever"></vs-button>
+                                   class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"><i class="feather icon-edit"></i></vs-button>
+                        <vs-button radius color="danger" size="small" @click="deleteRoom(tr)" icon="delete_forever"></vs-button>
                     </vs-td>
                 </vs-tr>
             </template>
@@ -132,7 +132,10 @@ export default {
     };
   },
   computed: {
-    ...mapState('rooms', ['rooms', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
+    ...mapState('rooms', ['rooms', 'pagination', 'searchTerm', 'order', 'views', 'needReload']),
+    branchId(){
+      return this.$store.state.getBranchId;
+    }
   },
   created() {
     this.getData();
@@ -154,7 +157,7 @@ export default {
       });
     },
     roomsAlert(room){
-      this.$http.delete('branches/'+ this.$route.params.branch + '/rooms/' + room).then( () => {
+      this.$http.delete('branches/'+ this.branchId + '/rooms/' + room).then( () => {
         this.$vs.notify({
           color:'success',
           title:'Xóa chi nhánh',
@@ -184,7 +187,7 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
+      thisIns.$vs.loading({color: '#1E6DB5', text: 'Loading...'});
       this.$http.get('branches/' + this.$route.params.branch + '/rooms', {
         params: {
           page: page,
@@ -242,7 +245,13 @@ export default {
   },
   destroyed() {
     this.$store.dispatch('rooms/updateNeedReload', false);
-  }
+  },
+  watch: {
+    branchId(){
+      this.$router.push('/settings/branches');
+      this.$store.dispatch('rooms/updateNeedReload', true);
+    }
+  },
 };
 </script>
 

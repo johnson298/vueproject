@@ -114,10 +114,10 @@
 
                 <vs-td v-if="views.action.viewable" class="d-flex-span">
                     <router-link tag="button" :to="`/courses/${tr.id}`"
-                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small">
+                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small">
                     <i class="feather icon-eye"></i></router-link>
-                    <vs-button color="primary" size="small" @click="detailCourse(tr)" class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
-                    <vs-button color="danger" size="small" @click="deleteCourse(tr)" icon="delete_forever"></vs-button>
+                    <vs-button radius color="primary" size="small" @click="detailCourse(tr)" class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
+                    <vs-button radius color="danger" size="small" @click="deleteCourse(tr)" icon="delete_forever"></vs-button>
                 </vs-td>
             </vs-tr>
         </template>
@@ -177,12 +177,15 @@ export default {
   },
   methods: {
     detailCourse(course){
-      this.editCourseSidebar = true;
       var vm = this;
+      vm.$vs.loading({color: '#1E6DB5', text: 'Loading...'});
       this.$http.get(`branches/${this.branchId}/courses/${course.id}`).then(function (response) {
         if(response.data.data.id){
           vm.coursesGetInfo = response.data.data;
         }
+      }).finally(function () {
+        vm.editCourseSidebar = true;
+        vm.$vs.loading.close();
       });
     },
     deleteCourse(course){
@@ -225,7 +228,7 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
+      thisIns.$vs.loading({color: '#1E6DB5', text: 'Loading...'});
       this.$http.get(`branches/${this.branchId}/courses`, {
         params: {
           page: page,

@@ -87,10 +87,10 @@
             <router-link
                     tag="button"
                     :to="'/settings/branches/' + tr.id +'/rooms'"
-                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-eye"></i></router-link>
-              <vs-button color="primary" size="small" @click="detailBranches(tr)"
+                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"><i class="feather icon-eye"></i></router-link>
+            <vs-button radius color="primary" size="small" @click="detailBranches(tr)"
                          class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
-            <vs-button color="danger" size="small" @click="deleteBranches(tr)" icon="delete_forever"></vs-button>
+            <vs-button radius color="danger" size="small" @click="deleteBranches(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>
       </template>
@@ -144,10 +144,13 @@ export default {
   },
   methods: {
     detailBranches(branches){
-      this.editBranchesSidebar = true;
       var vm = this;
+      vm.$vs.loading({color: '#1E6DB5', text: 'Loading...'});
       this.$http.get('branches/' + branches.id).then(function (response) {
         vm.branchesGetInfo = response.data.data;
+      }).finally(function () {
+        vm.editBranchesSidebar = true;
+        vm.$vs.loading.close();
       });
     },
     deleteBranches(branches){
@@ -191,7 +194,7 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
+      thisIns.$vs.loading({color: '#1E6DB5', text: 'Loading...'});
       this.$http.get('branches', {
         params: {
           page: page,

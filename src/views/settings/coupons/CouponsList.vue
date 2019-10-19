@@ -157,10 +157,13 @@ export default {
   },
   methods: {
     getIdCoupon(id) {
-      this.editCouponSidebar = true;
       var vm = this;
+      vm.$vs.loading({color: '#1E6DB5', text: 'Loading...'});
       this.$http.get('coupons/' + id).then(function (response) {
         vm.couponGetInfo = response.data.data;
+      }).finally(function () {
+        vm.editCouponSidebar = true;
+        vm.$vs.loading.close();
       });
     },
     deleteCoupon(coupon){
@@ -205,7 +208,7 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
+      thisIns.$vs.loading({color: '#1E6DB5', text: 'Loading...'});
       this.$http.get('coupons', {
         params: {
           page: page,
