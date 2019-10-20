@@ -52,11 +52,11 @@ const router = new Router({
           component: () => import("./views/employees/DetailEmployee.vue"),
           meta: {
             breadcrumb: [
-              { title: 'Chi tiết nhân viên', url: '/'},
-              { title: 'Nhân viên', url: '/employees' },
-              { title: 'Chi tiết nhân viên', active: true  },
+              { title: "Chi tiết nhân viên", url: "/" },
+              { title: "Nhân viên", url: "/employees" },
+              { title: "Chi tiết nhân viên", active: true }
             ],
-            pageTitle: 'Chi tiết nhân viên'
+            pageTitle: "Chi tiết nhân viên"
           },
           children: [
             {
@@ -113,17 +113,18 @@ const router = new Router({
           component: () => import("./views/students/DetailStudent.vue"),
           meta: {
             breadcrumb: [
-              { title: 'Chi tiết học viên', url: '/'},
-              { title: 'Học viên', url: '/students' },
-              { title:  'Chi tiết học viên',active: true},
+              { title: "Chi tiết học viên", url: "/" },
+              { title: "Học viên", url: "/students" },
+              { title: "Chi tiết học viên", active: true }
             ],
-            pageTitle: 'Chi tiết học viên'
+            pageTitle: "Chi tiết học viên"
           },
           children: [
             {
-              path: '',
-              name: 'infoStudent',
-              component: () => import('./views/students/infomation/StudentInfo.vue'),
+              path: "",
+              name: "infoStudent",
+              component: () =>
+                import("./views/students/infomation/StudentInfo.vue"),
               meta: {
                 breadcrumb: [{ title: "Thông tin học viên", url: "/" }],
                 pageTitle: "Thông tin học viên"
@@ -168,8 +169,7 @@ const router = new Router({
         {
           path: "/programs/:program/lessons",
           name: "coursesOnline",
-          component: () =>
-            import("./views/programs/coursesOnline/LessonList.vue"),
+          component: () => import("./views/programs/lessons/LessonList.vue"),
           meta: {
             breadcrumb: [{ title: "Khóa học online", url: "/" }],
             pageTitle: "Khóa học online"
@@ -201,11 +201,11 @@ const router = new Router({
                 import("./views/settings/branches/DataListListView.vue"),
               meta: {
                 breadcrumb: [
-                  { title: 'Cài đặt chi nhánh', url: '/'},
-                  { title: 'Cài đặt', url: '/settings' },
-                  { title:  'Chi nhánh',active: true},
+                  { title: "Cài đặt chi nhánh", url: "/" },
+                  { title: "Cài đặt", url: "/settings" },
+                  { title: "Chi nhánh", active: true }
                 ],
-                pageTitle: 'Cài đặt chi nhánh'
+                pageTitle: "Cài đặt chi nhánh"
               }
             },
             {
@@ -215,12 +215,12 @@ const router = new Router({
                 import("./views/settings/branches/rooms/BranchRooms.vue"),
               meta: {
                 breadcrumb: [
-                  { title: 'Chi tiết phòng học', url: '/'},
-                  { title: 'Cài đặt', url: '/settings' },
-                  { title: 'Chi nhánh', url: '/settings/branches' },
-                  { title:  'Phòng học',active: true},
+                  { title: "Chi tiết phòng học", url: "/" },
+                  { title: "Cài đặt", url: "/settings" },
+                  { title: "Chi nhánh", url: "/settings/branches" },
+                  { title: "Phòng học", active: true }
                 ],
-                pageTitle: 'Chi tiết phòng học'
+                pageTitle: "Chi tiết phòng học"
               }
             },
             {
@@ -230,11 +230,11 @@ const router = new Router({
                 import("./views/settings/coupons/CouponsList.vue"),
               meta: {
                 breadcrumb: [
-                  { title: 'Khuyến mại', url: '/'},
-                  { title: 'Cài đặt', url: '/settings' },
-                  { title:  'Khuyến mại',active: true},
+                  { title: "Khuyến mại", url: "/" },
+                  { title: "Cài đặt", url: "/settings" },
+                  { title: "Khuyến mại", active: true }
                 ],
-                pageTitle: 'Khuyến mại'
+                pageTitle: "Khuyến mại"
               }
             }
           ]
@@ -268,37 +268,36 @@ const router = new Router({
                 import("./views/courses/statistic/StatisticCourse.vue"),
               meta: {
                 breadcrumb: [
-                  { title: 'Thống kê lớp học', url: '/'},
-                  { title: 'Lớp học', url: '/courses' },
-                  { title:  'Thống kế lớp học',active: true},
-
+                  { title: "Thống kê lớp học", url: "/" },
+                  { title: "Lớp học", url: "/courses" },
+                  { title: "Thống kế lớp học", active: true }
                 ],
-                pageTitle: 'Thống kê lớp học'
-              },
+                pageTitle: "Thống kê lớp học"
+              }
             },
             {
-              path: 'students',
-              name: 'studentregisters',
-              component: () => import('./views/courses/students/ListStudent.vue'),
+              path: "students",
+              name: "studentregisters",
+              component: () =>
+                import("./views/courses/students/ListStudent.vue"),
               meta: {
                 breadcrumb: [
-                  { title: 'Học viên trong lớp', url: '/'},
-                  { title: 'Lớp học', url: '/courses' },
-                  { title:  'Học viên trong lớp',active: true},
+                  { title: "Học viên trong lớp", url: "/" },
+                  { title: "Lớp học", url: "/courses" },
+                  { title: "Học viên trong lớp", active: true }
                 ],
-                pageTitle: 'Học viên trong lớp'
-              },
+                pageTitle: "Học viên trong lớp"
+              }
             },
             {
-              path: 'teachers',
-              name: 'teacherregisters',
-              component: () => import('./views/courses/teachers/GetDataTeachers.vue'),
+              path: "teachers",
+              name: "teacherregisters",
+              component: () =>
+                import("./views/courses/teachers/GetDataTeachers.vue"),
               meta: {
-                breadcrumb: [
-                  { title: 'Giáo viên viên trong lớp', url: '/'}
-                ],
-                pageTitle: 'Giáo viên trong lớp'
-              },
+                breadcrumb: [{ title: "Giáo viên viên trong lớp", url: "/" }],
+                pageTitle: "Giáo viên trong lớp"
+              }
             },
             {
               path: "attendances",
@@ -321,29 +320,29 @@ const router = new Router({
               }
             },
             {
-              path: 'calendar',
-              name: 'calendar',
-              component: () => import('./views/courses/calendar/SimpleCalendar.vue'),
+              path: "calendar",
+              name: "calendar",
+              component: () =>
+                import("./views/courses/calendar/SimpleCalendar.vue"),
               meta: {
-                breadcrumb: [
-                  { title: 'Lịch học', url: '/'}
-                ],
-                pageTitle: 'Lịch học'
-              },
+                breadcrumb: [{ title: "Lịch học", url: "/" }],
+                pageTitle: "Lịch học"
+              }
             },
             {
-              path: 'history',
-              name: 'historycourse',
-              component: () => import('./views/courses/history/HistoryCourse.vue'),
+              path: "history",
+              name: "historycourse",
+              component: () =>
+                import("./views/courses/history/HistoryCourse.vue"),
               meta: {
                 breadcrumb: [
-                  { title: 'Lịch sử lớp học', url: '/'},
-                  { title: 'Lớp học', url: '/courses' },
-                  { title:  'Lịch sử lớp học',active: true},
+                  { title: "Lịch sử lớp học", url: "/" },
+                  { title: "Lớp học", url: "/courses" },
+                  { title: "Lịch sử lớp học", active: true }
                 ],
-                pageTitle: 'Lịch sử lớp học'
-              },
-            },
+                pageTitle: "Lịch sử lớp học"
+              }
+            }
           ]
         },
         // THU HỌC PHÍ
