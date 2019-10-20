@@ -1,28 +1,26 @@
 <template>
-        <vx-card-custom title="Lớp học" class="mb-base">
-                <div class="mt-5">
-                        <chartjs-component-pie-chart :height=250 :data="data" :options="options"></chartjs-component-pie-chart>
-                </div>
-        </vx-card-custom>
+  <vx-card-custom title="Lớp học" class="mb-base">
+    <div class="mt-5">
+      <chartjs-component-pie-chart v-if="classes" :height="250" :data="classes" :options="options"></chartjs-component-pie-chart>
+    </div>
+  </vx-card-custom>
 </template>
 
 <script>
 import ChartjsComponentPieChart from "../ChartjsComponentPieChart.vue";
 export default {
+  props: {
+    classes: {
+      required: true,
+      default: {}
+    }
+  },
   data() {
     return {
-      data: {
-        labels: ["Chờ mở", 'Đang mở', "Đã hoàn thành", "Hủy"],
-        datasets: [{
-          label: "Biểu đồ lớp học",
-          backgroundColor: ["#1E6DB5", "#28C76F", "#EA5455", "#FF9F43"],
-          data: [2478, 5267, 734, 784]
-        }]
-      },
       options: {
         title: {
           display: true,
-          text: 'Biểu đồ lớp học'
+          text: "Biểu đồ lớp học"
         }
       }
     };

@@ -83,10 +83,10 @@
                         <router-link
                                 tag="button"
                                 :to="'/employees/' + tr.user.id "
-                                class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-eye"></i></router-link>
+                                class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"><i class="feather icon-eye"></i></router-link>
                         <vs-button color="primary" size="small" @click="editTeacher(tr)"
-                                   class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
-                        <vs-button color="danger" size="small" @click="deleteTeacher(tr)" icon="delete_forever"></vs-button>
+                                   class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"><i class="feather icon-edit"></i></vs-button>
+                        <vs-button radius color="danger" size="small" @click="deleteTeacher(tr)" icon="delete_forever"></vs-button>
                     </vs-td>
                 </vs-tr>
             </template>

@@ -1,16 +1,16 @@
 <script>
-import { Pie } from 'vue-chartjs';
+import { Pie } from "vue-chartjs";
 
 export default {
   extends: Pie,
   props: {
     data: {
-      type: Object,
       default: null,
+      required: true
     },
     options: {
       type: Object,
-      default: null,
+      default: null
     }
   },
   mounted() {

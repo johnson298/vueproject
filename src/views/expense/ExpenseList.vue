@@ -102,7 +102,7 @@
                 </vs-td>
 
                 <vs-td v-if="views.action.viewable" class="d-flex-span">
-                    <vs-button color="danger" size="small" @click="deleteExpense(tr)" icon="delete_forever"></vs-button>
+                    <vs-button radius color="danger" size="small" @click="deleteExpense(tr)" icon="delete_forever"></vs-button>
                 </vs-td>
             </vs-tr>
         </template>

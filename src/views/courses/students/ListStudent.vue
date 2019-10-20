@@ -116,11 +116,11 @@
             <router-link
               tag="button"
               :to="'/students/' + tr.student.id "
-              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"
+              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"
             >
               <i class="feather icon-eye"></i>
             </router-link>
-            <vs-button color="danger" size="small" @click="deleteStudent(tr)" icon="delete_forever"></vs-button>
+            <vs-button radius color="danger" size="small" @click="deleteStudent(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>
       </template>
