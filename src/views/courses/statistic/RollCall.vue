@@ -1,11 +1,10 @@
 <template>
-<VxCardCustom title="Điểm danh">
+<vx-card title="Điểm danh">
     <e-charts :options="line" theme="ovilia-green" ref="line" auto-resize />
-</VxCardCustom>
+</vx-card>
 </template>
 
 <script>
-import VxCardCustom from './vx-card/VxCardCustom.vue';
 import ECharts from 'vue-echarts/components/ECharts';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legend';
@@ -105,8 +104,7 @@ export default {
     };
   },
   components: {
-    ECharts,
-    VxCardCustom
+    ECharts
   }
 };
 </script>

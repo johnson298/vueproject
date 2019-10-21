@@ -139,6 +139,9 @@ export default {
   computed: {
     ...mapState('expense', ['expense', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
+  created() {
+    this.getData();
+  },
   methods: {
     deleteExpense(expense) {
       this.$vs.dialog({
@@ -182,7 +185,7 @@ export default {
     getData(page = 1) {
       const thisIns = this;
       thisIns.$vs.loading({
-        color: '#7367F0',
+        color: '#1E6DB5',
         text: 'Loading...'
       });
       this.$http.get('invoices?type=2', {

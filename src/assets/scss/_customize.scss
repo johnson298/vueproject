@@ -212,7 +212,8 @@ body {
 .hover\:bg-primary:hover,
 .dropdown-custom .vs-dropdown--menu--after,
 .vs-radio-primary .vs-radio--circle,
-#simple-calendar-app .theme-default .cv-day.today .cv-day-number {
+#simple-calendar-app .theme-default .cv-day.today .cv-day-number,
+.vs-button-primary.vs-button-line .vs-button-linex {
   background-color: $primary !important;
 }
 

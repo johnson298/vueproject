@@ -1,5 +1,5 @@
 <template>
-  <vx-card-custom title="Nhân viên thêm mới">
+  <vx-card-custom title="Nhân viên thêm mới gần nhất">
     <vs-table class="my-5" stripe :data="usersLatest">
       <template style="padding-left: 10px" slot="thead">
         <vs-th>ẢNH</vs-th>

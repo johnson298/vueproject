@@ -82,6 +82,7 @@ export default {
   },
   data() {
     return {
+      employeeId: this.$route.params.employee,
       language: "vi",
       languages: lang,
       isNavOpen: true,
@@ -132,7 +133,7 @@ export default {
 
     userInfo() {
       let vm = this;
-      this.$http.get('users/' + this.$route.params.employee).then(function (response) {
+      this.$http.get('users/' + this.employeeId).then(function (response) {
         vm.user = response.data.data;
       }).catch(() => {
         this.$router.push('/pages/error-404');
@@ -150,6 +151,9 @@ export default {
       Object.keys(this.user).map(key => {
         if (key != 'metadata') {
           formData.append(key, this.user[key]);
+        }
+        if(!this.user[key]){
+          formData.append(key, '');
         }
       });
       if (typeof this.user.avatar === 'string') {

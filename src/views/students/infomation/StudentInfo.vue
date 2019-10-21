@@ -149,6 +149,9 @@ export default {
         if (key != 'metadata') {
           formData.append(key, this.student[key]);
         }
+        if(!this.student[key]){
+          formData.append(key, '');
+        }
       });
       if (typeof this.student.avatar === 'string') {
         formData.append('avatar', '');

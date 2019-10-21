@@ -88,7 +88,7 @@
     </VuePerfectScrollbar>
 
     <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
-        <vs-button class="mr-6 vs-con-loading__container" @click="createEmployee" :disabled="errors.any()" ref="addButton" id="button-with-loading">Thêm</vs-button>
+        <vs-button class="mr-6 vs-con-loading__container" @click="createEmployee" ref="addButton" id="button-with-loading">Thêm</vs-button>
         <vs-button type="border" color="danger" @click="initValues(); isSidebarActiveLocal = false">Hủy</vs-button>
     </div>
 </vs-sidebar>
@@ -220,7 +220,7 @@ export default {
           });
           this.callback();
           this.initValues();
-          this.$emit('closePopupAdd',false);
+          this.$emit('closeSidebar',false);
         })
         .catch((error) => {
           if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {

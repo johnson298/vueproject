@@ -3,7 +3,7 @@ export default [
     url: "/",
     name: "Tổng quan",
     slug: "home",
-    icon: "HomeIcon",
+    iconFontAwesome: "home",
   },
   {
     name: "user",
@@ -13,13 +13,13 @@ export default [
     url: "/employees",
     name: `Nhân viên`,
     slug: "employees",
-    icon: "UsersIcon",
+    iconFontAwesome: "user-tie"
   },
   {
     url: "/students",
     name: "Học viên",
     slug: "students",
-    icon: "UserIcon",
+    iconFontAwesome: "users",
   },
   {
     name: "programs",
@@ -29,13 +29,13 @@ export default [
     url : "/courses",
     name: "Lớp học",
     slug : "course",
-    icon : "PackageIcon"
+    iconFontAwesome: "graduation-cap",
   },
   {
     url: "/programs",
     name: "Chương trình học",
     slug: "programs",
-    icon: "MenuIcon",
+    iconFontAwesome: "layer-group",
   },
   {
     header: "Thu chi"
@@ -44,19 +44,19 @@ export default [
     url: "/invoices/revenues",
     name: "Thu học phí",
     slug: "revenues",
-    icon: "CreditCardIcon",
+    iconFontAwesome: "file-invoice-dollar",
   },
   {
     url: "/invoices/expenditures",
     name: "Chi tiêu",
     slug: "expenditures",
-    icon: "CreditCardIcon",
+    iconFontAwesome: "hand-holding-usd",
   },
   {
     url: "/reports",
     name: "Báo cáo",
     slug: "invoices",
-    icon: "MessageCircleIcon",
+    iconFontAwesome: "list-alt",
   },
   {
     name: "marketing",
@@ -66,13 +66,13 @@ export default [
     url: "/customers",
     name: "Khách hàng",
     slug: "customers",
-    icon: "UsersIcon",
+    iconFontAwesome: "user-friends"
   },
   {
     url: "/campaign",
     name: "Chiến dịch",
     slug: "campaign",
-    icon: "ActivityIcon",
+    iconFontAwesome: "handshake",
   },
   {
     name: "setting",
@@ -82,6 +82,6 @@ export default [
     url: "/settings",
     name: "Cài đặt",
     slug: "settings",
-    icon: "SettingsIcon",
+    iconFontAwesome: "tools"
   },
 ];

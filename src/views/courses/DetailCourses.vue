@@ -11,42 +11,42 @@
                         <li class="vs-tabs--li">
                             <router-link
                                 tag="button"
-                                :to="`/courses/${$route.params.course}`"
+                                :to="`/courses/${idCourse}`"
                                 class="vs-tabs--btn"
                                 >Thống kê</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
                                     tag="button"
-                                    :to="`/courses/${$route.params.course}/calendar`"
+                                    :to="`/courses/${idCourse}/calendar`"
                                     class="vs-tabs--btn"
                             >Lịch học</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
                                 tag="button"
-                                :to="`/courses/${$route.params.course}/students`"
+                                :to="`/courses/${idCourse}/students`"
                                 class="vs-tabs--btn"
                                 >Danh sách học viên</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
                                 tag="button"
-                                :to="`/courses/${$route.params.course}/teachers`"
+                                :to="`/courses/${idCourse}/teachers`"
                                 class="vs-tabs--btn"
                                 >Danh sách giáo viên</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
                                     tag="button"
-                                    :to="`/courses/${$route.params.course}/attendances`"
+                                    :to="`/courses/${idCourse}/attendances`"
                                     class="vs-tabs--btn"
                             >Điểm danh</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
                                 tag="button"
-                                :to="`/courses/${$route.params.course}/history`"
+                                :to="`/courses/${idCourse}/history`"
                                 class="vs-tabs--btn"
                                 >Lịch sử</router-link>
                         </li>
@@ -74,6 +74,7 @@ import GetDataTeachers from './teachers/GetDataTeachers.vue';
 export default {
   data() {
     return {
+      idCourse: this.$route.params.course,
       isNavOpen: true,
       wasSidebarOpen: null,
       course: {},

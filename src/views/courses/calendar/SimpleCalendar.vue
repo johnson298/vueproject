@@ -104,7 +104,9 @@ export default {
   },
   methods: {
     getData() {
-      this.calendarStudy = [];
+      let vm = this;
+      vm.calendarStudy = [];
+      vm.$vs.loading({color: '#1E6DB5', text: 'Loading...'});
       this.$http.get(`branches/${this.branch_id}/courses/${this.course_id}/calendar`)
         .then(response => {
           const listData = response.data.data;
@@ -114,7 +116,7 @@ export default {
             return a.join(':');
           };
           for (let key in listData) {
-            this.calendarStudy.push({
+            vm.calendarStudy.push({
               title: `${listData[key].title} (${formatTime(listData[key].start_at)}-${formatTime(listData[key].end_at)})`,
               startDate: listData[key].date,
               endDate: listData[key].date,
@@ -123,6 +125,8 @@ export default {
               label: 'business'
             });
           }
+        }).finally(function () {
+          vm.$vs.loading.close();
         });
     },
     updateMonth(val) {

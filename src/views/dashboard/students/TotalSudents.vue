@@ -1,5 +1,5 @@
 <template>
-    <vx-card-custom title="Học viên" class="mb-base">
+    <vx-card title="Học viên" class="mb-base">
         <template slot="actions">
             <vs-dropdown vs-trigger-click class="cursor-pointer">
                 <small class="flex cursor-pointer" >Chọn biểu đồ <feather-icon icon='ChevronDownIcon' svgClasses='h-4 w-4' class='ml-1'></feather-icon></small>
@@ -13,7 +13,7 @@
         <div class="mt-5">
             <chartjs-component-line-chart :height=250 :data="month.data" :options="month.options"></chartjs-component-line-chart>
         </div>
-    </vx-card-custom>
+    </vx-card>
 </template>
 <script>
 import ChartjsComponentLineChart from "../ChartjsComponentLineChart.vue";
