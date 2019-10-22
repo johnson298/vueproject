@@ -26,7 +26,7 @@
     <div class="vx-row">
       <!-- LINE CHART -->
       <div class="vx-col w-full md:w-2/3 mb-base">
-        <TotalRevenueExpenditure />
+        <TotalRevenueExpenditure :money="totalMoney" />
       </div>
       <!-- RADIAL CHART -->
       <!-- {{ parseFloat(dataStatistics.money.revenues)*100/(parseFloat(dataStatistics.money.revenues) + parseFloat(dataStatistics.money.expenditures)) }} -->

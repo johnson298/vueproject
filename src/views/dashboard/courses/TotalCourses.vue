@@ -1,9 +1,9 @@
 <template>
-  <vx-card-custom title="Lớp học" class="mb-base">
+  <vx-card title="Lớp học" class="mb-base">
     <div class="mt-5">
       <chartjs-component-pie-chart v-if="classes" :height="250" :data="classes" :options="options"></chartjs-component-pie-chart>
     </div>
-  </vx-card-custom>
+  </vx-card>
 </template>
 
 <script>

@@ -102,7 +102,7 @@ export default {
   methods: {
     login() {
       let thisInt = this;
-      thisInt.$vs.loading({ color: '#7367F0', text: 'Signing in...' });
+      thisInt.$vs.loading({ color: '#1E6DB5', text: 'Signing in...' });
       const payload = {
         checkbox_remember_me: this.checkbox_remember_me,
         userDetails: {

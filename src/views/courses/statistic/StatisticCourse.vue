@@ -11,50 +11,29 @@
 
     <div class="mt-5">
        <vs-row>
-           <vs-col vs-w='6' class="pl-0">
-               <LearningProcess/>
-           </vs-col>
-           <vs-col vs-w='6' class="pl-0">
-               <ClassificationStudent/>
-           </vs-col>
-       </vs-row>
-    </div>
-   <div class="mt-5">
-       <vs-row class="mt-5">
-           <vs-col vs-w='6' class="pl-0">
-               <Gender/>
-           </vs-col>
-           <vs-col vs-w='6' class="pr-0">
+           <vs-col vs-w='8' class="pl-0">
                <RollCall/>
            </vs-col>
+           <vs-col vs-w='4' class="pl-0">
+               <LearningProcess/>
+           </vs-col>
        </vs-row>
-   </div>
-    <div class="mt-5">
-        <vs-row>
-            <TableStudent/>
-        </vs-row>
     </div>
 </div>
 </template>
 
 <script>
-import Gender from './Gender.vue';
 import RollCall from './RollCall.vue';
 import LearningProcess from './LearningProcess.vue';
 import NumberOfPupils from './NumberOfPupils.vue';
 import NumberOffDay from './NumberOffDay.vue';
-import ClassificationStudent from  './ClassificationStudent.vue';
-import TableStudent from './TableStudent.vue';
 
 export default {
   components: {
-    Gender,
     RollCall,
     LearningProcess,
     NumberOfPupils,
-    NumberOffDay,
-    ClassificationStudent,
-    TableStudent
+    NumberOffDay
   }
 };
 </script>

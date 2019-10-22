@@ -70,19 +70,7 @@ export default {
     }
   },
   created() {
-    let vm = this;
-    this.$http.get(`/students/${this.student_id}`).then(function (response) {
-      vm.employeeInfo = response.data.data;
-    }).catch(() => {
-      this.$router.push('/pages/error-404');
-      this.$vs.notify({
-        title: 'Error!',
-        text: 'Có lỗi xảy ra',
-        iconPack: 'feather',
-        icon: 'fa fa-lg fa-exclamation-triangle',
-        color: 'danger'
-      });
-    });
+    this.getData();
   },
   filters: {
     trim: function (string) {
@@ -91,7 +79,28 @@ export default {
 
   },
   methods: {
-
+    getData(){
+        let vm = this;
+        vm.$vs.loading({
+            color: "#1E6DB5",
+            text: "Loading..."
+        });
+        this.$http.get(`/students/${this.student_id}`).then(function (response) {
+        vm.employeeInfo = response.data.data;
+        }).catch(() => {
+        this.$router.push('/pages/error-404');
+        this.$vs.notify({
+            title: 'Error!',
+            text: 'Có lỗi xảy ra',
+            iconPack: 'feather',
+            icon: 'fa fa-lg fa-exclamation-triangle',
+            color: 'danger'
+        });
+        })
+        .finally(function() {
+            vm.$vs.loading.close();
+        });
+    },
     mounted() {
       this.wasSidebarOpen = this.$store.state.reduceButton;
       this.$store.commit('TOGGLE_REDUCE_BUTTON', false);

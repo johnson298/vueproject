@@ -112,8 +112,8 @@
             <router-link
                     tag="button"
                     :to="'/campaign/1111' "
-                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-eye"></i></router-link>
-            <vs-button color="danger" size="small" @click="deleteCampaign(tr)" icon="delete_forever"></vs-button>
+                    class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small vs-radius"><i class="feather icon-eye"></i></router-link>
+            <vs-button radius color="danger" size="small" @click="deleteCampaign(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>
       </template>

@@ -147,6 +147,9 @@ export default {
   computed: {
     ...mapState('invoices', ['invoices', 'pagination', 'searchTerm', 'order', 'views', 'needReload'])
   },
+  created() {
+    this.getData();
+  },
   methods: {
     deleteInvoice(invoice) {
       this.$vs.dialog({
@@ -190,7 +193,7 @@ export default {
     getData(page = 1) {
       const thisIns = this;
       thisIns.$vs.loading({
-        color: '#7367F0',
+        color: '#1E6DB5',
         text: 'Loading...'
       });
       this.$http.get('invoices?type=1', {

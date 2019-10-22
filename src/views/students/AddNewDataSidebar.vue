@@ -16,12 +16,10 @@
                     <!--Email-->
                     <div>
                         <vs-input label="Email *" name="email" v-model="student.email" class="mt-5 w-full" v-validate="'required|email'" autocomplete="email" placeholder="Demo@gmail.com" />
-                        <small class="text-danger">{{ errors.first('email') }}</small>
                     </div>
                     <!--Password-->
                     <div>
                         <vs-input label="Mật khẩu *" name="password" type="password" v-model="student.password" class="mt-5 w-full" v-validate="'required|min:8'" autocomplete="new-password" placeholder="Nhập mật khẩu (8 ký tự)" />
-                        <small class="text-danger">{{ errors.first('password') }}</small>
                     </div>
                     <!--Nhập lại mật khẩu-->
                     <div>
@@ -33,7 +31,6 @@
                     <!-- NAME -->
                     <div>
                         <vs-input label="Tên học viên *" name="name" v-model="student.name" class="mt-5 w-full" v-validate="'required'" placeholder="Nhập tên học viên" />
-                        <small class="text-danger">{{ errors.first('name') }}</small>
                     </div>
                     <!--địa chỉ-->
                     <div>
@@ -84,7 +81,7 @@
     </VuePerfectScrollbar>
 
     <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
-        <vs-button class="mr-6 vs-con-loading__container" @click="createStudent" :disabled="errors.any()" ref="addButton" id="button-with-loading">thêm</vs-button>
+        <vs-button class="mr-6 vs-con-loading__container" @click="createStudent" ref="addButton" id="button-with-loading">thêm</vs-button>
         <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">hủy</vs-button>
     </div>
 </vs-sidebar>
@@ -217,6 +214,7 @@ export default {
           });
           this.callback();
           this.initValues();
+          this.$emit('closePopupAdd', false);
         })
         .catch((error) => {
           if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {

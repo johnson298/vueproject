@@ -229,7 +229,7 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({ color: "#7367F0", text: "Loading..." });
+      thisIns.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
       this.$http
         .get(
           `branches/${this.branch_id}/courses/${this.$route.params.course}/registers`,

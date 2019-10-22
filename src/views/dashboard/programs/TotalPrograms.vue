@@ -1,20 +1,10 @@
-<!-- =========================================================================================
-    File Name: ChartBarChart.vue
-    Description: Create bar chart
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
-
 <template>
-    <vx-card-custom title="Học viên" class="mb-base" code-toggler>
+    <vx-card title="Học viên" class="mb-base" code-toggler>
 
         <div class="mt-5">
             <chartjs-component-bar-chart :height=250 :data="data" :options="options"></chartjs-component-bar-chart>
         </div>
-    </vx-card-custom>
+    </vx-card>
 </template>
 
 <script>

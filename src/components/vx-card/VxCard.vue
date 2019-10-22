@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-    File Name: VxCard.vue
-    Description: Card Component
-    Component Name: VxCard
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
  <template>
     <div class="vx-card" ref="card" :class="[
         {'overflow-hidden': tempHidden},
@@ -19,7 +9,7 @@
 
             <!-- card title -->
             <div class="vx-card__title">
-                <h4 v-if="this.$props.title" :style="titleStyles" :class="titleClasses">{{ title }}</h4>
+                <h4 :style="titleStyles" :class="titleClasses">{{ title }}</h4>
                 <h6 v-if="this.$props.subtitle" :style="subtitleStyles" :class="subtitleClasses">{{ subtitle }}</h6>
             </div>
 
@@ -73,7 +63,10 @@ import _color from '@/assets/utils/color.js';
 export default{
   name: 'vx-card',
   props: {
-    title: String,
+    title: {
+      type: String,
+      default: ''
+    },
     subtitle: String,
     actionButtons: {
       type: Boolean,

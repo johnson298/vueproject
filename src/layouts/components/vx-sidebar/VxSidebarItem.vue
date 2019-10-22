@@ -4,6 +4,9 @@
             <vs-icon v-if="!featherIcon" :icon-pack="iconPack" :icon="icon">
             </vs-icon>
             <feather-icon :icon="icon" :class="{'w-3 h-3': iconSmall}" v-else></feather-icon>
+            <span v-if="iconAwesome" class="feather-icon select-none relative awesome-sidebar">
+              <font-awesome-icon :icon="iconAwesome"/>
+            </span>
             <slot></slot>
         </router-link>
         <a v-else :target="target" :href="href">
@@ -19,6 +22,10 @@
 export default {
   name: 'VxSidebarItem',
   props: {
+    iconAwesome: {
+      default: "",
+      type: String
+    },
     icon: {
       default: "",
       type: String
@@ -81,3 +88,9 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  .main-menu-sidebar .vs-sidebar--item a span.awesome-sidebar {
+    margin-left: -18px;
+    font-size: 18px;
+  }
+</style>
