@@ -147,6 +147,10 @@ body {
   width: 1024px !important;
 }
 
+.popup-custom-968 > .vs-popup {
+  width: 968px !important;
+}
+
 .popup-custom-768 > .vs-popup {
   width: 768px !important;
 }
@@ -269,5 +273,7 @@ a {
 .vs-tabs-primary button:not(:disabled):hover {
   color: #fff !important;
 }
-
+.vs--searchable .vs__dropdown-toggle {
+  height: 38px !important;
+}
 /* END CUSTOM COLOR */

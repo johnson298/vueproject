@@ -141,6 +141,16 @@ const router = new Router({
               }
             },
             {
+              path: "invoices",
+              name: "invoicesStudent",
+              component: () =>
+                import("./views/students/history/HistoryInvoice.vue"),
+              meta: {
+                breadcrumb: [{ title: "Lịch sử đóng tiền", url: "/" }],
+                pageTitle: "Lịch sử đóng tiền"
+              }
+            },
+            {
               path: "courses",
               name: "coursesStudent",
               component: () =>
@@ -322,8 +332,7 @@ const router = new Router({
             {
               path: "calendar",
               name: "calendar",
-              component: () =>
-                import("./views/courses/calendar/SimpleCalendar.vue"),
+              component: () => import("./views/courses/calendar/Calendars.vue"),
               meta: {
                 breadcrumb: [{ title: "Lịch học", url: "/" }],
                 pageTitle: "Lịch học"

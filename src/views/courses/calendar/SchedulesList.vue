@@ -1,11 +1,18 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    <add-new-data-sidebar
-      :isSidebarActive="addNewDataSidebar"
-      @closeSidebar="addNewDataSidebar = false"
+    <edit-calendar
+      v-if="editCalendar"
+      :active.sync="editCalendar"
       :callback="getData"
+      @closeEdit="editCalendar = $event"
+      :dataInfo="scheduleGetInfo"
     />
-
+    <add-calendar
+      v-if="addCalendar"
+      :active.sync="addCalendar"
+      :callback="getData"
+      @closeAdd="addCalendar = $event"
+    />
     <vs-table-custom
       :sst="true"
       ref="table"
@@ -13,7 +20,7 @@
       v-model="selected"
       @search="handleSearch"
       @sort="handleSort"
-      :data="users"
+      :data="calendarList"
       search
       id="table"
       maxItems="10"
@@ -50,7 +57,7 @@
             <div
               class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32"
             >
-              <span class="mr-2">Xem</span>
+              <span class="mr-2">Views</span>
               <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
             </div>
 
@@ -65,23 +72,14 @@
               </div>
             </vs-dropdown-menu>
           </vs-dropdown>
-
           <!-- ADD NEW -->
           <div
             class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary"
-            @click="addNewDataSidebar = true"
+            @click="addCalendar = true"
           >
-            <feather-icon icon="Upload" svgClasses="h-4 w-4" />
-            <span class="ml-2 text-base text-primary">Thêm nhân viên</span>
+            <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
+            <span class="ml-2 text-base text-primary">Thêm lịch học</span>
           </div>
-        </div>
-        <div class="import-file">
-          <vx-tooltip text="Thêm dữ liệu" position="top">
-            <label for="file-upload" class="custom-file-upload rounded-full mb-3 mr-2">
-              <i class="feather icon-upload-cloud"></i>
-            </label>
-            <input id="file-upload" type="file" />
-          </vx-tooltip>
         </div>
       </div>
 
@@ -93,163 +91,167 @@
           v-if="value.viewable"
         >{{ value.text }}</vs-th>
       </template>
-
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.code.viewable">
-            <p class="product-name font-medium">{{ tr.code }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.avatar.viewable">
-            <vs-avatar size="55px" :src="tr.avatar" :alt="tr.name" />
-          </vs-td>
-
           <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.name }}</p>
+            <p class="product-name">{{ tr.title }}</p>
           </vs-td>
 
-          <vs-td v-if="views.position.viewable">
-            <p class="product-name font-medium">
-              <vs-chip
-                :color="checkStatus(positions,tr.position)=='Giáo viên' ? 'primary'
-                      : checkStatus(positions,tr.position)=='Tư vấn' ? 'warning'
-                      : checkStatus(positions,tr.position)=='Kế toán' ? '#34495e'
-                      : checkStatus(positions,tr.position)=='Quản lý' ? 'success'
-                      : ''"
-              >{{ checkStatus(positions,tr.position) }}</vs-chip>
-            </p>
+          <vs-td v-if="views.joins.viewable">
+            <ul class="users-liked user-list">
+              <li v-for="(teachers, userIndex) in tr.joins" :key="userIndex">
+                <vx-tooltip
+                  :text="`${teachers.user.name} (${teachers.user.email})`"
+                  position="bottom"
+                >
+                  <vs-avatar
+                    :src="teachers.user.avatar"
+                    size="30px"
+                    class="border-2 border-white border-solid -m-1"
+                  ></vs-avatar>
+                </vx-tooltip>
+              </li>
+            </ul>
           </vs-td>
 
-          <vs-td v-if="views.email.viewable">
-            <p class="product-category">{{ tr.email }}</p>
+          <vs-td v-if="views.start_and_end.viewable">
+            <p>Từ {{ tr.start_at }}</p>
+            <p>Đến {{ tr.end_at }}</p>
           </vs-td>
 
-          <vs-td v-if="views.birthday.viewable">
-            <p class="product-category">{{ tr.birthday }}</p>
+          <vs-td v-if="views.date.viewable">
+            <p>Từ {{ tr.from_date }}</p>
+            <p>Đến {{ tr.to_date }}</p>
           </vs-td>
 
-          <vs-td v-if="views.phone.viewable">
-            <p class="product-category">{{ tr.phone }}</p>
+          <vs-td v-if="views.except_date.viewable">
+            <p class="product-category" v-for="item in tr.except_date" :key="item">{{ item }},&nbsp;</p>
           </vs-td>
 
-          <vs-td v-if="views.facebook.viewable">
-            <p class="product-category">
-              <a :href="tr.facebook" target="_blank">Link</a>
-            </p>
+          <vs-td v-if="views.weekdays.viewable">
+            <span
+              v-for="item in weekdays"
+              :key="item"
+            >{{ tr[item]? convertWeekdays(item) + ',' : '' }}</span>
           </vs-td>
 
-          <vs-td v-if="views.address.viewable">
-            <p class="product-category">{{ tr.address }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.status.viewable">
-            <vs-chip
-              :color="checkStatusFrom0(statusEmployee,tr.status)=='Hoạt động' ? 'success'
-                      : 'danger'"
-            >{{ checkStatusFrom0(statusEmployee,tr.status) }}</vs-chip>
-          </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
+          <vs-td v-if="views.note.viewable">
+            <p class="product-category">{{ tr.note }}</p>
           </vs-td>
 
           <vs-td v-if="views.created_at.viewable">
             <p class="product-category">{{ tr.created_at }}</p>
           </vs-td>
 
+          <vs-td v-if="views.updated_at.viewable">
+            <p class="product-category">{{ tr.updated_at }}</p>
+          </vs-td>
+
           <vs-td v-if="views.action.viewable" class="d-flex-span">
-            <router-link
-              tag="button"
-              :to="'/employees/' + tr.id "
-              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"
+            <vs-button
+              radius
+              color="primary"
+              size="small"
+              @click="detailSchedule(tr.id)"
+              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"
             >
-              <i class="feather icon-eye"></i>
-            </router-link>
+              <i class="feather icon-edit"></i>
+            </vs-button>
             <vs-button
               radius
               color="danger"
               size="small"
-              @click="deleteEmployee(tr)"
+              @click="deleteSchedule(tr)"
               icon="delete_forever"
             ></vs-button>
           </vs-td>
         </vs-tr>
       </template>
     </vs-table-custom>
-    <div class="con-vs-pagination vs-pagination-primary">
-      <nav class="vs-pagination--nav">
-        <paginate
-          :page-count="pagination.totalPages"
-          :page-range="3"
-          :margin-pages="2"
-          :active-class="'is-current'"
-          :container-class="'vs-pagination--ul'"
-          :page-class="'item-pagination vs-pagination--li'"
-          :prev-text="prev"
-          :next-text="next"
-          :click-handler="getData"
-          :value="pagination.currentPage"
-          ref="paginate"
-        />
-      </nav>
-    </div>
   </div>
 </template>
 
 <script>
-import AddNewDataSidebar from "./AddNewDataSidebar.vue";
+import EditCalendar from "./EditCalendar.vue";
+import AddCalendar from "./AddCalendar.vue";
 import { mapState } from "vuex";
 
 export default {
   components: {
-    AddNewDataSidebar
+    "edit-calendar": EditCalendar,
+    AddCalendar
   },
-  data() {
+  data: function() {
     return {
-      positions: this.$store.state.model.employees.positions,
-      activeConfirm: false,
+      addCalendar: false,
+      courseId: this.$route.params.course,
+      scheduleGetInfo: null,
+      editCalendar: false,
+      weekdays: [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday"
+      ],
       timer: null,
       selected: [],
-      isMounted: false,
-      addNewDataSidebar: false,
-      prev:
-        '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev"><i class="vs-icon notranslate icon-scale material-icons null">chevron_left</i></button>',
-      next:
-        '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-next"><i class="vs-icon notranslate icon-scale material-icons null">chevron_right</i></button>'
+      isMounted: false
     };
   },
   computed: {
-    ...mapState("employees", [
-      "users",
+    ...mapState("calendar", [
+      "calendarList",
       "pagination",
       "searchTerm",
       "order",
       "views",
       "needReload"
     ]),
-    statusEmployee() {
-      return this.$store.state.model.employees.status;
+    branchId() {
+      return this.$store.state.getBranchId;
     }
   },
   methods: {
-    deleteEmployee(user) {
+    detailSchedule(id) {
+      var vm = this;
+      vm.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
+      this.$http
+        .get(
+          `branches/${this.branchId}/courses/${this.courseId}/schedules/${id}`
+        )
+        .then(function(response) {
+          if (response.data.data.id) {
+            vm.scheduleGetInfo = response.data.data;
+          }
+        })
+        .finally(function() {
+          vm.editCalendar = true;
+          vm.$vs.loading.close();
+        });
+    },
+    deleteSchedule(sche) {
       this.$vs.dialog({
         type: "confirm",
         color: "danger",
-        title: `Xóa nhân viên`,
-        text: "Bạn có chắc muốn xóa " + user.name,
-        accept: this.employeeAlert,
-        parameters: [user.id]
+        title: `Xóa lịch học`,
+        text: "Bạn có chắc muốn xóa lịch " + sche.title,
+        accept: this.scheduleAlert,
+        parameters: [sche.id]
       });
     },
-    employeeAlert(user_id) {
+    scheduleAlert(id) {
       this.$http
-        .delete("users/" + user_id)
+        .delete(
+          `branches/${this.branchId}/courses/${this.courseId}/schedules/${id}`
+        )
         .then(() => {
           this.$vs.notify({
             color: "success",
-            title: "Xóa nhân viên",
-            text: "Bạn đã xóa thành công",
+            title: "Xóa lịch",
+            text: "Xóa thành công",
             icon: "verified_user"
           });
           this.getData();
@@ -265,7 +267,7 @@ export default {
         });
     },
     updateViews(index, e) {
-      this.$store.dispatch("employees/updateViews", {
+      this.$store.dispatch("calendar/updateViews", {
         index: index,
         viewable: e.target.checked
       });
@@ -275,12 +277,9 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({
-        color: "#1E6DB5",
-        text: "Loading..."
-      });
+      thisIns.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
       this.$http
-        .get("users", {
+        .get(`branches/${this.branchId}/courses/${this.courseId}/schedules`, {
           params: {
             page: page,
             search: this.searchTerm,
@@ -289,8 +288,8 @@ export default {
           }
         })
         .then(function(response) {
-          thisIns.$store.dispatch("employees/updateTable", {
-            users: thisIns.formatData(response.data.data),
+          thisIns.$store.dispatch("calendar/updateTable", {
+            calendarList: thisIns.formatData(response.data.data),
             pagination: response.data.pagination
           });
         })
@@ -309,11 +308,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch("employees/updateNeedReload", true);
+        this.$store.dispatch("calendar/updateNeedReload", true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch("employees/updateSearch", {
+      this.$store.dispatch("calendar/updateSearch", {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -322,7 +321,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch("employees/updateOrder", {
+      this.$store.dispatch("calendar/updateOrder", {
         order: {
           orderBy: key,
           orderType: active ? "desc" : "asc"
@@ -334,15 +333,21 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.users.length === 0) {
+    if (this.calendarList.length === 0) {
       this.getData();
     }
   },
-  destroyed() {
-    this.$store.dispatch("employees/updateNeedReload", false);
-  },
   created() {
     this.getData();
+  },
+  destroyed() {
+    this.$store.dispatch("calendar/updateNeedReload", false);
+  },
+  watch: {
+    branchId() {
+      this.getData();
+      this.$store.dispatch("calendar/updateNeedReload", true);
+    }
   }
 };
 </script>
@@ -355,7 +360,6 @@ export default {
       flex-wrap: wrap-reverse;
       margin-left: 1.5rem;
       margin-right: 1.5rem;
-
       > span {
         display: flex;
         flex-grow: 1;
@@ -386,21 +390,17 @@ export default {
 
       tr {
         box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
-
         td {
           padding: 20px;
-
           &:first-child {
             border-top-left-radius: 0.5rem;
             border-bottom-left-radius: 0.5rem;
           }
-
           &:last-child {
             border-top-right-radius: 0.5rem;
             border-bottom-right-radius: 0.5rem;
           }
         }
-
         td.td-check {
           padding: 20px !important;
         }
@@ -411,18 +411,15 @@ export default {
       th {
         padding-top: 0;
         padding-bottom: 0;
-        vertical-align: middle;
 
         .vs-table-text {
           text-transform: uppercase;
           font-weight: 600;
         }
       }
-
       th.td-check {
         padding: 0 15px !important;
       }
-
       tr {
         background: none;
         box-shadow: none;
@@ -444,17 +441,10 @@ export default {
     }
   }
 }
-
-.import-file {
-  .custom-file-upload {
-    border: 1px solid #ccc;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-  }
-
-  input[type="file"] {
-    display: none;
-  }
+.vdp-datepicker.picker-custom input {
+  width: 100% !important;
+}
+header.header-table.vs-table--header {
+  margin-left: 2px !important;
 }
 </style>

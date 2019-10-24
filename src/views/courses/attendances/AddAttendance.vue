@@ -2,10 +2,10 @@
   <div>
     <vs-row vs-w="12">
       <vs-col vs-w="12">
-        <label class="vs-input--label">Ngày bắt đầu</label>
+        <label class="vs-input--label">Ngày điểm danh</label>
         <div class="columns">
           <div class="column w-full is-3">
-            <flat-pickr v-model="currentDate" placeholder="chọn ngày bắt đầu" />
+            <flat-pickr v-model="currentDate" placeholder="chọn ngày điểm danh" />
           </div>
         </div>
       </vs-col>

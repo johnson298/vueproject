@@ -80,25 +80,25 @@ export default {
   },
   methods: {
     getData(){
-        let vm = this;
-        vm.$vs.loading({
-            color: "#1E6DB5",
-            text: "Loading..."
-        });
-        this.$http.get(`/users/${this.employee_id}`).then(function (response) {
+      let vm = this;
+      vm.$vs.loading({
+        color: "#1E6DB5",
+        text: "Loading..."
+      });
+      this.$http.get(`/users/${this.employee_id}`).then(function (response) {
         vm.employeeInfo = response.data.data;
-        }).catch(() => {
+      }).catch(() => {
         this.$router.push('/pages/error-404');
         this.$vs.notify({
-            title: 'Error!',
-            text: 'Có lỗi xảy ra',
-            iconPack: 'feather',
-            icon: 'fa fa-lg fa-exclamation-triangle',
-            color: 'danger'
+          title: 'Error!',
+          text: 'Có lỗi xảy ra',
+          iconPack: 'feather',
+          icon: 'fa fa-lg fa-exclamation-triangle',
+          color: 'danger'
         });
-        })
+      })
         .finally(function() {
-            vm.$vs.loading.close();
+          vm.$vs.loading.close();
         });
     },
     mounted() {

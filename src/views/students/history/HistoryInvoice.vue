@@ -1,11 +1,5 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    <add-new-data-sidebar
-      :isSidebarActive="addNewDataSidebar"
-      @closeSidebar="addNewDataSidebar = false"
-      :callback="getData"
-    />
-
     <vs-table-custom
       :sst="true"
       ref="table"
@@ -13,7 +7,7 @@
       v-model="selected"
       @search="handleSearch"
       @sort="handleSort"
-      :data="users"
+      :data="studentsInvoice"
       search
       id="table"
       maxItems="10"
@@ -28,7 +22,6 @@
               <span class="mr-2">Actions</span>
               <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
             </div>
-
             <vs-dropdown-menu>
               <vs-dropdown-item>
                 <span>Delete</span>
@@ -56,7 +49,7 @@
 
             <vs-dropdown-menu>
               <div class="col p-2">
-                <div v-for="(value, index) in views" :key="index" class="p-1">
+                <div v-for="(value, index) in viewsInvoice" :key="index" class="p-1">
                   <vs-checkbox
                     :value="value.viewable"
                     @change="updateViews(index, $event)"
@@ -65,113 +58,48 @@
               </div>
             </vs-dropdown-menu>
           </vs-dropdown>
-
-          <!-- ADD NEW -->
-          <div
-            class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary"
-            @click="addNewDataSidebar = true"
-          >
-            <feather-icon icon="Upload" svgClasses="h-4 w-4" />
-            <span class="ml-2 text-base text-primary">Thêm nhân viên</span>
-          </div>
-        </div>
-        <div class="import-file">
-          <vx-tooltip text="Thêm dữ liệu" position="top">
-            <label for="file-upload" class="custom-file-upload rounded-full mb-3 mr-2">
-              <i class="feather icon-upload-cloud"></i>
-            </label>
-            <input id="file-upload" type="file" />
-          </vx-tooltip>
         </div>
       </div>
 
       <template slot="thead">
         <vs-th
           :sort-key="value.sortKey"
-          v-for="(value, index) in views"
+          v-for="(value, index) in viewsInvoice"
           :key="index"
           v-if="value.viewable"
         >{{ value.text }}</vs-th>
       </template>
-
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.code.viewable">
-            <p class="product-name font-medium">{{ tr.code }}</p>
+          <vs-td v-if="viewsInvoice.course.viewable">
+            <p class="product-category">{{ tr.course.name }}</p>
           </vs-td>
 
-          <vs-td v-if="views.avatar.viewable">
-            <vs-avatar size="55px" :src="tr.avatar" :alt="tr.name" />
+          <vs-td v-if="viewsInvoice.amount.viewable">
+            <p class="product-category">{{ formatPrice(tr.amount) }}</p>
           </vs-td>
 
-          <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.name }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.position.viewable">
-            <p class="product-name font-medium">
-              <vs-chip
-                :color="checkStatus(positions,tr.position)=='Giáo viên' ? 'primary'
-                      : checkStatus(positions,tr.position)=='Tư vấn' ? 'warning'
-                      : checkStatus(positions,tr.position)=='Kế toán' ? '#34495e'
-                      : checkStatus(positions,tr.position)=='Quản lý' ? 'success'
-                      : ''"
-              >{{ checkStatus(positions,tr.position) }}</vs-chip>
-            </p>
-          </vs-td>
-
-          <vs-td v-if="views.email.viewable">
-            <p class="product-category">{{ tr.email }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.birthday.viewable">
-            <p class="product-category">{{ tr.birthday }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.phone.viewable">
-            <p class="product-category">{{ tr.phone }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.facebook.viewable">
+          <vs-td v-if="viewsInvoice.source.viewable">
             <p class="product-category">
-              <a :href="tr.facebook" target="_blank">Link</a>
+              <vs-chip
+                :color="checkStatus(sourceInvoices,tr.source)=='Momo' ? 'primary'
+                              : checkStatus(sourceInvoices,tr.source)=='Tiền mặt' ? 'success'
+                              : checkStatus(sourceInvoices,tr.source)=='Chuyển khoản' ? 'warning'
+                              : ''"
+              >{{ checkStatus(sourceInvoices,tr.source) }}</vs-chip>
             </p>
           </vs-td>
 
-          <vs-td v-if="views.address.viewable">
-            <p class="product-category">{{ tr.address }}</p>
+          <vs-td v-if="viewsInvoice.note.viewable">
+            <p class="product-category">{{ tr.note }}</p>
           </vs-td>
 
-          <vs-td v-if="views.status.viewable">
-            <vs-chip
-              :color="checkStatusFrom0(statusEmployee,tr.status)=='Hoạt động' ? 'success'
-                      : 'danger'"
-            >{{ checkStatusFrom0(statusEmployee,tr.status) }}</vs-chip>
-          </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
+          <vs-td v-if="viewsInvoice.updated_at.viewable">
             <p class="product-category">{{ tr.updated_at }}</p>
           </vs-td>
 
-          <vs-td v-if="views.created_at.viewable">
+          <vs-td v-if="viewsInvoice.created_at.viewable">
             <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.action.viewable" class="d-flex-span">
-            <router-link
-              tag="button"
-              :to="'/employees/' + tr.id "
-              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"
-            >
-              <i class="feather icon-eye"></i>
-            </router-link>
-            <vs-button
-              radius
-              color="danger"
-              size="small"
-              @click="deleteEmployee(tr)"
-              icon="delete_forever"
-            ></vs-button>
           </vs-td>
         </vs-tr>
       </template>
@@ -179,7 +107,7 @@
     <div class="con-vs-pagination vs-pagination-primary">
       <nav class="vs-pagination--nav">
         <paginate
-          :page-count="pagination.totalPages"
+          :page-count="paginationInvoice.totalPages"
           :page-range="3"
           :margin-pages="2"
           :active-class="'is-current'"
@@ -188,7 +116,7 @@
           :prev-text="prev"
           :next-text="next"
           :click-handler="getData"
-          :value="pagination.currentPage"
+          :value="paginationInvoice.currentPage"
           ref="paginate"
         />
       </nav>
@@ -197,21 +125,18 @@
 </template>
 
 <script>
-import AddNewDataSidebar from "./AddNewDataSidebar.vue";
 import { mapState } from "vuex";
 
 export default {
-  components: {
-    AddNewDataSidebar
-  },
   data() {
     return {
-      positions: this.$store.state.model.employees.positions,
-      activeConfirm: false,
+      studentId: this.$route.params.student,
+      sourceInvoices: this.$store.state.model.invoices.source,
+      addBill: false,
+      invoiceGetInfo: {},
       timer: null,
       selected: [],
       isMounted: false,
-      addNewDataSidebar: false,
       prev:
         '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev"><i class="vs-icon notranslate icon-scale material-icons null">chevron_left</i></button>',
       next:
@@ -219,55 +144,23 @@ export default {
     };
   },
   computed: {
-    ...mapState("employees", [
-      "users",
-      "pagination",
-      "searchTerm",
-      "order",
-      "views",
-      "needReload"
-    ]),
-    statusEmployee() {
-      return this.$store.state.model.employees.status;
-    }
+    ...mapState("students", [
+      "studentsInvoice",
+      "paginationInvoice",
+      "searchTermInvoice",
+      "orderInvoice",
+      "viewsInvoice",
+      "needReloadInvoice"
+    ])
+  },
+  created() {
+    this.getData();
   },
   methods: {
-    deleteEmployee(user) {
-      this.$vs.dialog({
-        type: "confirm",
-        color: "danger",
-        title: `Xóa nhân viên`,
-        text: "Bạn có chắc muốn xóa " + user.name,
-        accept: this.employeeAlert,
-        parameters: [user.id]
-      });
-    },
-    employeeAlert(user_id) {
-      this.$http
-        .delete("users/" + user_id)
-        .then(() => {
-          this.$vs.notify({
-            color: "success",
-            title: "Xóa nhân viên",
-            text: "Bạn đã xóa thành công",
-            icon: "verified_user"
-          });
-          this.getData();
-        })
-        .catch(() => {
-          this.$vs.notify({
-            title: "Error!",
-            text: "Bạn không xóa thành công",
-            iconPack: "feather",
-            icon: "fa fa-lg fa-exclamation-triangle",
-            color: "danger"
-          });
-        });
-    },
     updateViews(index, e) {
-      this.$store.dispatch("employees/updateViews", {
+      this.$store.dispatch("students/updateViewsInvoice", {
         index: index,
-        viewable: e.target.checked
+        viewableInvoice: e.target.checked
       });
     },
     formatData(data) {
@@ -280,18 +173,18 @@ export default {
         text: "Loading..."
       });
       this.$http
-        .get("users", {
+        .get(`invoices?type=1&search=student_id:${this.studentId}`, {
           params: {
             page: page,
-            search: this.searchTerm,
-            orderBy: this.order.orderBy,
-            sortedBy: this.order.orderType
+            search: this.searchTermInvoice,
+            orderBy: this.orderInvoice.orderBy,
+            sortedBy: this.orderInvoice.orderType
           }
         })
         .then(function(response) {
-          thisIns.$store.dispatch("employees/updateTable", {
-            users: thisIns.formatData(response.data.data),
-            pagination: response.data.pagination
+          thisIns.$store.dispatch("students/updateTableInvoice", {
+            studentsInvoice: thisIns.formatData(response.data.data),
+            paginationInvoice: response.data.pagination
           });
         })
         .catch(function(error) {
@@ -308,13 +201,13 @@ export default {
         });
     },
     handleSearch(searching) {
-      if (!this.needReload) {
-        this.$store.dispatch("employees/updateNeedReload", true);
+      if (!this.needReloadInvoice) {
+        this.$store.dispatch("students/updateNeedReloadInvoice", true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch("employees/updateSearch", {
-        searchTerm: searching
+      this.$store.dispatch("students/updateSearchInvoice", {
+        searchTermInvoice: searching
       });
       clearTimeout(this.timer);
       this.timer = setTimeout(function() {
@@ -322,27 +215,24 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch("employees/updateOrder", {
-        order: {
+      this.$store.dispatch("students/updateOrderInvoice", {
+        orderInvoice: {
           orderBy: key,
           orderType: active ? "desc" : "asc"
         }
       });
-      this.getData(this.pagination.currentPage);
+      this.getData(this.paginationInvoice.currentPage);
     }
   },
   mounted() {
-    this.$refs.table.searchx = this.searchTerm;
+    this.$refs.table.searchx = this.searchTermInvoice;
     this.isMounted = true;
-    if (this.users.length === 0) {
+    if (this.studentsInvoice.length === 0) {
       this.getData();
     }
   },
   destroyed() {
-    this.$store.dispatch("employees/updateNeedReload", false);
-  },
-  created() {
-    this.getData();
+    this.$store.dispatch("students/updateNeedReloadInvoice", false);
   }
 };
 </script>
@@ -411,7 +301,6 @@ export default {
       th {
         padding-top: 0;
         padding-bottom: 0;
-        vertical-align: middle;
 
         .vs-table-text {
           text-transform: uppercase;
@@ -445,16 +334,7 @@ export default {
   }
 }
 
-.import-file {
-  .custom-file-upload {
-    border: 1px solid #ccc;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-  }
-
-  input[type="file"] {
-    display: none;
-  }
+.popup-custom-768 > .vs-popup {
+  width: 768px !important;
 }
 </style>
