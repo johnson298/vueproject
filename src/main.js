@@ -211,6 +211,23 @@ Vue.mixin({
     },
     toNumber(string) {
       return string.replace(/[^\d.-]/g, "");
+    },
+    convertWeekdays(word) {
+      let text = null;
+      let dayEn = [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday"
+      ];
+      let dayVi = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
+      dayEn.forEach((el, key) => {
+        el == word ? (text = dayVi[key]) : false;
+      });
+      return text;
     }
   }
 });

@@ -166,9 +166,11 @@ export default {
             ]
           };
           thisIns.totalMoney = [
-            (parseFloat(response.data.data.money.revenues) * 100) /
-              (parseFloat(response.data.data.money.revenues) +
-                parseFloat(response.data.data.money.expenditures))
+            Math.ceil(
+              (parseFloat(response.data.data.money.revenues) * 100) /
+                (parseFloat(response.data.data.money.revenues) +
+                  parseFloat(response.data.data.money.expenditures))
+            ) || 0
           ];
         })
         .catch(function(error) {

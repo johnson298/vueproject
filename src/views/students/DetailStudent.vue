@@ -23,16 +23,23 @@
                         <li class="vs-tabs--li">
                             <router-link
                                 tag="button"
-                                :to="`/students/${student_id}/history`"
+                                :to="`/students/${student_id}/courses`"
                                 class="vs-tabs--btn"
-                                >Lịch sử</router-link>
+                                >Lớp đang tham gia</router-link>
                         </li>
                         <li class="vs-tabs--li">
                             <router-link
                                 tag="button"
-                                :to="`/students/${student_id}/courses`"
+                                :to="`/students/${student_id}/invoices`"
                                 class="vs-tabs--btn"
-                                >Lớp đang tham gia</router-link>
+                                >Lịch sử đóng tiền</router-link>
+                        </li>
+                        <li class="vs-tabs--li">
+                            <router-link
+                                tag="button"
+                                :to="`/students/${student_id}/history`"
+                                class="vs-tabs--btn"
+                                >Lịch sử</router-link>
                         </li>
                     </ul>
                 </div>
@@ -80,25 +87,25 @@ export default {
   },
   methods: {
     getData(){
-        let vm = this;
-        vm.$vs.loading({
-            color: "#1E6DB5",
-            text: "Loading..."
-        });
-        this.$http.get(`/students/${this.student_id}`).then(function (response) {
+      let vm = this;
+      vm.$vs.loading({
+        color: "#1E6DB5",
+        text: "Loading..."
+      });
+      this.$http.get(`/students/${this.student_id}`).then(function (response) {
         vm.employeeInfo = response.data.data;
-        }).catch(() => {
+      }).catch(() => {
         this.$router.push('/pages/error-404');
         this.$vs.notify({
-            title: 'Error!',
-            text: 'Có lỗi xảy ra',
-            iconPack: 'feather',
-            icon: 'fa fa-lg fa-exclamation-triangle',
-            color: 'danger'
+          title: 'Error!',
+          text: 'Có lỗi xảy ra',
+          iconPack: 'feather',
+          icon: 'fa fa-lg fa-exclamation-triangle',
+          color: 'danger'
         });
-        })
+      })
         .finally(function() {
-            vm.$vs.loading.close();
+          vm.$vs.loading.close();
         });
     },
     mounted() {

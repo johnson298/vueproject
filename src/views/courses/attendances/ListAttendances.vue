@@ -1,6 +1,6 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    <vs-popup class="popup-custom-768" title="Thêm điểm danh" :active.sync="popupAdd">
+    <vs-popup title="Thêm điểm danh" :active.sync="popupAdd">
       <add-attendance
         :callback="getData"
         :active.sync="popupAdd"
@@ -87,9 +87,20 @@
       </template>
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
- 
           <vs-td v-if="views.date.viewable">
             <p class="product-name font-medium">{{ tr.date }}</p>
+          </vs-td>
+
+          <vs-td v-if="views.present.viewable">
+            <p class="product-name font-medium">{{ tr.present?tr.present:0 }}</p>
+          </vs-td>
+
+          <vs-td v-if="views.absent.viewable">
+            <p class="product-name font-medium">{{ tr.absent?tr.absent:0 }}</p>
+          </vs-td>
+
+          <vs-td v-if="views.late.viewable">
+            <p class="product-name font-medium">{{ tr.late?tr.late:0 }}</p>
           </vs-td>
 
           <vs-td v-if="views.created_at.viewable">
@@ -104,7 +115,7 @@
             <router-link
               tag="button"
               :to="`/courses/${idCourse}/attendances/${tr.id}`"
-              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small vs-radius "
+              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small vs-radius"
             >
               <i class="feather icon-eye"></i>
             </router-link>

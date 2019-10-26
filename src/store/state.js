@@ -52,7 +52,8 @@ const state = {
         { text: "Quản lý", value: 4 },
         { text: "Khác", value: 5 }
       ],
-      majors: [{ text: "Có", value: 1 }, { text: "Không", value: 2 }]
+      majors: [{ text: "Có", value: 1 }, { text: "Không", value: 2 }],
+      status: [{ text: "Nghỉ", value: 0 }, { text: "Hoạt động", value: 1 }]
     },
     students: {
       gender: [{ text: "Nam", value: 0 }, { text: "Nữ", value: 1 }],
