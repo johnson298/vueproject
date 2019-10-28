@@ -151,7 +151,10 @@ export default {
       "orderInvoice",
       "viewsInvoice",
       "needReloadInvoice"
-    ])
+    ]),
+    branchId() {
+      return this.$store.state.getBranchId;
+    }
   },
   created() {
     this.getData();
@@ -173,14 +176,17 @@ export default {
         text: "Loading..."
       });
       this.$http
-        .get(`invoices?type=1&search=student_id:${this.studentId}`, {
-          params: {
-            page: page,
-            search: this.searchTermInvoice,
-            orderBy: this.orderInvoice.orderBy,
-            sortedBy: this.orderInvoice.orderType
+        .get(
+          `branches/${this.branchId}/invoices?type=1&search=student_id:${this.studentId}`,
+          {
+            params: {
+              page: page,
+              search: this.searchTermInvoice,
+              orderBy: this.orderInvoice.orderBy,
+              sortedBy: this.orderInvoice.orderType
+            }
           }
-        })
+        )
         .then(function(response) {
           thisIns.$store.dispatch("students/updateTableInvoice", {
             studentsInvoice: thisIns.formatData(response.data.data),

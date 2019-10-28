@@ -23,43 +23,51 @@
       </vs-col>
     </div>
 
-    <div class="vx-row">
+    <div class="vx-row mt-10">
       <!-- LINE CHART -->
       <div class="vx-col w-full md:w-2/3 mb-base">
         <TotalRevenueExpenditure :money="totalMoney" />
       </div>
       <!-- RADIAL CHART -->
       <div class="vx-col w-full md:w-1/3 mb-base">
-        <vx-card title="Tổng thu chi">
-          <template slot="no-body">
-            <div class="mt-10">
-              <vue-apex-charts
-                type="radialBar"
-                height="240"
-                :options="analyticsData.goalOverviewRadialBar.chartOptions"
-                :series="totalMoney"
-              />
-            </div>
-          </template>
-
-          <!-- DATA -->
-          <div class="flex justify-between text-center" slot="no-body-bottom">
-            <div
-              class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0"
-            >
-              <p class="mt-4">Thu</p>
-              <p
-                class="mb-4 text-3xl font-semibold"
-              >{{ formatPrice(dataStatistics.money.revenues) }}</p>
-            </div>
-            <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">
-              <p class="mt-4">Chi Tiêu</p>
-              <p
-                class="mb-4 text-3xl font-semibold"
-              >{{ formatPrice(dataStatistics.money.expenditures) }}</p>
+        <div class="vx-card">
+          <div class="vx-card__header">
+            <div class="vx-card__title">
+              <h4 class>Tổng thu chi</h4>
             </div>
           </div>
-        </vx-card>
+          <div class="vx-card__collapsible-content vs-con-loading__container">
+            <div class="vx-card__body">
+              <div class="mt-10">
+                <vue-apex-charts
+                  type="radialBar"
+                  height="240"
+                  :options="analyticsData.goalOverviewRadialBar.chartOptions"
+                  :series="totalMoney"
+                />
+              </div>
+              <!-- DATA -->
+              <div class="flex justify-between text-center" slot="no-body-bottom">
+                <div
+                  class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0"
+                >
+                  <p class="mt-4">Thu</p>
+                  <p
+                    class="text-xl font-semibold"
+                  >{{ formatShortMoney(dataStatistics.money.revenues) }}</p>
+                </div>
+                <div
+                  class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0"
+                >
+                  <p class="mt-4">Chi Tiêu</p>
+                  <p
+                    class="text-xl font-semibold"
+                  >{{ formatShortMoney(dataStatistics.money.expenditures) }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="vx-row mt-5 px-4">
@@ -170,9 +178,11 @@ export default {
             ]
           };
           thisIns.totalMoney = [
-            (parseFloat(response.data.data.money.revenues) * 100) /
-              (parseFloat(response.data.data.money.revenues) +
-                parseFloat(response.data.data.money.expenditures)) || 0
+            Math.ceil(
+              (parseFloat(response.data.data.money.revenues) * 100) /
+                (parseFloat(response.data.data.money.revenues) +
+                  parseFloat(response.data.data.money.expenditures))
+            ) || 0
           ];
         })
         .catch(function(error) {

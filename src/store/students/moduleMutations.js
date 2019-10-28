@@ -32,7 +32,7 @@ export default {
     state.searchTermInvoice = payload.searchTermInvoice;
   },
   UPDATE_VIEWS_INVOICE(state, payload) {
-    state.views[payload.index].viewableInvoice = payload.viewableInvoice;
+    state.viewsInvoice[payload.index].viewable = payload.viewableInvoice;
   },
   UPDATE_NEED_RELOAD_INVOICE(state, payload) {
     state.needReloadInvoice = payload;

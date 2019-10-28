@@ -190,7 +190,15 @@ export default {
       "order",
       "views",
       "needReload"
-    ])
+    ]),
+    branchId() {
+      return this.$store.state.getBranchId;
+    }
+  },
+  watch: {
+    branchId() {
+      this.getData();
+    }
   },
   created() {
     this.getData();
@@ -208,7 +216,7 @@ export default {
     },
     invoiceAlert(invoice_id) {
       this.$http
-        .delete(`invoices/${invoice_id}?type=1`)
+        .delete(`branches/${this.branchId}/invoices/${invoice_id}?type=1`)
         .then(() => {
           this.$vs.notify({
             color: "success",
@@ -244,7 +252,7 @@ export default {
         text: "Loading..."
       });
       this.$http
-        .get("invoices?type=1", {
+        .get(`branches/${this.branchId}/invoices?type=1`, {
           params: {
             page: page,
             search: this.searchTerm,
