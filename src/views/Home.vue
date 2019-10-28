@@ -29,7 +29,6 @@
         <TotalRevenueExpenditure :money="totalMoney" />
       </div>
       <!-- RADIAL CHART -->
-      <!-- {{ parseFloat(dataStatistics.money.revenues)*100/(parseFloat(dataStatistics.money.revenues) + parseFloat(dataStatistics.money.expenditures)) }} -->
       <div class="vx-col w-full md:w-1/3 mb-base">
         <vx-card title="Tổng thu chi">
           <template slot="no-body">
@@ -144,6 +143,11 @@ export default {
   created() {
     this.getData();
   },
+  watch: {
+    branchId() {
+      this.getData();
+    }
+  },
   methods: {
     getData() {
       const thisIns = this;
@@ -166,11 +170,9 @@ export default {
             ]
           };
           thisIns.totalMoney = [
-            Math.ceil(
-              (parseFloat(response.data.data.money.revenues) * 100) /
-                (parseFloat(response.data.data.money.revenues) +
-                  parseFloat(response.data.data.money.expenditures))
-            ) || 0
+            (parseFloat(response.data.data.money.revenues) * 100) /
+              (parseFloat(response.data.data.money.revenues) +
+                parseFloat(response.data.data.money.expenditures)) || 0
           ];
         })
         .catch(function(error) {

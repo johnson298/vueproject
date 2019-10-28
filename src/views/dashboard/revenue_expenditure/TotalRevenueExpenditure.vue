@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <vx-card title="Thu chi(tháng)">
+  <div id="div-with-loading" class="vs-con-loading__container">
+    <vx-card title="Thu chi">
       <template slot="actions">
         <vs-dropdown vs-trigger-click class="cursor-pointer">
           <small class="flex cursor-pointer">
@@ -17,56 +17,43 @@
       <div slot="no-body" class="p-6 pb-0">
         <div class="flex" v-if="last_week">
           <div class="mr-6">
-            <p class="mb-1 font-semibold">Thu</p>
+            <p class="mb-1 font-semibold">Theo tuần</p>
             <p class="text-3xl text-success">
-              <sup class="text-base mr-1">$</sup>86,589
-            </p>
-          </div>
-          <div>
-            <p class="mb-1 font-semibold">Chi</p>
-            <p class="text-3xl">
-              <sup class="text-base mr-1">$</sup>73,683
+              <sup class="text-base mr-1">$</sup>
+              {{ totalPrice }}
             </p>
           </div>
         </div>
         <div class="flex" v-if="last_month">
           <div class="mr-6">
-            <p class="mb-1 font-semibold">Thu</p>
+            <p class="mb-1 font-semibold">Theo tháng</p>
             <p class="text-3xl text-success">
-              <sup class="text-base mr-1">$</sup>10,589
-            </p>
-          </div>
-          <div>
-            <p class="mb-1 font-semibold">Chi</p>
-            <p class="text-3xl">
-              <sup class="text-base mr-1">$</sup>3,683
+              <sup class="text-base mr-1">$</sup>
+              {{ totalPrice }}
             </p>
           </div>
         </div>
         <div class="flex" v-if="last_year">
           <div class="mr-6">
-            <p class="mb-1 font-semibold">Thu</p>
+            <p class="mb-1 font-semibold">Theo năm</p>
             <p class="text-3xl text-success">
-              <sup class="text-base mr-1">$</sup>186,589
-            </p>
-          </div>
-          <div>
-            <p class="mb-1 font-semibold">Chi</p>
-            <p class="text-3xl">
-              <sup class="text-base mr-1">$</sup>93,683
+              <sup class="text-base mr-1">$</sup>
+              {{ totalPrice }}
             </p>
           </div>
         </div>
         <div v-if="last_month">
           <vue-apex-charts
+            v-if="status"
             type="line"
             height="266"
-            :options="analyticsData.revenueComparisonLine.chartOptions"
-            :series="analyticsData.revenueComparisonLine.series"
+            :options="revenueComparisonLine.chartOptions"
+            :series="revenueComparisonLine.series"
           />
         </div>
         <div v-if="last_year">
           <vue-apex-charts
+            v-if="status"
             type="line"
             height="266"
             :options="revenueComparisonLine.chartOptions"
@@ -75,10 +62,11 @@
         </div>
         <div v-if="last_week">
           <vue-apex-charts
+            v-if="status"
             type="line"
             height="266"
-            :options="analyticsData.revenueComparisonLine.chartOptions"
-            :series="analyticsData.revenueComparisonLine.series"
+            :options="revenueComparisonLine.chartOptions"
+            :series="revenueComparisonLine.series"
           />
         </div>
       </div>
@@ -88,7 +76,6 @@
 <script>
 import VueApexCharts from "vue-apexcharts";
 import StatisticsCardLine from "@/components/statistics-cards/StatisticsCardLine.vue";
-import analyticsData from "../ui-elements/card/analyticsData.js";
 import ChangeTimeDurationDropdown from "../ChangeTimeDurationDropdown.vue";
 
 export default {
@@ -99,23 +86,18 @@ export default {
   },
   data() {
     return {
+      status: false,
+      mode: "day",
+      totalPrice: null,
+      dataStatistic: [],
       last_week: true,
       last_month: false,
       last_year: false,
-      analyticsData: analyticsData,
       revenueComparisonLine: {
         series: [
           {
-            name: "Theo năm",
-            data: [55000, 40000, 30000, 20500, 15500, 48000, 46500, 48600]
-          },
-          {
-            name: "Theo năm",
-            data: [16000, 18000, 25500, 40600, 14500, 36500, 15000, 17000]
-          },
-          {
-            name: "Theo năm",
-            data: [10000, 8000, 2500, 4600, 1500, 6500, 1000, 7000]
+            name: "This Month",
+            data: [45000, 47000, 44800, 47500, 45500, 48000, 46500, 48600]
           }
         ],
         chartOptions: {
@@ -162,9 +144,9 @@ export default {
             axisTicks: {
               show: false
             },
-            categories: ["01", "02", "03", "04", "05", "06", "07", "08"],
+            categories: [],
             axisBorder: {
-              show: false
+              show: true
             }
           },
           yaxis: {
@@ -185,6 +167,19 @@ export default {
       }
     };
   },
+  computed: {
+    branchId() {
+      return this.$store.state.getBranchId;
+    }
+  },
+  watch: {
+    branchId() {
+      this.getData();
+    }
+  },
+  created() {
+    this.getData();
+  },
   components: {
     VueApexCharts,
     StatisticsCardLine,
@@ -195,16 +190,43 @@ export default {
       this.last_week = true;
       this.last_month = false;
       this.last_year = false;
+      this.mode = "day";
+      this.getData();
     },
     month() {
       this.last_year = false;
       this.last_month = true;
       this.last_week = false;
+      this.mode = "month";
+      this.getData();
     },
     year() {
       this.last_week = false;
       this.last_month = false;
       this.last_year = true;
+      this.mode = "year";
+      this.getData();
+    },
+    getData() {
+      let vm = this;
+      vm.revenueComparisonLine.series = [];
+      vm.revenueComparisonLine.chartOptions.xaxis.categories = [];
+      vm.$http
+        .get(`branches/${vm.branchId}/statistics/cost?mode=${vm.mode}`)
+        .then(function(response) {
+          vm.status = true;
+          let dataMoney = response.data.data;
+          vm.revenueComparisonLine.series.push({
+            name: "Đã thu",
+            data: [...dataMoney.map(item => item.sum)]
+          });
+          vm.totalPrice = vm.formatPrice(
+            vm.revenueComparisonLine.series[0].data.reduce((a, b) => a + b, 0)
+          );
+          vm.revenueComparisonLine.chartOptions.xaxis.categories = [
+            ...dataMoney.map(item => item.date)
+          ];
+        });
     }
   }
 };
