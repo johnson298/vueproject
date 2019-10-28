@@ -1,16 +1,28 @@
 import navbarSearchAndPinList from "@/layouts/components/navbarSearchAndPinList";
 import themeConfig from "@/../themeConfig.js";
 import colors from "@/../themeConfig.js";
-
+function checkBranchId() {
+  if (
+    typeof JSON.parse(localStorage.getItem("user")) === "undefined" ||
+    JSON.parse(localStorage.getItem("user")) == null ||
+    JSON.parse(localStorage.getItem("user")).branch_id === null
+    // eslint-disable-next-line no-empty
+  ) {
+    if (localStorage.getItem("branchId")) {
+      return localStorage.getItem("branchId");
+    } else {
+      localStorage.setItem("branchId", 1);
+    }
+  } else {
+    localStorage.setItem(
+      "branchId",
+      JSON.parse(localStorage.getItem("user")).branch_id
+    );
+  }
+  return localStorage.getItem("branchId");
+}
 const state = {
-  getBranchId:
-    typeof JSON.parse(localStorage.getItem("user")) === "undefined"
-      ? 1
-      : JSON.parse(localStorage.getItem("user")) == null
-        ? 1
-        : JSON.parse(localStorage.getItem("user")).branch_id === null
-          ? 1
-          : JSON.parse(localStorage.getItem("user")).branch_id,
+  getBranchId: checkBranchId(),
   isSidebarActive: true,
   breakpoint: null,
   sidebarWidth: "default",
