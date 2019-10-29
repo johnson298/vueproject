@@ -197,7 +197,14 @@ body {
     @include scrollCustom();
   }
 }
-
+.flatpickr-calendar {
+  .flatpickr-weekdays {
+    .flatpickr-weekdaycontainer {
+      width: 100%;
+      display: flex;
+    }
+  }
+}
 /*=========================================================================================
   File Name: _customize.scss
   Description: custom color 

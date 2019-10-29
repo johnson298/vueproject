@@ -216,7 +216,7 @@ export default {
   props: {
     isSidebarActive: {
       type: Boolean,
-      required: true
+      required: false
     },
     callback: {
       type: Function,
