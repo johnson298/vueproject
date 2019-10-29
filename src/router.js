@@ -33,6 +33,15 @@ const router = new Router({
             pageTitle: "Dashboard"
           }
         },
+        {
+          path: "/me",
+          name: "profile",
+          component: () => import("./views/profile/Profile.vue"),
+          meta: {
+            breadcrumb: [{ title: "Cá nhân", url: "/" }],
+            pageTitle: "Cá nhân"
+          }
+        },
         // NHÂN VIÊN
         {
           path: "/employees",

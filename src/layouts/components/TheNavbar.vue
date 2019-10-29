@@ -178,7 +178,7 @@
                 </li>
                 <li
                   class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                  @click="$router.replace(`/employees/${currentUser.id}`)"
+                  @click="$router.replace('/me')"
                 >
                   <feather-icon icon="UserIcon" svgClasses="w-4 h-4"></feather-icon>
                   <span class="ml-2">Cá nhân</span>
