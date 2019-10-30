@@ -3,7 +3,7 @@ export default [
     url: "/",
     name: "Tổng quan",
     slug: "home",
-    iconFontAwesome: "home",
+    iconFontAwesome: "home"
   },
   {
     name: "user",
@@ -19,23 +19,23 @@ export default [
     url: "/students",
     name: "Học viên",
     slug: "students",
-    iconFontAwesome: "users",
+    iconFontAwesome: "users"
   },
   {
     name: "programs",
     header: "đào tạo"
   },
   {
-    url : "/courses",
+    url: "/courses",
     name: "Lớp học",
-    slug : "course",
-    iconFontAwesome: "graduation-cap",
+    slug: "course",
+    iconFontAwesome: "graduation-cap"
   },
   {
     url: "/programs",
     name: "Chương trình học",
     slug: "programs",
-    iconFontAwesome: "layer-group",
+    iconFontAwesome: "layer-group"
   },
   {
     header: "Thu chi"
@@ -44,19 +44,19 @@ export default [
     url: "/invoices/revenues",
     name: "Thu học phí",
     slug: "revenues",
-    iconFontAwesome: "file-invoice-dollar",
+    iconFontAwesome: "file-invoice-dollar"
   },
   {
     url: "/invoices/expenditures",
     name: "Chi tiêu",
     slug: "expenditures",
-    iconFontAwesome: "hand-holding-usd",
+    iconFontAwesome: "hand-holding-usd"
   },
   {
     url: "/reports",
     name: "Báo cáo",
     slug: "invoices",
-    iconFontAwesome: "list-alt",
+    iconFontAwesome: "list-alt"
   },
   {
     name: "marketing",
@@ -72,16 +72,22 @@ export default [
     url: "/campaign",
     name: "Chiến dịch",
     slug: "campaign",
-    iconFontAwesome: "handshake",
+    iconFontAwesome: "handshake"
   },
   {
     name: "setting",
     header: "Cấu hình"
   },
   {
+    url: "/rooms",
+    name: "Phòng học",
+    slug: "rooms",
+    iconFontAwesome: "building"
+  },
+  {
     url: "/settings",
     name: "Cài đặt",
     slug: "settings",
     iconFontAwesome: "tools"
-  },
+  }
 ];
