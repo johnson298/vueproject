@@ -194,6 +194,19 @@ const router = new Router({
             pageTitle: "Khóa học online"
           }
         },
+        //ROOMS
+        {
+          path: "/rooms",
+          name: "branch",
+          component: () => import("./views/rooms/BranchRooms.vue"),
+          meta: {
+            breadcrumb: [
+              { title: "Phòng học", url: "/" },
+              { title: "Phòng học", active: true }
+            ],
+            pageTitle: "Phòng học"
+          }
+        },
         //SETTINGS
         {
           path: "/settings",
@@ -225,21 +238,6 @@ const router = new Router({
                   { title: "Chi nhánh", active: true }
                 ],
                 pageTitle: "Cài đặt chi nhánh"
-              }
-            },
-            {
-              path: "branches/:branch/rooms",
-              name: "branch",
-              component: () =>
-                import("./views/settings/branches/rooms/BranchRooms.vue"),
-              meta: {
-                breadcrumb: [
-                  { title: "Chi tiết phòng học", url: "/" },
-                  { title: "Cài đặt", url: "/settings" },
-                  { title: "Chi nhánh", url: "/settings/branches" },
-                  { title: "Phòng học", active: true }
-                ],
-                pageTitle: "Chi tiết phòng học"
               }
             },
             {

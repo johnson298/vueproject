@@ -63,7 +63,8 @@ import {
   faHandshake,
   faLayerGroup,
   faListAlt,
-  faHome
+  faHome,
+  faBuilding
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -82,7 +83,8 @@ library.add(
   faHandshake,
   faLayerGroup,
   faListAlt,
-  faHome
+  faHome,
+  faBuilding
 );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

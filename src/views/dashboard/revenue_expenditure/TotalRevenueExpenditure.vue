@@ -150,13 +150,19 @@ export default {
   },
   methods: {
     chooseDate(type) {
-      type == "day"
-        ? (this.popupActiveDate = true)
-        : type == "month"
-        ? (this.popupActiveMonth = true)
-        : type == "year"
-        ? (this.popupActiveYear = true)
-        : false;
+      switch (type) {
+        case "day":
+          this.popupActiveDate = true;
+          break;
+        case "month":
+          this.popupActiveMonth = true;
+          break;
+        case "year":
+          this.popupActiveYear = true;
+          break;
+        default:
+          break;
+      }
       this.type = type;
     },
     getDataByDate() {
