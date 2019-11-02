@@ -1,23 +1,16 @@
 <template>
-  <div class="vx-card">
-    <div class="vx-card__header">
-      <div class="vx-card__title">
-        <h4 class>Lớp học</h4>
+  <vue-card title="Lớp học">
+    <div slot="card-body">
+      <div class="mt-5">
+        <chartjs-component-pie-chart
+          v-if="classes"
+          :height="250"
+          :data="classes"
+          :options="options"
+        ></chartjs-component-pie-chart>
       </div>
     </div>
-    <div class="vx-card__collapsible-content vs-con-loading__container">
-      <div class="vx-card__body">
-        <div class="mt-5">
-          <chartjs-component-pie-chart
-            v-if="classes"
-            :height="250"
-            :data="classes"
-            :options="options"
-          ></chartjs-component-pie-chart>
-        </div>
-      </div>
-    </div>
-  </div>
+  </vue-card>
 </template>
 
 <script>

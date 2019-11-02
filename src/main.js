@@ -212,7 +212,7 @@ Vue.mixin({
       return result;
     },
     toNumber(string) {
-      return string.replace(/[^\d.-]/g, "");
+      return string.replace(/[^\d]/g, "");
     },
     convertWeekdays(word) {
       let text = null;

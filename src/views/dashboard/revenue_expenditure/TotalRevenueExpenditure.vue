@@ -27,68 +27,65 @@
         </vs-col>
       </vs-row>
     </vs-popup>
-    <div class="vx-card h-100">
-      <div class="vx-card__header">
-        <div class="vx-card__title">
-          <h4 class>Thu ({{ typeChart }})</h4>
+
+    <vue-card class="h-100">
+      <div slot="title">
+        <h4>Thu (theo {{ typeChart }})</h4>
+      </div>
+      <div slot="card-actions">
+        <vs-dropdown vs-trigger-click class="cursor-pointer mr-3">
+          <small class="flex cursor-pointer">
+            Chọn biểu đồ
+            <feather-icon icon="PieChartIcon" svgClasses="h-4 w-4" class="ml-1"></feather-icon>
+          </small>
+          <vs-dropdown-menu class="w-32">
+            <vs-dropdown-item @click="day">Theo ngày</vs-dropdown-item>
+            <vs-dropdown-item @click="month">Theo tháng</vs-dropdown-item>
+            <vs-dropdown-item @click="year">Theo năm</vs-dropdown-item>
+          </vs-dropdown-menu>
+        </vs-dropdown>
+        <vs-dropdown vs-trigger-click class="cursor-pointer">
+          <small class="flex cursor-pointer">
+            Chọn thời gian
+            <feather-icon icon="SettingsIcon" svgClasses="h-4 w-4" class="ml-1"></feather-icon>
+          </small>
+          <vs-dropdown-menu class="w-32">
+            <vs-dropdown-item @click="chooseDate('day')">Chọn ngày</vs-dropdown-item>
+            <vs-dropdown-item @click="chooseDate('month')">Chọn tháng</vs-dropdown-item>
+            <vs-dropdown-item @click="chooseDate('year')">Chọn năm</vs-dropdown-item>
+          </vs-dropdown-menu>
+        </vs-dropdown>
+      </div>
+      <div slot="card-body" class="pt-6">
+        <div v-if="last_day">
+          <vue-apex-charts
+            v-if="revenueComparisonLineDay"
+            type="line"
+            height="266"
+            :options="revenueComparisonLineDay.chartOptions"
+            :series="revenueComparisonLineDay.series"
+          />
         </div>
-        <div class="vx-card__actions">
-          <vs-dropdown vs-trigger-click class="cursor-pointer mr-3">
-            <small class="flex cursor-pointer">
-              Chọn biểu đồ
-              <feather-icon icon="PieChartIcon" svgClasses="h-4 w-4" class="ml-1"></feather-icon>
-            </small>
-            <vs-dropdown-menu class="w-32">
-              <vs-dropdown-item @click="day">Theo ngày</vs-dropdown-item>
-              <vs-dropdown-item @click="month">Theo tháng</vs-dropdown-item>
-              <vs-dropdown-item @click="year">Theo năm</vs-dropdown-item>
-            </vs-dropdown-menu>
-          </vs-dropdown>
-          <vs-dropdown vs-trigger-click class="cursor-pointer">
-            <small class="flex cursor-pointer">
-              Chọn thời gian
-              <feather-icon icon="SettingsIcon" svgClasses="h-4 w-4" class="ml-1"></feather-icon>
-            </small>
-            <vs-dropdown-menu class="w-32">
-              <vs-dropdown-item @click="chooseDate('day')">Chọn ngày</vs-dropdown-item>
-              <vs-dropdown-item @click="chooseDate('month')">Chọn tháng</vs-dropdown-item>
-              <vs-dropdown-item @click="chooseDate('year')">Chọn năm</vs-dropdown-item>
-            </vs-dropdown-menu>
-          </vs-dropdown>
+        <div v-if="last_month">
+          <vue-apex-charts
+            v-if="revenueComparisonLineMonth"
+            type="line"
+            height="266"
+            :options="revenueComparisonLineMonth.chartOptions"
+            :series="revenueComparisonLineMonth.series"
+          />
+        </div>
+        <div v-if="last_year">
+          <vue-apex-charts
+            v-if="revenueComparisonLineYear"
+            type="line"
+            height="266"
+            :options="revenueComparisonLineYear.chartOptions"
+            :series="revenueComparisonLineYear.series"
+          />
         </div>
       </div>
-      <div class="vx-card__collapsible-content vs-con-loading__container">
-        <div class="vx-card__body">
-          <div v-if="last_day">
-            <vue-apex-charts
-              v-if="revenueComparisonLineDay"
-              type="line"
-              height="266"
-              :options="revenueComparisonLineDay.chartOptions"
-              :series="revenueComparisonLineDay.series"
-            />
-          </div>
-          <div v-if="last_month">
-            <vue-apex-charts
-              v-if="revenueComparisonLineMonth"
-              type="line"
-              height="266"
-              :options="revenueComparisonLineMonth.chartOptions"
-              :series="revenueComparisonLineMonth.series"
-            />
-          </div>
-          <div v-if="last_year">
-            <vue-apex-charts
-              v-if="revenueComparisonLineYear"
-              type="line"
-              height="266"
-              :options="revenueComparisonLineYear.chartOptions"
-              :series="revenueComparisonLineYear.series"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    </vue-card>
   </div>
 </template>
 <script>

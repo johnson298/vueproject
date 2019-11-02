@@ -1,6 +1,6 @@
 <template>
-  <vx-card title="Quá trình học">
-    <template slot="no-body">
+  <vue-card title="Quá trình học">
+    <div slot="card-body">
       <div class="mt-10">
         <vue-apex-charts
           type="radialBar"
@@ -9,21 +9,20 @@
           :series="[Math.ceil(courseInfo.progress*100/courseInfo.number_of_lessons)||0]"
         />
       </div>
-    </template>
-
-    <div class="flex justify-between text-center" slot="no-body-bottom">
-      <div
-        class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0"
-      >
-        <p class="mt-4">Tổng số buổi</p>
-        <p class="mb-4 text-3xl font-semibold">{{ courseInfo.number_of_lessons }}</p>
-      </div>
-      <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">
-        <p class="mt-4">Số buổi hoàn thành</p>
-        <p class="mb-4 text-3xl font-semibold">{{ courseInfo.progress }}</p>
+      <div class="flex justify-between text-center" slot="no-body-bottom">
+        <div
+          class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0"
+        >
+          <p class="mt-4">Tổng số buổi</p>
+          <p class="mb-4 text-3xl font-semibold">{{ courseInfo.number_of_lessons }}</p>
+        </div>
+        <div class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0">
+          <p class="mt-4">Số buổi hoàn thành</p>
+          <p class="mb-4 text-3xl font-semibold">{{ courseInfo.progress }}</p>
+        </div>
       </div>
     </div>
-  </vx-card>
+  </vue-card>
 </template>
 
 <script>

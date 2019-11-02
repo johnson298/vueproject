@@ -1,31 +1,24 @@
 <template>
-  <div class="vx-card">
-    <div class="vx-card__header">
-      <div class="vx-card__title">
-        <h4 class>Học viên</h4>
-      </div>
-      <div class="vx-card__actions">
-        <vs-dropdown vs-trigger-click class="cursor-pointer">
-          <small class="flex cursor-pointer">
-            Chọn biểu đồ
-            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" class="ml-1"></feather-icon>
-          </small>
-          <vs-dropdown-menu class="w-32">
-            <vs-dropdown-item>Theo tuần</vs-dropdown-item>
-            <vs-dropdown-item>Theo tháng</vs-dropdown-item>
-            <vs-dropdown-item>Theo năm</vs-dropdown-item>
-          </vs-dropdown-menu>
-        </vs-dropdown>
+  <vue-card title="Học viên">
+    <div slot="card-actions">
+      <vs-dropdown vs-trigger-click class="cursor-pointer">
+        <small class="flex cursor-pointer">
+          Chọn biểu đồ
+          <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" class="ml-1"></feather-icon>
+        </small>
+        <vs-dropdown-menu class="w-32">
+          <vs-dropdown-item>Theo tuần</vs-dropdown-item>
+          <vs-dropdown-item>Theo tháng</vs-dropdown-item>
+          <vs-dropdown-item>Theo năm</vs-dropdown-item>
+        </vs-dropdown-menu>
+      </vs-dropdown>
+    </div>
+    <div slot="card-body">
+      <div class="mt-5">
+        <chartjs-component-line-chart :height="250" :data="month.data" :options="month.options"></chartjs-component-line-chart>
       </div>
     </div>
-    <div class="vx-card__collapsible-content vs-con-loading__container">
-      <div class="vx-card__body">
-        <div class="mt-5">
-          <chartjs-component-line-chart :height="250" :data="month.data" :options="month.options"></chartjs-component-line-chart>
-        </div>
-      </div>
-    </div>
-  </div>
+  </vue-card>
 </template>
 <script>
 import ChartjsComponentLineChart from "../ChartjsComponentLineChart.vue";

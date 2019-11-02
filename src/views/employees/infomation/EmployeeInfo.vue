@@ -178,6 +178,11 @@ export default {
       }
     };
   },
+  watch: {
+    user() {
+      this.user.phone = this.toNumber(this.user.phone);
+    }
+  },
   created() {
     this.userInfo();
   },

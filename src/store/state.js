@@ -2,22 +2,20 @@ import navbarSearchAndPinList from "@/layouts/components/navbarSearchAndPinList"
 import themeConfig from "@/../themeConfig.js";
 import colors from "@/../themeConfig.js";
 function checkBranchId() {
+  let userStore = JSON.parse(localStorage.getItem("user"));
   if (
-    typeof JSON.parse(localStorage.getItem("user")) === "undefined" ||
-    JSON.parse(localStorage.getItem("user")) == null ||
-    JSON.parse(localStorage.getItem("user")).branch_id === null
+    typeof userStore === "undefined" ||
+    userStore == null ||
+    userStore.branch_id === null
     // eslint-disable-next-line no-empty
   ) {
     if (localStorage.getItem("branchId")) {
       return localStorage.getItem("branchId");
     } else {
-      localStorage.setItem("branchId", 1);
+      localStorage.setItem("branchId", localStorage.getItem("defaultBranchId"));
     }
   } else {
-    localStorage.setItem(
-      "branchId",
-      JSON.parse(localStorage.getItem("user")).branch_id
-    );
+    localStorage.setItem("branchId", userStore.branch_id);
   }
   return localStorage.getItem("branchId");
 }

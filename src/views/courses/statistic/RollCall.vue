@@ -1,18 +1,19 @@
 <template>
-<vx-card title="Điểm danh">
-    <e-charts :options="line" theme="ovilia-green" ref="line" auto-resize />
-</vx-card>
+  <vue-card title="Điểm danh">
+    <div slot="card-body">
+      <e-charts :options="line" theme="ovilia-green" ref="line" auto-resize />
+    </div>
+  </vue-card>
 </template>
 
 <script>
-import ECharts from 'vue-echarts/components/ECharts';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legend';
-import 'echarts/lib/chart/line';
-import theme from './echarts/theme.json';
-ECharts.registerTheme('ovilia-green', theme);
+import ECharts from "vue-echarts/components/ECharts";
+import "echarts/lib/component/tooltip";
+import "echarts/lib/component/legend";
+import "echarts/lib/chart/line";
+import theme from "./echarts/theme.json";
+ECharts.registerTheme("ovilia-green", theme);
 export default {
-
   data() {
     let data = [
       ["2000-06-05", 116],
@@ -66,26 +67,27 @@ export default {
       ["2000-07-23", 55],
       ["2000-07-24", 60]
     ];
-    var dateList = data.map(function (item) {
+    var dateList = data.map(function(item) {
       return item[0];
     });
-    var valueList = data.map(function (item) {
+    var valueList = data.map(function(item) {
       return item[1];
     });
 
     return {
       line: {
-
         // Make gradient line here
-        visualMap: [{
-          show: false,
-          type: 'continuous',
-          seriesIndex: 0,
-          min: 0,
-          max: 400
-        }],
+        visualMap: [
+          {
+            show: false,
+            type: "continuous",
+            seriesIndex: 0,
+            min: 0,
+            max: 400
+          }
+        ],
         tooltip: {
-          trigger: 'axis'
+          trigger: "axis"
         },
         xAxis: {
           data: dateList
@@ -93,14 +95,14 @@ export default {
         yAxis: {
           splitLine: {
             show: false
-          },
+          }
         },
         series: {
-          type: 'line',
+          type: "line",
           showSymbol: false,
           data: valueList
         }
-      },
+      }
     };
   },
   components: {
@@ -110,5 +112,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

@@ -346,19 +346,44 @@ export default {
     changeBranch() {
       this.$store.dispatch("changeBranchData", this.branchID);
       localStorage.setItem("branchId", this.branchID);
-      this.$vs.notify({
-        title: "Chuyển chi nhánh thành công",
-        text: `Chi nhánh hiện tại: ${this.branchName}`,
-        color: "success",
-        iconPack: "feather",
-        icon: "icon-check"
-      });
+      axios
+        .get(`branches/${this.branchID}`)
+        .then(res => {
+          this.$vs.notify({
+            title: "Chuyển chi nhánh thành công",
+            text: `Chi nhánh hiện tại: ${res.data.data.name}`,
+            color: "success",
+            iconPack: "feather",
+            icon: "icon-check"
+          });
+        })
+        .catch(() => {
+          this.$vs.notify({
+            title: "Chuyển chi nhánh thành công",
+            text: "Lỗi lấy tên chi nhánh",
+            color: "danger",
+            iconPack: "feather",
+            icon: "icon-check"
+          });
+        });
       this.changeBranchPopup = false;
     },
     getAllBranches() {
-      axios.get("branches").then(res => {
-        this.branches = res.data.data;
-      });
+      axios
+        .get("branches")
+        .then(res => {
+          this.branches = res.data.data;
+          localStorage.setItem("defaultBranchId", res.data.data[0].id);
+        })
+        .catch(() => {
+          this.$vs.notify({
+            title: "Lỗi !",
+            text: "Có lỗi xảy ra",
+            color: "danger",
+            iconPack: "feather",
+            icon: "icon-check"
+          });
+        });
     },
     getBranchName() {
       axios.get(`branches/${this.branchID}`).then(res => {
