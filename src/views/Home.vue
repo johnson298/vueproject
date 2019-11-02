@@ -30,44 +30,37 @@
       </div>
       <!-- RADIAL CHART -->
       <div class="vx-col w-full md:w-1/3 mb-base">
-        <div class="vx-card">
-          <div class="vx-card__header">
-            <div class="vx-card__title">
-              <h4 class>Tổng thu chi</h4>
+        <vue-card title="Tổng thu chi">
+          <div slot="card-body">
+            <div class="mt-10">
+              <vue-apex-charts
+                type="radialBar"
+                height="240"
+                :options="analyticsData.goalOverviewRadialBar.chartOptions"
+                :series="totalMoney"
+              />
             </div>
-          </div>
-          <div class="vx-card__collapsible-content vs-con-loading__container">
-            <div class="vx-card__body">
-              <div class="mt-10">
-                <vue-apex-charts
-                  type="radialBar"
-                  height="240"
-                  :options="analyticsData.goalOverviewRadialBar.chartOptions"
-                  :series="totalMoney"
-                />
+            <!-- DATA -->
+            <div class="flex justify-between text-center" slot="no-body-bottom">
+              <div
+                class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0 py-1"
+              >
+                <p>Thu</p>
+                <p
+                  class="text-xl font-semibold"
+                >{{ formatShortMoney(dataStatistics.money.revenues) }}</p>
               </div>
-              <!-- DATA -->
-              <div class="flex justify-between text-center" slot="no-body-bottom">
-                <div
-                  class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0"
-                >
-                  <p class="mt-4">Thu</p>
-                  <p
-                    class="text-xl font-semibold"
-                  >{{ formatShortMoney(dataStatistics.money.revenues) }}</p>
-                </div>
-                <div
-                  class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0"
-                >
-                  <p class="mt-4">Chi Tiêu</p>
-                  <p
-                    class="text-xl font-semibold"
-                  >{{ formatShortMoney(dataStatistics.money.expenditures) }}</p>
-                </div>
+              <div
+                class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 py-1"
+              >
+                <p>Chi Tiêu</p>
+                <p
+                  class="text-xl font-semibold"
+                >{{ formatShortMoney(dataStatistics.money.expenditures) }}</p>
               </div>
             </div>
           </div>
-        </div>
+        </vue-card>
       </div>
     </div>
     <div class="vx-row mt-5 px-4">

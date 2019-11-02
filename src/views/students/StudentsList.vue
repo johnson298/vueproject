@@ -149,7 +149,15 @@
           </vs-td>
 
           <vs-td v-if="views.debts.viewable">
-            <p class="product-category">{{ formatPrice(tr.total_amount - tr.paid) }}</p>
+            <p
+              class="product-category"
+            >{{ (tr.total_amount - tr.paid) > 0 ? formatPrice(tr.total_amount - tr.paid) : 0 }}</p>
+          </vs-td>
+
+          <vs-td v-if="views.surplus.viewable">
+            <p
+              class="product-category"
+            >{{ (tr.total_amount - tr.paid) > 0 ? 0 : formatPrice(Math.abs(tr.total_amount - tr.paid)) }}</p>
           </vs-td>
 
           <vs-td v-if="views.updated_at.viewable">

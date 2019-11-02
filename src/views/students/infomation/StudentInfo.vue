@@ -102,6 +102,11 @@ export default {
   components: {
     Datepicker
   },
+  watch: {
+    student() {
+      this.student.phone = this.toNumber(this.student.phone);
+    }
+  },
   computed: {
     formatDate: {
       get() {

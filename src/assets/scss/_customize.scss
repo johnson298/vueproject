@@ -205,6 +205,13 @@ body {
     }
   }
 }
+ul.vs-dropdown--menu {
+  .con-vs-checkbox {
+    span.con-slot-label {
+      text-transform: capitalize;
+    }
+  }
+}
 /*=========================================================================================
   File Name: _customize.scss
   Description: custom color 

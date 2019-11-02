@@ -2,7 +2,7 @@
 <div>
     <div class="vs-row">
         <div class="vs-col md:w-1/2 w-full mb-5">
-            <vs-input label="Tên khách hàng" placeholder="Mã khách hàng" class="w-full uniquesdfgh" v-model="customerInfo.code" disabled="disabled" />
+            <vs-input label="Mã khách hàng" placeholder="Mã khách hàng" class="w-full uniquesdfgh" v-model="customerInfo.code" disabled="disabled" />
         </div>
         <div class="vs-col md:w-1/2 w-full mb-5">
             <vs-input label="Tên khách hàng" placeholder="Tên khách hàng" class="w-full uniquesdfgh" v-model="customerInfo.name" />

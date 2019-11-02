@@ -135,7 +135,7 @@
         </VuePerfectScrollbar>
 
         <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
-            <vs-button class="mr-6 vs-con-loading__container" :disabled="errors.any()" id="button-with-loading" @click="updateCourse(coursesGetInfo)">Chỉnh sửa</vs-button>
+            <vs-button class="mr-6 vs-con-loading__container" :disabled="errors.any()" id="button-with-loading" @click="updateCourse(coursesGetInfo)">Cập nhật</vs-button>
             <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Hủy</vs-button>
         </div>
     </vs-sidebar>
