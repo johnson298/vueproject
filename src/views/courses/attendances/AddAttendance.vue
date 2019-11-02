@@ -5,7 +5,7 @@
         <label class="vs-input--label">Ngày điểm danh</label>
         <div class="columns">
           <div class="column w-full is-3">
-            <flat-pickr v-model="currentDate" placeholder="chọn ngày điểm danh" />
+            <flat-pickr v-model="currentDate" placeholder="chọn ngày điểm danh" disabled="true" />
           </div>
         </div>
       </vs-col>
