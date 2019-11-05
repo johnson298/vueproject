@@ -154,12 +154,6 @@
             >{{ (tr.total_amount - tr.paid) > 0 ? formatPrice(tr.total_amount - tr.paid) : 0 }}</p>
           </vs-td>
 
-          <vs-td v-if="views.surplus.viewable">
-            <p
-              class="product-category"
-            >{{ (tr.total_amount - tr.paid) > 0 ? 0 : formatPrice(Math.abs(tr.total_amount - tr.paid)) }}</p>
-          </vs-td>
-
           <vs-td v-if="views.updated_at.viewable">
             <p class="product-category">{{ tr.updated_at }}</p>
           </vs-td>

@@ -1,8 +1,8 @@
 <template>
-  <div class="vue-card">
+  <div class="vue-card" ref="card" :style="cardStyles">
     <div class="vue-card__header">
       <div class="vue-card__title">
-        <h4 class>{{ $props.title }}</h4>
+        <h4 class :style="titleStyles">{{ $props.title }}</h4>
         <slot name="title" />
       </div>
       <div class="vue-card__actions">
@@ -22,6 +22,24 @@ export default {
   props: {
     title: {
       type: String
+    },
+    titleColor: {
+      type: [String, Object]
+    },
+    cardBackground: {
+      type: String
+    }
+  },
+  computed: {
+    titleStyles() {
+      return {
+        color: this.titleColor
+      };
+    },
+    cardStyles() {
+      return {
+        background: this.cardBackground
+      };
     }
   }
 };

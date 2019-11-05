@@ -1,49 +1,16 @@
 <template>
   <div id="profile-page">
     <!-- COL AREA -->
-    <h2 class="text-center mb-10">Lớp: {{course.name}}</h2>
-    <vx-card code-toggler class="custom-card">
+    <vx-card class="custom-card">
       <div class="mt-5 custom-tab">
         <div class="con-vs-tabs vs-tabs vs-tabs-primary vs-tabs-position-top">
           <div class="con-ul-tabs">
             <ul class="ul-tabs vs-tabs--ul ul-tabs-left">
               <li class="vs-tabs--li">
-                <router-link tag="button" :to="`/courses/${idCourse}`" class="vs-tabs--btn">Thống kê</router-link>
+                <router-link tag="button" to="/campaigns" class="vs-tabs--btn">Thông báo</router-link>
               </li>
               <li class="vs-tabs--li">
-                <router-link
-                  tag="button"
-                  :to="`/courses/${idCourse}/calendar`"
-                  class="vs-tabs--btn"
-                >Lịch học</router-link>
-              </li>
-              <li class="vs-tabs--li">
-                <router-link
-                  tag="button"
-                  :to="`/courses/${idCourse}/students`"
-                  class="vs-tabs--btn"
-                >Danh sách học viên</router-link>
-              </li>
-              <li class="vs-tabs--li">
-                <router-link
-                  tag="button"
-                  :to="`/courses/${idCourse}/teachers`"
-                  class="vs-tabs--btn"
-                >Danh sách giáo viên</router-link>
-              </li>
-              <li class="vs-tabs--li">
-                <router-link
-                  tag="button"
-                  :to="`/courses/${idCourse}/attendances`"
-                  class="vs-tabs--btn"
-                >Điểm danh</router-link>
-              </li>
-              <li class="vs-tabs--li">
-                <router-link
-                  tag="button"
-                  :to="`/courses/${idCourse}/history`"
-                  class="vs-tabs--btn"
-                >Lịch sử</router-link>
+                <router-link tag="button" to="/campaigns/evaluate" class="vs-tabs--btn">Đánh giá</router-link>
               </li>
             </ul>
           </div>
@@ -66,46 +33,12 @@ import themeConfig from "@/../themeConfig.js";
 export default {
   data() {
     return {
-      idCourse: this.$route.params.course,
       isNavOpen: true,
       wasSidebarOpen: null,
       course: {},
       routerTransition: themeConfig.routerTransition || "zoom-fade",
       branch_id: this.$store.state.getBranchId
     };
-  },
-  created() {
-    let vm = this;
-    this.$http
-      .get(`branches/${this.branch_id}/courses/` + this.$route.params.course)
-      .then(function(response) {
-        vm.course = response.data.data;
-      })
-      .catch(() => {
-        this.$router.push("/pages/error-404");
-        this.$vs.notify({
-          title: "Error!",
-          text: "Có lỗi xảy ra",
-          iconPack: "feather",
-          icon: "fa fa-lg fa-exclamation-triangle",
-          color: "danger"
-        });
-      });
-  },
-  filters: {
-    trim: function(string) {
-      return string.trim();
-    }
-  },
-  methods: {
-    mounted() {
-      this.wasSidebarOpen = this.$store.state.reduceButton;
-      this.$store.commit("TOGGLE_REDUCE_BUTTON", false);
-    },
-    beforeDestroy() {
-      if (!this.wasSidebarOpen)
-        this.$store.commit("TOGGLE_REDUCE_BUTTON", false);
-    }
   },
   computed: {
     branchId() {
@@ -114,7 +47,7 @@ export default {
   },
   watch: {
     branchId() {
-      this.$router.push("/courses");
+      this.$router.push("/");
     }
   }
 };

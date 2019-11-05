@@ -1,17 +1,13 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    <add-new-data-sidebar
-      :isSidebarActive="addNewDataSidebar"
-      @closeSidebar="addNewDataSidebar = false"
-      :callback="getData"
-    />
-
-    <edit-course-sidebar
-      :isSidebarEditActive="editCourseSidebar"
-      @closeSidebar="editCourseSidebar = false"
-      :coursesGetInfo="coursesGetInfo"
-      :getData="getData"
-    />
+    <ul class="d-flex my-5">
+      <li class="ml-5">
+        <vs-radio v-model="emp" vs-value="Đang hoạt động">Thu</vs-radio>
+      </li>
+      <li class="ml-5">
+        <vs-radio v-model="emp" vs-value="Đã nghỉ">Chi</vs-radio>
+      </li>
+    </ul>
     <vs-table-custom
       :sst="true"
       ref="table"
@@ -19,7 +15,7 @@
       v-model="selected"
       @search="handleSearch"
       @sort="handleSort"
-      :data="courses"
+      :data="invoices"
       search
       id="table"
       maxItems="10"
@@ -62,7 +58,7 @@
 
             <vs-dropdown-menu>
               <div class="col p-2">
-                <div v-for="(value, index) in views" :key="index" class="p-1">
+                <div v-for="(value, index) in viewsMoney" :key="index" class="p-1">
                   <vs-checkbox
                     :value="value.viewable"
                     @change="updateViews(index, $event)"
@@ -71,99 +67,60 @@
               </div>
             </vs-dropdown-menu>
           </vs-dropdown>
-
-          <!-- ADD NEW -->
-          <div
-            class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary"
-            @click="addNewDataSidebar = true"
-          >
-            <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-            <span class="ml-2 text-base text-primary">Thêm lớp học</span>
-          </div>
         </div>
       </div>
+
       <template slot="thead">
         <vs-th
           :sort-key="value.sortKey"
-          v-for="(value, index) in views"
+          v-for="(value, index) in viewsMoney"
           :key="index"
           v-if="value.viewable"
         >{{ value.text }}</vs-th>
       </template>
-
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.name }}</p>
+          <vs-td v-if="viewsMoney.id.viewable">
+            <p class="product-category">{{ tr.id }}</p>
           </vs-td>
 
-          <vs-td v-if="views.price.viewable">
-            <p class="product-category">{{ formatPrice(tr.price) }}</p>
+          <vs-td v-if="viewsMoney.student_id.viewable">
+            <p class="product-category">{{ tr.student_id }}</p>
           </vs-td>
 
-          <vs-td v-if="views.program_id.viewable">
-            <p class="product-category">{{ tr.program_id }}</p>
+          <vs-td v-if="viewsMoney.student_avatar.viewable">
+            <vs-avatar size="55px" :src="tr.student.avatar" :alt="tr.student.name" />
           </vs-td>
 
-          <vs-td v-if="views.start_at.viewable">
-            <p class="product-category">{{ tr.start_at }}</p>
+          <vs-td v-if="viewsMoney.student_name.viewable">
+            <p class="product-category">{{ tr.student.name }}</p>
           </vs-td>
 
-          <vs-td v-if="views.end_at.viewable">
-            <p class="product-category">{{ tr.end_at }}</p>
+          <vs-td v-if="viewsMoney.amount.viewable">
+            <p class="product-category">{{ formatPrice(tr.amount) }}</p>
           </vs-td>
 
-          <vs-td v-if="views.progress.viewable">
-            <span>{{ tr.progress }}/{{ tr.number_of_lessons }}</span>
-            <vs-progress
-              :percent="tr.progress*100/tr.number_of_lessons"
-              :color="(tr.progress*100/tr.number_of_lessons<100)?'primary':'success'"
-            ></vs-progress>
+          <vs-td v-if="viewsMoney.note.viewable">
+            <p class="product-category">{{ tr.note }}</p>
           </vs-td>
 
-          <vs-td v-if="views.status.viewable">
+          <vs-td v-if="viewsMoney.source.viewable">
             <p class="product-category">
               <vs-chip
-                :color="checkStatus(statusCourse,tr.status)=='Mở' ? 'warning'
-                      : checkStatus(statusCourse,tr.status)=='Hoạt động' ? 'primary'
-                      : checkStatus(statusCourse,tr.status)=='Hoàn thành' ? 'success'
-                      : 'danger'"
-              >{{ checkStatus(statusCourse,tr.status) }}</vs-chip>
+                :color="checkStatus(sourceInvoices,tr.source)=='Momo' ? 'primary'
+                              : checkStatus(sourceInvoices,tr.source)=='Tiền mặt' ? 'success'
+                              : checkStatus(sourceInvoices,tr.source)=='Chuyển khoản' ? 'warning'
+                              : ''"
+              >{{ checkStatus(sourceInvoices,tr.source) }}</vs-chip>
             </p>
           </vs-td>
 
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
+          <vs-td v-if="viewsMoney.updated_at.viewable">
             <p class="product-category">{{ tr.updated_at }}</p>
           </vs-td>
 
-          <vs-td v-if="views.action.viewable" class="d-flex-span">
-            <router-link
-              tag="button"
-              :to="`/courses/${tr.id}`"
-              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"
-            >
-              <i class="feather icon-eye"></i>
-            </router-link>
-            <vs-button
-              radius
-              color="primary"
-              size="small"
-              @click="detailCourse(tr)"
-              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"
-            >
-              <i class="feather icon-edit"></i>
-            </vs-button>
-            <vs-button
-              radius
-              color="danger"
-              size="small"
-              @click="deleteCourse(tr)"
-              icon="delete_forever"
-            ></vs-button>
+          <vs-td v-if="viewsMoney.created_at.viewable">
+            <p class="product-category">{{ tr.created_at }}</p>
           </vs-td>
         </vs-tr>
       </template>
@@ -171,7 +128,7 @@
     <div class="con-vs-pagination vs-pagination-primary">
       <nav class="vs-pagination--nav">
         <paginate
-          :page-count="pagination.totalPages"
+          :page-count="paginationMoney.totalPages"
           :page-range="3"
           :margin-pages="2"
           :active-class="'is-current'"
@@ -180,7 +137,7 @@
           :prev-text="prev"
           :next-text="next"
           :click-handler="getData"
-          :value="pagination.currentPage"
+          :value="paginationMoney.currentPage"
           ref="paginate"
         />
       </nav>
@@ -189,80 +146,137 @@
 </template>
 
 <script>
-import AddNewDataSidebar from "./AddNewDataSidebar.vue";
-import EditCourseSidebar from "./EditCourse.vue";
 import { mapState } from "vuex";
 
 export default {
-  components: {
-    AddNewDataSidebar,
-    EditCourseSidebar
-  },
-  data: function() {
+  data() {
     return {
-      statusCourse: this.$store.state.model.courses.status,
-      coursesGetInfo: {
-        program: { name: "" },
-        branch: { name: "" }
-      },
+      itemsPerPage: "Tuần",
+      emp: "Được thêm mới",
+      sourceInvoices: this.$store.state.model.invoices.source,
       activeConfirm: false,
       timer: null,
       selected: [],
       isMounted: false,
       addNewDataSidebar: false,
-      editCourseSidebar: false,
       prev:
         '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev"><i class="vs-icon notranslate icon-scale material-icons null">chevron_left</i></button>',
       next:
-        '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-next"><i class="vs-icon notranslate icon-scale material-icons null">chevron_right</i></button>'
+        '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-next"><i class="vs-icon notranslate icon-scale material-icons null">chevron_right</i></button>',
+      invoices: [
+        {
+          id: 1,
+          type: 1,
+          branch_id: 1,
+          user_id: 1,
+          course_id: 474,
+          student_id: 1814,
+          amount: 1000000,
+          note: null,
+          source: 3,
+          date: "2019-11-04",
+          created_at: "2019-11-04 11:29:56",
+          updated_at: "2019-11-04 11:29:56",
+          deleted_at: null,
+          student: {
+            id: 1814,
+            user_id: null,
+            branch_id: 6,
+            code: "HV-01814",
+            name: "Thịnh Hạ",
+            status: null,
+            email: "huyen33@example.org",
+            birthday: "2009-06-21",
+            gender: 0,
+            facebook:
+              "http://dong.pro.vn/voluptas-ullam-tenetur-sunt-doloribus-non-incidunt",
+            phone: "0122-259-4338",
+            address:
+              "091 Phố Đào Dân Việt, Phường Hà, Quận Kính Nhuận\nHồ Chí Minh",
+            school: "Khương and Sons",
+            class: "and Sons",
+            source: 3,
+            note:
+              "Sunt commodi possimus aperiam ipsam facere iusto. Mollitia sit inventore provident esse quo blanditiis. Voluptates autem non et quidem voluptate. Aperiam ducimus nisi sunt iste delectus.",
+            metadata: null,
+            email_verified_at: "2019-11-03 22:04:33",
+            total_amount: 10157000,
+            paid: 9883000,
+            created_at: "2019-11-03 22:04:42",
+            updated_at: "2019-11-05 10:15:48",
+            deleted_at: null,
+            avatar: "http://apiedu.itsvnweb.com/images/default.png"
+          },
+          course: {
+            id: 474,
+            program_id: 24,
+            branch_id: 1,
+            name: "Aliquid ut temporibus fugit autem omnis aut.",
+            start_at: "2019-11-03",
+            end_at: "2019-12-03",
+            price: 5274000,
+            status: 1,
+            progress: 5,
+            number_of_lessons: 27,
+            created_at: "2019-11-03 22:04:42",
+            updated_at: "2019-11-05 11:25:19",
+            deleted_at: null
+          },
+          user: {
+            id: 1,
+            branch_id: null,
+            code: "00001",
+            name: "Administrator",
+            email: "admin@crm.local",
+            status: 1,
+            birthday: null,
+            gender: 0,
+            facebook: null,
+            phone: null,
+            address: null,
+            major: 0,
+            level: 1,
+            note: null,
+            metadata: null,
+            position: 5,
+            email_verified_at: "2019-11-03 22:04:11",
+            created_at: "2019-11-03 22:04:11",
+            updated_at: "2019-11-03 22:04:11",
+            deleted_at: null,
+            avatar: "http://apiedu.itsvnweb.com/images/default.png"
+          }
+        }
+      ]
     };
   },
   computed: {
-    ...mapState("courses", [
-      "courses",
-      "pagination",
-      "searchTerm",
-      "order",
-      "views",
-      "needReload"
-    ]),
-    branchId() {
-      return this.$store.state.getBranchId;
-    }
+    ...mapState("reports", [
+      "money",
+      "paginationMoney",
+      "searchTermMoney",
+      "orderMoney",
+      "viewsMoney",
+      "needReloadMoney"
+    ])
   },
   methods: {
-    detailCourse(course) {
-      var vm = this;
-      vm.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
-      this.$http
-        .get(`branches/${this.branchId}/courses/${course.id}`)
-        .then(function(response) {
-          if (response.data.data.id) {
-            vm.coursesGetInfo = response.data.data;
-          }
-        })
-        .finally(function() {
-          vm.editCourseSidebar = true;
-          vm.$vs.loading.close();
-        });
-    },
-    deleteCourse(course) {
+    deleteEmployee(user) {
       this.$vs.dialog({
         type: "confirm",
         color: "danger",
-        title: `Xóa lớp học`,
-        text: "Bạn có chắc muốn xóa " + course.name,
-        accept: this.courseAlert,
-        parameters: [course.id]
+        title: `Xóa nhân viên`,
+        text: "Bạn có chắc muốn xóa " + user.name,
+        accept: this.employeeAlert,
+        parameters: [user.id]
       });
     },
-    courseAlert(course) {
+    employeeAlert(user_id) {
       this.$http
-        .delete(`branches/${this.branchId}/courses/${course}`)
+        .delete("users/" + user_id)
         .then(() => {
           this.$vs.notify({
             color: "success",
-            title: "Xóa lớp học",
+            title: "Xóa nhân viên",
             text: "Bạn đã xóa thành công",
             icon: "verified_user"
           });
@@ -279,7 +293,7 @@ export default {
         });
     },
     updateViews(index, e) {
-      this.$store.dispatch("courses/updateViews", {
+      this.$store.dispatch("reports/updateViewsMoney", {
         index: index,
         viewable: e.target.checked
       });
@@ -289,9 +303,12 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
+      thisIns.$vs.loading({
+        color: "#7367F0",
+        text: "Loading..."
+      });
       this.$http
-        .get(`branches/${this.branchId}/courses`, {
+        .get("users", {
           params: {
             page: page,
             search: this.searchTerm,
@@ -300,9 +317,9 @@ export default {
           }
         })
         .then(function(response) {
-          thisIns.$store.dispatch("courses/updateTable", {
-            courses: thisIns.formatData(response.data.data),
-            pagination: response.data.pagination
+          thisIns.$store.dispatch("reports/updateTableMoney", {
+            users: thisIns.formatData(response.data.data),
+            paginationMoney: response.data.pagination
           });
         })
         .catch(function(error) {
@@ -320,11 +337,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch("courses/updateNeedReload", true);
+        this.$store.dispatch("reports/updateNeedReloadMoney", true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch("courses/updateSearch", {
+      this.$store.dispatch("reports/updateSearchMoney", {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -333,7 +350,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch("courses/updateOrder", {
+      this.$store.dispatch("reports/updateOrderMoney", {
         order: {
           orderBy: key,
           orderType: active ? "desc" : "asc"
@@ -345,21 +362,9 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.courses.length === 0) {
-      this.getData();
-    }
-  },
-  created() {
-    this.getData();
   },
   destroyed() {
-    this.$store.dispatch("courses/updateNeedReload", false);
-  },
-  watch: {
-    branchId() {
-      this.getData();
-      this.$store.dispatch("courses/updateNeedReload", true);
-    }
+    this.$store.dispatch("reports/updateNeedReloadMoney", false);
   }
 };
 </script>
@@ -372,6 +377,7 @@ export default {
       flex-wrap: wrap-reverse;
       margin-left: 1.5rem;
       margin-right: 1.5rem;
+
       > span {
         display: flex;
         flex-grow: 1;
@@ -402,17 +408,21 @@ export default {
 
       tr {
         box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+
         td {
           padding: 20px;
+
           &:first-child {
             border-top-left-radius: 0.5rem;
             border-bottom-left-radius: 0.5rem;
           }
+
           &:last-child {
             border-top-right-radius: 0.5rem;
             border-bottom-right-radius: 0.5rem;
           }
         }
+
         td.td-check {
           padding: 20px !important;
         }
@@ -423,15 +433,18 @@ export default {
       th {
         padding-top: 0;
         padding-bottom: 0;
+        vertical-align: middle;
 
         .vs-table-text {
           text-transform: uppercase;
           font-weight: 600;
         }
       }
+
       th.td-check {
         padding: 0 15px !important;
       }
+
       tr {
         background: none;
         box-shadow: none;
@@ -452,8 +465,5 @@ export default {
       margin: 3px;
     }
   }
-}
-.vdp-datepicker.picker-custom input {
-  width: 100% !important;
 }
 </style>

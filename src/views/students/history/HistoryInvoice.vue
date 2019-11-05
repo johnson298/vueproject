@@ -169,7 +169,7 @@ export default {
     formatData(data) {
       return data;
     },
-    getData(page = 1) {
+    getData() {
       const thisIns = this;
       thisIns.$vs.loading({
         color: "#1E6DB5",
@@ -177,15 +177,7 @@ export default {
       });
       this.$http
         .get(
-          `branches/${this.branchId}/invoices?type=1&search=student_id:${this.studentId}`,
-          {
-            params: {
-              page: page,
-              search: this.searchTermInvoice,
-              orderBy: this.orderInvoice.orderBy,
-              sortedBy: this.orderInvoice.orderType
-            }
-          }
+          `branches/${this.branchId}/invoices?type=1&search=student_id:${this.studentId}`
         )
         .then(function(response) {
           thisIns.$store.dispatch("students/updateTableInvoice", {

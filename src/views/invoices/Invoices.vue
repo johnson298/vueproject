@@ -1,6 +1,11 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    <vs-popup class="popup-custom-968" title="Thêm mới hóa đơn" :active.sync="addBill">
+    <vs-popup
+      class="popup-custom-968"
+      title="Thêm mới hóa đơn"
+      :active.sync="addBill"
+      v-if="addBill"
+    >
       <AddInvoice :callback="getData" :active.sync="addBill" @closePopupInvoice="addBill = $event" />
     </vs-popup>
 

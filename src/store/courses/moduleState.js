@@ -21,7 +21,6 @@ export default {
       viewable: false,
       sortKey: "program_id"
     },
-    branch_id: { text: "Tên chi nhánh", viewable: false, sortKey: "branch_id" },
     start_at: { text: "Ngày bắt đầu", viewable: false, sortKey: "start_at" },
     end_at: { text: "Ngày kết thúc", viewable: false, sortKey: "end_at" },
     progress: { text: "Tiến độ (buổi)", viewable: true, sortKey: "progress" },

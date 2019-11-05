@@ -25,6 +25,7 @@ import moduleExpense from "./expense/module";
 import moduleAttendances from "./attendances/module";
 import moduleRegisterAttendance from "./registersAttendance/module";
 import moduleLessons from "./lessons/module";
+import moduleReports from "./reports/module";
 
 Vue.use(Vuex);
 
@@ -53,7 +54,8 @@ export default new Vuex.Store({
     expense: moduleExpense,
     attendances: moduleAttendances,
     registersAttendance: moduleRegisterAttendance,
-    lessons: moduleLessons
+    lessons: moduleLessons,
+    reports: moduleReports
   },
   strict: process.env.NODE_ENV !== "production"
 });

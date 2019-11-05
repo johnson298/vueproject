@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="vs-con-loading__container" id="div-with-loading-popup">
     <vs-row vs-w="12">
-      <vs-col vs-w="12">
+      <vs-col vs-w="12" id="print-invoice">
         <div>
           <div class="vs-component vs-con-input-label vs-input mb-5 w-full vs-input-primary">
             <vue-simple-suggest
@@ -21,18 +21,18 @@
               </div>
               <template slot="misc-item-above" slot-scope="{ suggestions, query }">
                 <div class="misc-item">
-                  <span>You're searching for '{{ query }}'.</span>
+                  <span>Bạn đang tìm kiếm '{{ query }}'.</span>
                 </div>
 
                 <template v-if="suggestions.length > 0">
                   <div class="misc-item">
-                    <span>{{ suggestions.length }} suggestions are shown...</span>
+                    <span>{{ suggestions.length }} đề xuất được hiển thị...</span>
                   </div>
                   <hr />
                 </template>
 
                 <div class="misc-item" v-else-if="!loading">
-                  <span>No results</span>
+                  <span>Không có kết quả</span>
                 </div>
               </template>
 
@@ -48,7 +48,7 @@
                 slot-scope="{ suggestions }"
                 v-if="loading"
               >
-                <span>Loading...</span>
+                <span>Đang tìm kiếm...</span>
               </div>
             </vue-simple-suggest>
           </div>
@@ -58,7 +58,7 @@
           key="check-course"
         >
           <vs-select
-            v-if="selectedStudent.courses.length != 0"
+            v-if="coursesRegis.length != 0"
             v-model="invoices.courses"
             label="Chọn lớp học"
             class="mt-5 w-full"
@@ -67,7 +67,8 @@
               :key="item.id"
               :value="item"
               :text="item.name"
-              v-for="item in selectedStudent.courses"
+              v-for="item in coursesRegis"
+              @change="selectCourseRegister($event)"
             />
           </vs-select>
           <div v-else key="check-course">
@@ -84,7 +85,7 @@
                   <strong>Tên học viên:</strong>
                 </div>
                 <div class="vx-col sm:w-3/4 w-full">
-                  <span>{{selectedStudent.name}}</span>
+                  <span>{{ selectedStudent.name }}</span>
                 </div>
               </div>
               <div class="vx-row mb-5">
@@ -92,7 +93,7 @@
                   <strong>Mã học viên:</strong>
                 </div>
                 <div class="vx-col sm:w-3/4 w-full">
-                  <span>{{selectedStudent.id}}</span>
+                  <span>{{ selectedStudent.code }}</span>
                   <vs-input value="id" type="hidden" />
                 </div>
               </div>
@@ -101,7 +102,7 @@
                   <strong>Điện thoại:</strong>
                 </div>
                 <div class="vx-col sm:w-3/4 w-full">
-                  <span>{{selectedStudent.phone}}</span>
+                  <span>{{ selectedStudent.phone }}</span>
                 </div>
               </div>
               <div class="vx-row mb-5">
@@ -109,13 +110,16 @@
                   <strong>Địa chỉ:</strong>
                 </div>
                 <div class="vx-col sm:w-3/4 w-full">
-                  <span>{{selectedStudent.address}}</span>
+                  <span>{{ selectedStudent.address }}</span>
                 </div>
               </div>
             </vs-col>
           </vs-row>
         </div>
-        <div class="vx-row mb-5" v-if="invoices.courses.id && selectedStudent.courses.length != 0">
+        <div
+          class="vx-row mb-5"
+          v-if="invoices.courses.id && selectedStudent.courses.length != 0 && invoices.courses.register.paid !=='undefined'"
+        >
           <div class="vx-col w-full pr-0">
             <h5 class="mt-3 mb-3">Chương trình học</h5>
           </div>
@@ -128,23 +132,21 @@
                   <br />(vnđ)
                 </vs-th>
                 <vs-th class="p-2">
-                  Công nợ
+                  Còn thiếu
                   <br />(vnđ)
                 </vs-th>
-                <vs-th class="p-2">Thanh toán (vnđ)</vs-th>
+                <vs-th class="p-2">Muốn thanh toán (vnđ)</vs-th>
               </template>
 
               <template slot-scope="{data}">
                 <vs-tr>
-                  <vs-td :data="data.name">{{ data.name }}</vs-td>
+                  <vs-td>{{ data.name }}</vs-td>
 
-                  <vs-td :data="data.price">{{ formatPrice(data.price) }}</vs-td>
+                  <vs-td>{{ formatPrice(data.price) }}</vs-td>
 
-                  <vs-td :data="data.debt">
-                    <!-- {{ formatPrice(data.debt) }} -->
-                  </vs-td>
+                  <vs-td>{{ (data.price - invoices.courses.register.paid) > 0 ? formatPrice(data.price - invoices.courses.register.paid) : 0 }}</vs-td>
 
-                  <vs-td :data="data.price">
+                  <vs-td>
                     <vs-input v-model="invoices.amount" :value="data.price" type="number" />
                   </vs-td>
                 </vs-tr>
@@ -156,7 +158,7 @@
               <vs-col vs-w="6" class="p-0">
                 <p class="pt-2">
                   <strong class="text-primary">Tổng tiền thanh toán:</strong>
-                  {{formatPrice(invoices.amount)}} vnđ
+                  {{ formatPrice(invoices.amount) }} vnđ
                 </p>
               </vs-col>
 
@@ -166,13 +168,40 @@
                     <strong class="pt-2 d-block text-primary">Bằng chữ:</strong>
                   </div>
                   <div class="vx-col pl-0 sm:w-3/4 w-full">
-                    <span class="mt-2 d-block">{{DOCSO(invoices.amount)}}</span>
+                    <span class="mt-2 d-block">{{ DOCSO(invoices.amount) }}</span>
                   </div>
                 </div>
               </vs-col>
             </vs-row>
+            <vs-row class="mt-5">
+              <vs-col vs-w="6" class="p-0">
+                <div class="vx-row d-flex ml-1">
+                  <div class="vx-col p-0 sm:w-1/4 w-full">
+                    <strong class="pt-2 d-block text-primary">Số tiền (vnđ):</strong>
+                  </div>
+                  <div class="vx-col pl-0 sm:w-3/4 w-full">
+                    <vs-input v-model="memPay" type="number" />
+                  </div>
+                </div>
+              </vs-col>
+
+              <vs-col vs-w="6" class="p-0">
+                <div class="vx-row d-flex">
+                  <div class="vx-col p-0 sm:w-1/4 w-full">
+                    <strong class="pt-2 d-block text-primary">Trả lại:</strong>
+                  </div>
+                  <div class="vx-col pl-0 sm:w-3/4 w-full">
+                    <span
+                      class="mt-2 d-block"
+                      v-if="parseInt(memPay) > parseInt(invoices.amount)"
+                    >{{ formatPrice(memPay - invoices.amount) }}vnđ</span>
+                  </div>
+                </div>
+              </vs-col>
+            </vs-row>
+
             <h5 class="mt-3 mb-3">Hình thức thanh toán</h5>
-            <ul class="d-flex">
+            <ul class="d-flex justify-content-center">
               <li class="mr-5" v-for="(item, key) in sourceInvoices" :key="key">
                 <vs-radio v-model="invoices.source" :vs-value="item.value">{{item.text}}</vs-radio>
               </li>
@@ -209,6 +238,7 @@
           class="ml-3"
           type="filled"
           color="primary"
+          @click="createInvoice(true)"
         >Tạo & in hóa đơn</vs-button>
         <vs-button
           class="ml-3"
@@ -223,6 +253,7 @@
 
 <script>
 import vSelect from "vue-select";
+import dataHtml from "./data.js";
 export default {
   props: {
     callback: {
@@ -232,6 +263,8 @@ export default {
   },
   data() {
     return {
+      memPay: 0,
+      coursesRegis: [],
       sourceInvoices: this.$store.state.model.invoices.source,
       searchData: "",
       disabled: "disabled",
@@ -242,7 +275,10 @@ export default {
         student_id: null,
         courses: {
           course_id: null,
-          price: null
+          price: null,
+          register: {
+            paid: 0
+          }
         },
         note: "",
         source: 3,
@@ -259,6 +295,34 @@ export default {
     }
   },
   methods: {
+    printInvoice() {
+      let objData = {
+        name: this.selectedStudent.name,
+        email: this.selectedStudent.email,
+        phone: this.selectedStudent.phone,
+        courseName: this.invoices.courses.name,
+        price: this.formatPrice(this.invoices.courses.price),
+        amount: this.formatPrice(parseInt(this.invoices.amount)),
+        memPaid: this.formatPrice(this.memPay),
+        total: this.formatPrice(this.memPay),
+        moneyWord: this.DOCSO(this.invoices.amount),
+        typePay: this.checkStatus(this.sourceInvoices, this.invoices.source),
+        code: this.selectedStudent.code,
+        start_at: this.invoices.courses.start_at,
+        end_at: this.invoices.courses.end_at,
+        surplus: (this.memPay - parseInt(this.invoices.amount)) > 0? this.formatPrice(this.memPay - parseInt(this.invoices.amount)): 0
+      };
+      var mywindow = window.open("", "Print", "height=600,width=800");
+
+      mywindow.document.write("<html><head><title>Print</title>");
+      mywindow.document.write("</head><body >");
+      mywindow.document.write(dataHtml.data(objData));
+      mywindow.document.write("</body></html>");
+
+      mywindow.document.close();
+      mywindow.focus();
+      return true;
+    },
     initValues() {
       this.invoices = {
         student_id: null,
@@ -270,14 +334,26 @@ export default {
         source: 3,
         amount: 0
       };
-      (this.selectedStudent = null), (this.searchData = "");
+      this.selectedStudent = null;
+      this.searchData = "";
     },
-    createInvoice() {
+    createInvoice(print = false) {
+      if (
+        this.invoices.amount >
+        this.invoices.courses.price - this.invoices.courses.register.paid
+      ) {
+        this.$vs.notify({
+          title: "Lỗi!",
+          text: "Số tiền muốn đóng không lớn hơn số tiền còn thiếu",
+          iconPack: "feather",
+          icon: "fa fa-lg fa-exclamation-triangle",
+          color: "danger"
+        });
+        return false;
+      }
       this.$vs.loading({
-        background: "#1E6DB5",
-        color: "#fff",
-        container: "#btn-loading",
-        scale: 0.45
+        container: "#div-with-loading-popup",
+        scale: 0.6
       });
       this.$http
         .post(`branches/${this.branchId}/invoices?type=1`, {
@@ -288,6 +364,9 @@ export default {
           amount: this.invoices.amount
         })
         .then(() => {
+          if (print) {
+            this.printInvoice();
+          }
           this.$vs.notify({
             title: "Đã thêm mới thành công",
             text: "OK",
@@ -326,7 +405,7 @@ export default {
           }
         })
         .finally(() => {
-          this.$vs.loading.close("#btn-loading > .con-vs-loading");
+          this.$vs.loading.close("#div-with-loading-popup > .con-vs-loading");
         });
     },
     getStudents(search = "") {
@@ -350,6 +429,28 @@ export default {
     onSuggestSelectStudent(suggest) {
       if (suggest) {
         this.invoices.student_id = suggest.id;
+        let vm = this;
+        vm.$vs.loading({
+          container: "#div-with-loading-popup",
+          scale: 0.6
+        });
+        vm.$http
+          .get(`students/${suggest.id}/courses`)
+          .then(res => {
+            vm.coursesRegis = res.data.data;
+          })
+          .catch(() => {
+            vm.$vs.notify({
+              title: "Lỗi",
+              text: "Lỗi tìm lớp của học viên",
+              color: "danger",
+              iconPack: "feather",
+              icon: "icon-alert-circle"
+            });
+          })
+          .finally(() => {
+            vm.$vs.loading.close("#div-with-loading-popup > .con-vs-loading");
+          });
       }
     }
   }

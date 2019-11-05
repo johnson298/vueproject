@@ -69,9 +69,9 @@ export default [
     iconFontAwesome: "user-friends"
   },
   {
-    url: "/campaign",
+    url: "/campaigns",
     name: "Chiến dịch",
-    slug: "campaign",
+    slug: "campaigns",
     iconFontAwesome: "handshake"
   },
   {
