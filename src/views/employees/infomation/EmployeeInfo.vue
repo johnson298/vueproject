@@ -180,7 +180,9 @@ export default {
   },
   watch: {
     user() {
-      this.user.phone = this.toNumber(this.user.phone);
+      if (this.user.phone) {
+        this.user.phone = this.toNumber(this.user.phone);
+      }
     }
   },
   created() {
@@ -230,7 +232,7 @@ export default {
         if (key != "metadata") {
           formData.append(key, this.user[key]);
         }
-        if (!this.user[key]) {
+        if (this.user[key] === null || this.user[key] === "") {
           formData.append(key, "");
         }
       });

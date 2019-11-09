@@ -110,7 +110,7 @@ Vue.mixin({
   methods: {
     formatPrice(value) {
       let val = (value / 1).toFixed(0).replace(".", ",");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     formatDateUTC(val) {
       var date = new Date(val);
@@ -196,6 +196,9 @@ Vue.mixin({
     },
     // check status (convert number to word)
     checkStatus(arrCheck, x) {
+      if (!Number.isInteger(x)) {
+        return "Không định dạng";
+      }
       var arrFilter = arrCheck.map(el => el.text);
       let result = null;
       for (let i = 1; i <= arrFilter.length; i++) {

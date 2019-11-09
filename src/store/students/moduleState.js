@@ -26,7 +26,6 @@ export default {
     class: { text: "lớp", viewable: false, sortKey: "" },
     school: { text: "trường", viewable: false, sortKey: "" },
     debts: { text: "còn nợ (vnđ)", viewable: true, sortKey: "debts" },
-    surplus: { text: "còn dư (vnđ)", viewable: true, sortKey: "surplus" },
     created_at: { text: "ngày tạo", viewable: false, sortKey: "created_at" },
     updated_at: {
       text: "ngày cập nhật",

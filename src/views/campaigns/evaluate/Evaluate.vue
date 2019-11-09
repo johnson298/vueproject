@@ -1,17 +1,11 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    <add-new-data-sidebar
-      :isSidebarActive="addNewDataSidebar"
-      @closeSidebar="addNewDataSidebar = false"
-      :callback="getData"
-    />
-
-    <edit-course-sidebar
-      :isSidebarEditActive="editCourseSidebar"
-      @closeSidebar="editCourseSidebar = false"
-      :coursesGetInfo="coursesGetInfo"
-      :getData="getData"
-    />
+    <vs-popup class="popup-custom-968" title="Thêm mới đánh giá" :active.sync="addNew">
+      <add-evaluate :active.sync="addNew" @closePopupAdd="addNew = $event"></add-evaluate>
+    </vs-popup>
+    <vs-popup class="popup-custom-768" title="Chi tiết đánh giá" :active.sync="detailValuate">
+      <detail-evaluate :active.sync="detailValuate" @closePopupDetail="detailValuate = $event"></detail-evaluate>
+    </vs-popup>
     <vs-table-custom
       :sst="true"
       ref="table"
@@ -19,7 +13,7 @@
       v-model="selected"
       @search="handleSearch"
       @sort="handleSort"
-      :data="courses"
+      :data="campaigns"
       search
       id="table"
       maxItems="10"
@@ -56,7 +50,7 @@
             <div
               class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32"
             >
-              <span class="mr-2">Xem</span>
+              <span class="mr-2">Views</span>
               <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
             </div>
 
@@ -71,97 +65,71 @@
               </div>
             </vs-dropdown-menu>
           </vs-dropdown>
-
           <!-- ADD NEW -->
+
           <div
             class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary"
-            @click="addNewDataSidebar = true"
+            @click="addNew = true"
           >
             <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-            <span class="ml-2 text-base text-primary">Thêm lớp học</span>
+            <span
+              class="ml-2 text-base text-primary"
+              style="color: #636363 !important;"
+            >Thêm đánh giá</span>
           </div>
         </div>
       </div>
-      <template slot="thead">
-        <vs-th
-          :sort-key="value.sortKey"
-          v-for="(value, index) in views"
-          :key="index"
-          v-if="value.viewable"
-        >{{ value.text }}</vs-th>
+
+      <template style="padding-left: 10px" slot="thead">
+        <vs-th>Mã lớp</vs-th>
+        <vs-th>Tên đánh giá</vs-th>
+        <vs-th>Ngày áp dụng</vs-th>
+        <vs-th>Số câu hỏi</vs-th>
+        <vs-th>Người tạo</vs-th>
+        <vs-th>Tỷ lệ đánh giá</vs-th>
+        <vs-th>hành động</vs-th>
       </template>
 
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.name.viewable">
+          <vs-td>
+            <p class="product-name font-medium">{{ tr.code }}</p>
+          </vs-td>
+          <vs-td>
             <p class="product-name font-medium">{{ tr.name }}</p>
           </vs-td>
-
-          <vs-td v-if="views.price.viewable">
-            <p class="product-category">{{ formatPrice(tr.price) }}</p>
+          <vs-td>
+            <p class="product-name font-medium">{{ tr.date }}</p>
           </vs-td>
-
-          <vs-td v-if="views.program_id.viewable">
-            <p class="product-category">{{ tr.program_id }}</p>
+          <vs-td>
+            <p class="product-name font-medium">{{ tr.count }}</p>
           </vs-td>
-
-          <vs-td v-if="views.start_at.viewable">
-            <p class="product-category">{{ tr.start_at }}</p>
+          <vs-td>
+            <p class="product-name font-medium">{{ tr.memberCreate }}</p>
           </vs-td>
-
-          <vs-td v-if="views.end_at.viewable">
-            <p class="product-category">{{ tr.end_at }}</p>
+          <vs-td>
+            <p class="product-name font-medium" v-html="tr.dg"></p>
           </vs-td>
-
-          <vs-td v-if="views.progress.viewable">
-            <span>{{ tr.progress }}/{{ tr.number_of_lessons }}</span>
-            <vs-progress
-              :percent="tr.progress*100/tr.number_of_lessons"
-              :color="(tr.progress*100/tr.number_of_lessons<100)?'primary':'success'"
-            ></vs-progress>
-          </vs-td>
-
-          <vs-td v-if="views.status.viewable">
-            <p class="product-category">
-              <vs-chip
-                :color="checkStatus(statusCourse,tr.status)=='Mở' ? 'warning'
-                      : checkStatus(statusCourse,tr.status)=='Hoạt động' ? 'primary'
-                      : checkStatus(statusCourse,tr.status)=='Hoàn thành' ? 'success'
-                      : 'danger'"
-              >{{ checkStatus(statusCourse,tr.status) }}</vs-chip>
-            </p>
-          </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.action.viewable" class="d-flex-span">
-            <router-link
-              tag="button"
-              :to="`/courses/${tr.id}`"
-              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"
+          <vs-td class="d-flex-span">
+            <vx-tooltip text="copy sang bản mới">
+              <div
+                class="mt-1 mr-1 vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small vs-radius"
+                @click="detailValuate = true"
+              >
+                <i class="feather icon-copy"></i>
+              </div>
+            </vx-tooltip>
+            <div
+              class="mt-1 vs-component vs-button vs-button-success vs-button-filled includeIcon includeIconOnly small vs-radius"
+              @click="detailValuate = true"
             >
               <i class="feather icon-eye"></i>
-            </router-link>
-            <vs-button
-              radius
-              color="primary"
-              size="small"
-              @click="detailCourse(tr)"
-              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"
-            >
-              <i class="feather icon-edit"></i>
-            </vs-button>
+            </div>
             <vs-button
               radius
               color="danger"
               size="small"
-              @click="deleteCourse(tr)"
+              @click="deleteCampaign(tr)"
               icon="delete_forever"
             ></vs-button>
           </vs-td>
@@ -189,28 +157,35 @@
 </template>
 
 <script>
-import AddNewDataSidebar from "./AddNewDataSidebar.vue";
-import EditCourseSidebar from "./EditCourse.vue";
 import { mapState } from "vuex";
+import AddEvaluate from "./AddEvaluate";
+import DetailEvalute from "./DetailEvalute";
 
 export default {
   components: {
-    AddNewDataSidebar,
-    EditCourseSidebar
+    "add-evaluate": AddEvaluate,
+    "detail-evaluate": DetailEvalute
   },
-  data: function() {
+  data() {
     return {
-      statusCourse: this.$store.state.model.courses.status,
-      coursesGetInfo: {
-        program: { name: "" },
-        branch: { name: "" }
-      },
+      addNew: false,
+      detailValuate: false,
+      campaigns: [
+        {
+          code: "TA_01",
+          name: "Tiếng anh giao tiếp",
+          date: "21-08-2019",
+          count: 5,
+          memberCreate: "John Smith",
+          dg: "50% - rất hài lòng <br> 30% - hài lòng <br> 20% - không hài lòng"
+        }
+      ],
+      range_send: this.$store.state.model.campaign.range_send,
+      position: this.$store.state.model.campaign.position,
       activeConfirm: false,
       timer: null,
       selected: [],
       isMounted: false,
-      addNewDataSidebar: false,
-      editCourseSidebar: false,
       prev:
         '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev"><i class="vs-icon notranslate icon-scale material-icons null">chevron_left</i></button>',
       next:
@@ -218,51 +193,33 @@ export default {
     };
   },
   computed: {
-    ...mapState("courses", [
-      "courses",
+    ...mapState("campaign", [
+      "users",
       "pagination",
       "searchTerm",
       "order",
       "views",
       "needReload"
-    ]),
-    branchId() {
-      return this.$store.state.getBranchId;
-    }
+    ])
   },
   methods: {
-    detailCourse(course) {
-      var vm = this;
-      vm.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
-      this.$http
-        .get(`branches/${this.branchId}/courses/${course.id}`)
-        .then(function(response) {
-          if (response.data.data.id) {
-            vm.coursesGetInfo = response.data.data;
-          }
-        })
-        .finally(function() {
-          vm.editCourseSidebar = true;
-          vm.$vs.loading.close();
-        });
-    },
-    deleteCourse(course) {
+    deleteCampaign(user) {
       this.$vs.dialog({
         type: "confirm",
         color: "danger",
-        title: `Xóa lớp học`,
-        text: "Bạn có chắc muốn xóa " + course.name,
-        accept: this.courseAlert,
-        parameters: [course.id]
+        title: `Xóa nhân viên`,
+        text: "Bạn có chắc muốn xóa " + user.name,
+        accept: this.campaignAlert,
+        parameters: [user.id]
       });
     },
-    courseAlert(course) {
+    campaignAlert(user_id) {
       this.$http
-        .delete(`branches/${this.branchId}/courses/${course}`)
+        .delete("users/" + user_id)
         .then(() => {
           this.$vs.notify({
             color: "success",
-            title: "Xóa lớp học",
+            title: "Xóa nhân viên",
             text: "Bạn đã xóa thành công",
             icon: "verified_user"
           });
@@ -279,7 +236,7 @@ export default {
         });
     },
     updateViews(index, e) {
-      this.$store.dispatch("courses/updateViews", {
+      this.$store.dispatch("campaign/updateViews", {
         index: index,
         viewable: e.target.checked
       });
@@ -289,9 +246,9 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
+      thisIns.$vs.loading({ color: "#7367F0", text: "Loading..." });
       this.$http
-        .get(`branches/${this.branchId}/courses`, {
+        .get("users", {
           params: {
             page: page,
             search: this.searchTerm,
@@ -300,8 +257,8 @@ export default {
           }
         })
         .then(function(response) {
-          thisIns.$store.dispatch("courses/updateTable", {
-            courses: thisIns.formatData(response.data.data),
+          thisIns.$store.dispatch("campaign/updateTable", {
+            users: thisIns.formatData(response.data.data),
             pagination: response.data.pagination
           });
         })
@@ -320,11 +277,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch("courses/updateNeedReload", true);
+        this.$store.dispatch("campaign/updateNeedReload", true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch("courses/updateSearch", {
+      this.$store.dispatch("campaign/updateSearch", {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -333,7 +290,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch("courses/updateOrder", {
+      this.$store.dispatch("campaign/updateOrder", {
         order: {
           orderBy: key,
           orderType: active ? "desc" : "asc"
@@ -345,21 +302,12 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.courses.length === 0) {
+    if (this.users.length === 0) {
       this.getData();
     }
-  },
-  created() {
-    this.getData();
   },
   destroyed() {
-    this.$store.dispatch("courses/updateNeedReload", false);
-  },
-  watch: {
-    branchId() {
-      this.getData();
-      this.$store.dispatch("courses/updateNeedReload", true);
-    }
+    this.$store.dispatch("campaign/updateNeedReload", false);
   }
 };
 </script>
@@ -443,17 +391,21 @@ export default {
     }
   }
 }
-
 .d-flex-span {
   span {
     display: flex;
-
     button {
       margin: 3px;
     }
   }
 }
-.vdp-datepicker.picker-custom input {
-  width: 100% !important;
+</style>
+<style>
+#add_campaign {
+  height: 46px;
+  background: #ffffff;
+  border-style: none !important;
+  box-shadow: 2px 2px 2px 2px #dddddd;
+  color: #636363 !important;
 }
 </style>

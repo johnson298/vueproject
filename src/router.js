@@ -401,11 +401,35 @@ const router = new Router({
           }
         },
         {
-          path: "/report/employee",
-          component: () => import("./views/reports/EmployeeReport.vue"),
+          path: "/reports/employee",
+          component: () => import("./views/reports/EmployeesReport.vue"),
           meta: {
             breadcrumb: [{ title: "Báo cáo nhân viên", url: "/" }],
             pageTitle: "Báo cáo nhân viên"
+          }
+        },
+        {
+          path: "/reports/student",
+          component: () => import("./views/reports/StudentsReport.vue"),
+          meta: {
+            breadcrumb: [{ title: "Báo cáo học viên", url: "/" }],
+            pageTitle: "Báo cáo học viên"
+          }
+        },
+        {
+          path: "/reports/course",
+          component: () => import("./views/reports/CoursesReport.vue"),
+          meta: {
+            breadcrumb: [{ title: "Báo cáo lớp học", url: "/" }],
+            pageTitle: "Báo cáo chương lớp học"
+          }
+        },
+        {
+          path: "/reports/money",
+          component: () => import("./views/reports/MoneyReport.vue"),
+          meta: {
+            breadcrumb: [{ title: "Báo cáo thu chi", url: "/" }],
+            pageTitle: "Báo cáo thu chi"
           }
         },
         // KHÁCH HÀNG
@@ -417,14 +441,32 @@ const router = new Router({
             pageTitle: "Khách hàng"
           }
         },
+        // CHIẾN DỊCH
         {
-          path: "/campaign",
-          name: "campaign",
-          component: () => import("./views/campaign/DataListListView.vue"),
-          meta: {
-            breadcrumb: [{ title: "Chi tiết chiến dịch", url: "/" }],
-            pageTitle: "Chi tiết chiến dịch"
-          }
+          path: "/campaigns",
+          component: () => import("./views/campaigns/OverView.vue"),
+          children: [
+            {
+              path: "/",
+              name: "campaignsNotification",
+              component: () =>
+                import("./views/campaigns/notification/Notification.vue"),
+              meta: {
+                breadcrumb: [{ title: "Thông báo", url: "/" }],
+                pageTitle: "Thông báo"
+              }
+            },
+            {
+              path: "/campaigns/evaluate",
+              name: "campaignsEvaluate",
+              component: () =>
+                import("./views/campaigns/evaluate/Evaluate.vue"),
+              meta: {
+                breadcrumb: [{ title: "Đánh giá", url: "/" }],
+                pageTitle: "Đánh giá"
+              }
+            }
+          ]
         },
         {
           path: "/notifications",
