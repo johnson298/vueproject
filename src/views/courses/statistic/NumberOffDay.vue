@@ -1,27 +1,32 @@
 <template>
-    <div>
-        <statistics-card-line color='success' icon="UsersIcon" statistic="92.6k" statisticTitle="Số ngày nghỉ" :chartData="analyticsData.subscribersGained" type='area'></statistics-card-line>
-    </div>
-
+  <div>
+    <statistics-card-line
+      color="success"
+      icon="UsersIcon"
+      statistic="0"
+      statisticTitle="Ngày nghỉ"
+      :chartData="analyticsData.subscribersGained"
+      type="area"
+    ></statistics-card-line>
+  </div>
 </template>
 <script>
-import VueApexCharts from 'vue-apexcharts';
-import StatisticsCardLine from '@/components/statistics-cards/StatisticsCardLine.vue';
-import analyticsData from './ui-elements/card/analyticsData.js';
+import VueApexCharts from "vue-apexcharts";
+import StatisticsCardLine from "@/components/statistics-cards/StatisticsCardLine.vue";
+import analyticsData from "./ui-elements/card/analyticsData.js";
 
-export default{
+export default {
   data() {
     return {
-      analyticsData: analyticsData,
+      analyticsData: analyticsData
     };
   },
   components: {
     VueApexCharts,
-    StatisticsCardLine,
-  },
+    StatisticsCardLine
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-
 </style>

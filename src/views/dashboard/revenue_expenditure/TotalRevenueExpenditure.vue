@@ -148,17 +148,17 @@ export default {
   methods: {
     chooseDate(type) {
       switch (type) {
-        case "day":
-          this.popupActiveDate = true;
-          break;
-        case "month":
-          this.popupActiveMonth = true;
-          break;
-        case "year":
-          this.popupActiveYear = true;
-          break;
-        default:
-          break;
+      case "day":
+        this.popupActiveDate = true;
+        break;
+      case "month":
+        this.popupActiveMonth = true;
+        break;
+      case "year":
+        this.popupActiveYear = true;
+        break;
+      default:
+        break;
       }
       this.type = type;
     },
