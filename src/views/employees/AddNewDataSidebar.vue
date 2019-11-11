@@ -258,7 +258,8 @@ export default {
         position: 1,
         major: 1,
         gender: 0,
-        status: 1
+        status: 1,
+        branch_id: this.$store.state.getBranchId
       },
       levels: this.$store.state.model.employees.levels,
       positions: this.$store.state.model.employees.positions,
@@ -326,7 +327,8 @@ export default {
         level: 1,
         position: 1,
         major: 1,
-        status: 1
+        status: 1,
+        branch_id: this.$store.state.getBranchId
       };
       this.$refs.file.value = null;
     },

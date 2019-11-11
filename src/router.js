@@ -390,11 +390,10 @@ const router = new Router({
         // BÁO CÁO
         {
           path: "/reports",
-          component: () => import("./views/reports/OverView.vue"),
+          component: () => import("./views/reports/Index.vue"),
           meta: {
             breadcrumb: [
               { title: "Báo cáo", url: "/reports" },
-              { title: "Thu chi" },
               { title: "Báo cáo", active: true }
             ],
             pageTitle: "Báo cáo"

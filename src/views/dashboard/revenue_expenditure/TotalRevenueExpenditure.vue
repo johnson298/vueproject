@@ -1,28 +1,55 @@
 <template>
   <div class="h-100">
-    <vs-popup class="holamundo" title="Chọn ngày thống kê" :active.sync="popupActiveDate">
+    <vs-popup
+      class="holamundo"
+      title="Chọn ngày thống kê"
+      :active.sync="popupActiveDate"
+    >
       <vs-row>
-        <vs-col vs-w="12" vs-type="flex" vs-justify="center" class="picker-custom">
+        <vs-col
+          vs-w="12"
+          vs-type="flex"
+          vs-justify="center"
+          class="picker-custom"
+        >
           <flat-pickr v-model="fromDate" placeholder="Từ ngày" class="mr-3" />
           <flat-pickr v-model="toDate" placeholder="Đến  ngày" class="mr-3" />
           <vs-button color="primary" @click="getDataByDate">Xem</vs-button>
         </vs-col>
       </vs-row>
     </vs-popup>
-    <vs-popup class="holamundo" title="Chọn tháng thống kê" :active.sync="popupActiveMonth">
+    <vs-popup
+      class="holamundo"
+      title="Chọn tháng thống kê"
+      :active.sync="popupActiveMonth"
+    >
       <vs-row>
-        <vs-col vs-w="12" vs-type="flex" vs-justify="center" class="picker-custom">
+        <vs-col
+          vs-w="12"
+          vs-type="flex"
+          vs-justify="center"
+          class="picker-custom"
+        >
           <flat-pickr v-model="fromMonth" placeholder="Từ ngày" class="mr-3" />
-          <flat-pickr v-model="toMonth" placeholder="Đến  ngày" class="mr-3" />
+          <flat-pickr v-model="toMonth" placeholder="Đến ngày" class="mr-3" />
           <vs-button color="primary" @click="getDataByDate">Xem</vs-button>
         </vs-col>
       </vs-row>
     </vs-popup>
-    <vs-popup class="holamundo" title="Chọn năm thống kê" :active.sync="popupActiveYear">
+    <vs-popup
+      class="holamundo"
+      title="Chọn năm thống kê"
+      :active.sync="popupActiveYear"
+    >
       <vs-row>
-        <vs-col vs-w="12" vs-type="flex" vs-justify="center" class="picker-custom">
+        <vs-col
+          vs-w="12"
+          vs-type="flex"
+          vs-justify="center"
+          class="picker-custom"
+        >
           <flat-pickr v-model="fromYear" placeholder="Từ ngày" class="mr-3" />
-          <flat-pickr v-model="toYear" placeholder="Đến  ngày" class="mr-3" />
+          <flat-pickr v-model="toYear" placeholder="Đến ngày" class="mr-3" />
           <vs-button color="primary" @click="getDataByDate">Xem</vs-button>
         </vs-col>
       </vs-row>
@@ -32,11 +59,15 @@
       <div slot="title">
         <h4>Thu (theo {{ typeChart }})</h4>
       </div>
-      <div slot="card-actions">
+      <div slot="card-actions" class="d-flex">
         <vs-dropdown vs-trigger-click class="cursor-pointer mr-3">
           <small class="flex cursor-pointer">
             Chọn biểu đồ
-            <feather-icon icon="PieChartIcon" svgClasses="h-4 w-4" class="ml-1"></feather-icon>
+            <feather-icon
+              icon="PieChartIcon"
+              svgClasses="h-4 w-4"
+              class="ml-1"
+            ></feather-icon>
           </small>
           <vs-dropdown-menu class="w-32">
             <vs-dropdown-item @click="day">Theo ngày</vs-dropdown-item>
@@ -44,44 +75,69 @@
             <vs-dropdown-item @click="year">Theo năm</vs-dropdown-item>
           </vs-dropdown-menu>
         </vs-dropdown>
-        <vs-dropdown vs-trigger-click class="cursor-pointer">
-          <small class="flex cursor-pointer">
-            Chọn thời gian
-            <feather-icon icon="SettingsIcon" svgClasses="h-4 w-4" class="ml-1"></feather-icon>
-          </small>
-          <vs-dropdown-menu class="w-32">
-            <vs-dropdown-item @click="chooseDate('day')">Chọn ngày</vs-dropdown-item>
-            <vs-dropdown-item @click="chooseDate('month')">Chọn tháng</vs-dropdown-item>
-            <vs-dropdown-item @click="chooseDate('year')">Chọn năm</vs-dropdown-item>
-          </vs-dropdown-menu>
-        </vs-dropdown>
+        <small
+          v-if="last_day"
+          class="flex cursor-pointer"
+          @click="chooseDate('day')"
+        >
+          Chọn thời gian
+          <feather-icon
+            icon="SettingsIcon"
+            svgClasses="h-4 w-4"
+            class="ml-1"
+          ></feather-icon>
+        </small>
+        <small
+          v-if="last_month"
+          class="flex cursor-pointer"
+          @click="chooseDate('month')"
+        >
+          Chọn thời gian
+          <feather-icon
+            icon="SettingsIcon"
+            svgClasses="h-4 w-4"
+            class="ml-1"
+          ></feather-icon>
+        </small>
+        <small
+          v-if="last_year"
+          class="flex cursor-pointer"
+          @click="chooseDate('year')"
+        >
+          Chọn thời gian
+          <feather-icon
+            icon="SettingsIcon"
+            svgClasses="h-4 w-4"
+            class="ml-1"
+          ></feather-icon>
+        </small>
       </div>
       <div slot="card-body" class="pt-6">
         <div v-if="last_day">
           <vue-apex-charts
-            v-if="revenueComparisonLineDay"
+            v-if="dataDate"
             type="line"
             height="266"
-            :options="revenueComparisonLineDay.chartOptions"
-            :series="revenueComparisonLineDay.series"
+            :options="dataDate.chartOptions"
+            :series="dataDate.series"
           />
         </div>
         <div v-if="last_month">
           <vue-apex-charts
-            v-if="revenueComparisonLineMonth"
+            v-if="dataMonth"
             type="line"
             height="266"
-            :options="revenueComparisonLineMonth.chartOptions"
-            :series="revenueComparisonLineMonth.series"
+            :options="dataMonth.chartOptions"
+            :series="dataMonth.series"
           />
         </div>
         <div v-if="last_year">
           <vue-apex-charts
-            v-if="revenueComparisonLineYear"
+            v-if="dataYear"
             type="line"
             height="266"
-            :options="revenueComparisonLineYear.chartOptions"
-            :series="revenueComparisonLineYear.series"
+            :options="dataYear.chartOptions"
+            :series="dataYear.series"
           />
         </div>
       </div>
@@ -95,17 +151,12 @@ import ChangeTimeDurationDropdown from "../ChangeTimeDurationDropdown.vue";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 export default {
-  props: {
-    money: {
-      default: null
-    }
-  },
   data() {
     return {
       typeChart: "Ngày",
-      revenueComparisonLineDay: null,
-      revenueComparisonLineMonth: null,
-      revenueComparisonLineYear: null,
+      dataDate: null,
+      dataMonth: null,
+      dataYear: null,
       popupActiveDate: false,
       popupActiveMonth: false,
       popupActiveYear: false,
@@ -115,7 +166,6 @@ export default {
       toMonth: "",
       fromYear: "",
       toYear: "",
-      dataStatistic: [],
       last_day: true,
       last_month: false,
       last_year: false,
@@ -221,12 +271,6 @@ export default {
     },
     getData() {
       let vm = this;
-      vm.revenueComparisonLineDay
-        ? (vm.revenueComparisonLineDay.series = [])
-        : "";
-      vm.revenueComparisonLineDay
-        ? (vm.revenueComparisonLineDay.chartOptions.xaxis.categories = [])
-        : "";
       var url = null;
       if (this.fromDate && this.toDate) {
         url = `branches/${vm.branchId}/statistics/cost?mode=day&from=${this.fromDate}&to=${this.toDate}`;
@@ -235,7 +279,7 @@ export default {
       }
       vm.$http.get(url).then(function(response) {
         let dataMoney = response.data.data;
-        vm.revenueComparisonLineDay = {
+        vm.dataDate = {
           series: [
             {
               name: "Đã thu",
@@ -326,12 +370,6 @@ export default {
     },
     getDataMonth() {
       let vm = this;
-      vm.revenueComparisonLineMonth
-        ? (vm.revenueComparisonLineMonth.series = [])
-        : "";
-      vm.revenueComparisonLineMonth
-        ? (vm.revenueComparisonLineMonth.chartOptions.xaxis.categories = [])
-        : "";
       var url = null;
       if (this.fromMonth && this.toMonth) {
         url = `branches/${vm.branchId}/statistics/cost?mode=month&from=${this.fromMonth}&to=${this.toMonth}`;
@@ -340,7 +378,7 @@ export default {
       }
       vm.$http.get(url).then(function(response) {
         let dataMoney = response.data.data;
-        vm.revenueComparisonLineMonth = {
+        vm.dataMonth = {
           series: [
             {
               name: "Đã thu",
@@ -431,12 +469,6 @@ export default {
     },
     getDataYear() {
       let vm = this;
-      vm.revenueComparisonLineYear
-        ? (vm.revenueComparisonLineYear.series = [])
-        : "";
-      vm.revenueComparisonLineYear
-        ? (vm.revenueComparisonLineYear.chartOptions.xaxis.categories = [])
-        : "";
       var url = null;
       if (this.fromYear && this.toYear) {
         url = `branches/${vm.branchId}/statistics/cost?mode=year&from=${this.fromYear}&to=${this.toYear}`;
@@ -445,7 +477,7 @@ export default {
       }
       vm.$http.get(url).then(function(response) {
         let dataMoney = response.data.data;
-        vm.revenueComparisonLineYear = {
+        vm.dataYear = {
           series: [
             {
               name: "Đã thu",
@@ -539,21 +571,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.flatpickr-input[readonly] {
-  cursor: pointer;
-}
-
-.flatpickr-input {
-  padding: 0.7rem;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  color: #626262;
-}
-.h-100 {
-  height: 100%;
-  .vx-card {
-    height: 100%;
+  .flatpickr-input[readonly] {
+    cursor: pointer;
   }
-}
+
+  .flatpickr-input {
+    padding: 0.7rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    color: #626262;
+  }
+  .h-100 {
+    height: 100%;
+    .vx-card {
+      height: 100%;
+    }
+  }
 </style>

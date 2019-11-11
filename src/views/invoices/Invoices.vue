@@ -110,6 +110,10 @@
             <p class="product-category">{{ formatPrice(tr.amount) }}</p>
           </vs-td>
 
+          <vs-td v-if="views.total.viewable">
+            <p class="product-category">{{ formatPrice(tr.total) }}</p>
+          </vs-td>
+
           <vs-td v-if="views.note.viewable">
             <p class="product-category">{{ tr.note }}</p>
           </vs-td>
@@ -134,6 +138,33 @@
           </vs-td>
 
           <vs-td v-if="views.action.viewable" class="d-flex-span">
+            <vx-tooltip text="Gửi mail" position="top">
+              <button
+                @click="sendMail(tr.id)"
+                name="button"
+                class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"
+              >
+                <font-awesome-icon icon="envelope" />
+              </button>
+            </vx-tooltip>
+            <vx-tooltip text="Hóa đơn (web)" position="top">
+              <vs-button
+                radius
+                color="success"
+                size="small"
+                @click="printInvoice('html', tr.id)"
+                icon="print"
+              ></vs-button>
+            </vx-tooltip>
+            <vx-tooltip text="Xuất PDF" position="top">
+              <button
+                @click="printInvoice('pdf', tr.id)"
+                name="button"
+                class="vs-component vs-button vs-button-warning vs-button-filled includeIcon includeIconOnly vs-radius small"
+              >
+                <font-awesome-icon icon="file-pdf" />
+              </button>
+            </vx-tooltip>
             <vs-button
               radius
               color="danger"
@@ -168,6 +199,7 @@
 <script>
 import AddInvoice from "./AddInvoice";
 import { mapState } from "vuex";
+const baseUrl = process.env.VUE_APP_URL;
 
 export default {
   components: {
@@ -175,7 +207,11 @@ export default {
   },
   data() {
     return {
+      idInvoice: 0,
+      urlIframe: "",
       sourceInvoices: this.$store.state.model.invoices.source,
+      bill: null,
+      infoBill: false,
       addBill: false,
       invoiceGetInfo: {},
       timer: null,
@@ -209,6 +245,68 @@ export default {
     this.getData();
   },
   methods: {
+    sendMail(id) {
+      this.$vs.loading({
+        color: "#1E6DB5",
+        text: "Loading..."
+      });
+      this.$http
+        .post(`branches/${this.branchId}/invoices/${id}/mail`)
+        .then(() => {
+          this.$vs.notify({
+            title: "Gửi thành công",
+            text: "OK",
+            iconPack: "feather",
+            icon: "fa fa-lg fa-check-circle",
+            color: "success"
+          });
+          this.$emit("closePopupInfo", false);
+        })
+        .catch(() => {
+          this.$vs.notify({
+            title: "Error!",
+            text: "Gửi mail thất bại",
+            iconPack: "feather",
+            icon: "fa fa-lg fa-exclamation-triangle",
+            color: "danger"
+          });
+        })
+        .finally(() => {
+          this.$vs.loading.close();
+        });
+    },
+    printInvoice(type, invoiceId) {
+      let token = localStorage.getItem("access_token");
+      let vm = this;
+      let url = "";
+      if (type == "html") {
+        url = `${baseUrl}branches/${vm.branchId}/invoices/${invoiceId}/pdf?mode=html&token=${token}`;
+      }
+      if (type == "pdf") {
+        url = `${baseUrl}branches/${vm.branchId}/invoices/${invoiceId}/pdf?mode=pdf&token=${token}`;
+      }
+      vm.$vs.loading({
+        color: "#1E6DB5",
+        text: "Loading..."
+      });
+      vm.$http
+        .get(url)
+        .then(() => {
+          window.open(url, "_blank");
+        })
+        .catch(() => {
+          vm.$vs.notify({
+            title: "Lỗi!",
+            text: "Vui lòng thử lại !",
+            iconPack: "feather",
+            icon: "fa fa-lg fa-exclamation-triangle",
+            color: "danger"
+          });
+        })
+        .finally(function() {
+          vm.$vs.loading.close();
+        });
+    },
     deleteInvoice(invoice) {
       this.$vs.dialog({
         type: "confirm",

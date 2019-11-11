@@ -1,5 +1,5 @@
 <template>
-    <div class="vx-col w-full lg:w-1/2 mb-base">
+    <div class="vx-col w-full lg:w-1/2 mb-base h-100">
         <vx-card-custom slot="no-body" class="text-center bg-primary-gradient greet-user">
             <img src="@/assets/images/elements/decore-left.png" class="decore-left" alt="Decore Left" width="200" >
             <img src="@/assets/images/elements/decore-right.png" class="decore-right" alt="Decore Right" width="175">
