@@ -41,10 +41,20 @@
     </div>
     <div class="row">
       <div class="vs-col md:w-1/2 w-full mb-5">
-        <vs-input label="Email *" v-model="customerInfo.email" placeholder="Email" class="w-full" />
+        <vs-input
+          label="Email *"
+          v-model="customerInfo.email"
+          placeholder="Email"
+          class="w-full"
+        />
       </div>
       <div class="vs-col md:w-1/2 w-full mb-5">
-        <vs-input label="Zalo" placeholder="Zalo" v-model="customerInfo.zalo" class="w-full" />
+        <vs-input
+          label="Zalo"
+          placeholder="Zalo"
+          v-model="customerInfo.zalo"
+          class="w-full"
+        />
       </div>
     </div>
     <div class="row">
@@ -57,7 +67,11 @@
         />
       </div>
       <div class="vs-col md:w-1/2 w-full mb-5">
-        <vs-select v-model="customerInfo.gender" label="Giới Tính" class="w-full">
+        <vs-select
+          v-model="customerInfo.gender"
+          label="Giới Tính"
+          class="w-full"
+        >
           <vs-select-item
             :key="item.value"
             :value="item.value"
@@ -89,7 +103,7 @@
       <div class="vs-col md:w-1/2 w-full mb-5">
         <vs-input
           label="Trường học"
-          placeholder="Nhập tên trường"
+          placeholder=" Nhập tên trường"
           class="w-full"
           v-model="student.school"
         />
@@ -127,8 +141,15 @@
         type="filled"
         color="primary"
         @click="createStudent"
-      >Thêm</vs-button>
-      <vs-button class="ml-3" type="filled" color="danger" @click="$emit('update:active',false)">Hủy</vs-button>
+        >Thêm</vs-button
+      >
+      <vs-button
+        class="ml-3"
+        type="filled"
+        color="danger"
+        @click="$emit('update:active', false)"
+        >Hủy</vs-button
+      >
     </vs-col>
   </div>
 </template>
@@ -150,7 +171,6 @@ export default {
   },
   data() {
     return {
-      selectedBranch: null,
       loading: false,
       language: "vi",
       languages: lang,
@@ -183,32 +203,6 @@ export default {
     Datepicker
   },
   methods: {
-    initValues() {
-      this.student = {
-        password: null,
-        password_confirmation: null,
-        school: null,
-        class: null,
-        source: 4,
-        note: null
-      };
-    },
-    formDataEditStatusCustomer() {
-      let formData = new FormData();
-      Object.keys(this.customerInfo).map(key => {
-        formData.append(key, this.customerInfo[key]);
-      });
-      let keyObj = Object.keys(this.customerInfo);
-      let valueObj = Object.values(this.customerInfo);
-      for (let key in keyObj) {
-        if (!valueObj[key]) {
-          formData.append(keyObj[key], "");
-        }
-      }
-      formData.append("status", 3);
-      formData.append("_method", "PUT");
-      return formData;
-    },
     addStudent() {
       this.$vs.loading({
         background: "#1E6DB5",
@@ -235,7 +229,6 @@ export default {
         .then(() => {
           this.$emit("closePopupConvert", false);
           this.callback();
-          this.initValues();
           this.$vs.notify({
             title: "Đã thêm mới thành công",
             text: "OK",
@@ -282,15 +275,9 @@ export default {
     },
     editStatusCustomer() {
       this.$http
-        .post(
-          `branches/${this.branchId}/customers/${this.customerInfo.id}`,
-          this.formDataEditStatusCustomer(),
-          {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            }
-          }
-        )
+        .put(`branches/${this.branchId}/customers/${this.customerInfo.id}`, {
+          status: 3
+        })
         .catch(error => {
           if (
             error.response.status === 500 &&
@@ -302,10 +289,7 @@ export default {
               ][0];
             this.$vs.notify({
               title: "Thêm mới học viên thất bại !",
-              text:
-                Object.keys(error.response.data.error.validation)[0] === "email"
-                  ? "Email này đã tồn tại trong danh sách khách hàng"
-                  : message,
+              text: message,
               iconPack: "feather",
               icon: "fa fa-lg fa-exclamation-triangle",
               color: "danger"
