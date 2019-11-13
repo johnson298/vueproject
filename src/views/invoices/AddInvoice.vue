@@ -180,7 +180,7 @@
                     <strong class="pt-2 d-block text-primary">Số tiền (vnđ):</strong>
                   </div>
                   <div class="vx-col pl-0 sm:w-3/4 w-full">
-                    <vs-input v-model="memPay" type="number" />
+                    <vs-input v-model="invoices.total" type="number" />
                   </div>
                 </div>
               </vs-col>
@@ -193,8 +193,8 @@
                   <div class="vx-col pl-0 sm:w-3/4 w-full">
                     <span
                       class="mt-2 d-block"
-                      v-if="parseInt(memPay) > parseInt(invoices.amount)"
-                    >{{ formatPrice(memPay - invoices.amount) }}vnđ</span>
+                      v-if="parseInt(invoices.total) > parseInt(invoices.amount)"
+                    >{{ formatPrice(invoices.total - invoices.amount) }}vnđ</span>
                   </div>
                 </div>
               </vs-col>
@@ -238,7 +238,7 @@
           class="ml-3"
           type="filled"
           color="primary"
-          @click="createInvoice(true)"
+          @click="createInvoice"
         >Tạo & in hóa đơn</vs-button>
         <vs-button
           class="ml-3"
@@ -253,7 +253,6 @@
 
 <script>
 import vSelect from "vue-select";
-import dataHtml from "./data.js";
 export default {
   props: {
     callback: {
@@ -263,7 +262,6 @@ export default {
   },
   data() {
     return {
-      memPay: 0,
       coursesRegis: [],
       sourceInvoices: this.$store.state.model.invoices.source,
       searchData: "",
@@ -282,7 +280,8 @@ export default {
         },
         note: "",
         source: 3,
-        amount: 0
+        amount: 0,
+        total: 0
       }
     };
   },
@@ -295,49 +294,7 @@ export default {
     }
   },
   methods: {
-    printInvoice() {
-      let objData = {
-        name: this.selectedStudent.name,
-        email: this.selectedStudent.email,
-        phone: this.selectedStudent.phone,
-        courseName: this.invoices.courses.name,
-        price: this.formatPrice(this.invoices.courses.price),
-        amount: this.formatPrice(parseInt(this.invoices.amount)),
-        memPaid: this.formatPrice(this.memPay),
-        total: this.formatPrice(this.memPay),
-        moneyWord: this.DOCSO(this.invoices.amount),
-        typePay: this.checkStatus(this.sourceInvoices, this.invoices.source),
-        code: this.selectedStudent.code,
-        start_at: this.invoices.courses.start_at,
-        end_at: this.invoices.courses.end_at,
-        surplus: (this.memPay - parseInt(this.invoices.amount)) > 0? this.formatPrice(this.memPay - parseInt(this.invoices.amount)): 0
-      };
-      var mywindow = window.open("", "Print", "height=600,width=800");
-
-      mywindow.document.write("<html><head><title>Print</title>");
-      mywindow.document.write("</head><body >");
-      mywindow.document.write(dataHtml.data(objData));
-      mywindow.document.write("</body></html>");
-
-      mywindow.document.close();
-      mywindow.focus();
-      return true;
-    },
-    initValues() {
-      this.invoices = {
-        student_id: null,
-        courses: {
-          course_id: "",
-          price: ""
-        },
-        note: "",
-        source: 3,
-        amount: 0
-      };
-      this.selectedStudent = null;
-      this.searchData = "";
-    },
-    createInvoice(print = false) {
+    createInvoice() {
       if (
         this.invoices.amount >
         this.invoices.courses.price - this.invoices.courses.register.paid
@@ -364,9 +321,6 @@ export default {
           amount: this.invoices.amount
         })
         .then(() => {
-          if (print) {
-            this.printInvoice();
-          }
           this.$vs.notify({
             title: "Đã thêm mới thành công",
             text: "OK",
@@ -379,29 +333,31 @@ export default {
           this.$emit("closePopupInvoice", false);
         })
         .catch(error => {
-          if (
-            error.response.status === 500 &&
-            error.response.data.error.hasOwnProperty("validation")
-          ) {
-            let message =
-              error.response.data.error.validation[
-                Object.keys(error.response.data.error.validation)[0]
-              ][0];
-            this.$vs.notify({
-              title: "Validation error!",
-              text: message,
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          } else {
-            this.$vs.notify({
-              title: "Error!",
-              text: "Thêm mới thất bại",
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
+          if (error.response.status) {
+            if (
+              error.response.status === 500 &&
+              error.response.data.error.hasOwnProperty("validation")
+            ) {
+              let message =
+                error.response.data.error.validation[
+                  Object.keys(error.response.data.error.validation)[0]
+                ][0];
+              this.$vs.notify({
+                title: "Validation error!",
+                text: message,
+                iconPack: "feather",
+                icon: "fa fa-lg fa-exclamation-triangle",
+                color: "danger"
+              });
+            } else {
+              this.$vs.notify({
+                title: "Error!",
+                text: "Thêm mới thất bại",
+                iconPack: "feather",
+                icon: "fa fa-lg fa-exclamation-triangle",
+                color: "danger"
+              });
+            }
           }
         })
         .finally(() => {

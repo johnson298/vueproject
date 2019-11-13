@@ -64,7 +64,9 @@ import {
   faLayerGroup,
   faListAlt,
   faHome,
-  faBuilding
+  faBuilding,
+  faFilePdf,
+  faEnvelope
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -84,7 +86,9 @@ library.add(
   faLayerGroup,
   faListAlt,
   faHome,
-  faBuilding
+  faBuilding,
+  faFilePdf,
+  faEnvelope
 );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
