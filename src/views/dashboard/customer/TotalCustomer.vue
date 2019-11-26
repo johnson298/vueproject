@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-100">
     <statistics-card-line
       color="success"
       icon="UserPlusIcon"

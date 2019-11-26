@@ -104,7 +104,7 @@ export default {
   },
   watch: {
     student() {
-      this.student.phone = this.toNumber(this.student.phone);
+      this.student.phone = this.student.phone ? this.toNumber(this.student.phone) : '';
     }
   },
   computed: {

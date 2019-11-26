@@ -15,15 +15,15 @@
     </div>
 
     <div class="vx-row">
-      <vs-col vs-w="6">
-        <TotalStudents />
-      </vs-col>
-      <vs-col vs-w="6">
+      <vs-col class="sm:w-full md:w-1/3 mb-base">
         <TotalCourses :classes="dataTotalCourses" />
+      </vs-col>
+      <vs-col class="sm:w-full md:w-2/3 mb-base">
+        <TotalStudents />
       </vs-col>
     </div>
 
-    <div class="vx-row mt-10">
+    <div class="vx-row">
       <!-- LINE CHART -->
       <div class="vx-col w-full md:w-2/3 mb-base">
         <TotalRevenueExpenditure :money="totalMoney" />
@@ -46,17 +46,17 @@
                 class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 border-l-0 py-1"
               >
                 <p>Thu</p>
-                <p
-                  class="text-xl font-semibold"
-                >{{ formatShortMoney(dataStatistics.money.revenues) }}</p>
+                <p class="text-xl font-semibold">
+                  {{ formatShortMoney(dataStatistics.money.revenues) }}
+                </p>
               </div>
               <div
                 class="w-1/2 border border-solid d-theme-border-grey-light border-r-0 border-b-0 py-1"
               >
                 <p>Chi Tiêu</p>
-                <p
-                  class="text-xl font-semibold"
-                >{{ formatShortMoney(dataStatistics.money.expenditures) }}</p>
+                <p class="text-xl font-semibold">
+                  {{ formatShortMoney(dataStatistics.money.expenditures) }}
+                </p>
               </div>
             </div>
           </div>
@@ -161,7 +161,7 @@ export default {
         .then(function(response) {
           thisIns.dataStatistics = response.data.data;
           thisIns.dataTotalCourses = {
-            labels: ["Chờ mở", "Đang mở", "Đã hoàn thành", "Hủy"],
+            labels: ["Chờ mở", "Đang mở", "Hoàn thành", "Hủy"],
             datasets: [
               {
                 label: "Biểu đồ lớp học",
@@ -173,8 +173,8 @@ export default {
           thisIns.totalMoney = [
             Math.ceil(
               (parseFloat(response.data.data.money.revenues) * 100) /
-                (parseFloat(response.data.data.money.revenues) +
-                  parseFloat(response.data.data.money.expenditures))
+                                (parseFloat(response.data.data.money.revenues) +
+                                    parseFloat(response.data.data.money.expenditures))
             ) || 0
           ];
         })
@@ -196,25 +196,25 @@ export default {
 </script>
 
 <style lang="scss">
-#dashboard-analytics {
-  .greet-user {
-    position: relative;
-    .decore-left {
-      position: absolute;
-      left: 0;
-      top: 0;
+  #dashboard-analytics {
+    .greet-user {
+      position: relative;
+      .decore-left {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      .decore-right {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
     }
-    .decore-right {
-      position: absolute;
-      right: 0;
-      top: 0;
+    @media (max-width: 576px) {
+      .decore-left,
+      .decore-right {
+        width: 140px;
+      }
     }
   }
-  @media (max-width: 576px) {
-    .decore-left,
-    .decore-right {
-      width: 140px;
-    }
-  }
-}
 </style>

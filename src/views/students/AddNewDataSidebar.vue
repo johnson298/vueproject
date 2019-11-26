@@ -242,7 +242,8 @@ export default {
         gender: "0",
         school: "",
         class: "",
-        source: "1"
+        source: "1",
+        branch_id: this.$store.state.getBranchId
       },
       gender: this.$store.state.model.students.gender,
       source: this.$store.state.model.students.source,
@@ -309,7 +310,8 @@ export default {
         level: 1,
         position: 1,
         major: 1,
-        gender: 0
+        gender: 0,
+        branch_id: this.$store.state.getBranchId
       };
       this.$refs.file.value = null;
     },

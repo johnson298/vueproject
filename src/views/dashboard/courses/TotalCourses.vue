@@ -1,7 +1,7 @@
 <template>
-  <vue-card title="Lớp học">
+  <vue-card title="Lớp học" class="h-100">
     <div slot="card-body">
-      <div class="mt-5">
+      <div class="mt-5 pb-5">
         <chartjs-component-pie-chart
           v-if="classes"
           :height="250"
