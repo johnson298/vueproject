@@ -318,7 +318,8 @@ export default {
           course_id: this.invoices.courses.id,
           note: this.invoices.note,
           source: this.invoices.source,
-          amount: this.invoices.amount
+          amount: this.invoices.amount,
+          total: this.invoices.total
         })
         .then(() => {
           this.$vs.notify({

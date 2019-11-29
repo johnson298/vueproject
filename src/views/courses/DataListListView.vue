@@ -101,8 +101,8 @@
             <p class="product-category">{{ formatPrice(tr.price) }}</p>
           </vs-td>
 
-          <vs-td v-if="views.program_id.viewable">
-            <p class="product-category">{{ tr.program_id }}</p>
+          <vs-td v-if="views.program.viewable">
+            <p class="product-category">{{ tr.program.name }}</p>
           </vs-td>
 
           <vs-td v-if="views.start_at.viewable">

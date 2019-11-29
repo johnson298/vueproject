@@ -62,11 +62,20 @@ const state = {
         { text: "Quản lý", value: 4 },
         { text: "Khác", value: 5 }
       ],
-      majors: [{ text: "Không", value: 0 }, { text: "Có", value: 1 }],
-      status: [{ text: "Nghỉ", value: 0 }, { text: "Hoạt động", value: 1 }]
+      majors: [
+        { text: "Không", value: 0 },
+        { text: "Có", value: 1 }
+      ],
+      status: [
+        { text: "Nghỉ", value: 0 },
+        { text: "Hoạt động", value: 1 }
+      ]
     },
     students: {
-      gender: [{ text: "Nam", value: 0 }, { text: "Nữ", value: 1 }],
+      gender: [
+        { text: "Nam", value: 0 },
+        { text: "Nữ", value: 1 }
+      ],
       source: [
         { text: "Facebook", value: 1 },
         { text: "Bạn bè", value: 2 },
@@ -93,7 +102,10 @@ const state = {
       ]
     },
     teachers: {
-      role: [{ text: "Giảng viên", value: 1 }, { text: "Trợ giảng", value: 2 }]
+      role: [
+        { text: "Giảng viên", value: 1 },
+        { text: "Trợ giảng", value: 2 }
+      ]
     },
     calendar: {
       class: [

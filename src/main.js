@@ -66,7 +66,11 @@ import {
   faHome,
   faBuilding,
   faFilePdf,
-  faEnvelope
+  faEnvelope,
+  faUsersCog,
+  faCog,
+  faCodeBranch,
+  faDollarSign
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -88,7 +92,11 @@ library.add(
   faHome,
   faBuilding,
   faFilePdf,
-  faEnvelope
+  faEnvelope,
+  faUsersCog,
+  faCog,
+  faCodeBranch,
+  faDollarSign
 );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

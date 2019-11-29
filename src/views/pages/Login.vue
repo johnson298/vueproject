@@ -50,7 +50,6 @@
                 <vs-button type="border">Register</vs-button>
                 <vs-button
                   class="float-right"
-                  :disabled="!validateForm"
                   @click="login"
                   tabindex="3"
                 >Đăng nhập</vs-button>
