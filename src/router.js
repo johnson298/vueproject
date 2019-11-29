@@ -253,7 +253,21 @@ const router = new Router({
                 ],
                 pageTitle: "Khuyến mại"
               }
-            }
+            },
+            {
+              path: "permission",
+              name: "SettingsPermission",
+              component: () =>
+                import("./views/settings/permission/PermissionList.vue"),
+              meta: {
+                breadcrumb: [
+                  { title: "Phân quyền", url: "/" },
+                  { title: "Cài đặt", url: "/settings" },
+                  { title: "Phân quyền", active: true }
+                ],
+                pageTitle: "Phân quyền"
+              }
+            },
           ]
         },
         // LỚP HỌC

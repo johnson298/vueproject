@@ -16,10 +16,10 @@ export default {
   views: {
     name: { text: "Tên lớp học", viewable: true, sortKey: "name" },
     price: { text: "Học phí (vnđ)", viewable: true, sortKey: "price" },
-    program_id: {
-      text: "Chương chính học",
+    program: {
+      text: "Chương trình học",
       viewable: false,
-      sortKey: "program_id"
+      sortKey: "program"
     },
     start_at: { text: "Ngày bắt đầu", viewable: false, sortKey: "start_at" },
     end_at: { text: "Ngày kết thúc", viewable: false, sortKey: "end_at" },

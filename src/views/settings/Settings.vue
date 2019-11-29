@@ -1,15 +1,12 @@
 <template>
-<div id="todo-app" class="border border-solid d-theme-border-grey-light rounded relative overflow-hidden">
-
-    <vs-sidebar class="items-no-padding" parent="#todo-app" :hidden-background="clickNotClose" v-model="isSidebarActive">
-            <settings-sidebar></settings-sidebar>
+<div id="todo-app" class=" rounded relative overflow-hidden">
+    <vs-sidebar class="custom--height__sidebar" parent="#todo-app" :hidden-background="clickNotClose" v-model="isSidebarActive">
+        <settings-sidebar></settings-sidebar>
     </vs-sidebar>
-    <div :class="{'sidebar-spacer': clickNotClose}" class="app-fixed-height border border-r-0 border-b-0 border-t-0 border-solid d-theme-border-grey-light app-fixed-height pt-6">
-        <VuePerfectScrollbar class="todo-content-scroll-area pt-3" :settings="settings">
-            <transition :name="routerTransition" mode="out-in">
-                <router-view></router-view>
-            </transition>
-        </VuePerfectScrollbar>
+    <div :class="{'sidebar-spacer': clickNotClose}" class="border border-r-0 border-b-0 border-t-0  app-fixed-height">
+        <transition :name="routerTransition" mode="out-in">
+            <router-view></router-view>
+        </transition>
     </div>
 </div>
 </template>
@@ -37,17 +34,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@/assets/scss/vuesax/apps/todo.scss";
-
-.page-config-item.router-link-exact-active.router-link-active {
-    color: #1E6DB5 !important;
-}
-
-.page-config-item {
-    color: #626262 !important;
-}
-.app-fixed-height {
-    height: calc(100vh - 9.1rem);
-}
 </style>
