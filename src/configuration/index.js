@@ -13,6 +13,18 @@ export default function() {
       .forEach(item => {
         obj[item] = check(item);
       });
+
+
+    // set favicon index
+    var link =
+      document.querySelector("link[rel*='icon']") ||
+      document.createElement("link");
+    link.type = "image/x-icon";
+    link.rel = "shortcut icon";
+    link.href = obj.favicon.image;
+    document.getElementsByTagName("head")[0].appendChild(link);
+
+    // save configuration
     store.dispatch("changeConfigs", obj);
   });
 }
