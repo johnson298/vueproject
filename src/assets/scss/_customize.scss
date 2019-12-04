@@ -173,6 +173,14 @@ body {
   }
 }
 
+.d-block{
+  display: block !important;
+}
+
+.d-inline-block{
+  display: inline-block;
+}
+
 .popup-custom-1024 > .vs-popup {
   width: 1024px !important;
 }
@@ -283,6 +291,9 @@ ul.vs-dropdown--menu {
     }
   }
 }
+#todo-app {
+  min-height: calc(100vh - 260px);
+}
 /*=========================================================================================
   File Name: _customize.scss
   Description: custom color 
@@ -360,5 +371,8 @@ a {
 }
 .vs--searchable .vs__dropdown-toggle {
   height: 38px !important;
+}
+.loading .effect-1, .loading .effect-2,.loading .effect-3{
+  border-left: 3px solid rgb(41, 116, 184);
 }
 /* END CUSTOM COLOR */

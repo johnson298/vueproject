@@ -5,21 +5,11 @@
         <div class="vx-col mb-6">
           <h2>Thông tin nhân viên</h2>
         </div>
-        <div>
           <vs-input label="Mã nhân viên" class="mt-5 w-full" v-model="user.code" disabled />
-        </div>
-        <div>
           <vs-input label="Tên nhân viên" class="mt-5 w-full" v-model="user.name" />
-        </div>
-        <div>
           <vs-input label="Địa chỉ" class="mt-5 w-full" v-model="user.address" />
-        </div>
-        <div>
           <vs-input label="Số điện thoại" class="mt-5 w-full" v-model="user.phone" />
-        </div>
-        <div>
           <vs-input label="Facebook" class="mt-5 w-full" v-model="user.facebook" />
-        </div>
         <div class="mt-5">
           <label for class="vs-input--label">Ngày sinh</label>
           <datepicker
@@ -31,29 +21,17 @@
             class="w-full picker-custom"
           ></datepicker>
         </div>
-        <div>
-          <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
-            <label for class="vs-input--label">Ảnh đại diện</label>
-            <div class="vs-con-input">
-              <input
-                type="file"
-                ref="file"
-                accept="image/*"
-                @change="changeAvatar"
-                class="vs-inputx vs-input--input normal hasValue"
-              />
-            </div>
-          </div>
-        </div>
+        <vx-upload-image
+          text="Ảnh đại diện"
+          :v-model-show="user.avatar"
+          :srcImage="srcAvatar"
+          :show.sync="user.avatar"
+          :src.sync="srcAvatar"
+        />
       </div>
       <div class="vx-col md:w-1/2 w-full mb-base">
-        <div class="vx-col mb-6">
-          <h2>Thông tin đăng nhập</h2>
-        </div>
-        <div>
+          <h2 class="mb-6">Thông tin đăng nhập</h2>
           <vs-input label="Email" class="mt-5 w-full" v-model="user.email" />
-        </div>
-        <div>
           <vs-input
             label="Mật khẩu"
             type="password"
@@ -61,8 +39,6 @@
             v-model="user.password"
             placeholder="Thêm mật khẩu mới"
           />
-        </div>
-        <div>
           <vs-input
             label="Nhập lại khẩu"
             type="password"
@@ -70,10 +46,7 @@
             v-model="user.password_confirmation"
             placeholder="Nhập lại mật khẩu"
           />
-        </div>
-        <div class="vx-col mb-6 mt-5">
-          <h2>Thông tin học vấn</h2>
-        </div>
+          <h2 class="mb-6 mt-5">Thông tin học vấn</h2>
         <vs-select v-model="user.level" label="Trình độ học vấn" class="mt-5 w-full">
           <vs-select-item
             :key="index"
@@ -107,7 +80,6 @@
             v-for="item in status"
           />
         </vs-select>
-        <div>
           <div class="note mt-5">
             <label class="vs-input--label">Ghi chú</label>
           </div>
@@ -121,7 +93,6 @@
             placeholder="Nhập Ghi chú"
           />
         </div>
-      </div>
     </div>
     <vs-row vs-type="flex" vs-justify="flex-end">
       <button
@@ -150,6 +121,7 @@ export default {
   },
   data() {
     return {
+      srcAvatar: null,
       employeeId: this.$route.params.employee,
       language: "vi",
       languages: lang,
@@ -204,8 +176,13 @@ export default {
     }
   },
   methods: {
-    changeAvatar() {
-      this.user.avatar = this.$refs.file.files[0];
+    deleteAvatar() {
+      this.user.avatar = null;
+    },
+    changeAvatar(e) {
+      let url = e.target.files[0];
+      this.user.avatar = url;
+      this.srcAvatar = URL.createObjectURL(url);
     },
 
     userInfo() {

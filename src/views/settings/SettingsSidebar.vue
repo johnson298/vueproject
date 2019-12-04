@@ -27,6 +27,13 @@
                 <span class="text-lg ml-3">Phân quyền</span>
             </router-link>
         </div>
+
+        <div class="flex items-center mt-6 cursor-pointer">
+            <router-link tag="a" to="/settings/introduces" class="page-config-item flex items-center mb-2">
+                <font-awesome-icon icon="info-circle" class="icon" />
+                <span class="text-lg ml-3">Giới thiệu</span>
+            </router-link>
+        </div>
     </div>
 </template>
 

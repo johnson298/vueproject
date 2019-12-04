@@ -10,7 +10,7 @@
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 mx-auto self-center bg-white bg-dark pb-6">
               <div class="p-8">
                 <div class="vx-card__title mb-8">
-                  <h4 class="mb-4">Đăng nhập</h4>
+                  <h4 class="mb-4">{{ $store.state.configuration ? $store.state.configuration.name.value : 'ETADO' }} - Đăng nhập</h4>
                   <p>Chào mừng trở lại, xin vui lòng đăng nhập vào tài khoản của bạn.</p>
                 </div>
                 <form action>
@@ -43,13 +43,13 @@
                   />
                 </form>
 
-                <div class="flex flex-wrap justify-between my-5">
+                <!-- <div class="flex flex-wrap justify-between my-5">
                   <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Nhớ mật khẩu</vs-checkbox>
                   <router-link to>Quên mật khẩu?</router-link>
-                </div>
+                </div> -->
                 <!-- <vs-button type="border">Đăng ký</vs-button> -->
                 <vs-button
-                  class="float-right"
+                  class="float-right mt-3"
                   @click="login"
                   tabindex="3"
                 >Đăng nhập</vs-button>

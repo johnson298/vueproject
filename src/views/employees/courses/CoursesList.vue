@@ -54,7 +54,7 @@
         </div>
       </div>
       <template slot="thead">
-        <vs-th :sort-key="value.sortKey" v-for="(value, index) in views" :key="index" v-if="value.viewable">{{ value.text }}</vs-th>
+        <vs-th :sort-key="value.sortKey" v-for="(value, index) in views" :key="index" v-if="value.viewable && value.sortKey !== 'paid'">{{ value.text }}</vs-th>
       </template>
 
       <template slot-scope="{data}">
@@ -99,6 +99,9 @@
           </vs-td>
 
                 <vs-td v-if="views.action.viewable" class="d-flex-span">
+                  <router-link tag="button" :to="`/courses/${tr.id}`" class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small">
+                        <i class="feather icon-eye"></i>
+                    </router-link>
                     <vs-button color="danger" size="small" icon="delete_forever"></vs-button>
                 </vs-td>
             </vs-tr>

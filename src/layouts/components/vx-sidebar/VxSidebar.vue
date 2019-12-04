@@ -15,8 +15,8 @@
       <div @mouseenter="sidebarMouseEntered" @mouseleave="sidebarMouseLeave">
         <div class="header-sidebar flex items-end justify-between" slot="header">
           <div class="logo flex items-center">
-            <img class="logo-small" v-if="sidebarItemsMin" :src="logoSmall" alt="etado" />
-            <img :src="logo" alt="etado" class="w-10 mr-4" v-if="logo" />
+            <img class="logo-small" v-if="sidebarItemsMin" :src="$store.state.configuration ? $store.state.configuration.favicon.image : logoSmall" alt="etado" />
+            <img :src="$store.state.configuration ? $store.state.configuration.logo.image : logo" class="w-10 mr-4" v-if="$store.state.configuration" />
             <span class="logo-text" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span>
           </div>
           <div>

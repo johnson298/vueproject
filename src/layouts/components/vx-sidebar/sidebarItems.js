@@ -22,6 +22,12 @@ export default [
     iconFontAwesome: "users"
   },
   {
+    url: "/reserves",
+    name: "Bảo lưu",
+    slug: "reserves",
+    iconFontAwesome: "window-restore"
+  },
+  {
     name: "programs",
     header: "đào tạo"
   },

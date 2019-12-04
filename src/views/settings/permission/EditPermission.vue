@@ -3,16 +3,19 @@
     <h5 class="text-center">
         <strong>Tên quyền: </strong> <span>{{ role.name }}</span>
     </h5>
-    <vs-row class="mt-3">
-        <vs-col vs-w="4" v-for="(item, key) in permission" :key="key" class="mb-3">
+    <vs-row class="mt-2" v-for="(name, index) in Object.keys(grouObject(permission))" :key="index">
+        <vs-col vs-w="12">
+          <h5 class="mb-2">{{ translateRoles(name) }}</h5>
+        </vs-col>
+        <vs-col vs-w="3" v-for="(role, key) in grouObject(permission)[name]" :key="key" class="mb-3">
             <div class="vs-component con-vs-checkbox vs-checkbox-primary vs-checkbox-default">
-                <input type="checkbox" class="vs-checkbox--input" value="true" :checked="checkRoleActive(item.id)" :data-id="item.id" @change="changePermission">
+                <input type="checkbox" class="vs-checkbox--input" value="true" :checked="checkRoleActive(role.id)" :data-id="role.id" @change="changePermission">
                 <span class="checkbox_x vs-checkbox" style="border: 2px solid rgb(180, 180, 180);">
                     <span class="vs-checkbox--check">
                         <i class="vs-icon notranslate icon-scale vs-checkbox--icon  material-icons null">check</i>
                     </span>
                 </span>
-                <span class="con-slot-label">{{ item.display_name }}</span>
+                <span class="con-slot-label">{{ role.display_name }}</span>
             </div>
         </vs-col>
     </vs-row>
@@ -74,6 +77,13 @@ export default {
         }).finally(() => {
           thisIns.$vs.loading.close('#button-with-loading > .con-vs-loading');
         });
+    },
+    grouObject(array){
+      const groups = array.reduce((groups, item) => ({
+        ...groups,
+        [item.group]: [...(groups[item.group] || []), item]
+      }), {});
+      return groups;
     }
   }
 };

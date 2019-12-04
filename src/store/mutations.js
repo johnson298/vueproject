@@ -81,6 +81,19 @@ const mutations = {
   // change branch
   CHANGE_BRANCH(state, branch_id){
     state.getBranchId = branch_id;
+  },
+
+  // change configs
+  CHANGE_CONFIGS(state, data){
+    state.configuration = data;
+  },
+
+  CHANGE_CONFIG_FIELD(state, payload){
+    if(payload.field == 'logo' || payload.field == 'favicon'){
+      state.configuration[payload.field].image = payload.input;
+    } else {
+      state.configuration[payload.field].value = payload.input;
+    }
   }
 };
 

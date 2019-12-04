@@ -1,6 +1,8 @@
 /* eslint-disable no-case-declarations */
 import Vue from "vue";
 import App from "./App.vue";
+import configsWeb from './configuration/index';
+configsWeb();
 
 // Vuesax Component Framework
 import Vuesax from "vuesax";
@@ -49,58 +51,10 @@ require("./assets/css/iconfont.css");
 // font awesome
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faUserSecret,
-  faSitemap,
-  faPlayCircle,
-  faUsers,
-  faUserTie,
-  faGraduationCap,
-  faHandHoldingUsd,
-  faFileInvoiceDollar,
-  faUserFriends,
-  faTools,
-  faChartPie,
-  faHandshake,
-  faLayerGroup,
-  faListAlt,
-  faHome,
-  faBuilding,
-  faFilePdf,
-  faEnvelope,
-  faUsersCog,
-  faCog,
-  faCodeBranch,
-  faDollarSign,
-  faFilter
-} from "@fortawesome/free-solid-svg-icons";
+import { faUserSecret, faSitemap, faPlayCircle, faUsers, faUserTie, faGraduationCap, faHandHoldingUsd, faFileInvoiceDollar, faUserFriends, faTools, faChartPie, faHandshake, faLayerGroup, faListAlt, faHome, faBuilding, faFilePdf, faEnvelope, faUsersCog, faCog, faCodeBranch, faDollarSign, faFilter, faInfoCircle, faWindowRestore, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  faUserSecret,
-  faSitemap,
-  faPlayCircle,
-  faUsers,
-  faUserTie,
-  faGraduationCap,
-  faHandHoldingUsd,
-  faFileInvoiceDollar,
-  faUserFriends,
-  faTools,
-  faChartPie,
-  faHandshake,
-  faLayerGroup,
-  faListAlt,
-  faHome,
-  faBuilding,
-  faFilePdf,
-  faEnvelope,
-  faUsersCog,
-  faCog,
-  faCodeBranch,
-  faDollarSign,
-  faFilter
-);
+library.add( faUserSecret, faSitemap, faPlayCircle, faUsers, faUserTie, faGraduationCap, faHandHoldingUsd, faFileInvoiceDollar, faUserFriends, faTools, faChartPie, faHandshake, faLayerGroup, faListAlt, faHome, faBuilding, faFilePdf, faEnvelope, faUsersCog, faCog, faCodeBranch, faDollarSign, faFilter, faInfoCircle, faWindowRestore, faEye );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 // VeeValidate
@@ -122,6 +76,7 @@ new Vue({
 
 // Mixin golabal
 Vue.mixin({
+
   methods: {
     formatPrice(value) {
       let val = (value / 1).toFixed(0).replace(".", ",");
@@ -261,6 +216,7 @@ Vue.mixin({
       }
       return num;
     },
+    // check respon axios & return notification
     checkResponRequest(data, _500, callback, mess = "Có lỗi xảy ra, vui lòng thử lại") {
       switch (data.status) {
       case 403:
@@ -314,6 +270,29 @@ Vue.mixin({
         }
         break;
       }
+    },
+    // translate roles
+    translateRoles(val){
+      let result;
+      const type = ['employee', 'student', 'course', 'register', 'schedule', 'attendance', 'teacher', 'program', 'lesson', 'invoice', 'customer', 'campaign', 'evaluate', 'report', 'room', 'branch', 'role', 'coupon'];
+      const convert = ['Nhân viên', 'Học viên', 'Lớp học', 'Học viên trong lớp', 'Lịch học', 'Điểm danh', 'Giáo viên trong lớp', 'Chương trình học', 'Bài học', 'Hóa đơn', 'Khách hàng', 'Chiến dịch', 'Đánh giá', 'Báo cáo', 'Phòng học', 'Chi nhánh', 'Khuyến mại', 'Phân quyền' ];
+      for (let i = 0; i < type.length; i++) {
+        if (type[i] === val) result = convert[i];
+      }
+      return result;
+    },
+    getObjectConfig(array){
+      let obj = {};
+      let check = input => {
+        return array.filter(e => e.name == input)[0];
+      };
+      array
+        .map(e => e.name)
+        .forEach(item => {
+          obj[item] = check(item);
+        });
+      return obj;
     }
+
   }
 });

@@ -17,11 +17,9 @@
 
     <VuePerfectScrollbar class="scroll-area--data-list-add-new pt-4 pb-6" :settings="settings">
       <div class="p-6">
-        <form>
           <div>
             <h4 class="text-center uppercase">Thông tin đăng nhập</h4>
             <!--Email-->
-            <div>
               <vs-input
                 label="Email *"
                 name="email"
@@ -31,9 +29,7 @@
                 autocomplete="email"
                 placeholder="Demo@gmail.com"
               />
-            </div>
             <!--Password-->
-            <div>
               <vs-input
                 label="Mật khẩu *"
                 name="password"
@@ -44,9 +40,7 @@
                 autocomplete="new-password"
                 placeholder="Nhập mật khẩu (8 ký tự)"
               />
-            </div>
             <!--Nhập lại mật khẩu-->
-            <div>
               <vs-input
                 label="Nhập lại mật khẩu *"
                 name="password_confirmation"
@@ -56,12 +50,10 @@
                 class="mt-5 w-full"
                 placeholder="Nhập lại mật khẩu"
               />
-            </div>
           </div>
           <div class="mt-8">
             <h4 class="text-center uppercase">Thông tin cá nhân</h4>
             <!-- NAME -->
-            <div>
               <vs-input
                 label="Tên nhân viên *"
                 name="name"
@@ -70,9 +62,7 @@
                 v-validate="'required'"
                 placeholder="Nhập tên nhân viên"
               />
-            </div>
             <!--địa chỉ-->
-            <div>
               <vs-input
                 label="Địa chỉ"
                 name="address"
@@ -81,9 +71,7 @@
                 class="mt-5 w-full"
                 placeholder="Nhập địa chỉ"
               />
-            </div>
             <!--số điện thoại-->
-            <div>
               <vs-input
                 label="Số điện thoại"
                 name="phone"
@@ -92,9 +80,7 @@
                 class="mt-5 w-full"
                 placeholder="0123456789"
               />
-            </div>
             <!--facebook-->
-            <div>
               <vs-input
                 label="Facebook"
                 name="facebook"
@@ -103,7 +89,6 @@
                 class="mt-5 w-full"
                 placeholder="http://demo.com"
               />
-            </div>
             <div class="mt-5">
               <label for class="vs-input--label">Ngày sinh</label>
               <datepicker
@@ -117,19 +102,13 @@
               ></datepicker>
             </div>
             <!--ảnh đại diện-->
-            <div>
-              <div class="mt-5">
-                <label class="vs-input--label">Ảnh đại diện</label>
-              </div>
-              <input
-                type="file"
-                id="file"
-                ref="file"
-                accept="image/*"
-                class="form-control file_avatar"
-                @change="changeAvatar"
-              />
-            </div>
+            <vx-upload-image
+              text="Ảnh đại diện"
+              :v-model-show="employee.avatar"
+              :srcImage="srcAvatar"
+              :show.sync="employee.avatar"
+              :src.sync="srcAvatar"
+            />
           </div>
           <div class="mt-8">
             <h4 class="text-center uppercase">Thông tin học vấn</h4>
@@ -143,7 +122,6 @@
               />
             </vs-select>
             <!--chức vụ-->
-            <div class="position">
               <vs-select v-model="employee.position" label="Chức vụ" class="mt-5 w-full">
                 <vs-select-item
                   :key="item.value"
@@ -152,9 +130,7 @@
                   v-for="item in positions"
                 />
               </vs-select>
-            </div>
             <!--nghiệm vụ-->
-            <div>
               <vs-select v-model="employee.major" label="Nghiệp vụ" class="mt-5 w-full">
                 <vs-select-item
                   :key="item.value"
@@ -163,9 +139,7 @@
                   v-for="item in majors"
                 />
               </vs-select>
-            </div>
             <!--trang thai-->
-            <div>
               <vs-select v-model="employee.status" label="Trạng thái" class="mt-5 w-full">
                 <vs-select-item
                   :key="item.value"
@@ -174,9 +148,7 @@
                   v-for="item in status"
                 />
               </vs-select>
-            </div>
             <!--nghi chú-->
-            <div>
               <div class="mt-5 note">
                 <label class="vs-input--label">Ghi chú</label>
               </div>
@@ -189,9 +161,7 @@
                 :rows="5"
                 placeholder="Nhập ghi chú"
               />
-            </div>
           </div>
-        </form>
       </div>
     </VuePerfectScrollbar>
 
@@ -205,7 +175,7 @@
       <vs-button
         type="border"
         color="danger"
-        @click="initValues(); isSidebarActiveLocal = false"
+        @click="initValues()"
       >Hủy</vs-button>
     </div>
   </vs-sidebar>
@@ -229,6 +199,7 @@ export default {
   },
   data() {
     return {
+      srcAvatar: null,
       language: "vi",
       languages: lang,
       employee: {
@@ -288,10 +259,6 @@ export default {
   },
 
   methods: {
-    changeAvatar() {
-      this.employee.avatar = this.$refs.file.files[0];
-    },
-
     formData() {
       let formData = new FormData();
       Object.keys(this.employee).map(key => {
@@ -317,7 +284,7 @@ export default {
         status: 1,
         branch_id: this.$store.state.getBranchId
       };
-      this.$refs.file.value = null;
+      this.$emit('closeSidebar', false);
     },
     createEmployee() {
       this.$vs.loading({
@@ -342,7 +309,6 @@ export default {
           });
           this.callback();
           this.initValues();
-          this.$emit("closeSidebar", false);
         })
         .catch(error => {
           let thisIns = this;

@@ -17,7 +17,6 @@ export default {
     name: { text: "Tên lớp học", viewable: true, sortKey: "name" },
     price: { text: "Học phí (vnđ)", viewable: true, sortKey: "price" },
     paid: { text: "Đã trả (vnđ)", viewable: true, sortKey: "paid" },
-    surplus: { text: "còn dư (vnđ)", viewable: true, sortKey: "" },
     start_at: { text: "Ngày bắt đầu", viewable: false, sortKey: "start_at" },
     end_at: { text: "Ngày kết thúc", viewable: false, sortKey: "end_at" },
     number_of_lessons: {
