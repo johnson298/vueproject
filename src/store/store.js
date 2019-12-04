@@ -26,6 +26,7 @@ import moduleAttendances from "./attendances/module";
 import moduleRegisterAttendance from "./registersAttendance/module";
 import moduleLessons from "./lessons/module";
 import moduleReports from "./reports/module";
+import moduleRoles from './roles/module';
 
 Vue.use(Vuex);
 
@@ -55,7 +56,8 @@ export default new Vuex.Store({
     attendances: moduleAttendances,
     registersAttendance: moduleRegisterAttendance,
     lessons: moduleLessons,
-    reports: moduleReports
+    reports: moduleReports,
+    roles: moduleRoles
   },
   strict: process.env.NODE_ENV !== "production"
 });

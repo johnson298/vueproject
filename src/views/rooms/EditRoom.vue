@@ -52,7 +52,7 @@ export default {
         container: '#button-with-loading',
         scale: 0.45
       });
-      this.$http.put('branches/'+ this.$route.params.branch + '/rooms/' + this.roomGetInfo, {
+      this.$http.put('branches/'+ this.branchId + '/rooms/' + this.roomGetInfo, {
         name: this.rooms.name,
       }, {
       })
@@ -60,7 +60,7 @@ export default {
           this.getData();
           this.isSidebarActiveLocal = false;
           this.$vs.notify({
-            title: 'Đã cập nhật thành công',
+            title: 'Cập nhật thành công',
             text: 'OK',
             iconPack: 'feather',
             icon: 'fa fa-lg fa-check-circle',
@@ -68,25 +68,7 @@ export default {
           });
         })
         .catch((error) => {
-
-          if (error.response.data.error.hasOwnProperty('validation')) {
-            let message = error.response.data.error.validation[Object.keys(error.response.data.error.validation)[0]][0];
-            this.$vs.notify({
-              title: 'Validation error!',
-              text: message,
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          } else {
-            this.$vs.notify({
-              title: 'Error!',
-              text: 'Sửa thất bại',
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          }
+          this.checkResponRequest(error.response.data, null, null, 'Sửa thất bại');
         }).finally(() => {
           this.$vs.loading.close('#button-with-loading > .con-vs-loading');
         });
@@ -114,6 +96,9 @@ export default {
           this.$emit('closeSidebar');
         }
       }
+    },
+    branchId(){
+      return this.$store.state.getBranchId;
     }
   },
   components: {

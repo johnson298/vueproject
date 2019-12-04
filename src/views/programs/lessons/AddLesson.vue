@@ -41,7 +41,7 @@
           @click="addLesson"
           type="filled"
           color="primary"
-          id="btn-loading"
+          id="btn-loading_div"
         >Thêm mới</vs-button>
         <vs-button
           class="ml-3"
@@ -90,7 +90,7 @@ export default {
       this.$vs.loading({
         background: "#1E6DB5",
         color: "#fff",
-        container: "#btn-loading",
+        container: "#btn-loading_div",
         scale: 0.45
       });
       this.$http
@@ -112,33 +112,10 @@ export default {
           this.callback();
         })
         .catch(error => {
-          if (
-            error.response.status === 500 &&
-            error.response.data.error.hasOwnProperty("validation")
-          ) {
-            let message =
-              error.response.data.error.validation[
-                Object.keys(error.response.data.error.validation)[0]
-              ][0];
-            this.$vs.notify({
-              title: "Lỗi thông tin!",
-              text: message,
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          } else {
-            this.$vs.notify({
-              title: "Có lỗi!",
-              text: "Thêm mới thất bại",
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          }
+          this.checkResponRequest(error.response.data, null, null, "Xóa thất bại");
         })
         .finally(() => {
-          this.$vs.loading.close("#btn-loading > .con-vs-loading");
+          this.$vs.loading.close("#btn-loading_div > .con-vs-loading");
         });
     }
   }

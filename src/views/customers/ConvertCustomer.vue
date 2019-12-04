@@ -224,7 +224,8 @@ export default {
           note: this.student.note,
           avatar: this.student.avatar,
           password: this.student.password,
-          password_confirmation: this.student.password_confirmation
+          password_confirmation: this.student.password_confirmation,
+          branch_id: this.branchId
         })
         .then(() => {
           this.$emit("closePopupConvert", false);

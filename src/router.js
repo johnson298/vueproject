@@ -413,38 +413,6 @@ const router = new Router({
             pageTitle: "Báo cáo"
           }
         },
-        {
-          path: "/reports/employee",
-          component: () => import("./views/reports/EmployeesReport.vue"),
-          meta: {
-            breadcrumb: [{ title: "Báo cáo nhân viên", url: "/" }],
-            pageTitle: "Báo cáo nhân viên"
-          }
-        },
-        {
-          path: "/reports/student",
-          component: () => import("./views/reports/StudentsReport.vue"),
-          meta: {
-            breadcrumb: [{ title: "Báo cáo học viên", url: "/" }],
-            pageTitle: "Báo cáo học viên"
-          }
-        },
-        {
-          path: "/reports/course",
-          component: () => import("./views/reports/CoursesReport.vue"),
-          meta: {
-            breadcrumb: [{ title: "Báo cáo lớp học", url: "/" }],
-            pageTitle: "Báo cáo chương lớp học"
-          }
-        },
-        {
-          path: "/reports/money",
-          component: () => import("./views/reports/MoneyReport.vue"),
-          meta: {
-            breadcrumb: [{ title: "Báo cáo thu chi", url: "/" }],
-            pageTitle: "Báo cáo thu chi"
-          }
-        },
         // KHÁCH HÀNG
         {
           path: "/customers",

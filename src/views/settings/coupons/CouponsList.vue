@@ -102,9 +102,9 @@
           </vs-td>
 
           <vs-td v-if="views.action.viewable" class="d-flex-span">
-            <vs-button color="primary" size="small" @click="getIdCoupon(tr.id)"
+            <vs-button radius color="primary" size="small" @click="getIdCoupon(tr.id)"
             class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
-            <vs-button color="danger" size="small" @click="deleteCoupon(tr)" icon="delete_forever"></vs-button>
+            <vs-button radius color="danger" size="small" @click="deleteCoupon(tr)" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>
       </template>
@@ -186,14 +186,8 @@ export default {
         });
         this.getData();
       }
-      ).catch(() => {
-        this.$vs.notify({
-          title: 'Error!',
-          text: 'Bạn không xóa thành công',
-          iconPack: 'feather',
-          icon: 'fa fa-lg fa-exclamation-triangle',
-          color: 'danger'
-        });
+      ).catch((error) => {
+        this.checkResponRequest(error.response.data, null, null, "Xóa thất bại");
       });
 
     },
@@ -223,12 +217,7 @@ export default {
         });
       })
         .catch(function (error) {
-          thisIns.$vs.notify({
-            title:'Error',
-            text: error,
-            color:'danger',
-            iconPack: 'feather',
-            icon:'icon-alert-circle'});
+          thisIns.checkResponRequest(error.response.data);
         }).finally(function () {
           thisIns.$vs.loading.close();
         });
@@ -260,9 +249,9 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.coupons.length === 0) {
-      this.getData();
-    }
+  },
+  created() {
+    this.getData();
   },
   destroyed() {
     this.$store.dispatch('coupons/updateNeedReload', false);

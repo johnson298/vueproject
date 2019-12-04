@@ -6,7 +6,7 @@
       :active.sync="addBill"
       v-if="addBill"
     >
-      <AddInvoice :callback="getData" :active.sync="addBill" @closePopupInvoice="addBill = $event" />
+      <AddInvoice :callback="getData" :active.sync="addBill" @closeInvoice="addBill = $event" />
     </vs-popup>
 
     <vs-table-custom
@@ -324,19 +324,13 @@ export default {
           this.$vs.notify({
             color: "success",
             title: "Xóa hóa đơn",
-            text: "Bạn đã xóa thành công",
+            text: "Xóa thành công",
             icon: "verified_user"
           });
           this.getData();
         })
-        .catch(() => {
-          this.$vs.notify({
-            title: "Error!",
-            text: "Bạn không xóa thành công",
-            iconPack: "feather",
-            icon: "fa fa-lg fa-exclamation-triangle",
-            color: "danger"
-          });
+        .catch((error) => {
+          this.checkResponRequest(error.response.data, null, null, 'Xóa thất bại');
         });
     },
     updateViews(index, e) {
@@ -370,13 +364,7 @@ export default {
           });
         })
         .catch(function(error) {
-          thisIns.$vs.notify({
-            title: "Error",
-            text: error,
-            color: "danger",
-            iconPack: "feather",
-            icon: "icon-alert-circle"
-          });
+          thisIns.checkResponRequest(error.response.data);
         })
         .finally(function() {
           thisIns.$vs.loading.close();
@@ -409,9 +397,6 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.invoices.length === 0) {
-      this.getData();
-    }
   },
   destroyed() {
     this.$store.dispatch("invoices/updateNeedReload", false);

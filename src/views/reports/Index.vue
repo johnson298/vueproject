@@ -1,7 +1,7 @@
 <template>
   <div>
     <vue-card>
-      <div slot="title">
+      <div slot="title" id="hihi">
         <h4>THÔNG SỐ</h4>
       </div>
       <div class="table-custom p-5" slot="card-body">
@@ -76,17 +76,24 @@
       <div slot="title">
         <h4>KPI</h4>
       </div>
+      <div slot="card-actions">
+        <flat-pickr v-model="fromDate" placeholder="Từ ngày" class="mr-2" />
+        <flat-pickr v-model="toDate" placeholder="Đến ngày" class="mr-2"/>
+        <vs-button color="primary">
+          <font-awesome-icon icon="filter" />
+        </vs-button>
+      </div>
       <div class="table-custom p-5" slot="card-body">
         <vs-table :data="users">
           <template slot="thead">
             <vs-th bgcolor="#dfe2e5">TÊN NHÂN VIÊN</vs-th>
-            <vs-th bgcolor="#dfe2e5" colspan="4">KHÁCH HÀNG</vs-th>
+            <vs-th bgcolor="#dfe2e5" colspan="4">THÔNG SỐ</vs-th>
           </template>
 
           <template>
             <vs-tr>
               <!-- tên nhân viên -->
-              <vs-td>Nguyễn Văn A (NV-001)</vs-td>
+              <vs-td rowspan="2">Nguyễn Văn A (NV-001)</vs-td>
               <!-- Giáo viên -->
               <vs-td class="bg-warning text-white">Chờ chăm sóc</vs-td>
               <vs-td class="bg-primary text-white">Đang chăm sóc</vs-td>
@@ -94,8 +101,6 @@
               <vs-td class="bg-danger text-white">Hủy tư vấn</vs-td>
             </vs-tr>
             <vs-tr>
-              <!-- tên nhân viên -->
-              <vs-td>Thông số</vs-td>
               <!-- Giáo viên -->
               <vs-td>55</vs-td>
               <vs-td>1</vs-td>
@@ -118,8 +123,12 @@ export default {
   },
   data() {
     return {
+      changeBranchPopup: false,
+      branchName: null,
+      branches: null,
       fromDate: null,
       toDate: null,
+      branchId: null,
       users: [
         {
           id: 8,

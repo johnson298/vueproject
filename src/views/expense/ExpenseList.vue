@@ -217,19 +217,14 @@ export default {
           this.$vs.notify({
             color: "success",
             title: "Xóa hóa đơn",
-            text: "Bạn đã xóa thành công",
+            text: "Xóa thành công",
             icon: "verified_user"
           });
           this.getData();
         })
-        .catch(() => {
-          this.$vs.notify({
-            title: "Error!",
-            text: "Xóa không thành công",
-            iconPack: "feather",
-            icon: "fa fa-lg fa-exclamation-triangle",
-            color: "danger"
-          });
+        .catch((error) => {
+          let thisIns = this;
+          thisIns.checkResponRequest(error.response.data, null, null, "Xóa thất bại");
         });
     },
     updateViews(index, e) {
@@ -263,13 +258,7 @@ export default {
           });
         })
         .catch(function(error) {
-          thisIns.$vs.notify({
-            title: "Error",
-            text: error,
-            color: "danger",
-            iconPack: "feather",
-            icon: "icon-alert-circle"
-          });
+          thisIns.checkResponRequest(error.response.data);
         })
         .finally(function() {
           thisIns.$vs.loading.close();

@@ -175,7 +175,7 @@ export default {
     getData(page = 1) {
       const thisIns = this;
       thisIns.$vs.loading({
-        color: '#7367F0',
+        color: '#1E6DB5',
         text: 'Loading...'
       });
       this.$http.get(`branches/${this.branchId}/programs`, {

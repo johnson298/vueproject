@@ -173,12 +173,6 @@ export default {
         loading: this.$vs.loading
       };
       this.$store.dispatch("auth/login", payload);
-      if (localStorage.getItem("branchId")) {
-        this.$store.dispatch(
-          "changeBranchData",
-          localStorage.getItem("branchId")
-        );
-      }
     }
   }
 };

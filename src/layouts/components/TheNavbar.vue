@@ -67,12 +67,12 @@
 
         <vs-button type="line" @click="changeBranchPopup = true">
           <font-awesome-icon icon="sitemap" />
-          {{branchName}}
+          {{ branchName }}
         </vs-button>
         <vs-popup class="popup-custom-768" title="Chọn chi nhánh" :active.sync="changeBranchPopup">
           <div class="vx-col w-full">
             <h5 class="mt-3 mb-3 text-center">Danh sách chi nhánh</h5>
-            <vs-row class="d-flex row">
+            <vs-row class="d-flex row justify-start">
               <vs-col vs-w="6" class="mt-5" :key="index" v-for="(value,index) in branches">
                 <vs-radio v-model="changeBranchId" :vs-value="value.id">{{value.name}}</vs-radio>
               </vs-col>
@@ -359,7 +359,7 @@ export default {
         })
         .catch(() => {
           this.$vs.notify({
-            title: "Chuyển chi nhánh thành công",
+            title: "Lỗi",
             text: "Lỗi lấy tên chi nhánh",
             color: "danger",
             iconPack: "feather",
@@ -373,12 +373,11 @@ export default {
         .get("branches")
         .then(res => {
           this.branches = res.data.data;
-          localStorage.setItem("defaultBranchId", res.data.data[0].id);
         })
         .catch(() => {
           this.$vs.notify({
             title: "Lỗi !",
-            text: "Có lỗi xảy ra",
+            text: "Chưa lấy được chi nhánh",
             color: "danger",
             iconPack: "feather",
             icon: "icon-check"

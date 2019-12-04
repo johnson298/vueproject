@@ -50,7 +50,7 @@
           </vs-dropdown>
 
           <!-- ADD NEW -->
-          
+
         </div>
       </div>
       <template slot="thead">
@@ -67,7 +67,7 @@
           <vs-td v-if="views.price.viewable">
             <p class="product-category">{{ formatPrice(tr.price) }}</p>
           </vs-td>
-          
+
           <vs-td v-if="views.start_at.viewable">
             <p class="product-category">{{ tr.start_at }}</p>
           </vs-td>
@@ -161,7 +161,7 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({color: '#7367F0', text: 'Loading...'});
+      thisIns.$vs.loading({color: '#1E6DB5', text: 'Loading...'});
       this.$http.get(`users/${this.employee_id}/courses`, {
         params: {
           page: page,

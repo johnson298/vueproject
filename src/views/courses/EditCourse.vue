@@ -236,25 +236,16 @@ export default {
           this.getData();
         })
         .catch((error) => {
-
-          if (error.response.data.error.hasOwnProperty('validation')) {
-            let message = error.response.data.error.validation[Object.keys(error.response.data.error.validation)[0]][0];
-            this.$vs.notify({
-              title: 'Validation error!',
-              text: message,
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
+          let thisIns = this;
+          thisIns.checkResponRequest(error.response.data, null, () => {
+            thisIns.$vs.notify({
+              title: "Error!",
+              text: "Chỉnh sửa thất bại",
+              iconPack: "feather",
+              icon: "fa fa-lg fa-exclamation-triangle",
+              color: "danger"
             });
-          } else {
-            this.$vs.notify({
-              title: 'Error!',
-              text: 'Sửa thất bại',
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          }
+          });
         }).finally(() => {
           this.$vs.loading.close('#button-with-loading > .con-vs-loading');
         });

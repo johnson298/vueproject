@@ -1,5 +1,5 @@
 <template>
-  <div id="data-list-list-view" class="data-list-container">
+  <div id="div-with-loading-popup" class="vs-con-loading__container">
 
     <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="students" search id="table" maxItems="10">
 
@@ -61,7 +61,12 @@
           </vs-td>
 
           <vs-td v-if="views.action.viewable" class="d-flex-span">
-            <vs-button color="primary" size="small" icon="add" @click="addStudentsCourse(tr.id)"></vs-button>
+            <vs-button
+              color="primary"
+              size="small"
+              icon="add"
+              @click="addStudentsCourse(tr.id)"
+              ></vs-button>
           </vs-td>
         </vs-tr>
       </template>
@@ -71,10 +76,10 @@
         <paginate :page-count="pagination.totalPages" :page-range="3" :margin-pages="2" :active-class="'is-current'" :container-class="'vs-pagination--ul'" :page-class="'item-pagination vs-pagination--li'" :prev-text="prev" :next-text="next" :click-handler="getData" :value="pagination.currentPage" ref="paginate" />
       </nav>
     </div>
-    <div class="flex flex-wrap items-center flex-row-reverse p-6 action-footer">
+    <!-- <div class="flex flex-wrap items-center flex-row-reverse p-6 action-footer">
       <vs-button color="danger" class="mr-6 vs-con-loading__container" @click="$emit('update:active', false)">hủy</vs-button>
       <vs-button class="mr-6 vs-con-loading__container" @click="addStudentsCourse()">Thêm</vs-button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -108,20 +113,20 @@ export default {
         orderType: 'desc'
       },
       views: {
-        code: { text: 'Code', viewable: true, sortKey: 'code' },
-        avatar: { text: 'Avatar', viewable: true, sortKey: '' },
-        name: { text: 'Name', viewable: true, sortKey: 'name' },
-        email: { text: 'Email', viewable: true, sortKey: 'email' },
-        birthday: { text: 'Birthday', viewable: false, sortKey: 'birthday' },
-        phone: { text: 'Phone', viewable: true, sortKey: 'phone' },
-        facebook: { text: 'Facebook', viewable: false, sortKey: '' },
-        address: { text: 'Address', viewable: false, sortKey: '' },
-        source: { text: 'Source', viewable: false, sortKey: 'source' },
-        class: { text: 'Class', viewable: false, sortKey: '' },
-        school: { text: 'School', viewable: false, sortKey: '' },
-        created_at: { text: 'Created at', viewable: true, sortKey: 'created_at' },
-        updated_at: { text: 'Updated at', viewable: false, sortKey: 'updated_at' },
-        action: { text: 'Action', viewable: true, sortKey: '' },
+        code: { text: 'MÃ HV', viewable: true, sortKey: 'code' },
+        avatar: { text: 'ẢNH ĐẠI DIỆN', viewable: true, sortKey: '' },
+        name: { text: 'TÊN HV', viewable: true, sortKey: 'name' },
+        email: { text: 'EMAIL', viewable: true, sortKey: 'email' },
+        birthday: { text: 'NGÀY SINH', viewable: false, sortKey: 'birthday' },
+        phone: { text: 'SỐ ĐIỆN THOẠI', viewable: true, sortKey: 'phone' },
+        facebook: { text: 'FACEBOOK', viewable: false, sortKey: '' },
+        address: { text: 'ĐỊA CHỈ', viewable: false, sortKey: '' },
+        source: { text: 'NGUỒN', viewable: false, sortKey: 'source' },
+        class: { text: 'LỚP', viewable: false, sortKey: '' },
+        school: { text: 'TRƯỜNG', viewable: false, sortKey: '' },
+        created_at: { text: 'NGÀY TẠO', viewable: true, sortKey: 'created_at' },
+        updated_at: { text: 'NGÀY CẬP NHẬT', viewable: false, sortKey: 'updated_at' },
+        action: { text: 'HÀNH ĐỘNG', viewable: true, sortKey: '' },
       },
       show: false,
       timer: null,
@@ -139,7 +144,7 @@ export default {
     getData(page = 1) {
       const thisIns = this;
       thisIns.$vs.loading({
-        color: '#7367F0',
+        color: '#1E6DB5',
         text: 'Loading...'
       });
       this.$http.get(`students`, {
@@ -154,13 +159,7 @@ export default {
         thisIns.pagination = response.data.pagination;
       })
         .catch(function (error) {
-          thisIns.$vs.notify({
-            title: 'Error',
-            text: error,
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-alert-circle'
-          });
+          thisIns.checkResponRequest(error.response.data);
         }).finally(function () {
           thisIns.$vs.loading.close();
         });
@@ -181,6 +180,10 @@ export default {
       this.getData(this.pagination.currentPage);
     },
     addStudentsCourse(idStudent) {
+      this.$vs.loading({
+        container: "#div-with-loading-popup",
+        scale: 0.6
+      });
       this.$http.post(`branches/${this.branch_id}/courses/` + this.$route.params.course + '/registers', {
         student_id: idStudent || this.selected[0].id,
         coupon_id: null,
@@ -198,27 +201,10 @@ export default {
           this.callback();
         })
         .catch((error) => {
-          if (error.response.data.error.hasOwnProperty('validation')) {
-            let message = error.response.data.error.validation[Object.keys(error.response.data.error.validation)[0]][0];
-            this.$vs.notify({
-              title: 'Validation error!',
-              text: message,
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          } else {
-            this.$vs.notify({
-              title: 'Error!',
-              text: 'Thêm thất bại',
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          }
+          this.checkResponRequest(error.response.data, null, null, "Thêm thất bại");
           this.selected = [];
         }).finally(() => {
-          this.$vs.loading.close('#button-with-loading > .con-vs-loading');
+          this.$vs.loading.close("#div-with-loading-popup > .con-vs-loading");
         });
     }
   },
@@ -334,5 +320,8 @@ export default {
         margin: 3px;
       }
     }
+  }
+  #div-with-loading-popup{
+    position: inherit;
   }
 </style>

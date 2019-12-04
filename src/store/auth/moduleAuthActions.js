@@ -22,7 +22,7 @@ export default {
         password: payload.userDetails.password
       })
       .then(result => {
-        commit("UPDATE_TOKEN", result.data.data.access_token);
+        commit("UPDATE_TOKEN", { access_token: result.data.data.access_token, branch_id: result.data.data.branch_id });
         dispatch("updateUser", {
           isReloadRequired: true,
           notify: payload.notify
@@ -46,7 +46,7 @@ export default {
       });
   },
 
-  async updateUser({ commit, dispatch }, payload) {
+  async updateUser({ commit }, payload) {
     return new Promise(resolve => {
       Vue.axios
         .get("me")
@@ -72,7 +72,6 @@ export default {
             });
           }
           localStorage.removeItem("user");
-          dispatch("clearData");
           resolve(false);
         });
     });

@@ -138,7 +138,6 @@ export default {
       this.$http.get('students/' + this.$route.params.student).then(function (response) {
         vm.student = response.data.data;
       }).catch(() => {
-        this.$router.push('/pages/error-404');
         this.$vs.notify({
           title: 'Error!',
           text: 'Có lỗi xảy ra',
@@ -179,33 +178,17 @@ export default {
         .then(() => {
           this.studentInfo();
           this.$vs.notify({
-            title: 'Đã sửa thành công',
-            text: 'OK',
+            title: 'Thành công !',
+            text: 'Chỉnh sửa thành công',
             iconPack: 'feather',
             icon: 'fa fa-lg fa-check-circle',
             color: 'success'
           });
         })
         .catch((error) => {
-
-          if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {
-            let message = error.response.data.error.validation[Object.keys(error.response.data.error.validation)[0]][0];
-            this.$vs.notify({
-              title: 'Validation error!',
-              text: message,
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          } else {
-            this.$vs.notify({
-              title: 'Error!',
-              text: 'Sửa thất bại',
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          }
+          let thisIns = this;
+          let errorData = error.response.data;
+          thisIns.checkResponRequest(errorData, null, null, 'Chỉnh sửa thất bại');
         }).finally(() => {
           this.$vs.loading.close('#update-loading > .con-vs-loading');
         });

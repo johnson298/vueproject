@@ -57,6 +57,11 @@
             </vs-select>
           </div>
         </div>
+        <div class="vs-col sm:w-1/2 w-full mb-5">
+          <vs-input class="w-full" label="Tìm kiếm chi nhánh" v-if="campaign.range_send==2" />
+          <vs-input class="w-full" label="Tìm kiếm giáo viên" v-if="campaign.range_send==3" />
+          <vs-input class="w-full" label="Tìm kiếm học viên" v-if="campaign.range_send==4" />
+        </div>
       </div>
       <div class="vs-row mt-5 mb-5">
         <div class="vs-col w-full">
@@ -92,7 +97,6 @@
 import vSelect from "vue-select";
 import Datepicker from "vuejs-datepicker";
 import * as lang from "vuejs-datepicker/src/locale";
-import "video.js/dist/video-js.css";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import flatPickr from "vue-flatpickr-component";
 import "@/assets/css/flatpickr.css";
@@ -135,8 +139,7 @@ export default {
       selectedBranch: null,
       loading: false,
       campaign: {
-        birthday: "",
-        range_send: 1,
+        range_send: 2,
         position: null
       },
       selectedProgram: null,

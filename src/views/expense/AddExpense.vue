@@ -41,13 +41,6 @@
           id="btn-loading"
         >Tạo chi</vs-button>
         <vs-button
-          :disabled="(expense.amount&&expense.note) ? false : true"
-          class="ml-3"
-          type="filled"
-          color="primary"
-          @click="createExpense"
-        >Tạo & in hóa đơn</vs-button>
-        <vs-button
           class="ml-3"
           type="filled"
           color="danger"
@@ -117,30 +110,8 @@ export default {
           this.$emit("closePopupExpense", false);
         })
         .catch(error => {
-          if (
-            error.response.status === 500 &&
-            error.response.data.error.hasOwnProperty("validation")
-          ) {
-            let message =
-              error.response.data.error.validation[
-                Object.keys(error.response.data.error.validation)[0]
-              ][0];
-            this.$vs.notify({
-              title: "Validation error!",
-              text: message,
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          } else {
-            this.$vs.notify({
-              title: "Error!",
-              text: "Thêm mới thất bại",
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          }
+          let thisIns = this;
+          thisIns.checkResponRequest(error.response.data, null, null, "Thêm mới thất bại");
         })
         .finally(() => {
           this.$vs.loading.close("#btn-loading > .con-vs-loading");

@@ -170,16 +170,9 @@ export default {
           icon: 'verified_user',
         });
         this.getData();
-      }).catch(() => {
-        this.$vs.notify({
-          title: 'Error!',
-          text: 'Bạn không xóa thành công',
-          iconPack: 'feather',
-          icon: 'fa fa-lg fa-exclamation-triangle',
-          color: 'danger'
-        });
+      }).catch((error) => {
+        this.checkResponRequest(error.response.data);
       });
-
     },
     updateViews(index, e) {
       this.$store.dispatch('programs/updateViews', {
@@ -210,13 +203,7 @@ export default {
         });
       })
         .catch(function (error) {
-          thisIns.$vs.notify({
-            title: 'Error',
-            text: error,
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-alert-circle'
-          });
+          thisIns.checkResponRequest(error.response.data);
         }).finally(function () {
           thisIns.$vs.loading.close();
         });
@@ -248,9 +235,6 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.programs.length === 0) {
-      this.getData();
-    }
   },
   destroyed() {
     this.$store.dispatch('programs/updateNeedReload', false);
