@@ -15,7 +15,7 @@ export default {
   },
   views: {
     name: { text: "Tên quyền", viewable: true, sortKey: "name" },
-    guard_name: { text: "Loại tài khoản", viewable: true, sortKey: "guard_name" },
+    display_name: { text: "Loại tài khoản", viewable: true, sortKey: "display_name" },
     action: { text: "Hành động", viewable: true, sortKey: "" }
   },
   needReload: false

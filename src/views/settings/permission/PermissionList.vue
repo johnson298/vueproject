@@ -72,8 +72,8 @@
                         <p class="product-name font-medium">{{ tr.name }}</p>
                     </vs-td>
 
-                    <vs-td v-if="views.guard_name.viewable">
-                        <p class="product-name font-medium">{{ tr.guard_name }}</p>
+                    <vs-td v-if="views.display_name.viewable">
+                        <p class="product-name font-medium">{{ tr.display_name }}</p>
                     </vs-td>
 
                     <vs-td v-if="views.action.viewable" class="d-flex-span text-center">

@@ -19,7 +19,7 @@ import moduleRooms from "./rooms/module";
 import moduleInvoices from "./invoices/module";
 import moduleCustomers from "./customers/module";
 import moduleCustomerCare from "./customer_care/module";
-import moduleCampaign from "./campaign/module";
+import moduleCampaign from "./campaigns/module";
 import moduleCoursesEmployee from "./courses_register/module";
 import moduleExpense from "./expense/module";
 import moduleAttendances from "./attendances/module";
@@ -50,7 +50,7 @@ export default new Vuex.Store({
     rooms: moduleRooms,
     customers: moduleCustomers,
     customer_care: moduleCustomerCare,
-    campaign: moduleCampaign,
+    campaigns: moduleCampaign,
     courses_register: moduleCoursesEmployee,
     expense: moduleExpense,
     attendances: moduleAttendances,
