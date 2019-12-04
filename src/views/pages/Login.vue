@@ -7,11 +7,11 @@
             <div class="vx-col hidden sm:hidden md:hidden lg:block lg:w-1/2 mx-auto self-center">
               <img src="@/assets/images/pages/login.png" alt="login" class="mx-auto" />
             </div>
-            <div class="vx-col sm:w-full md:w-full lg:w-1/2 mx-auto self-center bg-white bg-dark">
+            <div class="vx-col sm:w-full md:w-full lg:w-1/2 mx-auto self-center bg-white bg-dark pb-6">
               <div class="p-8">
                 <div class="vx-card__title mb-8">
-                  <h4 class="mb-4">Login</h4>
-                  <p>Welcome back, please login to your account.</p>
+                  <h4 class="mb-4">Đăng nhập</h4>
+                  <p>Chào mừng trở lại, xin vui lòng đăng nhập vào tài khoản của bạn.</p>
                 </div>
                 <form action>
                   <vs-input
@@ -44,21 +44,21 @@
                 </form>
 
                 <div class="flex flex-wrap justify-between my-5">
-                  <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Remember Me</vs-checkbox>
-                  <router-link to>Forgot Password?</router-link>
+                  <vs-checkbox v-model="checkbox_remember_me" class="mb-3">Nhớ mật khẩu</vs-checkbox>
+                  <router-link to>Quên mật khẩu?</router-link>
                 </div>
-                <vs-button type="border">Register</vs-button>
+                <!-- <vs-button type="border">Đăng ký</vs-button> -->
                 <vs-button
                   class="float-right"
                   @click="login"
                   tabindex="3"
                 >Đăng nhập</vs-button>
 
-                <vs-divider>OR</vs-divider>
+                <!-- <vs-divider>Hoặc</vs-divider> -->
 
-                <div class="social-login flex flex-wrap justify-between">
+                <!-- <div class="social-login flex flex-wrap justify-between">
                   <div class="social-login-buttons flex flex-wrap items-center mt-4">
-                    <!-- facebook -->
+                    
                     <div class="bg-facebook pt-3 pb-2 px-4 rounded-lg cursor-pointer mr-4">
                       <svg
                         aria-hidden="true"
@@ -77,7 +77,7 @@
                       </svg>
                     </div>
 
-                    <!-- TWITTER -->
+                    
                     <div class="bg-twitter pt-3 pb-2 px-4 rounded-lg cursor-pointer mr-4">
                       <svg
                         aria-hidden="true"
@@ -96,7 +96,7 @@
                       </svg>
                     </div>
 
-                    <!-- GOOGLE -->
+                    
                     <div class="bg-google pt-3 pb-2 px-4 rounded-lg cursor-pointer mr-4">
                       <svg
                         aria-hidden="true"
@@ -115,7 +115,7 @@
                       </svg>
                     </div>
 
-                    <!-- GITHUB -->
+                    
                     <div class="bg-github pt-3 pb-2 px-4 rounded-lg cursor-pointer mr-4">
                       <svg
                         aria-hidden="true"
@@ -135,7 +135,7 @@
                     </div>
                   </div>
                   <vs-button class="mt-4" color="#eb5424">Auth0</vs-button>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>

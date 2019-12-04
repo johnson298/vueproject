@@ -1,8 +1,14 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
+
     <vs-popup class="popup-custom-968" title="Thêm mới thông báo" :active.sync="addNew">
-      <add-notification :active.sync="addNew" @closePopupInvoice="addNew = $event"></add-notification>
+      <add-notification
+        :active.sync="addNew"
+        @closePopupAdd="addNew = $event"
+        v-if="addNew"
+        :callback="getData" />
     </vs-popup>
+
     <vs-table-custom
       :sst="true"
       ref="table"
@@ -47,7 +53,7 @@
             <div
               class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32"
             >
-              <span class="mr-2">Views</span>
+              <span class="mr-2">Xem</span>
               <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
             </div>
 
@@ -62,75 +68,75 @@
               </div>
             </vs-dropdown-menu>
           </vs-dropdown>
-          <!-- ADD NEW -->
 
+          <!-- ADD NEW -->
           <div
             class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary"
             @click="addNew = true"
           >
-            <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-            <span
-              class="ml-2 text-base text-primary"
-              style="color: #636363 !important;"
-            >Thêm thông báo</span>
+            <feather-icon icon="Upload" svgClasses="h-4 w-4" />
+            <span class="ml-2 text-base text-primary">Thêm thông báo</span>
           </div>
+        </div>
+        <div class="import-file">
+          <vx-tooltip text="Thêm dữ liệu" position="top">
+            <label for="file-upload" class="custom-file-upload rounded-full mb-3 mr-2">
+              <i class="feather icon-upload-cloud"></i>
+            </label>
+            <input id="file-upload" type="file" />
+          </vx-tooltip>
         </div>
       </div>
 
-      <template style="padding-left: 10px" slot="thead">
-        <vs-th>Mã</vs-th>
-        <vs-th>Tên thông báo</vs-th>
-        <vs-th>Người tạo</vs-th>
-        <vs-th>Ngày triển khai</vs-th>
-        <vs-th>Phạm vi gửi</vs-th>
-        <vs-th>Hành động</vs-th>
+      <template slot="thead">
+        <vs-th
+          :sort-key="value.sortKey"
+          v-for="(value, index) in views"
+          :key="index"
+          v-if="value.viewable"
+        >{{ value.text }}</vs-th>
       </template>
 
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="data[indextr].code">
-            <p class="product-name font-medium">{{ tr.code }}</p>
+          <vs-td v-if="views.title.viewable">
+            <p class="font-medium">{{ tr.title }}</p>
           </vs-td>
-          <vs-td v-if="data[indextr].name">
-            <p class="product-name font-medium">{{ tr.name }}</p>
+          <vs-td v-if="views.target_id.viewable">
+            <p class="font-medium">{{ tr.target_id }}</p>
           </vs-td>
-          <vs-td v-if="data[indextr].name">
-            <p class="product-name font-medium">{{ tr.memCreate }}</p>
+          <vs-td v-if="views.user.viewable">
+            <p class="font-medium">{{ tr.user.name }}</p>
           </vs-td>
-          <vs-td v-if="data[indextr].schedule">
-            <p class="product-name font-medium">{{ tr.schedule }}</p>
+          <vs-td v-if="views.schedule_at.viewable">
+            <p class="font-medium">{{ tr.schedule_at }}</p>
           </vs-td>
-          <vs-td v-if="data[indextr].range_send">
-            <p class="product-name font-medium">
-              <vs-chip
-                :color="checkStatus(range_send,tr.range_send)=='Toàn bộ trung tâm' ? 'warning'
-                      : checkStatus(range_send,tr.range_send)=='Theo chi nhánh' ? 'success'
-                      : checkStatus(range_send,tr.range_send)=='Theo chương trình học' ? 'primary'
-                      : checkStatus(range_send,tr.range_send)=='Theo lớp học' ? 'danger'
-                      : ''"
-              >{{ checkStatus(range_send,tr.range_send) }}</vs-chip>
-            </p>
+          <vs-td v-if="views.via.viewable">
+            <p class="font-medium">{{ tr.via ? tr.via.join(', ') : tr.via }}</p>
           </vs-td>
-          <vs-td v-if="data[indextr].updated_at">
-            <p class="product-name font-medium">{{ tr.updated_at }}</p>
+          <vs-td v-if="views.focus_on.viewable">
+            <p class="font-medium">{{ tr.focus_on === 1 ? "Học viên" : "Giáo viên" }}</p>
           </vs-td>
-          <vs-td v-if="data[indextr].created_at">
-            <p class="product-name font-medium">{{ tr.created_at }}</p>
+          <vs-td v-if="views.content.viewable">
+            <div v-html="tr.content"></div>
+          </vs-td>
+          <vs-td v-if="views.perform_at.viewable">
+            <p class="font-medium">{{ tr.perform_at }}</p>
+          </vs-td>
+          <vs-td v-if="views.created_at.viewable">
+            <p class="font-medium">{{ tr.created_at }}</p>
+          </vs-td>
+          <vs-td v-if="views.updated_at.viewable">
+            <p class="font-medium">{{ tr.updated_at }}</p>
           </vs-td>
           <vs-td class="d-flex-span">
-            <router-link
-              tag="button"
-              to="/campaigns/1111"
-              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small vs-radius"
-            >
-              <i class="feather icon-eye"></i>
-            </router-link>
             <vs-button
               radius
               color="danger"
               size="small"
               @click="deleteCampaign(tr)"
               icon="delete_forever"
+              v-if="!tr.perform_at"
             ></vs-button>
           </vs-td>
         </vs-tr>
@@ -161,87 +167,65 @@ import { mapState } from "vuex";
 import AddNotification from "./AddNotification.vue";
 
 export default {
-  components: {
-    "add-notification": AddNotification
-  },
   data() {
     return {
-      addNew: false,
-      campaigns: [
-        {
-          code: "KH-001",
-          memCreate: "John Smith",
-          name: "thông báo nghỉ lễ",
-          schedule: "21-08-2019",
-          position: 1,
-          range_send: 1
-        },
-        {
-          code: "KH-002",
-          memCreate: "John Smith",
-          name: "Nghỉ mùng 2/9",
-          schedule: "21-08-2019",
-          position: 2,
-          range_send: 2
-        }
-      ],
-      range_send: this.$store.state.model.campaign.range_send,
-      position: this.$store.state.model.campaign.position,
       activeConfirm: false,
       timer: null,
       selected: [],
       isMounted: false,
+      addNew: false,
       prev:
         '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev"><i class="vs-icon notranslate icon-scale material-icons null">chevron_left</i></button>',
       next:
         '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-next"><i class="vs-icon notranslate icon-scale material-icons null">chevron_right</i></button>'
     };
   },
+  components: {
+    "add-notification": AddNotification
+  },
   computed: {
-    ...mapState("campaign", [
-      "users",
+    ...mapState("campaigns", [
+      "campaigns",
       "pagination",
       "searchTerm",
       "order",
       "views",
       "needReload"
-    ])
+    ]),
+    statusEmployee() {
+      return this.$store.state.model.employees.status;
+    }
   },
   methods: {
-    deleteCampaign(user) {
+    deleteCampaign(campaign) {
       this.$vs.dialog({
         type: "confirm",
         color: "danger",
-        title: `Xóa nhân viên`,
-        text: "Bạn có chắc muốn xóa " + user.name,
+        title: `Xóa thông báo`,
+        text: "Bạn có chắc muốn xóa " + campaign.title,
         accept: this.campaignAlert,
-        parameters: [user.id]
+        parameters: [campaign.id]
       });
     },
-    campaignAlert(user_id) {
-      this.$http
-        .delete("users/" + user_id)
-        .then(() => {
-          this.$vs.notify({
-            color: "success",
-            title: "Xóa nhân viên",
-            text: "Bạn đã xóa thành công",
-            icon: "verified_user"
-          });
-          this.getData();
-        })
-        .catch(() => {
-          this.$vs.notify({
-            title: "Error!",
-            text: "Bạn không xóa thành công",
-            iconPack: "feather",
-            icon: "fa fa-lg fa-exclamation-triangle",
-            color: "danger"
-          });
-        });
+    campaignAlert(id) {
+      // this.$http
+      //   .delete("campaigns/" + id)
+      //   .then(() => {
+      //     this.$vs.notify({
+      //       color: "success",
+      //       title: "Xóa thông báo",
+      //       text: "Bạn đã xóa thành công",
+      //       icon: "verified_user"
+      //     });
+      //     this.getData();
+      //   })
+      //   .catch(error => {
+      //     let thisIns = this;
+      //     thisIns.checkResponRequest(error.response.data, null, null, 'Xóa không thành công');
+      //   });
     },
     updateViews(index, e) {
-      this.$store.dispatch("campaign/updateViews", {
+      this.$store.dispatch("campaigns/updateViews", {
         index: index,
         viewable: e.target.checked
       });
@@ -251,9 +235,12 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({ color: "#7367F0", text: "Loading..." });
+      thisIns.$vs.loading({
+        color: "#1E6DB5",
+        text: "Loading..."
+      });
       this.$http
-        .get("users", {
+        .get("campaigns", {
           params: {
             page: page,
             search: this.searchTerm,
@@ -262,19 +249,13 @@ export default {
           }
         })
         .then(function(response) {
-          thisIns.$store.dispatch("campaign/updateTable", {
-            users: thisIns.formatData(response.data.data),
+          thisIns.$store.dispatch("campaigns/updateTable", {
+            campaigns: thisIns.formatData(response.data.data),
             pagination: response.data.pagination
           });
         })
         .catch(function(error) {
-          thisIns.$vs.notify({
-            title: "Error",
-            text: error,
-            color: "danger",
-            iconPack: "feather",
-            icon: "icon-alert-circle"
-          });
+          thisIns.checkResponRequest(error.response.data);
         })
         .finally(function() {
           thisIns.$vs.loading.close();
@@ -282,11 +263,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch("campaign/updateNeedReload", true);
+        this.$store.dispatch("campaigns/updateNeedReload", true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch("campaign/updateSearch", {
+      this.$store.dispatch("campaigns/updateSearch", {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -295,7 +276,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch("campaign/updateOrder", {
+      this.$store.dispatch("campaigns/updateOrder", {
         order: {
           orderBy: key,
           orderType: active ? "desc" : "asc"
@@ -307,12 +288,12 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.users.length === 0) {
-      this.getData();
-    }
+  },
+  created() {
+    this.getData();
   },
   destroyed() {
-    this.$store.dispatch("campaign/updateNeedReload", false);
+    this.$store.dispatch("campaigns/updateNeedReload", false);
   }
 };
 </script>
@@ -325,6 +306,7 @@ export default {
       flex-wrap: wrap-reverse;
       margin-left: 1.5rem;
       margin-right: 1.5rem;
+
       > span {
         display: flex;
         flex-grow: 1;
@@ -355,17 +337,21 @@ export default {
 
       tr {
         box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+
         td {
           padding: 20px;
+
           &:first-child {
             border-top-left-radius: 0.5rem;
             border-bottom-left-radius: 0.5rem;
           }
+
           &:last-child {
             border-top-right-radius: 0.5rem;
             border-bottom-right-radius: 0.5rem;
           }
         }
+
         td.td-check {
           padding: 20px !important;
         }
@@ -376,15 +362,18 @@ export default {
       th {
         padding-top: 0;
         padding-bottom: 0;
+        vertical-align: middle;
 
         .vs-table-text {
           text-transform: uppercase;
           font-weight: 600;
         }
       }
+
       th.td-check {
         padding: 0 15px !important;
       }
+
       tr {
         background: none;
         box-shadow: none;
@@ -396,21 +385,27 @@ export default {
     }
   }
 }
+
 .d-flex-span {
   span {
     display: flex;
+
     button {
       margin: 3px;
     }
   }
 }
-</style>
-<style>
-#add_campaign {
-  height: 46px;
-  background: #ffffff;
-  border-style: none !important;
-  box-shadow: 2px 2px 2px 2px #dddddd;
-  color: #636363 !important;
+
+.import-file {
+  .custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
 }
 </style>

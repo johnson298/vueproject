@@ -127,11 +127,12 @@ const state = {
       ]
     },
     campaign: {
-      range_send: [
-        { text: "Toàn bộ trung tâm", value: 1 },
-        { text: "1 chi nhánh", value: 2 },
-        { text: "1 giáo viên", value: 3 },
-        { text: "1 học viên", value: 4 }
+      target_type: [
+        { text: "Toàn bộ trung tâm", value: "" },
+        { text: "1 chi nhánh", value: "App\\Entities\\Branch" },
+        { text: "1 lớp học", value: "App\\Entities\\Course" },
+        { text: "1 học viên", value: "App\\Entities\\Student" },
+        { text: "1 giáo viên", value: "App\\Entities\\User" }
       ],
       position: [
         { text: "Giáo viên", value: 1 },
