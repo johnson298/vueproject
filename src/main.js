@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import Vue from "vue";
 import App from "./App.vue";
 
@@ -70,7 +71,8 @@ import {
   faUsersCog,
   faCog,
   faCodeBranch,
-  faDollarSign
+  faDollarSign,
+  faFilter
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -96,7 +98,8 @@ library.add(
   faUsersCog,
   faCog,
   faCodeBranch,
-  faDollarSign
+  faDollarSign,
+  faFilter
 );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
@@ -257,6 +260,60 @@ Vue.mixin({
         return (num / 1000).toFixed(1).replace(/\.0$/, "") + "Nghìn";
       }
       return num;
+    },
+    checkResponRequest(data, _500, callback, mess = "Có lỗi xảy ra, vui lòng thử lại") {
+      switch (data.status) {
+      case 403:
+        this.$vs.notify({
+          title: "Lỗi phân quyền !",
+          text: data.error.message,
+          color: "danger",
+          iconPack: "feather",
+          icon: "icon-alert-circle"
+        });
+        break;
+      case 500:
+        if(data.error.hasOwnProperty("validation")){
+          if (_500 instanceof Function){
+            _500();
+          } else {
+            let message = data.error.validation[Object.keys(data.error.validation)[0]][0];
+            this.$vs.notify({
+              title: "Validation error!",
+              text: message,
+              iconPack: "feather",
+              icon: "fa fa-lg fa-exclamation-triangle",
+              color: "danger"
+            });
+          }
+        } else {
+          if (callback instanceof Function){
+            callback();
+          } else {
+            this.$vs.notify({
+              title: "Lỗi !",
+              text: mess,
+              iconPack: "feather",
+              icon: "fa fa-lg fa-exclamation-triangle",
+              color: "danger"
+            });
+          }
+        }
+        break;
+      default:
+        if (callback instanceof Function){
+          callback();
+        } else {
+          this.$vs.notify({
+            title: "Lỗi !",
+            text: mess,
+            iconPack: "feather",
+            icon: "fa fa-lg fa-exclamation-triangle",
+            color: "danger"
+          });
+        }
+        break;
+      }
     }
   }
 });

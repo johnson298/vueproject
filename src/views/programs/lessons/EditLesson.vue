@@ -107,30 +107,7 @@ export default {
           this.callback();
         })
         .catch(error => {
-          if (
-            error.response.status === 500 &&
-            error.response.data.error.hasOwnProperty("validation")
-          ) {
-            let message =
-              error.response.data.error.validation[
-                Object.keys(error.response.data.error.validation)[0]
-              ][0];
-            this.$vs.notify({
-              title: "Lỗi thông tin!",
-              text: message,
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          } else {
-            this.$vs.notify({
-              title: "Có lỗi!",
-              text: "Chỉnh sửa thất bại",
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          }
+          this.checkResponRequest(error.response.data, null, null, "Chỉnh sửa thất bại");
         })
         .finally(() => {
           this.$vs.loading.close("#btn-loading > .con-vs-loading");

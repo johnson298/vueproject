@@ -53,12 +53,6 @@ export default [
     iconFontAwesome: "hand-holding-usd"
   },
   {
-    url: "/reports",
-    name: "Báo cáo",
-    slug: "invoices",
-    iconFontAwesome: "list-alt"
-  },
-  {
     name: "marketing",
     header: "marketing"
   },
@@ -73,6 +67,12 @@ export default [
     name: "Chiến dịch",
     slug: "campaigns",
     iconFontAwesome: "handshake"
+  },
+  {
+    url: "/reports",
+    name: "Báo cáo",
+    slug: "invoices",
+    iconFontAwesome: "list-alt"
   },
   {
     name: "setting",

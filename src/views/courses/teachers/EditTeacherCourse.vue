@@ -28,7 +28,7 @@
         </VuePerfectScrollbar>
 
         <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
-            <vs-button class="mr-6 vs-con-loading__container" :disabled="errors.any()" id="button-with-loading" @click="updateTeacher(teacherGetInfo)">Chỉnh sửa</vs-button>
+            <vs-button class="mr-6 vs-con-loading__container" :disabled="errors.any()" id="button-with-loading_teacher" @click="updateTeacher(teacherGetInfo)">Chỉnh sửa</vs-button>
             <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Hủy</vs-button>
         </div>
     </vs-sidebar>
@@ -84,7 +84,7 @@ export default {
       this.$vs.loading({
         background: '#1E6DB5',
         color: '#fff',
-        container: '#button-with-loading',
+        container: '#button-with-loading_teacher',
         scale: 0.45
       });
       this.$http.put(`branches/${this.branch_id}/courses/${this.course_id}/teachers/${teacher.id}`, {
@@ -105,27 +105,9 @@ export default {
           });
         })
         .catch((error) => {
-
-          if (error.response.data.error.hasOwnProperty('validation')) {
-            let message = error.response.data.error.validation[Object.keys(error.response.data.error.validation)[0]][0];
-            this.$vs.notify({
-              title: 'Validation error!',
-              text: message,
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          } else {
-            this.$vs.notify({
-              title: 'Error!',
-              text: 'Sửa thất bại',
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          }
+          this.checkResponRequest(error.response.data, null, null, 'Sửa thất bại');
         }).finally(() => {
-          this.$vs.loading.close('#button-with-loading > .con-vs-loading');
+          this.$vs.loading.close('#button-with-loading_teacher > .con-vs-loading');
         });
     },
   },

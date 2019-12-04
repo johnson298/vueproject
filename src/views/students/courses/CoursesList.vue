@@ -124,7 +124,10 @@
           </vs-td>
 
           <vs-td v-if="views.action.viewable" class="d-flex-span">
-            <vs-button color="danger" size="small" icon="delete_forever"></vs-button>
+            <router-link tag="button" :to="`/courses/${tr.id}`" class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small">
+                        <i class="feather icon-eye"></i>
+            </router-link>
+            <vs-button color="danger" radius size="small" icon="delete_forever"></vs-button>
           </vs-td>
         </vs-tr>
       </template>
@@ -195,7 +198,7 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({ color: "#7367F0", text: "Loading..." });
+      thisIns.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
       this.$http
         .get(`students/${this.student_id}/courses`, {
           params: {

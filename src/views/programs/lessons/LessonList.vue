@@ -249,14 +249,8 @@ export default {
           });
           this.getData();
         })
-        .catch(() => {
-          this.$vs.notify({
-            title: "Có lỗi!",
-            text: "Bạn không xóa thành công",
-            iconPack: "feather",
-            icon: "fa fa-lg fa-exclamation-triangle",
-            color: "danger"
-          });
+        .catch((error) => {
+          this.checkResponRequest(error.response.data);
         });
     },
     updateViews(index, e) {
@@ -291,13 +285,11 @@ export default {
           });
         })
         .catch(function(error) {
-          thisIns.$vs.notify({
-            title: "Có lỗi",
-            text: error,
-            color: "danger",
-            iconPack: "feather",
-            icon: "icon-alert-circle"
-          });
+          if(error.response.data.status === 404){
+            thisIns.$router.push("/pages/error-404");
+            return;
+          }
+          thisIns.checkResponRequest(error.response.data);
         })
         .finally(function() {
           thisIns.$vs.loading.close();

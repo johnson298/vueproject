@@ -3,7 +3,7 @@
     <vs-sidebar class="custom--height__sidebar" parent="#todo-app" :hidden-background="clickNotClose" v-model="isSidebarActive">
         <settings-sidebar></settings-sidebar>
     </vs-sidebar>
-    <div :class="{'sidebar-spacer': clickNotClose}" class="border border-r-0 border-b-0 border-t-0  app-fixed-height">
+    <div :class="{'sidebar-spacer': clickNotClose}" class="border border-r-0 border-b-0 border-t-0">
         <transition :name="routerTransition" mode="out-in">
             <router-view></router-view>
         </transition>
@@ -33,7 +33,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@/assets/scss/vuesax/apps/todo.scss";
-</style>

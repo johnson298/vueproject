@@ -131,24 +131,7 @@ export default {
           this.$emit('closePopup', false);
         })
         .catch((error) => {
-          if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {
-            let message = error.response.data.error.validation[Object.keys(error.response.data.error.validation)[0]][0];
-            this.$vs.notify({
-              title: 'Validation error!',
-              text: message,
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          } else {
-            this.$vs.notify({
-              title: 'Error!',
-              text: 'Thêm mới thất bại',
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          }
+          this.checkResponRequest(error.response.data, null, null, "Thêm mới thật bại");
         }).finally(() => {
           this.$vs.loading.close('#button-with-loading-create > .con-vs-loading');
         });

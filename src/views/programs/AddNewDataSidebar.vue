@@ -36,7 +36,7 @@
     </VuePerfectScrollbar>
 
     <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
-        <vs-button class="mr-6 vs-con-loading__container" @click="createProgram" :disabled="errors.any()" ref="addButton" id="button-with-loading">Thêm</vs-button>
+        <vs-button class="mr-6 vs-con-loading__container" @click="createProgram" :disabled="errors.any()" ref="addButton" id="button-with_loading">Thêm</vs-button>
         <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Hủy</vs-button>
     </div>
 </vs-sidebar>
@@ -111,7 +111,7 @@ export default {
       this.$vs.loading({
         background: '#1E6DB5',
         color: '#fff',
-        container: '#button-with-loading',
+        container: '#button-with_loading',
         scale: 0.45
       });
       this.$http.post(`branches/${this.branchId}/programs`, this.formData())
@@ -128,26 +128,9 @@ export default {
           this.$emit('closeSidebar', false);
         })
         .catch((error) => {
-          if (error.response.status === 500 && error.response.data.error.hasOwnProperty('validation')) {
-            let message = error.response.data.error.validation[Object.keys(error.response.data.error.validation)[0]][0];
-            this.$vs.notify({
-              title: 'Validation error!',
-              text: message,
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          } else {
-            this.$vs.notify({
-              title: 'Error!',
-              text: 'Thêm mới thất bại',
-              iconPack: 'feather',
-              icon: 'fa fa-lg fa-exclamation-triangle',
-              color: 'danger'
-            });
-          }
+          this.checkResponRequest(error.response.data, null, null, "Thêm mới thất bại");
         }).finally(() => {
-          this.$vs.loading.close('#button-with-loading > .con-vs-loading');
+          this.$vs.loading.close('#button-with_loading > .con-vs-loading');
         });
     }
   },

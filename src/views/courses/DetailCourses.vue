@@ -81,15 +81,12 @@ export default {
       .then(function(response) {
         vm.course = response.data.data;
       })
-      .catch(() => {
-        this.$router.push("/pages/error-404");
-        this.$vs.notify({
-          title: "Error!",
-          text: "Có lỗi xảy ra",
-          iconPack: "feather",
-          icon: "fa fa-lg fa-exclamation-triangle",
-          color: "danger"
-        });
+      .catch((error) => {
+        if(error.response.data.status === 404){
+          this.$router.push("/pages/error-404");
+          return;
+        }
+        this.checkResponRequest(error.response.data);
       });
   },
   filters: {

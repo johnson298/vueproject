@@ -69,27 +69,7 @@
                             <label class="vs-input--label">Ảnh đại diện</label>
                         </div>
                         <div>
-                            <div class="con-upload custom-upload-image" v-if="srcLogo" key="srcLogo">
-                                <div class="con-img-upload">
-                                    <div class="upload-logo">
-                                        <div class="img-upload">
-                                            <button class="btn-x-file">
-                                                <i translate="translate" @click="deleteAvatar" class="material-icons notranslate">
-                                                    clear
-                                                </i></button>
-                                            <img :src="srcLogo" ref="logo" class="img--upload" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="con-input-upload float-none" v-else key="srcLogo">
-                                <input type="file" @change="changeAvatar($event)" accept="image/*" ref="file" />
-                                <span class="text-input"> Upload File </span><span class="input-progress" style="width: 0%;"></span><button type="button" title="Upload" class="btn-upload-all vs-upload--button-upload">
-                                    <i translate="translate" class="material-icons notranslate">
-                                        cloud_upload
-                                    </i>
-                                </button>
-                            </div>
+                            <input type="file" @change="changeAvatar" accept="image/*" ref="file" />
                         </div>
                     </div>
                     <!--nghi chú-->
@@ -129,7 +109,6 @@ export default {
   },
   data() {
     return {
-      srcLogo: null,
       language: "vi",
       languages: lang,
       student: {
@@ -188,13 +167,8 @@ export default {
   },
 
   methods: {
-    deleteAvatar() {
-      this.srcLogo = null;
-    },
-    changeAvatar(e) {
+    changeAvatar() {
       this.student.avatar = this.$refs.file.files[0];
-      let url = e.target.files[0];
-      this.srcLogo = URL.createObjectURL(url);
     },
 
     formData() {
@@ -252,30 +226,7 @@ export default {
           this.$emit("closeSidebar", false);
         })
         .catch(error => {
-          if (
-            error.response.status === 500 &&
-                        error.response.data.error.hasOwnProperty("validation")
-          ) {
-            let message =
-                            error.response.data.error.validation[
-                              Object.keys(error.response.data.error.validation)[0]
-                            ][0];
-            this.$vs.notify({
-              title: "Validation error!",
-              text: message,
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          } else {
-            this.$vs.notify({
-              title: "Error!",
-              text: "Thêm mới thất bại",
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          }
+          this.checkResponRequest(error.response.data, null, null, 'Thêm mới thất bại');
         })
         .finally(() => {
           this.$vs.loading.close("#button-with-loading > .con-vs-loading");

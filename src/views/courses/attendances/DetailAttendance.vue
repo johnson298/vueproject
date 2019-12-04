@@ -265,13 +265,7 @@ export default {
           });
         })
         .catch(error => {
-          thisIns.$vs.notify({
-            title: "Đã xảy ra lỗi",
-            text: error,
-            color: "danger",
-            iconPack: "feather",
-            icon: "icon-alert-circle"
-          });
+          thisIns.checkResponRequest(error.response.data, "chỉnh sửa thất bại");
           thisIns.getData();
         });
     },
@@ -291,7 +285,7 @@ export default {
         pagination: null
       });
       const url = `branches/${this.branch_id}/courses/${this.courseId}/attendances/${this.attendanceId}`;
-      thisIns.$vs.loading({ color: "#7367F0", text: "Loading..." });
+      thisIns.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
       this.$http
         .get(url, {
           params: {
@@ -308,13 +302,7 @@ export default {
           });
         })
         .catch(function(error) {
-          thisIns.$vs.notify({
-            title: "Đã xảy ra lỗi",
-            text: error,
-            color: "danger",
-            iconPack: "feather",
-            icon: "icon-alert-circle"
-          });
+          thisIns.checkResponRequest(error.response.data);
         })
         .finally(function() {
           thisIns.$vs.loading.close();
@@ -347,9 +335,6 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.registersAttendance.length === 0) {
-      this.getData();
-    }
   },
   destroyed() {
     this.$store.dispatch("registersAttendance/updateNeedReload", false);

@@ -1,26 +1,22 @@
 import navbarSearchAndPinList from "@/layouts/components/navbarSearchAndPinList";
 import themeConfig from "@/../themeConfig.js";
 import colors from "@/../themeConfig.js";
-function checkBranchId() {
-  let userStore = JSON.parse(localStorage.getItem("user"));
-  if (
-    typeof userStore === "undefined" ||
-    userStore == null ||
-    userStore.branch_id === null
-    // eslint-disable-next-line no-empty
-  ) {
-    if (localStorage.getItem("branchId")) {
-      return localStorage.getItem("branchId");
-    } else {
-      localStorage.setItem("branchId", localStorage.getItem("defaultBranchId"));
-    }
-  } else {
-    localStorage.setItem("branchId", userStore.branch_id);
+function checkBranch() {
+  let userBranchId = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")).branch_id : false;
+  let branchId = localStorage.getItem("branchId");
+  let branchDefault = localStorage.getItem("defaultBranch");
+  if (userBranchId) {
+    return userBranchId;
   }
-  return localStorage.getItem("branchId");
+  if (branchId) {
+    return branchId;
+  }
+  if (branchDefault) {
+    return branchDefault;
+  }
 }
 const state = {
-  getBranchId: checkBranchId(),
+  getBranchId: checkBranch(),
   isSidebarActive: true,
   breakpoint: null,
   sidebarWidth: "default",
@@ -56,11 +52,11 @@ const state = {
         { text: "Khác", value: 3 }
       ],
       positions: [
-        { text: "Giáo viên", value: 1 },
+        { text: "Admin", value: 1 },
         { text: "Tư vấn", value: 2 },
-        { text: "Kế toán", value: 3 },
-        { text: "Quản lý", value: 4 },
-        { text: "Khác", value: 5 }
+        { text: "Quản lý", value: 3 },
+        { text: "Kế toán", value: 4 },
+        { text: "Giáo viên", value: 5 }
       ],
       majors: [
         { text: "Không", value: 0 },
@@ -133,9 +129,9 @@ const state = {
     campaign: {
       range_send: [
         { text: "Toàn bộ trung tâm", value: 1 },
-        { text: "Theo chi nhánh", value: 2 },
-        { text: "Theo chương trình học", value: 3 },
-        { text: "Theo lớp học", value: 4 }
+        { text: "1 chi nhánh", value: 2 },
+        { text: "1 giáo viên", value: 3 },
+        { text: "1 học viên", value: 4 }
       ],
       position: [
         { text: "Giáo viên", value: 1 },

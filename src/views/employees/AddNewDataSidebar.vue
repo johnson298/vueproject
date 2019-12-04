@@ -60,17 +60,6 @@
           </div>
           <div class="mt-8">
             <h4 class="text-center uppercase">Thông tin cá nhân</h4>
-            <!--Mã nhân viên-->
-            <div>
-              <vs-input
-                label="Mã nhân viên *"
-                name="code"
-                v-model="employee.code"
-                class="mt-5 w-full"
-                v-validate="'required|min:5'"
-                placeholder="Nhập mã nhân viên"
-              />
-            </div>
             <!-- NAME -->
             <div>
               <vs-input
@@ -251,11 +240,10 @@ export default {
         email: "",
         password: "",
         password_confirmation: "",
-        code: "",
         avatar: "",
         note: "",
         level: 1,
-        position: 1,
+        position: 5,
         major: 1,
         gender: 0,
         status: 1,
@@ -321,11 +309,10 @@ export default {
         email: "",
         password: "",
         password_confirmation: "",
-        code: "",
         avatar: "",
         note: "",
         level: 1,
-        position: 1,
+        position: 5,
         major: 1,
         status: 1,
         branch_id: this.$store.state.getBranchId
@@ -358,30 +345,8 @@ export default {
           this.$emit("closeSidebar", false);
         })
         .catch(error => {
-          if (
-            error.response.status === 500 &&
-            error.response.data.error.hasOwnProperty("validation")
-          ) {
-            let message =
-              error.response.data.error.validation[
-                Object.keys(error.response.data.error.validation)[0]
-              ][0];
-            this.$vs.notify({
-              title: "Validation error!",
-              text: message,
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          } else {
-            this.$vs.notify({
-              title: "Error!",
-              text: "Thêm mới thất bại",
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          }
+          let thisIns = this;
+          thisIns.checkResponRequest(error.response.data, null, null, 'Thêm mới thất bại');
         })
         .finally(() => {
           this.$vs.loading.close("#button-with-loading > .con-vs-loading");

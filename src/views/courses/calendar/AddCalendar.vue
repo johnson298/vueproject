@@ -119,6 +119,16 @@
             <div class="vx-row">
               <div class="vx-col sm:w-1/2 w-full mb-2">
                 <div class="mt-5">
+                  <label class="vs-input--label">Ngày kết thúc</label>
+                  <div class="columns">
+                    <div class="column w-full is-3">
+                      <flat-pickr v-model="newCalendars.to_date" placeholder="chọn ngày kết thúc" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="vx-col sm:w-1/2 w-full mb-2">
+                <div class="mt-5">
                   <label class="vs-input--label">Ngày nghỉ</label>
                   <div class="columns">
                     <div class="column w-full is-3">
@@ -127,16 +137,6 @@
                         :config="configMulti"
                         placeholder="chọn ngày nghỉ"
                       />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="vx-col sm:w-1/2 w-full mb-2">
-                <div class="mt-5">
-                  <label class="vs-input--label">Ngày kết thúc</label>
-                  <div class="columns">
-                    <div class="column w-full is-3">
-                      <flat-pickr v-model="newCalendars.to_date" placeholder="chọn ngày kết thúc" />
                     </div>
                   </div>
                 </div>
@@ -300,14 +300,8 @@ export default {
             }))
           );
         })
-        .catch(() => {
-          this.$vs.notify({
-            title: "Error!",
-            text: "Có lỗi xảy ra",
-            iconPack: "feather",
-            icon: "fa fa-lg fa-exclamation-triangle",
-            color: "danger"
-          });
+        .catch((error) => {
+          vm.checkResponRequest(error.response.data);
         });
     },
     getRooms() {
@@ -386,30 +380,7 @@ export default {
           this.callback();
         })
         .catch(error => {
-          if (
-            error.response.status === 500 &&
-            error.response.data.error.hasOwnProperty("validation")
-          ) {
-            let message =
-              error.response.data.error.validation[
-                Object.keys(error.response.data.error.validation)[0]
-              ][0];
-            this.$vs.notify({
-              title: "Validation error!",
-              text: message,
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          } else {
-            this.$vs.notify({
-              title: "Error!",
-              text: "Thêm mới thất bại",
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          }
+          this.checkResponRequest(error.response.data, null, null, 'Thêm mới thất bại');
         })
         .finally(() => {
           this.idsTeachers = [];

@@ -3,7 +3,7 @@
     <vs-popup class="popup-custom-768" title="Thêm mới khách hàng" :active.sync="popupAddCustomer">
         <add-customer :callback="getData" :active.sync="popupAddCustomer" @closePopup="popupAddCustomer = $event" />
     </vs-popup>
-    
+
     <vs-popup class="popup-custom-768" title="chuyển khách hàng thành học viên" :active.sync="popupConvertCustomer">
         <convert-customer :callback="getData" :active.sync="popupConvertCustomer" :customerInfo="customerGetInfo" @closePopupConvert="popupConvertCustomer = $event"/>
     </vs-popup>
@@ -115,18 +115,18 @@
                 </vs-td>
 
                 <vs-td v-if="views.gender.viewable">
-                    <p class="product-name font-medium"> 
+                    <p class="product-name font-medium">
                       <vs-chip :color="checkStatusFrom0(genderCustomer,tr.gender)=='Nam' ? 'success'
-                          : ''">{{ checkStatusFrom0(genderCustomer,tr.gender) }}</vs-chip> 
+                          : ''">{{ checkStatusFrom0(genderCustomer,tr.gender) }}</vs-chip>
                     </p>
                 </vs-td>
 
                 <vs-td v-if="views.status.viewable">
-                    <p class="product-name font-medium"> 
+                    <p class="product-name font-medium">
                       <vs-chip :color="checkStatus(statusCustomer,tr.status)=='Đang chăm sóc' ? 'warning'
                           : checkStatus(statusCustomer,tr.status)=='Thành công' ? 'success'
                           : checkStatus(statusCustomer,tr.status)=='Hủy tư vấn' ? 'danger'
-                          : ''">{{ checkStatus(statusCustomer,tr.status) }}</vs-chip> 
+                          : ''">{{ checkStatus(statusCustomer,tr.status) }}</vs-chip>
                     </p>
                 </vs-td>
 
@@ -197,11 +197,14 @@ export default {
       return this.$store.state.getBranchId;
     }
   },
+  created() {
+    this.getData();
+  },
   methods: {
     getInfoCustomer(id, popup) {
       const thisIns = this;
       thisIns.$vs.loading({
-        color: "#7367F0",
+        color: "#1E6DB5",
         text: "Loading..."
       });
       thisIns.$http
@@ -246,14 +249,9 @@ export default {
           icon: 'verified_user',
         });
         this.getData();
-      }).catch(() => {
-        this.$vs.notify({
-          title: 'Error!',
-          text: 'Bạn không xóa thành công',
-          iconPack: 'feather',
-          icon: 'fa fa-lg fa-exclamation-triangle',
-          color: 'danger'
-        });
+      }).catch(error => {
+        let thisIns = this;
+        thisIns.checkResponRequest(error.response.data, null, null, 'Xóa thất bại');
       });
     },
     updateViews(index, e) {
@@ -268,7 +266,7 @@ export default {
     getData(page = 1) {
       const thisIns = this;
       thisIns.$vs.loading({
-        color: '#7367F0',
+        color: '#1E6DB5',
         text: 'Loading...'
       });
       this.$http.get(`branches/${this.branchId}/customers`, {
@@ -285,13 +283,7 @@ export default {
         });
       })
         .catch(function (error) {
-          thisIns.$vs.notify({
-            title: 'Error',
-            text: error,
-            color: 'danger',
-            iconPack: 'feather',
-            icon: 'icon-alert-circle'
-          });
+          thisIns.checkResponRequest(error.response.data);
         }).finally(function () {
           thisIns.$vs.loading.close();
         });
@@ -323,9 +315,6 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.customers.length === 0) {
-      this.getData();
-    }
   },
   destroyed() {
     this.$store.dispatch('customers/updateNeedReload', false);

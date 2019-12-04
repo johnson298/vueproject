@@ -177,7 +177,7 @@
               <vs-col vs-w="6" class="p-0">
                 <div class="vx-row d-flex ml-1">
                   <div class="vx-col p-0 sm:w-1/4 w-full">
-                    <strong class="pt-2 d-block text-primary">Số tiền (vnđ):</strong>
+                    <strong class="pt-2 d-block text-primary">Tiền khách đưa (vnđ):</strong>
                   </div>
                   <div class="vx-col pl-0 sm:w-3/4 w-full">
                     <vs-input v-model="invoices.total" type="number" />
@@ -194,7 +194,13 @@
                     <span
                       class="mt-2 d-block"
                       v-if="parseInt(invoices.total) > parseInt(invoices.amount)"
+                      key="back"
                     >{{ formatPrice(invoices.total - invoices.amount) }}vnđ</span>
+                    <span
+                      class="mt-2 d-block"
+                      v-else
+                      key="back"
+                    >0 vnđ</span>
                   </div>
                 </div>
               </vs-col>
@@ -233,13 +239,6 @@
           ref="addButton"
           id="btn-loading"
         >Tạo hóa đơn</vs-button>
-        <vs-button
-          :disabled="(selectedStudent!=null && (typeof selectedStudent) === 'object') ? false : true"
-          class="ml-3"
-          type="filled"
-          color="primary"
-          @click="createInvoice"
-        >Tạo & in hóa đơn</vs-button>
         <vs-button
           class="ml-3"
           type="filled"
@@ -329,37 +328,13 @@ export default {
             icon: "fa fa-lg fa-check-circle",
             color: "success"
           });
+          this.$emit('closeInvoice',false);
           this.callback();
           this.initValues();
-          this.$emit("closePopupInvoice", false);
         })
         .catch(error => {
-          if (error.response.status) {
-            if (
-              error.response.status === 500 &&
-              error.response.data.error.hasOwnProperty("validation")
-            ) {
-              let message =
-                error.response.data.error.validation[
-                  Object.keys(error.response.data.error.validation)[0]
-                ][0];
-              this.$vs.notify({
-                title: "Validation error!",
-                text: message,
-                iconPack: "feather",
-                icon: "fa fa-lg fa-exclamation-triangle",
-                color: "danger"
-              });
-            } else {
-              this.$vs.notify({
-                title: "Error!",
-                text: "Thêm mới thất bại",
-                iconPack: "feather",
-                icon: "fa fa-lg fa-exclamation-triangle",
-                color: "danger"
-              });
-            }
-          }
+          let thisIns = this;
+          thisIns.checkResponRequest(error.response.data, null, null, "Thêm mới thất bại");
         })
         .finally(() => {
           this.$vs.loading.close("#div-with-loading-popup > .con-vs-loading");

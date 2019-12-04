@@ -255,14 +255,8 @@ export default {
           });
           this.getData();
         })
-        .catch(() => {
-          this.$vs.notify({
-            title: "Error!",
-            text: "Bạn không xóa thành công",
-            iconPack: "feather",
-            icon: "fa fa-lg fa-exclamation-triangle",
-            color: "danger"
-          });
+        .catch(error => {
+          this.checkResponRequest(error.response.data, null, null, 'Xóa thất bại');
         });
     },
     updateViews(index, e) {
@@ -296,13 +290,8 @@ export default {
           });
         })
         .catch(function(error) {
-          thisIns.$vs.notify({
-            title: "Error",
-            text: error,
-            color: "danger",
-            iconPack: "feather",
-            icon: "icon-alert-circle"
-          });
+          let errorData = error.response.data;
+          thisIns.checkResponRequest(errorData);
         })
         .finally(function() {
           thisIns.$vs.loading.close();
@@ -335,9 +324,6 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.students.length === 0) {
-      this.getData();
-    }
   },
   destroyed() {
     this.$store.dispatch("students/updateNeedReload", false);
