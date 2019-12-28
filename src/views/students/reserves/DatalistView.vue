@@ -1,11 +1,16 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    <add-new-data-sidebar
-      :isSidebarActive="addNewDataSidebar"
-      @closeSidebar="addNewDataSidebar = $event"
-      :callback="getData"
-    />
-
+    
+    <vs-popup class="popup-custom-768" title="Chuyển học viên vào lớp mới" :active.sync="joinPopup">
+      <join-student
+        :active.sync="joinPopup"
+        :isSidebarActive="joinPopup"
+        @closePopup="joinPopup = $event"
+        :getData="getData"
+        :studentInfo="studentInfo"
+        :reserveId="reserveId"
+      />
+    </vs-popup>
     <vs-table-custom
       :sst="true"
       ref="table"
@@ -18,7 +23,10 @@
       id="table"
       maxItems="10"
     >
-      <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
+      <div
+        slot="header"
+        class="flex flex-wrap-reverse items-center flex-grow justify-between"
+      >
         <div class="flex flex-wrap-reverse items-center">
           <!-- ACTION - DROPDOWN -->
           <vs-dropdown vs-trigger-click class="cursor-pointer mr-4 mb-4">
@@ -56,29 +64,29 @@
 
             <vs-dropdown-menu>
               <div class="col p-2">
-                <div v-for="(value, index) in views" :key="index" class="p-1" :class="{ hidden: !value.active.includes('students') }">
+                <div
+                  v-for="(value, index) in views"
+                  :key="index"
+                  class="p-1"
+                  :class="{ hidden: !value.active.includes('reserves') }"
+                >
                   <vs-checkbox
                     :value="value.viewable"
                     @change="updateViews(index, $event)"
-                    v-if="value.active.includes('students')"
-                  >{{ value.text }}</vs-checkbox>
+                    v-if="value.active.includes('reserves')"
+                    >{{ value.text }}</vs-checkbox
+                  >
                 </div>
               </div>
             </vs-dropdown-menu>
           </vs-dropdown>
-
-          <!-- ADD NEW -->
-          <div
-            class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary"
-            @click="addNewDataSidebar = true"
-          >
-            <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-            <span class="ml-2 text-base text-primary">Thêm Học Viên</span>
-          </div>
         </div>
         <div class="import-file">
           <vx-tooltip text="Thêm dữ liệu" position="top">
-            <label for="file-upload" class="custom-file-upload rounded-full mb-3 mr-2">
+            <label
+              for="file-upload"
+              class="custom-file-upload rounded-full mb-3 mr-2"
+            >
               <i class="feather icon-upload-cloud"></i>
             </label>
             <input id="file-upload" type="file" />
@@ -91,97 +99,122 @@
           :sort-key="value.sortKey"
           v-for="(value, index) in views"
           :key="index"
-          v-if="value.viewable && value.active.includes('students')"
-        >{{ value.text }}</vs-th>
+          v-if="value.viewable && value.active.includes('reserves')"
+          >{{ value.text }}</vs-th
+        >
       </template>
 
-      <template slot-scope="{data}">
-        <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
+      <template slot-scope="{ data }">
+        <vs-tr
+          :data="tr"
+          :key="indextr"
+          v-for="(tr, indextr) in data"
+          class="col"
+        >
           <vs-td v-if="views.code.viewable">
-            <p class="product-name font-medium">{{ tr.code }}</p>
+            <p class="product-name font-medium">{{ tr.student.code }}</p>
           </vs-td>
           <vs-td v-if="views.avatar.viewable">
-            <vs-avatar size="55px" :src="tr.avatar" :alt="tr.name" />
+            <vs-avatar size="55px" :src="tr.student.avatar" />
           </vs-td>
 
           <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.name }}</p>
+            <p class="product-name font-medium">{{ tr.student.name }}</p>
           </vs-td>
 
           <vs-td v-if="views.email.viewable">
-            <p class="product-category">{{ tr.email }}</p>
+            <p class="product-category">{{ tr.student.email }}</p>
           </vs-td>
 
           <vs-td v-if="views.birthday.viewable">
-            <p class="product-category">{{ tr.birthday }}</p>
+            <p class="product-category">{{ tr.student.birthday }}</p>
           </vs-td>
 
           <vs-td v-if="views.phone.viewable">
-            <p class="product-category">{{ tr.phone }}</p>
+            <p class="product-category">{{ tr.student.phone }}</p>
           </vs-td>
 
           <vs-td v-if="views.facebook.viewable">
             <p class="product-category">
-              <a :href="tr.facebook" target="_blank">Link</a>
+              <a :href="tr.student.facebook" target="_blank">Link</a>
             </p>
           </vs-td>
 
           <vs-td v-if="views.address.viewable">
-            <p class="product-category">{{ tr.address }}</p>
+            <p class="product-category">{{ tr.student.address }}</p>
           </vs-td>
 
-          <vs-td v-if="views.source.viewable">
-            <p class="product-category">
-              <vs-chip
-                :color="checkStatus(sourceStudent,tr.source)=='Facebook' ? 'primary' 
-                      : checkStatus(sourceStudent,tr.source)=='Bạn bè' ? 'warning'
-                      : checkStatus(sourceStudent,tr.source)=='Trang chủ' ? 'success'
-                      : ''"
-              >{{ checkStatus(sourceStudent,tr.source) }}</vs-chip>
-            </p>
+          <vs-td v-if="views.progress.viewable">
+            <p class="product-category">{{ tr.progress }}</p>
           </vs-td>
 
           <vs-td v-if="views.class.viewable">
-            <p class="product-category">{{ tr.class }}</p>
+            <p class="product-category">{{ tr.student.class }}</p>
           </vs-td>
 
           <vs-td v-if="views.school.viewable">
-            <p class="product-category">{{ tr.school }}</p>
+            <p class="product-category">{{ tr.student.school }}</p>
           </vs-td>
 
-          <vs-td v-if="views.debts.viewable">
-            <p
-              class="product-category"
-            >{{ (tr.total_amount - tr.paid) > 0 ? formatPrice(tr.total_amount - tr.paid) : 0 }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.note.viewable">
+          <vs-td v-if="views.reason.viewable">
             <p class="product-category">{{ tr.note }}</p>
           </vs-td>
 
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
+          <vs-td v-if="views.course.viewable">
+            <p class="product-category">
+              {{ tr.course.name }} ({{ checkStatus(statusCourse, tr.course.status) }})
+            </p>
+          </vs-td>
+
+          <vs-td v-if="views.status.viewable">
+            <span class="flex items-center px-2 py-1 rounded"
+              ><div
+                class="h-3 w-3 rounded-full mr-2"
+                :class="`bg-${ tr.type == 1 ? 'warning' : tr.type == 2 ? 'success' : 'danger' }`"
+              ></div>
+              {{ checkStatus(statusReserves, tr.type) }}</span
+            >
+          </vs-td>
+
+          <vs-td v-if="views.course_new.viewable">
+              <router-link
+              tag="a"
+              v-if="tr.course_new"
+              :to="`/courses/${tr.course_new.id}`"
+              key="course_new"
+              >
+              <font-awesome-icon icon="eye" color="#1e6db5" class="mr-2" />{{ tr.course_new.name }}</router-link
+            >
+            <p v-else key="course_new">Chưa có lớp mới</p>
           </vs-td>
 
           <vs-td v-if="views.updated_at.viewable">
             <p class="product-category">{{ tr.updated_at }}</p>
           </vs-td>
 
+          <vs-td v-if="views.created_at.viewable">
+            <p class="product-category">{{ tr.created_at }}</p>
+          </vs-td>
+
           <vs-td v-if="views.action.viewable" class="d-flex-span">
-            <router-link
-              tag="button"
-              :to="'/students/' + tr.id "
-              class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"
-            >
-              <i class="feather icon-eye"></i>
-            </router-link>
-            <!-- <vs-button
-              radius
-              color="danger"
-              size="small"
-              @click="deleteStudent(tr)"
-              icon="delete_forever"
-            ></vs-button> -->
+            <vx-tooltip text="Chuyển lớp học viên" v-if="tr.type == 1">
+              <vs-button
+                radius
+                color="primary"
+                size="small"
+                @click="joinStudentToCourse(tr)"
+                icon="cached"
+              ></vs-button>
+            </vx-tooltip>
+            <vx-tooltip text="Hủy bảo lưu học viên" v-if="tr.type == 1">
+              <vs-button
+                radius
+                color="danger"
+                size="small"
+                @click="unReserve(tr)"
+                icon="not_interested"
+              ></vs-button>
+            </vx-tooltip>
           </vs-td>
         </vs-tr>
       </template>
@@ -207,16 +240,20 @@
 </template>
 
 <script>
-import AddNewDataSidebar from "./AddNewDataSidebar.vue";
+import JoinStudent from './JoinStudent';
 import { mapState } from "vuex";
 
 export default {
   components: {
-    AddNewDataSidebar
+    "join-student": JoinStudent
   },
   data() {
     return {
-      sourceStudent: this.$store.state.model.students.source,
+      reserveId: 0,
+      studentInfo: null,
+      joinPopup: false,
+      statusCourse: this.$store.state.model.courses.status,
+      statusReserves: this.$store.state.model.students.reserves,
       timer: null,
       selected: [],
       isMounted: false,
@@ -235,33 +272,52 @@ export default {
       "order",
       "views",
       "needReload"
-    ])
+    ]),
+    branchId() {
+      return this.$store.state.getBranchId;
+    }
   },
   methods: {
-    deleteStudent(student) {
+    joinStudentToCourse(info){
+      this.joinPopup = true;
+      this.reserveId = info.id;
+      this.studentInfo = {
+        id: info.student.id,
+        name: info.student.name,
+        progress: info.progress,
+        note: info.note,
+        branch_id: info.branch_id,
+        course_id: info.course_id,
+        program_id: info.course.program_id
+      };
+    },
+    unReserve(info) {
       this.$vs.dialog({
         type: "confirm",
         color: "danger",
-        title: `Xóa nhân viên`,
-        text: "Bạn có chắc muốn xóa " + student.name,
+        title: `Hủy bảo lưu học viên`,
+        text: "Bạn có chắc muốn hủy bảo lưu học viên " + info.student.name,
         accept: this.studentAlert,
-        parameters: [student.id]
+        parameters: [info.id]
       });
     },
-    studentAlert(student_id) {
+    studentAlert(id) {
       this.$http
-        .delete("students/" + student_id)
+        .put(`branches/${this.branchId}/reserves/${id}`, {
+          type: 2
+        })
         .then(() => {
           this.$vs.notify({
-            color: "success",
-            title: "Xóa nhân viên",
-            text: "Bạn đã xóa thành công",
-            icon: "verified_user"
+            title: 'Hủy bảo lưu thành công',
+            text: 'OK',
+            iconPack: 'feather',
+            icon: 'fa fa-lg fa-check-circle',
+            color: 'success'
           });
           this.getData();
         })
-        .catch(error => {
-          this.checkResponRequest(error.response.data, null, null, 'Xóa thất bại');
+        .catch((error) => {
+          this.checkResponRequest(error.response.data, null, null, "Thêm thất bại");
         });
     },
     updateViews(index, e) {
@@ -280,7 +336,7 @@ export default {
         text: "Loading..."
       });
       this.$http
-        .get("students", {
+        .get(`branches/${this.branchId}/reserves`, {
           params: {
             page: page,
             search: this.searchTerm,

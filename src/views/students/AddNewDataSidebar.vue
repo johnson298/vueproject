@@ -8,85 +8,62 @@
 
     <VuePerfectScrollbar class="scroll-area--data-list-add-new pt-4 pb-6" :settings="settings">
         <div class="p-6">
-            <form>
-                <div>
-                    <h4 class="text-center uppercase">Thông tin đăng nhập</h4>
-                    <!--Email-->
-                    <div>
-                        <vs-input label="Email *" name="email" v-model="student.email" class="mt-5 w-full" v-validate="'required|email'" autocomplete="email" placeholder="Demo@gmail.com" />
-                    </div>
-                    <!--Password-->
-                    <div>
-                        <vs-input label="Mật khẩu *" name="password" type="password" v-model="student.password" class="mt-5 w-full" v-validate="'required|min:8'" autocomplete="new-password" placeholder="Nhập mật khẩu (8 ký tự)" />
-                    </div>
-                    <!--Nhập lại mật khẩu-->
-                    <div>
-                        <vs-input label="Nhập lại mật khẩu *" name="password_confirmation" autocomplete="new-password" type="password" v-model="student.password_confirmation" class="mt-5 w-full" placeholder="Nhập lại mật khẩu" />
-                    </div>
-                </div>
-                <div class="mt-8">
-                    <h4 class="text-center uppercase">Thông tin học viên</h4>
-                    <!-- NAME -->
-                    <div>
-                        <vs-input label="Tên học viên *" name="name" v-model="student.name" class="mt-5 w-full" v-validate="'required'" placeholder="Nhập tên học viên" />
-                    </div>
-                    <!--địa chỉ-->
-                    <div>
-                        <vs-input label="Địa chỉ" name="address" type="text" v-model="student.address" class="mt-5 w-full" placeholder="Nhập địa chỉ" />
-                    </div>
-                    <!--số điện thoại-->
-                    <div>
-                        <vs-input label="Số điện thoại" name="phone" type="text" v-model="student.phone" class="mt-5 w-full" placeholder="0123456789" />
-                    </div>
-                    <!--facebook-->
-                    <div>
-                        <vs-input label="Facebook" name="facebook" type="text" v-model="student.facebook" class="mt-5 w-full" placeholder="http://demo.com" />
-                    </div>
-                    <!-- ngày sinh -->
-                    <div class="mt-5">
-                        <label for class="vs-input--label">Ngày sinh</label>
-                        <datepicker :fullMonthName="true" v-model="formatDate" :language="languages[language]" format="d MMMM yyyy" :value="student.birthday" class="w-full picker-custom" placeholder="Chọn ngày sinh"></datepicker>
-                    </div>
-                    <!--trường-->
-                    <div>
-                        <vs-input label="Trường" name="school" type="text" v-model="student.school" class="mt-5 w-full" placeholder="Nhập tên trường" />
-                    </div>
-                    <!--lớp-->
-                    <div>
-                        <vs-input label="Lớp" name="class" type="text" v-model="student.class" class="mt-5 w-full" placeholder="Nhập tên lớp" />
-                    </div>
-                    <!--Giới tinh-->
-                    <vs-select v-model="student.gender" label="Giới Tính" class="mt-5 w-full">
-                        <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in gender" />
-                    </vs-select>
-                    <!--nguồn-->
-                    <vs-select v-model="student.source" label="Nguồn" class="mt-5 w-full">
-                        <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in source" />
-                    </vs-select>
-                    <!--ảnh đại diện-->
-                    <div>
-                        <div class="mt-5">
-                            <label class="vs-input--label">Ảnh đại diện</label>
-                        </div>
-                        <div>
-                            <input type="file" @change="changeAvatar" accept="image/*" ref="file" />
-                        </div>
-                    </div>
-                    <!--nghi chú-->
-                    <div>
-                        <div class="mt-5">
-                            <label class="vs-input--label">Ghi chú</label>
-                        </div>
-                        <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="student.note" class="w-full" :rows="5" placeholder="Nhập ghi chú" />
-                    </div>
-                </div>
-            </form>
+          <div>
+            <h4 class="text-center uppercase">Thông tin đăng nhập</h4>
+            <!--Email-->
+                <vs-input label="Email *" name="email" v-model="student.email" class="mt-5 w-full" v-validate="'required|email'" autocomplete="email" placeholder="Demo@gmail.com" />
+            <!--Password-->
+                <vs-input label="Mật khẩu *" name="password" type="password" v-model="student.password" class="mt-5 w-full" v-validate="'required|min:8'" autocomplete="new-password" placeholder="Nhập mật khẩu (8 ký tự)" />
+            <!--Nhập lại mật khẩu-->
+                <vs-input label="Nhập lại mật khẩu *" name="password_confirmation" autocomplete="new-password" type="password" v-model="student.password_confirmation" class="mt-5 w-full" placeholder="Nhập lại mật khẩu" />
+          </div>
+          <div class="mt-8">
+            <h4 class="text-center uppercase">Thông tin học viên</h4>
+            <!-- NAME -->
+                <vs-input label="Tên học viên *" name="name" v-model="student.name" class="mt-5 w-full" v-validate="'required'" placeholder="Nhập tên học viên" />
+            <!--địa chỉ-->
+                <vs-input label="Địa chỉ" name="address" type="text" v-model="student.address" class="mt-5 w-full" placeholder="Nhập địa chỉ" />
+            <!--số điện thoại-->
+                <vs-input label="Số điện thoại" name="phone" type="text" v-model="student.phone" class="mt-5 w-full" placeholder="0123456789" />
+            <!--facebook-->
+                <vs-input label="Facebook" name="facebook" type="text" v-model="student.facebook" class="mt-5 w-full" placeholder="http://demo.com" />
+            <!-- ngày sinh -->
+            <div class="mt-5">
+                <label for class="vs-input--label">Ngày sinh</label>
+                <datepicker :fullMonthName="true" v-model="formatDate" :language="languages[language]" format="d MMMM yyyy" :value="student.birthday" class="w-full picker-custom" placeholder="Chọn ngày sinh"></datepicker>
+            </div>
+            <!--trường-->
+                <vs-input label="Trường" name="school" type="text" v-model="student.school" class="mt-5 w-full" placeholder="Nhập tên trường" />
+            <!--lớp-->
+                <vs-input label="Lớp" name="class" type="text" v-model="student.class" class="mt-5 w-full" placeholder="Nhập tên lớp" />
+            <!--Giới tinh-->
+            <vs-select v-model="student.gender" label="Giới Tính" class="mt-5 w-full">
+                <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in gender" />
+            </vs-select>
+            <!--nguồn-->
+            <vs-select v-model="student.source" label="Nguồn" class="mt-5 w-full">
+                <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in source" />
+            </vs-select>
+            <!--ảnh đại diện-->
+              <vx-upload-image
+                text="Ảnh đại diện"
+                :v-model-show="student.avatar"
+                :srcImage="srcAvatar"
+                :show.sync="student.avatar"
+                :src.sync="srcAvatar"
+              />
+            <!--nghi chú-->
+              <div class="mt-5">
+                  <label class="vs-input--label">Ghi chú</label>
+              </div>
+              <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="student.note" class="w-full" :rows="5" placeholder="Nhập ghi chú" />
+            </div>
         </div>
     </VuePerfectScrollbar>
 
     <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
         <vs-button class="mr-6 vs-con-loading__container" @click="createStudent" ref="addButton" id="button-with-loading">thêm</vs-button>
-        <vs-button type="border" color="danger" @click="$emit('closeSidebar', false); initValues()">hủy</vs-button>
+        <vs-button type="border" color="danger" @click="initValues()">hủy</vs-button>
     </div>
 </vs-sidebar>
 </template>
@@ -109,6 +86,7 @@ export default {
   },
   data() {
     return {
+      srcAvatar: null,
       language: "vi",
       languages: lang,
       student: {
@@ -147,7 +125,7 @@ export default {
       },
       set(val) {
         if (!val) {
-          this.$emit("closeSidebar");
+          this.$emit("closeSidebar", false);
           this.initValues();
         }
       }
@@ -197,7 +175,7 @@ export default {
         gender: 0,
         branch_id: this.$store.state.getBranchId
       };
-      this.$refs.file.value = null;
+      this.$emit("closeSidebar", false);
       this.srcLogo = null;
     },
     createStudent() {
@@ -223,7 +201,6 @@ export default {
           });
           this.callback();
           this.initValues();
-          this.$emit("closeSidebar", false);
         })
         .catch(error => {
           this.checkResponRequest(error.response.data, null, null, 'Thêm mới thất bại');

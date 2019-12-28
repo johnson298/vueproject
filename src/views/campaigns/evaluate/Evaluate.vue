@@ -193,7 +193,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("campaign", [
+    ...mapState("campaigns", [
       "users",
       "pagination",
       "searchTerm",
@@ -236,7 +236,7 @@ export default {
         });
     },
     updateViews(index, e) {
-      this.$store.dispatch("campaign/updateViews", {
+      this.$store.dispatch("campaigns/updateViews", {
         index: index,
         viewable: e.target.checked
       });
@@ -257,7 +257,7 @@ export default {
           }
         })
         .then(function(response) {
-          thisIns.$store.dispatch("campaign/updateTable", {
+          thisIns.$store.dispatch("campaigns/updateTable", {
             users: thisIns.formatData(response.data.data),
             pagination: response.data.pagination
           });
@@ -277,11 +277,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch("campaign/updateNeedReload", true);
+        this.$store.dispatch("campaigns/updateNeedReload", true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch("campaign/updateSearch", {
+      this.$store.dispatch("campaigns/updateSearch", {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -290,7 +290,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch("campaign/updateOrder", {
+      this.$store.dispatch("campaigns/updateOrder", {
         order: {
           orderBy: key,
           orderType: active ? "desc" : "asc"
@@ -307,7 +307,7 @@ export default {
     }
   },
   destroyed() {
-    this.$store.dispatch("campaign/updateNeedReload", false);
+    this.$store.dispatch("campaigns/updateNeedReload", false);
   }
 };
 </script>

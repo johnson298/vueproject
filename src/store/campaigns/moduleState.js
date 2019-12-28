@@ -15,7 +15,7 @@ export default {
   },
   views: {
     title: { text: "tên thông báo", viewable: true, sortKey: "title" },
-    target_id: { text: "phạm vi gửi", viewable: true, sortKey: "target_id" },
+    target_type: { text: "phạm vi gửi", viewable: true, sortKey: "target_type" },
     user: { text: "người tạo", viewable: true, sortKey: "" },
     schedule_at: { text: "ngày triển khai", viewable: false, sortKey: "schedule_at" },
     via: { text: "hình thức gửi", viewable: true, sortKey: "via" },
@@ -23,8 +23,7 @@ export default {
     content: { text: "nội dung", viewable: false, sortKey: "content" },
     perform_at : { text: "thực hiện lúc", viewable: false, sortKey: "perform_at " },
     created_at: { text: "ngày tạo", viewable: false, sortKey: "created_at" },
-    updated_at: { text: "ngày cập nhật", viewable: false, sortKey: "updated_at" },
-    action: { text: "hành động", viewable: true, sortKey: "" }
+    updated_at: { text: "ngày cập nhật", viewable: false, sortKey: "updated_at" }
   },
   needReload: false
 };

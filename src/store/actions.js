@@ -51,7 +51,19 @@ const actions = {
   // change branch
   changeBranchData({ commit }, payload){
     commit('CHANGE_BRANCH', payload);
-  }
+  },
+
+  // change config 
+  changeConfigs({ commit }, payload){
+    commit('CHANGE_CONFIGS', payload);
+  },
+
+  // change config 
+  changeConfigsField({ commit }, payload){
+    commit('CHANGE_CONFIG_FIELD', payload);
+  },
+
+
 };
 
 export default actions;

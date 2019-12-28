@@ -16,6 +16,7 @@ function checkBranch() {
   }
 }
 const state = {
+  configuration: null,
   getBranchId: checkBranch(),
   isSidebarActive: true,
   breakpoint: null,
@@ -77,6 +78,11 @@ const state = {
         { text: "Bạn bè", value: 2 },
         { text: "Trang chủ", value: 3 },
         { text: "Khách hàng", value: 4 }
+      ],
+      reserves: [
+        { text: "Đang bảo lưu", value: 1 },
+        { text: "Đã chuyển", value: 2 },
+        { text: "Hủy", value: 3 }
       ]
     },
     courses: {

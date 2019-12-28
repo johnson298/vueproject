@@ -6,7 +6,22 @@
       title="Thêm học viên vào lớp học"
       :active.sync="popupAllstudent"
     >
-      <GetAllStudents :active.sync="popupAllstudent" :callback="getData" @closePopupAdd="popupAllstudent = $event" v-if="popupAllstudent"/>
+      <add-new-register
+        :active.sync="popupAllstudent"
+        :callback="getData"
+        @closePopupAdd="popupAllstudent = $event"
+        v-if="popupAllstudent"
+      />
+    </vs-popup>
+
+    <vs-popup title="Bảo lưu học viên" :active.sync="popupReverses">
+      <reserves-student
+        :active.sync="popupReverses"
+        :callback="getData"
+        :courseInfo="courseInfo"
+        @closePopupReverses="popupReverses = $event"
+        v-if="popupReverses"
+      />
     </vs-popup>
     <vs-table-custom
       :sst="true"
@@ -20,7 +35,10 @@
       id="table"
       maxItems="10"
     >
-      <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
+      <div
+        slot="header"
+        class="flex flex-wrap-reverse items-center flex-grow justify-between"
+      >
         <div class="flex flex-wrap-reverse items-center">
           <!-- ACTION - DROPDOWN -->
           <vs-dropdown vs-trigger-click class="cursor-pointer mr-4 mb-4">
@@ -62,7 +80,8 @@
                   <vs-checkbox
                     :value="value.viewable"
                     @change="updateViews(index, $event)"
-                  >{{ value.text }}</vs-checkbox>
+                    >{{ value.text }}</vs-checkbox
+                  >
                 </div>
               </div>
             </vs-dropdown-menu>
@@ -71,7 +90,7 @@
           <!-- ADD NEW -->
           <div
             class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary"
-            @click="popupAllstudent=true"
+            @click="popupAllstudent = true"
           >
             <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
             <span class="ml-2 text-base text-primary">Thêm học viên</span>
@@ -85,15 +104,25 @@
           v-for="(value, index) in views"
           :key="index"
           v-if="value.viewable"
-        >{{ value.text }}</vs-th>
+          >{{ value.text }}</vs-th
+        >
       </template>
-      <template slot-scope="{data}">
-        <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
+      <template slot-scope="{ data }">
+        <vs-tr
+          :data="tr"
+          :key="indextr"
+          v-for="(tr, indextr) in data"
+          class="col"
+        >
           <vs-td v-if="views.code.viewable">
             <p class="product-name font-medium">{{ tr.student.code }}</p>
           </vs-td>
           <vs-td v-if="views.avatar.viewable">
-            <vs-avatar size="55px" :src="tr.student.avatar" :alt="tr.student.avatar" />
+            <vs-avatar
+              size="55px"
+              :src="tr.student.avatar"
+              :alt="tr.student.avatar"
+            />
           </vs-td>
 
           <vs-td v-if="views.name.viewable">
@@ -115,12 +144,27 @@
           <vs-td v-if="views.action.viewable" class="d-flex-span">
             <router-link
               tag="button"
-              :to="'/students/' + tr.student.id "
+              :to="'/students/' + tr.student.id"
               class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"
             >
               <i class="feather icon-eye"></i>
             </router-link>
-            <vs-button radius color="danger" size="small" @click="deleteStudent(tr)" icon="delete_forever"></vs-button>
+            <vx-tooltip text="Bảo lưu học viên">
+              <vs-button
+                radius
+                color="primary"
+                size="small"
+                @click="reserveStudent(tr)"
+                icon="settings_backup_restore"
+              ></vs-button>
+            </vx-tooltip>
+            <vs-button
+              radius
+              color="danger"
+              size="small"
+              @click="deleteStudent(tr)"
+              icon="delete_forever"
+            ></vs-button>
           </vs-td>
         </vs-tr>
       </template>
@@ -146,12 +190,14 @@
 </template>
 
 <script>
-import GetAllStudents from "./GetAllStudents";
+import AddNewRegister from "./AddNewRegister";
+import ReservesStudent from "./ReservesStudent";
 import { mapState } from "vuex";
 
 export default {
   components: {
-    GetAllStudents
+    "add-new-register": AddNewRegister,
+    "reserves-student": ReservesStudent
   },
   data() {
     return {
@@ -161,6 +207,8 @@ export default {
       selected: [],
       isMounted: false,
       addNewDataSidebar: false,
+      popupReverses: false,
+      courseInfo: null,
       prev:
         '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-prev"><i class="vs-icon notranslate icon-scale material-icons null">chevron_left</i></button>',
       next:
@@ -184,6 +232,16 @@ export default {
     this.getData();
   },
   methods: {
+    reserveStudent(data) {
+      this.courseInfo = {
+        course_id: data.course_id,
+        student_id: data.student_id,
+        progress: data.course.progress,
+        name: data.student.name
+      };
+
+      this.popupReverses = true;
+    },
     deleteStudent(user) {
       this.$vs.dialog({
         type: "confirm",
@@ -208,8 +266,13 @@ export default {
           });
           this.getData();
         })
-        .catch((error) => {
-          this.checkResponRequest(error.response.data, null, null, "Xóa thất bại");
+        .catch(error => {
+          this.checkResponRequest(
+            error.response.data,
+            null,
+            null,
+            "Xóa thất bại"
+          );
         });
     },
     updateViews(index, e) {

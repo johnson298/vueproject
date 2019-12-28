@@ -268,6 +268,20 @@ const router = new Router({
                 pageTitle: "Phân quyền"
               }
             },
+            {
+              path: "introduces",
+              name: "SettingsIntroduces",
+              component: () =>
+                import("./views/settings/introduces/Index.vue"),
+              meta: {
+                breadcrumb: [
+                  { title: "Giới thiệu", url: "/" },
+                  { title: "Cài đặt", url: "/settings" },
+                  { title: "Giới thiệu", active: true }
+                ],
+                pageTitle: "Giới thiệu"
+              }
+            },
           ]
         },
         // LỚP HỌC
@@ -420,6 +434,19 @@ const router = new Router({
           meta: {
             breadcrumb: [{ title: "Khách hàng", url: "/" }],
             pageTitle: "Khách hàng"
+          }
+        },
+        // BẢO LƯU
+        {
+          path: "/reserves",
+          component: () => import("./views/students/reserves/DatalistView.vue"),
+          meta: {
+            breadcrumb: [
+              { title: "Bảo lưu", url: "/employees" },
+              { title: "Tài khoản" },
+              { title: "Danh sách lưu", active: true }
+            ],
+            pageTitle: "Bảo lưu"
           }
         },
         // CHIẾN DỊCH

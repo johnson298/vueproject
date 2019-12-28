@@ -86,12 +86,6 @@
             <p class="product-category">{{ formatPrice(tr.register.paid) }}</p>
           </vs-td>
 
-          <vs-td v-if="views.surplus.viewable">
-            <p
-              class="product-category"
-            >{{ (tr.price - tr.register.paid) > 0 ? 0 : formatPrice(Math.abs(tr.price - tr.register.paid)) }}</p>
-          </vs-td>
-
           <vs-td v-if="views.start_at.viewable">
             <p class="product-category">{{ tr.start_at }}</p>
           </vs-td>
@@ -254,9 +248,6 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.courses.length === 0) {
-      this.getData();
-    }
   },
   created() {
     this.getData();

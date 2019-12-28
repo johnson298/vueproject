@@ -102,8 +102,8 @@
           <vs-td v-if="views.title.viewable">
             <p class="font-medium">{{ tr.title }}</p>
           </vs-td>
-          <vs-td v-if="views.target_id.viewable">
-            <p class="font-medium">{{ tr.target_id }}</p>
+          <vs-td v-if="views.target_type.viewable">
+            <p class="font-medium">{{ tr.target_type }}</p>
           </vs-td>
           <vs-td v-if="views.user.viewable">
             <p class="font-medium">{{ tr.user.name }}</p>
@@ -128,16 +128,6 @@
           </vs-td>
           <vs-td v-if="views.updated_at.viewable">
             <p class="font-medium">{{ tr.updated_at }}</p>
-          </vs-td>
-          <vs-td class="d-flex-span">
-            <vs-button
-              radius
-              color="danger"
-              size="small"
-              @click="deleteCampaign(tr)"
-              icon="delete_forever"
-              v-if="!tr.perform_at"
-            ></vs-button>
           </vs-td>
         </vs-tr>
       </template>
@@ -197,33 +187,6 @@ export default {
     }
   },
   methods: {
-    deleteCampaign(campaign) {
-      this.$vs.dialog({
-        type: "confirm",
-        color: "danger",
-        title: `Xóa thông báo`,
-        text: "Bạn có chắc muốn xóa " + campaign.title,
-        accept: this.campaignAlert,
-        parameters: [campaign.id]
-      });
-    },
-    campaignAlert(id) {
-      // this.$http
-      //   .delete("campaigns/" + id)
-      //   .then(() => {
-      //     this.$vs.notify({
-      //       color: "success",
-      //       title: "Xóa thông báo",
-      //       text: "Bạn đã xóa thành công",
-      //       icon: "verified_user"
-      //     });
-      //     this.getData();
-      //   })
-      //   .catch(error => {
-      //     let thisIns = this;
-      //     thisIns.checkResponRequest(error.response.data, null, null, 'Xóa không thành công');
-      //   });
-    },
     updateViews(index, e) {
       this.$store.dispatch("campaigns/updateViews", {
         index: index,

@@ -165,13 +165,13 @@
             >
               <i class="feather icon-eye"></i>
             </router-link>
-            <vs-button
+            <!-- <vs-button
               radius
               color="danger"
               size="small"
               @click="deleteEmployee(tr)"
               icon="delete_forever"
-            ></vs-button>
+            ></vs-button> -->
           </vs-td>
         </vs-tr>
       </template>
