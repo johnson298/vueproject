@@ -239,11 +239,11 @@ export default {
             icon: "fa fa-lg fa-check-circle",
             color: "success"
           });
-          this.userInfo();
         })
         .catch(error => {
           let thisIns = this;
           thisIns.checkResponRequest(error.response.data, null, null, 'Sửa thất bại');
+          this.userInfo();
         })
         .finally(() => {
           this.$vs.loading.close("#update-loading > .con-vs-loading");

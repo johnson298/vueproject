@@ -1,5 +1,19 @@
 <template>
   <div>
+    <vs-row class="mb-5">
+      <vs-col vs-type="flex" vs-justify="space-between" vs-align="flex-end">
+        <vs-switch color="success" v-model="switchBranch">
+          <span slot="on">Toàn bộ chi nhánh</span>
+          <span slot="off">Một chi nhánh</span>
+        </vs-switch>
+        <div class="d-flex" v-if="!switchBranch">
+          <v-select :options="['foo','bar']" :dir="$vs.rtl ? 'rtl' : 'ltr'"  placeholder="Chọn chi nhánh" class="min-w-300" />
+          <vs-button color="primary" class="ml-5 px-3" >
+            <font-awesome-icon icon="filter" />
+          </vs-button>
+        </div>
+      </vs-col>
+    </vs-row>
     <vue-card>
       <div slot="title" id="hihi">
         <h4>THÔNG SỐ</h4>
@@ -79,7 +93,7 @@
       <div slot="card-actions">
         <flat-pickr v-model="fromDate" placeholder="Từ ngày" class="mr-2" />
         <flat-pickr v-model="toDate" placeholder="Đến ngày" class="mr-2"/>
-        <vs-button color="primary">
+        <vs-button color="primary" class="px-3">
           <font-awesome-icon icon="filter" />
         </vs-button>
       </div>
@@ -87,23 +101,31 @@
         <vs-table :data="users">
           <template slot="thead">
             <vs-th bgcolor="#dfe2e5">TÊN NHÂN VIÊN</vs-th>
-            <vs-th bgcolor="#dfe2e5" colspan="4">THÔNG SỐ</vs-th>
+            <vs-th bgcolor="#dfe2e5" colspan="5">THÔNG SỐ</vs-th>
           </template>
 
           <template>
             <vs-tr>
-              <!-- tên nhân viên -->
-              <vs-td rowspan="2">Nguyễn Văn A (NV-001)</vs-td>
-              <!-- Giáo viên -->
+              <vs-td></vs-td>
               <vs-td class="bg-warning text-white">Chờ chăm sóc</vs-td>
               <vs-td class="bg-primary text-white">Đang chăm sóc</vs-td>
-              <vs-td class="bg-success text-white">Thành công</vs-td>
+              <vs-td class="bg-success text-white">Thành công <br> (chỉ tăng khi học viên đó đóng tiền)</vs-td>
               <vs-td class="bg-danger text-white">Hủy tư vấn</vs-td>
+              <vs-td>Số tiền (vnđ)</vs-td>
             </vs-tr>
             <vs-tr>
-              <!-- Giáo viên -->
-              <vs-td>55</vs-td>
+              <vs-td rowspan="1">Nguyễn Văn A (NV-001)</vs-td>
               <vs-td>1</vs-td>
+              <vs-td>0</vs-td>
+              <vs-td>0</vs-td>
+              <vs-td>0</vs-td>
+              <vs-td>0</vs-td>
+            </vs-tr>
+            <vs-tr>
+              <vs-td rowspan="1">Nguyễn Văn A (NV-001)</vs-td>
+              <vs-td>1</vs-td>
+              <vs-td>0</vs-td>
+              <vs-td>0</vs-td>
               <vs-td>0</vs-td>
               <vs-td>0</vs-td>
             </vs-tr>
@@ -123,6 +145,7 @@ export default {
   },
   data() {
     return {
+      switchBranch: "on",
       changeBranchPopup: false,
       branchName: null,
       branches: null,
@@ -159,5 +182,8 @@ export default {
   .vx-card {
     height: 100%;
   }
+}
+.min-w-300{
+  min-width: 300px;
 }
 </style>

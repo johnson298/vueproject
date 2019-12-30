@@ -430,6 +430,7 @@ export default {
               return objParam.value;
             }
           };
+          field == "name" ? document.title = checkField(field) : false;
           this.$store.dispatch('changeConfigsField', {
             field: field,
             input: checkField(field)
