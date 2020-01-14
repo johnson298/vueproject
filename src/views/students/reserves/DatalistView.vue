@@ -1,7 +1,7 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    
-    <vs-popup class="popup-custom-768" title="Chuyển học viên vào lớp mới" :active.sync="joinPopup">
+
+    <vs-popup class="popup-custom-768" title="Chuyển học viên vào lớp mới" :active.sync="joinPopup" v-if="joinPopup">
       <join-student
         :active.sync="joinPopup"
         :isSidebarActive="joinPopup"
@@ -81,17 +81,6 @@
             </vs-dropdown-menu>
           </vs-dropdown>
         </div>
-        <div class="import-file">
-          <vx-tooltip text="Thêm dữ liệu" position="top">
-            <label
-              for="file-upload"
-              class="custom-file-upload rounded-full mb-3 mr-2"
-            >
-              <i class="feather icon-upload-cloud"></i>
-            </label>
-            <input id="file-upload" type="file" />
-          </vx-tooltip>
-        </div>
       </div>
 
       <template slot="thead">
@@ -111,71 +100,33 @@
           v-for="(tr, indextr) in data"
           class="col"
         >
-          <vs-td v-if="views.code.viewable">
-            <p class="product-name font-medium">{{ tr.student.code }}</p>
-          </vs-td>
+          <vs-td v-if="views.code.viewable">{{ tr.student.code }}</vs-td>
           <vs-td v-if="views.avatar.viewable">
             <vs-avatar size="55px" :src="tr.student.avatar" />
           </vs-td>
-
-          <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.student.name }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.email.viewable">
-            <p class="product-category">{{ tr.student.email }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.birthday.viewable">
-            <p class="product-category">{{ tr.student.birthday }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.phone.viewable">
-            <p class="product-category">{{ tr.student.phone }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.name.viewable">{{ tr.student.name }}</vs-td>
+          <vs-td v-if="views.email.viewable">{{ tr.student.email }}</vs-td>
+          <vs-td v-if="views.birthday.viewable">{{ tr.student.birthday }}</vs-td>
+          <vs-td v-if="views.phone.viewable">{{ tr.student.phone }}</vs-td>
           <vs-td v-if="views.facebook.viewable">
-            <p class="product-category">
               <a :href="tr.student.facebook" target="_blank">Link</a>
-            </p>
           </vs-td>
-
-          <vs-td v-if="views.address.viewable">
-            <p class="product-category">{{ tr.student.address }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.progress.viewable">
-            <p class="product-category">{{ tr.progress }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.class.viewable">
-            <p class="product-category">{{ tr.student.class }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.school.viewable">
-            <p class="product-category">{{ tr.student.school }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.reason.viewable">
-            <p class="product-category">{{ tr.note }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.address.viewable">{{ tr.student.address }}</vs-td>
+          <vs-td v-if="views.progress.viewable">{{ tr.progress }}</vs-td>
+          <vs-td v-if="views.class.viewable">{{ tr.student.class }}</vs-td>
+          <vs-td v-if="views.school.viewable">{{ tr.student.school }}</vs-td>
+          <vs-td v-if="views.reason.viewable">{{ tr.note }}</vs-td>
           <vs-td v-if="views.course.viewable">
-            <p class="product-category">
               {{ tr.course.name }} ({{ checkStatus(statusCourse, tr.course.status) }})
-            </p>
           </vs-td>
-
           <vs-td v-if="views.status.viewable">
             <span class="flex items-center px-2 py-1 rounded"
               ><div
                 class="h-3 w-3 rounded-full mr-2"
                 :class="`bg-${ tr.type == 1 ? 'warning' : tr.type == 2 ? 'success' : 'danger' }`"
               ></div>
-              {{ checkStatus(statusReserves, tr.type) }}</span
-            >
+              {{ checkStatus(statusReserves, tr.type) }}</span>
           </vs-td>
-
           <vs-td v-if="views.course_new.viewable">
               <router-link
               tag="a"
@@ -187,15 +138,8 @@
             >
             <p v-else key="course_new">Chưa có lớp mới</p>
           </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
+          <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
           <vs-td v-if="views.action.viewable" class="d-flex-span">
             <vx-tooltip text="Chuyển lớp học viên" v-if="tr.type == 1">
               <vs-button

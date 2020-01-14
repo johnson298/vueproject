@@ -59,53 +59,28 @@
 
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-
-          <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.name }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.price.viewable">
-            <p class="product-category">{{ formatPrice(tr.price) }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.start_at.viewable">
-            <p class="product-category">{{ tr.start_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.end_at.viewable">
-            <p class="product-category">{{ tr.end_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.number_of_lessons.viewable">
-            <p class="product-category">{{ tr.number_of_lessons }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.name.viewable">{{ tr.name }}</vs-td>
+          <vs-td v-if="views.price.viewable">{{ formatPrice(tr.price) }}</vs-td>
+          <vs-td v-if="views.start_at.viewable">{{ tr.start_at }}</vs-td>
+          <vs-td v-if="views.end_at.viewable">{{ tr.end_at }}</vs-td>
+          <vs-td v-if="views.number_of_lessons.viewable">{{ tr.number_of_lessons }}</vs-td>
           <vs-td v-if="views.status.viewable">
-            <p class="product-category">
               <vs-chip
               :color="checkStatus(statusCourse,tr.status)=='Mở' ? 'warning'
                       : checkStatus(statusCourse,tr.status)=='Hoạt động' ? 'primary'
                       : checkStatus(statusCourse,tr.status)=='Hoàn thành' ? 'success'
                       : 'danger'">{{ checkStatus(statusCourse,tr.status) }}</vs-chip>
-              </p>
           </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
+          <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
+          <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
+          <vs-td v-if="views.action.viewable" class="d-flex-span">
+            <router-link tag="button" :to="`/courses/${tr.id}`" class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small">
+                  <i class="feather icon-eye"></i>
+              </router-link>
+              <vs-button color="danger" size="small" icon="delete_forever"></vs-button>
           </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
-                <vs-td v-if="views.action.viewable" class="d-flex-span">
-                  <router-link tag="button" :to="`/courses/${tr.id}`" class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small">
-                        <i class="feather icon-eye"></i>
-                    </router-link>
-                    <vs-button color="danger" size="small" icon="delete_forever"></vs-button>
-                </vs-td>
-            </vs-tr>
-        </template>
+        </vs-tr>
+      </template>
     </vs-table-custom>
     <div class="con-vs-pagination vs-pagination-primary">
       <nav class="vs-pagination--nav">

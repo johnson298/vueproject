@@ -15,6 +15,8 @@ export default {
   },
   views: {
     name: { text: 'tên gv', viewable: true, sortKey: 'name' },
+    rank: { text: 'vai trò', viewable: true, sortKey: 'role' },
+    note: { text: 'ghi chú', viewable: false, sortKey: 'note' },
     created_at: { text: 'ngày tạo', viewable: true, sortKey: 'updated_at' },
     updated_at: { text: 'ngày cập nhật', viewable: true, sortKey: 'created_at' },
     action: { text: 'hành động', viewable: true, sortKey: '' },

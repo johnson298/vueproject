@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div id="div-with-loading-popup" class="vs-con-loading__container">
 
     <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="students" search id="table" maxItems="10">

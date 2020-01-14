@@ -23,7 +23,7 @@
             label="Tên lớp học *"
             name="name"
             v-model="courses.name"
-            class="mt-5 w-full"
+            class="mb-5 w-full"
             v-validate="'required|max:255'"
             placeholder="nhập tên lớp học"
           />
@@ -33,33 +33,33 @@
             name="price"
             v-model="courses.price"
             type="number"
-            class="mt-5 w-full"
+            class="mb-5 w-full"
             v-validate="'required'"
           />
         <!-- ngày bắt đầu học -->
-          <label for class="vs-input--label mt-5">Ngày bắt đầu *</label>
+          <label for class="vs-input--label mb-5">Ngày bắt đầu *</label>
           <datepicker
             :fullMonthName="true"
             v-model="formatDateStartAt"
             :language="languages[language]"
             format="d MMMM yyyy"
             :value="courses.start_at"
-            class="w-full picker-custom"
+            class="w-full picker-custom mb-5"
             placeholder="chọn ngày bắt đầu"
           ></datepicker>
         <!--Ngày kết thúc-->
-          <label for class="vs-input--label mt-5">Ngày kết thúc *</label>
+          <label for class="vs-input--label">Ngày kết thúc *</label>
           <datepicker
             :fullMonthName="true"
             v-model="formatDateEndAt"
             :language="languages[language]"
             format="d MMMM yyyy"
             :value="courses.end_at"
-            class="w-full picker-custom"
+            class="w-full picker-custom mb-5"
             placeholder="chọn ngày kết thúc"
           ></datepicker>
         <!--trạng thái-->
-        <vs-select v-model="courses.status" label="Trạng thái" class="mt-5 w-full">
+        <vs-select v-model="courses.status" label="Trạng thái" class="mb-5 w-full">
           <vs-select-item
             :key="item.value"
             :value="item.value"
@@ -67,66 +67,19 @@
             v-for="item in status"
           />
         </vs-select>
-
-          <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
-            <label class="vs-input--label">Chương trình học *</label>
-            <vue-simple-suggest
-              v-model="selectedProgram"
-              mode="select"
-              ref="suggestComponentPrograms"
-              placeholder="Search information..."
-              value-attribute="id"
-              display-attribute="name"
-              :list="getPrograms"
-              :debounce="200"
-              :filter-by-query="false"
-              @select="onSuggestSelectProgram"
-            >
-              <div class="g">
-                <input type="text" placeholder="Search information..." />
-              </div>
-              <template slot="misc-item-above" slot-scope="{ suggestions, query }">
-                <div class="misc-item">
-                  <span>You're searching for '{{ query }}'.</span>
-                </div>
-
-                <template v-if="suggestions.length > 0">
-                  <div class="misc-item">
-                    <span>{{ suggestions.length }} suggestions are shown...</span>
-                  </div>
-                  <hr />
-                </template>
-
-                <div class="misc-item" v-else-if="!loading">
-                  <span>No results</span>
-                </div>
-              </template>
-
-              <div slot="suggestion-item" slot-scope="{ suggestion, query }">
-                <div class="text">
-                  <span>{{ suggestion.name | truncate(40) }}</span>
-                </div>
-              </div>
-
-              <div
-                class="misc-item"
-                slot="misc-item-below"
-                slot-scope="{ suggestions }"
-                v-if="loading"
-              >
-                <span>Loading...</span>
-              </div>
-            </vue-simple-suggest>
-          </div>
-
-          <vs-input
-            label="Thời lượng *"
-            name="price"
-            v-model="courses.number_of_lessons"
-            type="number"
-            class="mt-5 w-full"
-            v-validate="'required'"
-          />
+        <vx-search-ajax
+          text="Chương trình học "
+          :link-api="`branches/${branchId}/programs`"
+          :change.sync="courses.program_id"
+          get-attribute="id" />
+        <vs-input
+          label="Thời lượng *"
+          name="price"
+          v-model="courses.number_of_lessons"
+          type="number"
+          class="mt-5 w-full"
+          v-validate="'required'"
+        />
       </div>
     </VuePerfectScrollbar>
 
@@ -164,6 +117,7 @@ export default {
       language: "vi",
       languages: lang,
       courses: {
+        id: "",
         name: "",
         program_id: null,
         branch_id: null,
@@ -223,52 +177,6 @@ export default {
   },
 
   methods: {
-    onSuggestSelectProgram(suggest) {
-      if (suggest) {
-        this.courses.program_id = suggest.id;
-      }
-    },
-    onSuggestSelectBranch(suggest) {
-      if (suggest) {
-        this.courses.branch_id = suggest.id;
-      }
-    },
-    getPrograms(search = "") {
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http
-          .get(`branches/${this.branchId}/programs`, {
-            params: {
-              search: search
-            }
-          })
-          .then(function(response) {
-            resolve(response.data.data);
-          })
-          .catch(e => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
-    },
-    getBranches(search = "") {
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http
-          .get(`branches/`, {
-            params: {
-              search: search
-            }
-          })
-          .then(function(response) {
-            resolve(response.data.data);
-          })
-          .catch(e => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
-    },
     initValues() {
       this.courses = {
         name: "",

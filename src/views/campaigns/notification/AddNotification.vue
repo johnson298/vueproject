@@ -41,7 +41,7 @@
       <div class="vs-row">
         <div class="vs-col sm:w-1/2 w-full mb-5">
           <div>
-            <vs-select label="Phạm vi gửi" v-model="newCaimpaign.target_type" class="w-full">
+            <vs-select label="Phạm vi gửi" v-model="newCaimpaign.target_type" class="w-full"  @change="resetTargetId">
               <vs-select-item
                 :key="item.value"
                 :value="item.value"
@@ -53,191 +53,43 @@
         </div>
         <div class="vs-col sm:w-1/2 w-full mb-5">
             <!-- chọn chi nhánh -->
-            <div class="vs-component vs-con-input-label vs-input w-full vs-input-primary" v-if="newCaimpaign.target_type === 'App\\Entities\\Branch' ">
-              <label class="vs-input--label">Chọn chi nhánh</label>
-              <vue-simple-suggest
-                v-model="selectedBranch"
-                mode="select"
-                ref="suggestComponentTeacher"
-                placeholder="Search information..."
-                value-attribute="id"
-                display-attribute="name"
-                :list="getBranch"
-                :debounce="200"
-                :filter-by-query="false"
-                @select="onSuggestSelectBranch">
-
-                <div class="g">
-                  <input type="text" placeholder="Search information...">
-                </div>
-                <template slot="misc-item-above" slot-scope="{ suggestions, query }">
-                  <div class="misc-item">
-                    <span>You're searching for '{{ query }}'.</span>
-                  </div>
-
-                  <template v-if="suggestions.length > 0">
-                    <div class="misc-item">
-                      <span>{{ suggestions.length }} suggestions are shown...</span>
-                    </div>
-                    <hr>
-                  </template>
-
-                  <div class="misc-item" v-else-if="!loading">
-                    <span>No results</span>
-                  </div>
-                </template>
-
-                <div slot="suggestion-item" slot-scope="{ suggestion, query }">
-                  <div class="text">
-                    <span>{{ suggestion.code }} - {{ suggestion.name | truncate(30) }}</span>
-                  </div>
-                </div>
-
-                <div class="misc-item" slot="misc-item-below" slot-scope="{ suggestions }" v-if="loading">
-                  <span>Loading...</span>
-                </div>
-              </vue-simple-suggest>
+            <div class="vs-component vs-con-input-label vs-input w-full vs-input-primary" v-show="newCaimpaign.target_type === 'App\\Entities\\Branch' ">
+              <vx-search-ajax
+                text="Chi nhánh "
+                :link-api="`branches`"
+                :change.sync="newCaimpaign.target_id"
+                get-attribute="id"
+              />
             </div>
 
             <!-- chọn lớp học -->
-            <div class="vs-component vs-con-input-label vs-input w-full vs-input-primary" v-if="newCaimpaign.target_type === 'App\\Entities\\Course'">
-              <label class="vs-input--label">Chọn lớp học</label>
-              <vue-simple-suggest
-                v-model="selectedCourses"
-                mode="select"
-                ref="suggestComponentTeacher"
-                placeholder="Search information..."
-                value-attribute="id"
-                display-attribute="name"
-                :list="getCourses"
-                :debounce="200"
-                :filter-by-query="false"
-                @select="onSuggestSelectCourses">
-
-                <div class="g">
-                  <input type="text" placeholder="Search information...">
-                </div>
-                <template slot="misc-item-above" slot-scope="{ suggestions, query }">
-                  <div class="misc-item">
-                    <span>You're searching for '{{ query }}'.</span>
-                  </div>
-
-                  <template v-if="suggestions.length > 0">
-                    <div class="misc-item">
-                      <span>{{ suggestions.length }} suggestions are shown...</span>
-                    </div>
-                    <hr>
-                  </template>
-
-                  <div class="misc-item" v-else-if="!loading">
-                    <span>No results</span>
-                  </div>
-                </template>
-
-                <div slot="suggestion-item" slot-scope="{ suggestion, query }">
-                  <div class="text">
-                    <span>{{ suggestion.code }} - {{ suggestion.name | truncate(30) }}</span>
-                  </div>
-                </div>
-
-                <div class="misc-item" slot="misc-item-below" slot-scope="{ suggestions }" v-if="loading">
-                  <span>Loading...</span>
-                </div>
-              </vue-simple-suggest>
+            <div class="vs-component vs-con-input-label vs-input w-full vs-input-primary" v-show="newCaimpaign.target_type === 'App\\Entities\\Course'">
+              <vx-search-ajax
+                text="Lớp học "
+                :link-api="`branches/${branchId}/courses`"
+                :change.sync="newCaimpaign.target_id"
+                get-attribute="id"
+              />
             </div>
 
             <!-- chọn học viên -->
-            <div class="vs-component vs-con-input-label vs-input w-full vs-input-primary" v-if="newCaimpaign.target_type === 'App\\Entities\\Student'">
-              <label class="vs-input--label">Chọn học viên</label>
-              <vue-simple-suggest
-                v-model="selectedStudent"
-                mode="select"
-                ref="suggestComponentTeacher"
-                placeholder="Search information..."
-                value-attribute="id"
-                display-attribute="name"
-                :list="getStudent"
-                :debounce="200"
-                :filter-by-query="false"
-                @select="onSuggestSelectStudent">
-
-                <div class="g">
-                  <input type="text" placeholder="Search information...">
-                </div>
-                <template slot="misc-item-above" slot-scope="{ suggestions, query }">
-                  <div class="misc-item">
-                    <span>You're searching for '{{ query }}'.</span>
-                  </div>
-
-                  <template v-if="suggestions.length > 0">
-                    <div class="misc-item">
-                      <span>{{ suggestions.length }} suggestions are shown...</span>
-                    </div>
-                    <hr>
-                  </template>
-
-                  <div class="misc-item" v-else-if="!loading">
-                    <span>No results</span>
-                  </div>
-                </template>
-
-                <div slot="suggestion-item" slot-scope="{ suggestion, query }">
-                  <div class="text">
-                    <span>{{ suggestion.code }} - {{ suggestion.name | truncate(30) }}</span>
-                  </div>
-                </div>
-
-                <div class="misc-item" slot="misc-item-below" slot-scope="{ suggestions }" v-if="loading">
-                  <span>Loading...</span>
-                </div>
-              </vue-simple-suggest>
+            <div class="vs-component vs-con-input-label vs-input w-full vs-input-primary" v-show="newCaimpaign.target_type === 'App\\Entities\\Student'">
+              <vx-search-ajax
+                text="Học viên "
+                :link-api="`students`"
+                :change.sync="newCaimpaign.target_id"
+                get-attribute="id"
+              />
             </div>
 
           <!-- chọn giáo viên -->
-          <div class="vs-component vs-con-input-label vs-input w-full vs-input-primary" v-if="newCaimpaign.target_type === 'App\\Entities\\User'">
-              <label class="vs-input--label">Chọn giáo viên</label>
-              <vue-simple-suggest
-                v-model="selectedTeacher"
-                mode="select"
-                ref="suggestComponentTeacher"
-                placeholder="Search information..."
-                value-attribute="id"
-                display-attribute="name"
-                :list="getTeachers"
-                :debounce="200"
-                :filter-by-query="false"
-                @select="onSuggestSelectTeacher">
-
-                <div class="g">
-                  <input type="text" placeholder="Search information...">
-                </div>
-                <template slot="misc-item-above" slot-scope="{ suggestions, query }">
-                  <div class="misc-item">
-                    <span>You're searching for '{{ query }}'.</span>
-                  </div>
-
-                  <template v-if="suggestions.length > 0">
-                    <div class="misc-item">
-                      <span>{{ suggestions.length }} suggestions are shown...</span>
-                    </div>
-                    <hr>
-                  </template>
-
-                  <div class="misc-item" v-else-if="!loading">
-                    <span>No results</span>
-                  </div>
-                </template>
-
-                <div slot="suggestion-item" slot-scope="{ suggestion, query }">
-                  <div class="text">
-                    <span>{{ suggestion.code }} - {{ suggestion.name | truncate(30) }}</span>
-                  </div>
-                </div>
-
-                <div class="misc-item" slot="misc-item-below" slot-scope="{ suggestions }" v-if="loading">
-                  <span>Loading...</span>
-                </div>
-              </vue-simple-suggest>
+          <div class="vs-component vs-con-input-label vs-input w-full vs-input-primary" v-show="newCaimpaign.target_type === 'App\\Entities\\User'">
+              <vx-search-ajax
+                text="Giáo viên "
+                :link-api="`users`"
+                :change.sync="newCaimpaign.target_id"
+                get-attribute="id"
+              />
             </div>
 
         </div>
@@ -338,6 +190,9 @@ export default {
     flatPickr
   },
   methods: {
+    resetTargetId(){
+      this.newCaimpaign.target_id = null;
+    },
     initValues(){
       this.newCaimpaign = {
         title: null,
@@ -348,27 +203,6 @@ export default {
         target_id: null,
         via: []
       };
-    },
-    onSuggestSelectTeacher(suggest) {
-      if (suggest) {
-        this.newCaimpaign.target_id = suggest.id;
-      }
-    },
-    getTeachers(search = ''){
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http.get(`users`, {
-          params: {
-            search: search
-          }
-        })
-          .then(function (response) {
-            resolve(response.data.data);
-          }).catch((e) => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
     },
 
 
@@ -399,73 +233,6 @@ export default {
         .finally(() => {
           this.$vs.loading.close("#btn-loading > .con-vs-loading");
         });
-    },
-
-
-    onSuggestSelectCourses(suggest) {
-      if (suggest) {
-        this.newCaimpaign.target_id = suggest.id;
-      }
-    },
-    getCourses(search = ''){
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http.get(`branches/${this.branchId}/courses`, {
-          params: {
-            search: search
-          }
-        })
-          .then(function (response) {
-            resolve(response.data.data);
-          }).catch((e) => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
-    },
-
-    onSuggestSelectStudent(suggest) {
-      if (suggest) {
-        this.newCaimpaign.target_id = suggest.id;
-      }
-    },
-    getStudent(search = ''){
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http.get(`students`, {
-          params: {
-            search: search
-          }
-        })
-          .then(function (response) {
-            resolve(response.data.data);
-          }).catch((e) => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
-    },
-
-    onSuggestSelectBranch(suggest) {
-      if (suggest) {
-        this.newCaimpaign.target_id = suggest.id;
-      }
-    },
-    getBranch(search = ''){
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http.get(`branches`, {
-          params: {
-            search: search
-          }
-        })
-          .then(function (response) {
-            resolve(response.data.data);
-          }).catch((e) => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
     },
 
   }

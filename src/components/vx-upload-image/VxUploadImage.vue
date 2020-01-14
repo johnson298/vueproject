@@ -53,11 +53,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .con-img-upload {
   .img-upload {
+    border-radius: 10px;
+    transform: scale(0.99);
+
+    &:hover{
+      .vs-upload--button-upload{
+        transform: translateY(-6px);
+        box-shadow: 0 5px 10px rgba(0,0,0,.3);
+      }
+    }
+    .vs-upload--button-upload{
+      padding-bottom: 10px;
+      padding-top: 10px;
+      background: #28c76f;
+      color: #fff;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      padding: 0;
+      margin-bottom: 5px;
+
+    }
+
     img {
-      max-width: none;
+      max-width: 100%;
       max-height: 100%;
+    }
+
+    .material-icons {
+      width: 26px;
+      height: 26px;
+      line-height: 26px;
+      padding-right: 0px !important;
     }
   }
 }

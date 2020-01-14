@@ -94,6 +94,10 @@ const mutations = {
     } else {
       state.configuration[payload.field].value = payload.input;
     }
+  },
+
+  ADD_BRANCHES(state, payload){
+    state.branches = payload;
   }
 };
 

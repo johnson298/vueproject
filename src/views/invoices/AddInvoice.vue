@@ -1,9 +1,9 @@
 <template>
-  <div class="vs-con-loading__container" id="div-with-loading-popup">
-    <vs-row vs-w="12">
+  <div class="vs-con-loading__container min-h-300" id="div-with-loading-popup">
+    <vs-row vs-w="12 h-100">
       <vs-col vs-w="12" id="print-invoice">
         <div>
-          <div class="vs-component vs-con-input-label vs-input mb-5 w-full vs-input-primary">
+          <div class="vs-component vs-con-input-label vs-input mb-5 w-full vs-input-primary" v-if="!selectedStudent">
             <vue-simple-suggest
               v-model="selectedStudent"
               mode="select"
@@ -62,13 +62,13 @@
             v-model="invoices.courses"
             label="Chọn lớp học"
             class="mt-5 w-full"
+            @change="selectCourseRegister($event)"
           >
             <vs-select-item
               :key="item.id"
               :value="item"
               :text="item.name"
               v-for="item in coursesRegis"
-              @change="selectCourseRegister($event)"
             />
           </vs-select>
           <div v-else key="check-course">
@@ -132,8 +132,7 @@
                   <br />(vnđ)
                 </vs-th>
                 <vs-th class="p-2">
-                  Còn thiếu
-                  <br />(vnđ)
+                  Còn thiếu (vnđ)
                 </vs-th>
                 <vs-th class="p-2">Muốn thanh toán (vnđ)</vs-th>
               </template>
@@ -144,7 +143,16 @@
 
                   <vs-td>{{ formatPrice(data.price) }}</vs-td>
 
-                  <vs-td>{{ (data.price - invoices.courses.register.paid) > 0 ? formatPrice(data.price - invoices.courses.register.paid) : 0 }}</vs-td>
+                  <vs-td>
+                    <p v-if="couponInfo === null" key="couponKm">{{ formatPrice(data.price - invoices.courses.register.paid) }}</p>
+                    <p v-else key="couponKm">
+                      {{ formatPrice(data.price - invoices.courses.register.paid) }}
+                      <br>-<br>
+                      {{ couponInfo.type === 1 ? `${couponInfo.discount_rate}%` : `${couponInfo.discount_amount}vnđ` }}
+                      <br>=<br>
+                      {{ calculatorDiscount((data.price - invoices.courses.register.paid), couponInfo.type === 1 ? couponInfo.discount_rate : couponInfo.discount_amount, couponInfo.type === 1 ? `%` : `vnd`) }}
+                    </p>
+                  </vs-td>
 
                   <vs-td>
                     <vs-input v-model="invoices.amount" :value="data.price" type="number" />
@@ -207,44 +215,56 @@
             </vs-row>
 
             <h5 class="mt-3 mb-3">Hình thức thanh toán</h5>
-            <ul class="d-flex justify-content-center">
+            <ul class="d-flex justify-start">
               <li class="mr-5" v-for="(item, key) in sourceInvoices" :key="key">
                 <vs-radio v-model="invoices.source" :vs-value="item.value">{{item.text}}</vs-radio>
               </li>
             </ul>
           </div>
-        </div>
-        <div>
-          <div class="mt-5 note">
-            <label class="vs-input--label">Ghi chú</label>
+          <h5 class="m-3">Nhập mã khuyến mại (nếu có)</h5>
+          <div class="vx-col w-full d-flex align-end">
+            <vs-input placeholder="KM01" v-model="invoices.coupon_code" @keyup.enter="checkCoupon" />
+            <vs-button class="mx-2 vs-con-loading__container" color="success" id="check-coupon" @click="checkCoupon">Áp dụng</vs-button>
+            <div>
+              <span class="text-success" v-if="couponInfo !== null" key="check_coupon">
+                - Còn: {{ couponInfo.coupons_limit }} mã
+                - Triết khấu: {{ couponInfo.type === 1 ? `${couponInfo.discount_rate}%` : `${couponInfo.discount_amount}vnđ` }}
+              </span>
+            </div>
+
           </div>
-          <vs-textarea
-            v-model="invoices.note"
-            style="border: solid 1px #dddddd; background: #fff"
-            name="note"
-            type="text"
-            class="w-full"
-            :rows="5"
-            placeholder="nhập ghi chú"
-          />
+          <div class="vx-col w-full">
+            <div class="mt-5 note">
+              <label class="vs-input--label">Ghi chú</label>
+            </div>
+            <vs-textarea
+              v-model="invoices.note"
+              style="border: solid 1px #dddddd; background: #fff"
+              name="note"
+              type="text"
+              class="w-full"
+              :rows="5"
+              placeholder="nhập ghi chú"
+            />
+          </div>
         </div>
-      </vs-col>
-      <vs-col class="mt-5" vs-w="12" vs-type="flex" vs-justify="flex-end">
-        <vs-button
-          :disabled="(selectedStudent!=null && (typeof selectedStudent) === 'object') ? false : true"
-          class="ml-3 vs-con-loading__container"
-          type="filled"
-          color="primary"
-          @click="createInvoice"
-          ref="addButton"
-          id="btn-loading"
-        >Tạo hóa đơn</vs-button>
-        <vs-button
-          class="ml-3"
-          type="filled"
-          color="danger"
-          @click="initValues();$emit('update:active',false)"
-        >Hủy</vs-button>
+        <vs-col class="mt-5 actions" vs-w="12" vs-type="flex" vs-justify="flex-end">
+          <vs-button
+            :disabled="(!(selectedStudent!=null && (typeof selectedStudent) === 'object'))"
+            class="ml-3 vs-con-loading__container"
+            type="filled"
+            color="primary"
+            @click="createInvoice"
+            ref="addButton"
+            id="btn-loading"
+          >Tạo hóa đơn</vs-button>
+          <vs-button
+            class="ml-3"
+            type="filled"
+            color="danger"
+            @click="initValues();$emit('update:active',false)"
+          >Hủy</vs-button>
+        </vs-col>
       </vs-col>
     </vs-row>
   </div>
@@ -261,6 +281,8 @@ export default {
   },
   data() {
     return {
+      messCheck: null,
+      couponInfo: null,
       coursesRegis: [],
       sourceInvoices: this.$store.state.model.invoices.source,
       searchData: "",
@@ -271,7 +293,7 @@ export default {
       invoices: {
         student_id: null,
         courses: {
-          course_id: null,
+          id: null,
           price: null,
           register: {
             paid: 0
@@ -280,7 +302,8 @@ export default {
         note: "",
         source: 3,
         amount: 0,
-        total: 0
+        total: 0,
+        coupons_code: null,
       }
     };
   },
@@ -294,19 +317,50 @@ export default {
   },
   methods: {
     createInvoice() {
-      if (
-        this.invoices.amount >
-        this.invoices.courses.price - this.invoices.courses.register.paid
-      ) {
+      let notifyMoney = () => {
         this.$vs.notify({
-          title: "Lỗi!",
+          title: "Thông báo!",
           text: "Số tiền muốn đóng không lớn hơn số tiền còn thiếu",
           iconPack: "feather",
           icon: "fa fa-lg fa-exclamation-triangle",
-          color: "danger"
+          color: "warning"
         });
-        return false;
+      };
+      let type = () => this.couponInfo ? (this.couponInfo.type === 1 ? `%` : `vnd`) : '';
+      let checkDiscount = () => {
+        if (this.couponInfo){
+          return this.couponInfo.type === 1 ? this.couponInfo.discount_rate : this.couponInfo.discount_amount;
+        }
+        return 0;
+      };
+      let missMoney = this.invoices.courses.price - this.invoices.courses.register.paid;
+      let calculatorCoupon = () => {
+        if(this.couponInfo){
+          switch (type()) {
+          case 'vnd':
+            return this.couponInfo.discount_amount;
+          case '%':
+            return this.invoices.courses.price * this.couponInfo.discount_rate * 0.01;
+          default:
+            return 0;
+          }
+        }
+      };
+      if (this.couponInfo){
+        if(this.invoices.amount >
+          this.calculatorDiscount(missMoney, checkDiscount(), type()), false){
+          notifyMoney();
+          return false;
+        }
+      } else{
+        if (
+          this.invoices.amount > missMoney
+        ) {
+          notifyMoney();
+          return false;
+        }
       }
+
       this.$vs.loading({
         container: "#div-with-loading-popup",
         scale: 0.6
@@ -318,7 +372,9 @@ export default {
           note: this.invoices.note,
           source: this.invoices.source,
           amount: this.invoices.amount,
-          total: this.invoices.total
+          total: this.invoices.total,
+          coupon_id: this.couponInfo ? this.couponInfo.id : null,
+          amount_coupon: calculatorCoupon()
         })
         .then(() => {
           this.$vs.notify({
@@ -384,6 +440,41 @@ export default {
             vm.$vs.loading.close("#div-with-loading-popup > .con-vs-loading");
           });
       }
+    },
+    checkCoupon(){
+      const thisIns = this;
+      thisIns.$vs.loading({
+        background: 'success',
+        color: '#fff',
+        container: "#check-coupon",
+        scale: 0.45
+      });
+      thisIns.$http.get(`checkLimit?coupons_code=${thisIns.invoices.coupon_code}`)
+        .then(respon => {
+          thisIns.couponInfo = respon.data.data;
+        })
+        .catch((error) => {
+          thisIns.couponInfo = null;
+          thisIns.checkResponRequest(error.response.data);
+        })
+        .finally(() => {
+          thisIns.$vs.loading.close("#check-coupon > .con-vs-loading");
+        });
+    },
+    selectCourseRegister(){
+      this.couponInfo = null;
+    },
+    initValues() {
+      this.invoices = {
+        student_id: null,
+        courses: {
+          course_id: null,
+          price: null,
+          register: {
+            paid: 0
+          }
+        }
+      };
     }
   }
 };
@@ -420,5 +511,16 @@ export default {
 
 .border {
   border: 1px solid #ccc;
+}
+.min-h-300{
+  min-height: 300px;
+}
+#div-with-loading-popup{
+  position: relative;
+  padding-bottom: 40px;
+  .actions{
+    position: absolute;
+    bottom: 0;
+  }
 }
 </style>

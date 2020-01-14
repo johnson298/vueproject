@@ -68,14 +68,8 @@
 
             <template slot-scope="{data}">
                 <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-                    <vs-td v-if="views.name.viewable">
-                        <p class="product-name font-medium">{{ tr.name }}</p>
-                    </vs-td>
-
-                    <vs-td v-if="views.display_name.viewable">
-                        <p class="product-name font-medium">{{ tr.display_name }}</p>
-                    </vs-td>
-
+                    <vs-td v-if="views.name.viewable">{{ tr.name }}</vs-td>
+                    <vs-td v-if="views.display_name.viewable">{{ tr.display_name }}</vs-td>
                     <vs-td v-if="views.action.viewable" class="d-flex-span text-center">
                         <vs-button radius color="success" size="small" @click="getInfoRole(tr.id)"
                                    class="vs-component vs-button vs-button-success vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
@@ -175,7 +169,7 @@ export default {
           pagination: response.data.pagination
         });
       })
-        .catch(function (error) { 
+        .catch(function (error) {
           thisIns.checkResponRequest(error.response.data);
         }).finally(function () {
           thisIns.$vs.loading.close();

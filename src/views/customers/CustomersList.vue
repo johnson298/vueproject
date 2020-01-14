@@ -66,14 +66,6 @@
                     <span class="ml-2 text-base text-primary">Thêm khách hàng</span>
                 </div>
             </div>
-            <div class="import-file">
-                <vx-tooltip text="Thêm dữ liệu" position="top">
-                    <label for="file-upload" class="custom-file-upload rounded-full mb-3 mr-2">
-                        <i class="feather icon-upload-cloud"></i>
-                    </label>
-                    <input id="file-upload" type="file" />
-                </vx-tooltip>
-            </div>
         </div>
 
         <template slot="thead">
@@ -82,66 +74,27 @@
 
         <template slot-scope="{data}">
             <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-                <vs-td v-if="views.code.viewable">
-                    <p class="product-name font-medium">{{ tr.code }}</p>
-                </vs-td>
-
-                <vs-td v-if="views.name.viewable">
-                    <p class="product-name font-medium">{{ tr.name }}</p>
-                </vs-td>
-
-                <vs-td v-if="views.email.viewable">
-                    <p class="product-category">{{ tr.email }}</p>
-                </vs-td>
-
-                <vs-td v-if="views.phone.viewable">
-                    <p class="product-category">{{ tr.phone }}</p>
-                </vs-td>
-
-                <vs-td v-if="views.phone.viewable">
-                    <p class="product-category">{{ tr.zalo }}</p>
-                </vs-td>
-
-                <vs-td v-if="views.address.viewable">
-                    <p class="product-category">{{ tr.address }}</p>
-                </vs-td>
-
-                <vs-td v-if="views.facebook.viewable">
-                    <p class="product-category"><a :href="tr.facebook" target="_blank">Link</a></p>
-                </vs-td>
-
-                <vs-td v-if="views.birthday.viewable">
-                    <p class="product-category">{{ tr.birthday }}</p>
-                </vs-td>
-
+                <vs-td v-if="views.code.viewable">{{ tr.code }}</vs-td>
+                <vs-td v-if="views.name.viewable">{{ tr.name }}</vs-td>
+                <vs-td v-if="views.email.viewable">{{ tr.email }}</vs-td>
+                <vs-td v-if="views.phone.viewable">{{ tr.phone }}</vs-td>
+                <vs-td v-if="views.phone.viewable">{{ tr.zalo }}</vs-td>
+                <vs-td v-if="views.address.viewable">{{ tr.address }}</vs-td>
+                <vs-td v-if="views.facebook.viewable"><a :href="tr.facebook" target="_blank">Link</a></vs-td>
+                <vs-td v-if="views.birthday.viewable">{{ tr.birthday }}</vs-td>
                 <vs-td v-if="views.gender.viewable">
-                    <p class="product-name font-medium">
                       <vs-chip :color="checkStatusFrom0(genderCustomer,tr.gender)=='Nam' ? 'success'
                           : ''">{{ checkStatusFrom0(genderCustomer,tr.gender) }}</vs-chip>
-                    </p>
                 </vs-td>
-
                 <vs-td v-if="views.status.viewable">
-                    <p class="product-name font-medium">
                       <vs-chip :color="checkStatus(statusCustomer,tr.status)=='Đang chăm sóc' ? 'warning'
                           : checkStatus(statusCustomer,tr.status)=='Thành công' ? 'success'
                           : checkStatus(statusCustomer,tr.status)=='Hủy tư vấn' ? 'danger'
                           : ''">{{ checkStatus(statusCustomer,tr.status) }}</vs-chip>
-                    </p>
                 </vs-td>
-
-                <vs-td v-if="views.note.viewable">
-                    <p class="product-category">{{ tr.note }}</p>
-                </vs-td>
-
-                <vs-td v-if="views.updated_at.viewable">
-                    <p class="product-category">{{ tr.updated_at }}</p>
-                </vs-td>
-
-                <vs-td v-if="views.created_at.viewable">
-                    <p class="product-category">{{ tr.created_at }}</p>
-                </vs-td>
-
+                <vs-td v-if="views.note.viewable">{{ tr.note }}</vs-td>
+                <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
+                <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
                 <vs-td v-if="views.action.viewable" class="d-flex-span">
                   <vx-tooltip text="Chuyển thành học viên" position="top">
                     <vs-button radius class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small" @click="getInfoCustomer(tr.id,'popupConvertCustomer')"><i class="feather icon-repeat"></i></vs-button>

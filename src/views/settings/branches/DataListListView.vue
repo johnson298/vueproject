@@ -94,22 +94,10 @@
 
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.name }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.address.viewable">
-            <p class="product-category">{{ tr.address }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.name.viewable">{{ tr.name }}</vs-td>
+          <vs-td v-if="views.address.viewable">{{ tr.address }}</vs-td>
+          <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
+          <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
           <vs-td v-if="views.action.viewable" class="d-flex-span">
             <vs-button
               radius

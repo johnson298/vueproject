@@ -90,53 +90,28 @@
       </template>
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.id.viewable">
-            <p class="product-category">{{ tr.id }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.student_id.viewable">
-            <p class="product-category">{{ tr.student_id }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.id.viewable">{{ tr.id }}</vs-td>
+          <vs-td v-if="views.student_id.viewable">{{ tr.student_id }}</vs-td>
           <vs-td v-if="views.student_avatar.viewable">
             <vs-avatar size="55px" :src="tr.student.avatar" :alt="tr.student.name" />
           </vs-td>
-
-          <vs-td v-if="views.student_name.viewable">
-            <p class="product-category">{{ tr.student.name }}</p>
+          <vs-td v-if="views.student_name.viewable">{{ tr.student.name }}</vs-td>
+          <vs-td v-if="views.amount.viewable">{{ formatPrice(tr.amount) }}</vs-td>
+          <vs-td v-if="views.total.viewable">{{ formatPrice(tr.total) }}</vs-td>
+          <vs-td v-if="views.coupon.viewable">
+            {{ tr.coupon ? `Mã: ${tr.coupon.coupons_code} - ${formatPrice(tr.amount_coupon)} vnđ` : 'Không có KM' }}
           </vs-td>
-
-          <vs-td v-if="views.amount.viewable">
-            <p class="product-category">{{ formatPrice(tr.amount) }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.total.viewable">
-            <p class="product-category">{{ formatPrice(tr.total) }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.note.viewable">
-            <p class="product-category">{{ tr.note }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.note.viewable">{{ tr.note }}</vs-td>
           <vs-td v-if="views.source.viewable">
-            <p class="product-category">
               <vs-chip
-                :color="checkStatus(sourceInvoices,tr.source)=='Momo' ? 'primary'
-                              : checkStatus(sourceInvoices,tr.source)=='Tiền mặt' ? 'success'
-                              : checkStatus(sourceInvoices,tr.source)=='Chuyển khoản' ? 'warning'
+                :color="checkStatus(sourceInvoices,tr.source)==='Momo' ? 'primary'
+                              : checkStatus(sourceInvoices,tr.source)==='Tiền mặt' ? 'success'
+                              : checkStatus(sourceInvoices,tr.source)==='Chuyển khoản' ? 'warning'
                               : ''"
               >{{ checkStatus(sourceInvoices,tr.source) }}</vs-chip>
-            </p>
           </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
+          <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
           <vs-td v-if="views.action.viewable" class="d-flex-span">
             <vx-tooltip text="Gửi mail" position="top">
               <button

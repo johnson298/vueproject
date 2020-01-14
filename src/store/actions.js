@@ -63,6 +63,10 @@ const actions = {
     commit('CHANGE_CONFIG_FIELD', payload);
   },
 
+  addBranches({ commit }, payload){
+    commit('ADD_BRANCHES', payload);
+  }
+
 
 };
 

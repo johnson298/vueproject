@@ -71,36 +71,19 @@
       </template>
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="viewsInvoice.course.viewable">
-            <p class="product-category">{{ tr.course.name }}</p>
-          </vs-td>
-
-          <vs-td v-if="viewsInvoice.amount.viewable">
-            <p class="product-category">{{ formatPrice(tr.amount) }}</p>
-          </vs-td>
-
+          <vs-td v-if="viewsInvoice.course.viewable">{{ tr.course.name }}</vs-td>
+          <vs-td v-if="viewsInvoice.amount.viewable">{{ formatPrice(tr.amount) }}</vs-td>
           <vs-td v-if="viewsInvoice.source.viewable">
-            <p class="product-category">
               <vs-chip
                 :color="checkStatus(sourceInvoices,tr.source)=='Momo' ? 'primary'
                               : checkStatus(sourceInvoices,tr.source)=='Tiền mặt' ? 'success'
                               : checkStatus(sourceInvoices,tr.source)=='Chuyển khoản' ? 'warning'
                               : ''"
               >{{ checkStatus(sourceInvoices,tr.source) }}</vs-chip>
-            </p>
           </vs-td>
-
-          <vs-td v-if="viewsInvoice.note.viewable">
-            <p class="product-category">{{ tr.note }}</p>
-          </vs-td>
-
-          <vs-td v-if="viewsInvoice.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="viewsInvoice.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
+          <vs-td v-if="viewsInvoice.note.viewable">{{ tr.note }}</vs-td>
+          <vs-td v-if="viewsInvoice.updated_at.viewable">{{ tr.updated_at }}</vs-td>
+          <vs-td v-if="viewsInvoice.created_at.viewable">{{ tr.created_at }}</vs-td>
         </vs-tr>
       </template>
     </vs-table-custom>

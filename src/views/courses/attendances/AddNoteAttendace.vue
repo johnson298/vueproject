@@ -6,7 +6,7 @@
           <label class="vs-input--label">Ghi chú</label>
         </div>
         <vs-textarea
-          v-model="attendaceNote"
+          v-model="getInfo.noteStudentAttendace"
           style="border: solid 1px #dddddd"
           name="note"
           placeholder="Ghi chú"
@@ -52,7 +52,6 @@ export default {
   },
   data() {
     return {
-      attendaceNote: null,
       branchId: this.$store.state.getBranchId,
       courseID: this.$route.params.course,
       attendanceId: this.$route.params.attendance
@@ -69,7 +68,7 @@ export default {
       const url = `branches/${this.branchId}/courses/${this.courseID}/attendances/${this.attendanceId}/items/${this.getInfo.idStudentAttendace}`;
       this.$http
         .put(url, {
-          note: this.attendaceNote
+          note: this.getInfo.noteStudentAttendace
         })
         .then(() => {
           this.$vs.notify({

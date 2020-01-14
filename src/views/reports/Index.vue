@@ -6,12 +6,28 @@
           <span slot="on">Toàn bộ chi nhánh</span>
           <span slot="off">Một chi nhánh</span>
         </vs-switch>
-        <div class="d-flex" v-if="!switchBranch">
-          <v-select :options="['foo','bar']" :dir="$vs.rtl ? 'rtl' : 'ltr'"  placeholder="Chọn chi nhánh" class="min-w-300" />
-          <vs-button color="primary" class="ml-5 px-3" >
-            <font-awesome-icon icon="filter" />
-          </vs-button>
+        <div class="d-flex">
+          <flat-pickr v-model="fromDate" placeholder="Từ ngày" />
+          <flat-pickr v-model="toDate" placeholder="Đến ngày" class="mx-2" />
+          <vs-button
+                color="primary"
+                class="px-3"
+                icon="replay"
+                @click="resetDate()"
+                v-if="fromDate !== '' || toDate !== ''"></vs-button>
         </div>
+        <div class="d-flex" v-if="!switchBranch && branchesAll">
+          <v-select
+            :options="branchesName(branchesAll)"
+            :dir="$vs.rtl ? 'rtl' : 'ltr'"
+            placeholder="Chọn chi nhánh"
+            class="min-w-300"
+            @input="getBranchId($event)"
+          />
+        </div>
+        <vs-button color="success" class="ml-5 px-3" @click="getAllData()">
+          <font-awesome-icon icon="filter" />
+        </vs-button>
       </vs-col>
     </vs-row>
     <vue-card>
@@ -21,65 +37,61 @@
       <div class="table-custom p-5" slot="card-body">
         <vs-table :data="users">
           <template slot="thead">
-            <vs-th bgcolor="#dfe2e5">THỜI GIAN</vs-th>
-            <vs-th bgcolor="#dfe2e5" colspan="2">GIÁO VIÊN</vs-th>
+            <vs-th bgcolor="#dfe2e5" colspan="2">NHÂN VIÊN</vs-th>
             <vs-th bgcolor="#dfe2e5" colspan="2">HỌC VIÊN</vs-th>
-            <vs-th bgcolor="#dfe2e5" colspan="3">LỚP</vs-th>
+            <vs-th bgcolor="#dfe2e5" colspan="4">LỚP</vs-th>
             <vs-th bgcolor="#dfe2e5" colspan="2">TÀI CHÍNH</vs-th>
-            <vs-th bgcolor="#dfe2e5" colspan="3">KHÁCH HÀNG</vs-th>
+            <vs-th bgcolor="#dfe2e5" colspan="4">KHÁCH HÀNG</vs-th>
             <vs-th bgcolor="#dfe2e5" colspan="2">CHIẾN DỊCH</vs-th>
           </template>
 
           <template>
             <vs-tr>
-              <!-- thời gian -->
-              <vs-td>Từ - Đến</vs-td>
-              <!-- Giáo viên -->
+              <!-- nhân viên -->
               <vs-td class="bg-success text-white">Hoạt động</vs-td>
               <vs-td class="bg-danger text-white">Hủy</vs-td>
               <!-- Học viên -->
               <vs-td class="bg-success text-white">Thêm mới</vs-td>
               <vs-td class="bg-warning text-white">Bảo lưu</vs-td>
               <!-- lớp -->
+              <vs-td class="bg-primary text-white">Mở</vs-td>
+              <vs-td class="bg-warning text-white">Hoạt động</vs-td>
               <vs-td class="bg-success text-white">Hoàn thành</vs-td>
-              <vs-td class="bg-warning text-white">Mới</vs-td>
               <vs-td class="bg-danger text-white">Hủy</vs-td>
               <!-- tài chính -->
               <vs-td>Doanh thu</vs-td>
               <vs-td>Chi tiêu</vs-td>
               <!-- khách hàng -->
-              <vs-td class="bg-warning text-white">Thêm mới</vs-td>
-              <vs-td class="bg-success text-white">Thành công</vs-td>
+              <vs-td class="bg-warning text-white">Chờ CS</vs-td>
+              <vs-td class="bg-success text-white">Đang CS</vs-td>
+              <vs-td class="bg-success text-white">CS thành công</vs-td>
               <vs-td class="bg-danger text-white">Hủy</vs-td>
               <!-- chiến dịch -->
               <vs-td>Thông báo</vs-td>
               <vs-td>Đánh giá</vs-td>
             </vs-tr>
             <vs-tr>
-              <!-- thời gian -->
-              <vs-td>
-                <flat-pickr v-model="fromDate" placeholder="Từ ngày" />
-                <flat-pickr v-model="toDate" placeholder="Từ ngày" class="mt-2" />
-              </vs-td>
-              <!-- Giáo viên -->
-              <vs-td>10</vs-td>
-              <vs-td>3</vs-td>
+              <!-- nhân viên -->
+              <vs-td>{{ dataMain.employee }}</vs-td>
+              <vs-td>{{ dataMain.employee_inactive }}</vs-td>
               <!-- Học viên -->
-              <vs-td>34</vs-td>
-              <vs-td>55</vs-td>
+              <vs-td>{{ dataMain.students }}</vs-td>
+              <vs-td>{{ dataMain.reserve }}</vs-td>
               <!-- lớp -->
-              <vs-td>66</vs-td>
-              <vs-td>65</vs-td>
-              <vs-td>65</vs-td>
+              <vs-td>{{ dataMain.classes.open }}</vs-td>
+              <vs-td>{{ dataMain.classes.in_progress }}</vs-td>
+              <vs-td>{{ dataMain.classes.finished }}</vs-td>
+              <vs-td>{{ dataMain.classes.closed }}</vs-td>
               <!-- tài chính -->
-              <vs-td>56</vs-td>
-              <vs-td>65</vs-td>
+              <vs-td>{{ dataMain.money.revenues }}</vs-td>
+              <vs-td>{{ dataMain.money.expenditures }}</vs-td>
               <!-- khách hàng -->
-              <vs-td>77</vs-td>
-              <vs-td>0</vs-td>
-              <vs-td>0</vs-td>
+              <vs-td>{{ dataMain.customer.wait_for_care }}</vs-td>
+              <vs-td>{{ dataMain.customer.taking_care_of }}</vs-td>
+              <vs-td>{{ dataMain.customer.successful_care }}</vs-td>
+              <vs-td>{{ dataMain.customer.cancel_care }}</vs-td>
               <!-- chiến dịch -->
-              <vs-td>0</vs-td>
+              <vs-td>{{ dataMain.campaign.notification }}</vs-td>
               <vs-td>0</vs-td>
             </vs-tr>
           </template>
@@ -88,14 +100,7 @@
     </vue-card>
     <vue-card class="mt-5">
       <div slot="title">
-        <h4>KPI</h4>
-      </div>
-      <div slot="card-actions">
-        <flat-pickr v-model="fromDate" placeholder="Từ ngày" class="mr-2" />
-        <flat-pickr v-model="toDate" placeholder="Đến ngày" class="mr-2"/>
-        <vs-button color="primary" class="px-3">
-          <font-awesome-icon icon="filter" />
-        </vs-button>
+        <h4>KPI Marketing</h4>
       </div>
       <div class="table-custom p-5" slot="card-body">
         <vs-table :data="users">
@@ -109,25 +114,22 @@
               <vs-td></vs-td>
               <vs-td class="bg-warning text-white">Chờ chăm sóc</vs-td>
               <vs-td class="bg-primary text-white">Đang chăm sóc</vs-td>
-              <vs-td class="bg-success text-white">Thành công <br> (chỉ tăng khi học viên đó đóng tiền)</vs-td>
+              <vs-td class="bg-success text-white"
+                >Thành công <br />
+                (chỉ tăng khi học viên đó đóng tiền)</vs-td
+              >
               <vs-td class="bg-danger text-white">Hủy tư vấn</vs-td>
               <vs-td>Số tiền (vnđ)</vs-td>
             </vs-tr>
-            <vs-tr>
-              <vs-td rowspan="1">Nguyễn Văn A (NV-001)</vs-td>
-              <vs-td>1</vs-td>
-              <vs-td>0</vs-td>
-              <vs-td>0</vs-td>
-              <vs-td>0</vs-td>
-              <vs-td>0</vs-td>
-            </vs-tr>
-            <vs-tr>
-              <vs-td rowspan="1">Nguyễn Văn A (NV-001)</vs-td>
-              <vs-td>1</vs-td>
-              <vs-td>0</vs-td>
-              <vs-td>0</vs-td>
-              <vs-td>0</vs-td>
-              <vs-td>0</vs-td>
+            <vs-tr v-for="(item, index) in dataKpi" :key="index">
+              <vs-td rowspan="1">
+                <router-link tag="a" :to="'/employees/' + item.user.id">{{ item.user.name }} ({{ item.user.code }})</router-link>
+              </vs-td>
+              <vs-td>{{ item.wait_for_care }}</vs-td>
+              <vs-td>{{ item.taking_care_of }}</vs-td>
+              <vs-td>{{ item.successful_care }}</vs-td>
+              <vs-td>{{ item.cancel_care }}</vs-td>
+              <vs-td>{{ item.money }}</vs-td>
             </vs-tr>
           </template>
         </vs-table>
@@ -139,19 +141,20 @@
 <script>
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
+import axios from "axios";
 export default {
   components: {
     flatPickr
   },
   data() {
     return {
-      switchBranch: "on",
+      switchBranch: true,
       changeBranchPopup: false,
       branchName: null,
       branches: null,
-      fromDate: null,
-      toDate: null,
-      branchId: null,
+      fromDate: "",
+      toDate: "",
+      branchId: "",
       users: [
         {
           id: 8,
@@ -160,8 +163,111 @@ export default {
           email: "Sherwood@rosamond.me",
           website: "jacynthe.com"
         }
+      ],
+      dataMain: {
+        employee: 0,
+        employee_inactive: 0,
+        students: 0,
+        reserve: 0,
+        classes: {
+          open: 0,
+          in_progress: 0,
+          finished: 0,
+          closed: 0
+        },
+        money: {
+          revenues: 0,
+          expenditures: 0
+        },
+        customer: {
+          wait_for_care: 0,
+          taking_care_of: 0,
+          successful_care: 0,
+          cancel_care: 0
+        },
+        campaign: {
+          notification: 0
+        }
+      },
+      dataKpi: [
+        {
+          wait_for_care: 0,
+          taking_care_of: 0,
+          successful_care: 0,
+          cancel_care: 0,
+          money: 0,
+          day: null,
+          created_at: null,
+          updated_at: null
+        }
       ]
     };
+  },
+  computed: {
+    branchesAll() {
+      return this.$store.state.branches;
+    }
+  },
+  created() {
+    this.getAllData();
+  },
+  methods: {
+    resetDate(){
+      this.fromDate = '';
+      this.toDate = '';
+    },
+    getAllData() {
+      axios.all([this.getData(), this.getKpi()]);
+    },
+    getKpi() {
+      const thisIns = this;
+      let url = thisIns.switchBranch
+        ? `report_kpi?from=${thisIns.fromDate}&to=${thisIns.toDate}`
+        : `report?branch=${thisIns.branchId}&from=${thisIns.fromDate}&to=${thisIns.toDate}`;
+
+      this.$http
+        .get(url)
+        .then(response => {
+          thisIns.dataKpi = response.data.data;
+        })
+        .catch(function(error) {
+          thisIns.checkResponRequest(error.response.data);
+        });
+    },
+    getData() {
+      const thisIns = this;
+      thisIns.$vs.loading({
+        color: "#1E6DB5",
+        text: "Loading..."
+      });
+      let url = thisIns.switchBranch
+        ? `report?from=${thisIns.fromDate}&to=${thisIns.toDate}`
+        : `report?branch=${thisIns.branchId}&from=${thisIns.fromDate}&to=${thisIns.toDate}`;
+
+      this.$http
+        .get(url)
+        .then(response => {
+          thisIns.dataMain = response.data.data;
+        })
+        .catch(function(error) {
+          thisIns.checkResponRequest(error.response.data);
+        })
+        .finally(function() {
+          thisIns.$vs.loading.close();
+        });
+    },
+    branchesName(arr) {
+      return arr.map(e => e.name);
+    },
+    getBranchId(event) {
+      let arrName = this.branchesAll.map(e => e.name);
+      let arrId = this.branchesAll.map(e => e.id);
+      for (let i = 0; i <= arrName.length; i++) {
+        if (arrName[i] === event) {
+          this.branchId = arrId[i];
+        }
+      }
+    }
   }
 };
 </script>
@@ -183,7 +289,7 @@ export default {
     height: 100%;
   }
 }
-.min-w-300{
+.min-w-300 {
   min-width: 300px;
 }
 </style>

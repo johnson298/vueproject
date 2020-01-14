@@ -28,8 +28,6 @@
       max-width: $reduced-sidebar-width;
 
       &:hover:not(.vs-sidebar-reduceNotRebound):not(.vs-sidebar-reduceNotHoverExpand){
-        .vs-sidebar--items {
-        }
         .vs-sidebar-group .group-header i{
           display: block;
         }
@@ -46,6 +44,7 @@
     .logo{
       img {
         padding: 4px 0;
+        max-height: 25px;
       }
       .logo-text{
         font-size: 22px;

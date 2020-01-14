@@ -76,14 +76,6 @@
             <span class="ml-2 text-base text-primary">Thêm Học Viên</span>
           </div>
         </div>
-        <div class="import-file">
-          <vx-tooltip text="Thêm dữ liệu" position="top">
-            <label for="file-upload" class="custom-file-upload rounded-full mb-3 mr-2">
-              <i class="feather icon-upload-cloud"></i>
-            </label>
-            <input id="file-upload" type="file" />
-          </vx-tooltip>
-        </div>
       </div>
 
       <template slot="thead">
@@ -97,76 +89,39 @@
 
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.code.viewable">
-            <p class="product-name font-medium">{{ tr.code }}</p>
-          </vs-td>
+          <vs-td v-if="views.code.viewable">{{ tr.code }}</vs-td>
           <vs-td v-if="views.avatar.viewable">
             <vs-avatar size="55px" :src="tr.avatar" :alt="tr.name" />
           </vs-td>
-
-          <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.name }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.email.viewable">
-            <p class="product-category">{{ tr.email }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.birthday.viewable">
-            <p class="product-category">{{ tr.birthday }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.phone.viewable">
-            <p class="product-category">{{ tr.phone }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.name.viewable">{{ tr.name }}</vs-td>
+          <vs-td v-if="views.email.viewable">{{ tr.email }}</vs-td>
+          <vs-td v-if="views.birthday.viewable">{{ tr.birthday }}</vs-td>
+          <vs-td v-if="views.phone.viewable">{{ tr.phone }}</vs-td>
           <vs-td v-if="views.facebook.viewable">
-            <p class="product-category">
               <a :href="tr.facebook" target="_blank">Link</a>
-            </p>
           </vs-td>
-
-          <vs-td v-if="views.address.viewable">
-            <p class="product-category">{{ tr.address }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.address.viewable">{{ tr.address }}</vs-td>
           <vs-td v-if="views.source.viewable">
-            <p class="product-category">
               <vs-chip
-                :color="checkStatus(sourceStudent,tr.source)=='Facebook' ? 'primary' 
+                :color="checkStatus(sourceStudent,tr.source)=='Facebook' ? 'primary'
                       : checkStatus(sourceStudent,tr.source)=='Bạn bè' ? 'warning'
                       : checkStatus(sourceStudent,tr.source)=='Trang chủ' ? 'success'
                       : ''"
               >{{ checkStatus(sourceStudent,tr.source) }}</vs-chip>
+          </vs-td>
+          <vs-td v-if="views.class.viewable">{{ tr.class }}</vs-td>
+          <vs-td v-if="views.school.viewable">{{ tr.school }}</vs-td>
+          <vs-td v-if="views.debts.viewable">{{ (tr.total_amount - tr.paid) > 0 ? formatPrice(tr.total_amount - tr.paid) : 0 }}</vs-td>
+          <vs-td v-if="views.note.viewable">{{ tr.note }}</vs-td>
+          <vs-td v-if="views.mem_add.viewable">
+            <p class="product-category" v-if="tr.user">
+              <router-link
+                tag="a"
+                :to="'/employees/' + tr.user.id ">{{ tr.user.name }}</router-link>
             </p>
           </vs-td>
-
-          <vs-td v-if="views.class.viewable">
-            <p class="product-category">{{ tr.class }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.school.viewable">
-            <p class="product-category">{{ tr.school }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.debts.viewable">
-            <p
-              class="product-category"
-            >{{ (tr.total_amount - tr.paid) > 0 ? formatPrice(tr.total_amount - tr.paid) : 0 }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.note.viewable">
-            <p class="product-category">{{ tr.note }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
+          <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
           <vs-td v-if="views.action.viewable" class="d-flex-span">
             <router-link
               tag="button"

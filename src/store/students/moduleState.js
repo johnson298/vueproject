@@ -28,6 +28,7 @@ export default {
     school: { text: "trường", viewable: false, sortKey: "", active: ['students', 'reserves']  },
     debts: { text: "còn nợ (vnđ)", viewable: true, sortKey: "debts", active: ['students'] },
     note: { text: "ghi chú", viewable: false, sortKey: "note", active: ['students'] },
+    mem_add: { text: "người thêm", viewable: false, sortKey: "", active: ['students'] },
     reason: { text: "Lý do", viewable: false, sortKey: "note", active: ['reserves'] },
     course: { text: "Lớp bảo lưu", viewable: false, sortKey: "", active: ['reserves'] },
     status: { text: "Trạng thái bảo lưu", viewable: true, sortKey: "type", active: ['reserves'] },

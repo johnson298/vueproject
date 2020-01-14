@@ -6,7 +6,6 @@
 
 <script>
 import themeConfig from '@/../themeConfig.js';
-
 export default {
   watch: {
     '$store.state.theme'(val) {

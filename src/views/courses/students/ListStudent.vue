@@ -114,9 +114,7 @@
           v-for="(tr, indextr) in data"
           class="col"
         >
-          <vs-td v-if="views.code.viewable">
-            <p class="product-name font-medium">{{ tr.student.code }}</p>
-          </vs-td>
+          <vs-td v-if="views.code.viewable">{{ tr.student.code }}</vs-td>
           <vs-td v-if="views.avatar.viewable">
             <vs-avatar
               size="55px"
@@ -124,23 +122,26 @@
               :alt="tr.student.avatar"
             />
           </vs-td>
-
-          <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.student.name }}</p>
+          <vs-td v-if="views.name.viewable">{{ tr.student.name }}</vs-td>
+          <vs-td v-if="views.status.viewable">
+            <div class="d-flex justify-start">
+              <span class="flex items-center px-2 py-1 rounded">
+              <div class="h-3 w-3 rounded-full mr-2 bg-success" ></div>
+              {{ tr.present || 0 }}
+            </span>
+            <span class="flex items-center px-2 py-1 rounded">
+              <div class="h-3 w-3 rounded-full mr-2 bg-warning" ></div>
+              {{ tr.late || 0 }}
+            </span>
+            <span class="flex items-center px-2 py-1 rounded">
+              <div class="h-3 w-3 rounded-full mr-2 bg-danger" ></div>
+              {{ tr.absent || 0 }}
+            </span>
+            </div>
           </vs-td>
-
-          <vs-td v-if="views.note.viewable">
-            <p class="product-category">{{ tr.student.note }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.student.updated_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.student.created_at }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.note.viewable">{{ tr.student.note }}</vs-td>
+          <vs-td v-if="views.updated_at.viewable">{{ tr.student.updated_at }}</vs-td>
+          <vs-td v-if="views.created_at.viewable">{{ tr.student.created_at }}</vs-td>
           <vs-td v-if="views.action.viewable" class="d-flex-span">
             <router-link
               tag="button"

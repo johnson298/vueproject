@@ -87,30 +87,12 @@
       </template>
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.date.viewable">
-            <p class="product-name font-medium">{{ tr.date }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.present.viewable">
-            <p class="product-name font-medium">{{ tr.present?tr.present:0 }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.absent.viewable">
-            <p class="product-name font-medium">{{ tr.absent?tr.absent:0 }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.late.viewable">
-            <p class="product-name font-medium">{{ tr.late?tr.late:0 }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.date.viewable">{{ tr.date }}</vs-td>
+          <vs-td v-if="views.present.viewable">{{ tr.present?tr.present:0 }}</vs-td>
+          <vs-td v-if="views.absent.viewable">{{ tr.absent?tr.absent:0 }}</vs-td>
+          <vs-td v-if="views.late.viewable">{{ tr.late?tr.late:0 }}</vs-td>
+          <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
+          <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
           <vs-td v-if="views.action.viewable" class="d-flex-span">
             <router-link
               tag="button"

@@ -226,7 +226,8 @@ export default {
           password: this.student.password,
           password_confirmation: this.student.password_confirmation,
           branch_id: this.branchId,
-          customer_id: this.customerInfo.id
+          customer_id: this.customerInfo.id,
+          user_id: JSON.parse(localStorage.getItem('user')).id
         })
         .then(() => {
           this.$emit("closePopupConvert", false);

@@ -105,6 +105,7 @@ export default {
         school: "",
         class: "",
         source: "1",
+        user_id: JSON.parse(localStorage.getItem('user')).id,
         branch_id: this.$store.state.getBranchId
       },
       gender: this.$store.state.model.students.gender,

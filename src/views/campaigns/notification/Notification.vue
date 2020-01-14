@@ -78,14 +78,6 @@
             <span class="ml-2 text-base text-primary">Thêm thông báo</span>
           </div>
         </div>
-        <div class="import-file">
-          <vx-tooltip text="Thêm dữ liệu" position="top">
-            <label for="file-upload" class="custom-file-upload rounded-full mb-3 mr-2">
-              <i class="feather icon-upload-cloud"></i>
-            </label>
-            <input id="file-upload" type="file" />
-          </vx-tooltip>
-        </div>
       </div>
 
       <template slot="thead">
@@ -99,36 +91,18 @@
 
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.title.viewable">
-            <p class="font-medium">{{ tr.title }}</p>
-          </vs-td>
-          <vs-td v-if="views.target_type.viewable">
-            <p class="font-medium">{{ tr.target_type }}</p>
-          </vs-td>
-          <vs-td v-if="views.user.viewable">
-            <p class="font-medium">{{ tr.user.name }}</p>
-          </vs-td>
-          <vs-td v-if="views.schedule_at.viewable">
-            <p class="font-medium">{{ tr.schedule_at }}</p>
-          </vs-td>
-          <vs-td v-if="views.via.viewable">
-            <p class="font-medium">{{ tr.via ? tr.via.join(', ') : tr.via }}</p>
-          </vs-td>
-          <vs-td v-if="views.focus_on.viewable">
-            <p class="font-medium">{{ tr.focus_on === 1 ? "Học viên" : "Giáo viên" }}</p>
-          </vs-td>
+          <vs-td v-if="views.title.viewable">{{ tr.title }}</vs-td>
+          <vs-td v-if="views.target_type.viewable">{{ tr.target_type }}</vs-td>
+          <vs-td v-if="views.user.viewable">{{ tr.user.name }}</vs-td>
+          <vs-td v-if="views.schedule_at.viewable">{{ tr.schedule_at }}</vs-td>
+          <vs-td v-if="views.via.viewable">{{ tr.via ? tr.via.join(', ') : tr.via }}</vs-td>
+          <vs-td v-if="views.focus_on.viewable">{{ tr.focus_on === 1 ? "Học viên" : "Giáo viên" }}</vs-td>
           <vs-td v-if="views.content.viewable">
             <div v-html="tr.content"></div>
           </vs-td>
-          <vs-td v-if="views.perform_at.viewable">
-            <p class="font-medium">{{ tr.perform_at }}</p>
-          </vs-td>
-          <vs-td v-if="views.created_at.viewable">
-            <p class="font-medium">{{ tr.created_at }}</p>
-          </vs-td>
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="font-medium">{{ tr.updated_at }}</p>
-          </vs-td>
+          <vs-td v-if="views.perform_at.viewable">{{ tr.perform_at }}</vs-td>
+          <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
+          <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
         </vs-tr>
       </template>
     </vs-table-custom>

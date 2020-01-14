@@ -4,43 +4,45 @@
         <h4>Chỉnh sửa khuyến mại</h4>
         <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
     </div>
-    <vs-divider class="mb-0"></vs-divider>
+  <vs-divider class="mb-0"></vs-divider>
 
-    <VuePerfectScrollbar class="scroll-area--data-list-add-new pt-4 pb-6" :settings="settings">
+  <VuePerfectScrollbar class="scroll-area--data-list-add-new pt-4 pb-6" :settings="settings">
 
         <div class="p-6">
-            <form>
-
-                <div>
-                    <h4 class="text-center uppercase">Thông tin khuyến mại</h4>
-                    <!--type-->
-                    <div>
-                        <vs-select v-model="couponInfo.type" label="Loại khuyến mại" class="mt-5 w-full">
-                            <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in type" />
-                        </vs-select>
-                    </div>
-                    <!--chiet khau %-->
-                    <div v-if="couponInfo.type==1">
-                        <vs-input label="Chiếu khấu %" type="number" name="discount_rate" v-model="couponInfo.discount_rate" class="mt-5 w-full" />
-                    </div>
-                      <!-- khuyen mai theo so tien -->
-                    <div v-else>
-                        <vs-input label="Khuyến mại theo số tiền" type="number" name="discount_amount" v-model="couponInfo.discount_amount" v-validate="'required|min:0'" class="mt-5 w-full" />
-                    </div>
-                    <!--trang thai-->
-                    <div>
-                        <vs-select v-model="couponInfo.status" label="Trạng thái" class="mt-5 w-full">
-                            <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in status" />
-                        </vs-select>
-                    </div>
-                    <!--nghi chú-->
-                    <div>
-                      <div class="note mt-5"><label class="vs-input--label">Ghi chú</label></div>
-                      <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="couponInfo.note" class="w-full" :rows="5"/>
-                    </div>
-                </div>
-
-            </form>
+              <div>
+                  <h4 class="text-center uppercase">Thông tin khuyến mại</h4>
+                  <!--type-->
+                  <div>
+                      <vs-select v-model="couponInfo.type" label="Loại khuyến mại" class="mt-5 w-full">
+                          <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in type" />
+                      </vs-select>
+                  </div>
+                  <!--chiet khau %-->
+                  <div v-if="couponInfo.type==1">
+                      <vs-input label="Chiếu khấu %" type="number" name="discount_rate" v-model="couponInfo.discount_rate" class="mt-5 w-full" />
+                  </div>
+                    <!-- khuyen mai theo so tien -->
+                  <div v-else>
+                      <vs-input label="Khuyến mại theo số tiền" type="number" name="discount_amount" v-model="couponInfo.discount_amount" v-validate="'required|min:0'" class="mt-5 w-full" />
+                  </div>
+                  <!--trang thai-->
+                  <div>
+                    <vs-input v-model="couponInfo.coupons_limit" class="mt-5 w-full" label="Giới hạn mã (lần)" type="number" />
+                  </div>
+                  <div>
+                    <vs-input v-model="couponInfo.coupons_code" class="mt-5 w-full" label="Tạo mã" type="text" placeholder="KM01" />
+                  </div>
+                  <div>
+                      <vs-select v-model="couponInfo.status" label="Trạng thái" class="mt-5 w-full">
+                          <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in status" />
+                      </vs-select>
+                  </div>
+                  <!--nghi chú-->
+                  <div>
+                    <div class="note mt-5"><label class="vs-input--label">Ghi chú</label></div>
+                    <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="couponInfo.note" class="w-full" :rows="5"/>
+                  </div>
+              </div>
         </div>
     </VuePerfectScrollbar>
 
@@ -81,7 +83,9 @@ export default {
         discount_rate: coupon.discount_rate,
         discount_amount: coupon.discount_amount,
         status: coupon.status,
-        note: coupon.note
+        note: coupon.note,
+        coupons_limit: coupon.coupons_limit,
+        coupons_code: coupon.coupons_code,
       })
         .then(() => {
           this.getData();
@@ -92,6 +96,7 @@ export default {
             icon: 'fa fa-lg fa-check-circle',
             color: 'success'
           });
+          this.$emit('closeSidebar', false);
         })
         .catch((error) => {
 

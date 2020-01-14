@@ -93,9 +93,7 @@
       </template>
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.name.viewable">
-            <p class="product-name">{{ tr.title }}</p>
-          </vs-td>
+          <vs-td v-if="views.name.viewable">{{ tr.title }}</vs-td>
 
           <vs-td v-if="views.joins.viewable">
             <ul class="users-liked user-list">
@@ -139,13 +137,9 @@
             <p class="product-category">{{ tr.note }}</p>
           </vs-td>
 
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
+          <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
 
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
+          <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
 
           <vs-td v-if="views.action.viewable" class="d-flex-span">
             <vs-button

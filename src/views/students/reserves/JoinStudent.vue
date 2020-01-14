@@ -5,57 +5,12 @@
         <div
           class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary"
         >
-          <label class="vs-input--label">Lớp học</label>
-          <vue-simple-suggest
-            v-model="selectedCourses"
-            mode="select"
-            ref="suggestComponentCourses"
-            placeholder="Search information..."
-            value-attribute="id"
-            display-attribute="name"
-            :list="getCourses"
-            :debounce="200"
-            :filter-by-query="false"
-            @select="onSuggestSelectCourses"
-          >
-            <div class="g">
-              <input type="text" placeholder="Search information..." />
-            </div>
-            <template
-              slot="misc-item-above"
-              slot-scope="{ suggestions, query }"
-            >
-              <div class="misc-item">
-                <span>You're searching for '{{ query }}'.</span>
-              </div>
-
-              <template v-if="suggestions.length > 0">
-                <div class="misc-item">
-                  <span>{{ suggestions.length }} suggestions are shown...</span>
-                </div>
-                <hr />
-              </template>
-
-              <div class="misc-item" v-else-if="!loading">
-                <span>No results</span>
-              </div>
-            </template>
-
-            <div slot="suggestion-item" slot-scope="{ suggestion, query }">
-              <div class="text">
-                <span>{{ suggestion.name | truncate(40) }}</span>
-              </div>
-            </div>
-
-            <div
-              class="misc-item"
-              slot="misc-item-below"
-              slot-scope="{ suggestions }"
-              v-if="loading"
-            >
-              <span>Loading...</span>
-            </div>
-          </vue-simple-suggest>
+          <vx-search-ajax
+            text="Lớp học "
+            :link-api="`branches/${branchId}/programs/${studentInfo.program_id}/courses`"
+            :change.sync="selectedCourses"
+            get-attribute="id"
+          />
         </div>
       </vs-col>
 
@@ -104,9 +59,7 @@ export default {
   data() {
     return {
       loading: false,
-      selectedCourses: {
-        id: null
-      },
+      selectedCourses: null,
       disabled: "disabled"
     };
   },
@@ -126,7 +79,7 @@ export default {
       this.$http
         .put(`branches/${this.branchId}/reserves/${this.reserveId}`, {
           type: 2,
-          course_new_id: this.selectedCourses.id
+          course_new_id: this.selectedCourses
         })
         .then(() => {
           this.$emit("closePopup", false);
@@ -155,7 +108,7 @@ export default {
         });
         this.$http
           .post(
-            `branches/${this.branchId}/courses/${this.selectedCourses.id}/registers`,
+            `branches/${this.branchId}/courses/${this.selectedCourses}/registers`,
             {
               student_id: this.studentInfo.id,
               coupon_id: null,
@@ -186,29 +139,6 @@ export default {
       });
 
       this.changeStatusStudent();
-    },
-    onSuggestSelectCourses(suggest) {
-      if (suggest) {
-        this.selectedCourses = suggest;
-      }
-    },
-    getCourses(search = "") {
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http
-          .get(`branches/${this.branchId}/programs/${this.studentInfo.program_id}/courses`, {
-            params: {
-              search: search
-            }
-          })
-          .then(function(response) {
-            resolve(response.data.data);
-          })
-          .catch(e => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
     }
   }
 };

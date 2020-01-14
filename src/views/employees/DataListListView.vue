@@ -75,14 +75,6 @@
             <span class="ml-2 text-base text-primary">Thêm nhân viên</span>
           </div>
         </div>
-        <div class="import-file">
-          <vx-tooltip text="Thêm dữ liệu" position="top">
-            <label for="file-upload" class="custom-file-upload rounded-full mb-3 mr-2">
-              <i class="feather icon-upload-cloud"></i>
-            </label>
-            <input id="file-upload" type="file" />
-          </vx-tooltip>
-        </div>
       </div>
 
       <template slot="thead">
@@ -96,67 +88,33 @@
 
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.code.viewable">
-            <p class="product-name font-medium">{{ tr.code }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.code.viewable">{{ tr.code }}</vs-td>
           <vs-td v-if="views.avatar.viewable">
             <vs-avatar size="55px" :src="tr.avatar" :alt="tr.name" />
           </vs-td>
-
-          <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.name }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.name.viewable">{{ tr.name }}</vs-td>
           <vs-td v-if="views.position.viewable">
-            <p class="product-name font-medium">
               <vs-chip
-                :color="checkStatus(positions,tr.position)=='Giáo viên' ? 'primary'
-                      : checkStatus(positions,tr.position)=='Tư vấn' ? 'warning'
-                      : checkStatus(positions,tr.position)=='Kế toán' ? '#34495e'
-                      : checkStatus(positions,tr.position)=='Quản lý' ? 'success'
+                :color="checkStatus(positions,tr.position)==='Giáo viên' ? 'primary'
+                      : checkStatus(positions,tr.position)==='Tư vấn' ? 'warning'
+                      : checkStatus(positions,tr.position)==='Kế toán' ? '#34495e'
+                      : checkStatus(positions,tr.position)==='Quản lý' ? 'success'
                       : ''"
               >{{ checkStatus(positions,tr.position) }}</vs-chip>
-            </p>
           </vs-td>
-
-          <vs-td v-if="views.email.viewable">
-            <p class="product-category">{{ tr.email }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.birthday.viewable">
-            <p class="product-category">{{ tr.birthday }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.phone.viewable">
-            <p class="product-category">{{ tr.phone }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.facebook.viewable">
-            <p class="product-category">
-              <a :href="tr.facebook" target="_blank">Link</a>
-            </p>
-          </vs-td>
-
-          <vs-td v-if="views.address.viewable">
-            <p class="product-category">{{ tr.address }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.email.viewable">{{ tr.email }}</vs-td>
+          <vs-td v-if="views.birthday.viewable">{{ tr.birthday }}</vs-td>
+          <vs-td v-if="views.phone.viewable">{{ tr.phone }}</vs-td>
+          <vs-td v-if="views.facebook.viewable"><a :href="tr.facebook" target="_blank">Link</a></vs-td>
+          <vs-td v-if="views.address.viewable">{{ tr.address }}</vs-td>
           <vs-td v-if="views.status.viewable">
             <vs-chip
-              :color="checkStatusFrom0(statusEmployee,tr.status)=='Hoạt động' ? 'success'
+              :color="checkStatusFrom0(statusEmployee,tr.status)==='Hoạt động' ? 'success'
                       : 'danger'"
             >{{ checkStatusFrom0(statusEmployee,tr.status) }}</vs-chip>
           </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
+          <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
           <vs-td v-if="views.action.viewable" class="d-flex-span">
             <router-link
               tag="button"

@@ -372,6 +372,7 @@ export default {
       axios
         .get("branches")
         .then(res => {
+          this.$store.dispatch('addBranches', res.data.data);
           this.branches = res.data.data;
         })
         .catch(() => {

@@ -26,8 +26,9 @@ export default {
       viewable: true,
       sortKey: "student_name"
     },
-    amount: { text: "Số tiền trả (vnđ)", viewable: true, sortKey: "amount" },
-    total: { text: "Số tiền khách đưa", viewable: true, sortKey: "total" },
+    amount: { text: "thanh toán (vnđ)", viewable: true, sortKey: "amount" },
+    total: { text: "tiền khách đưa", viewable: false, sortKey: "total" },
+    coupon: { text: "khuyến mại", viewable: true, sortKey: "" },
     note: { text: "ghi chú", viewable: false, sortKey: "note" },
     source: { text: "pt thanh toán", viewable: true, sortKey: "source" },
     created_at: { text: "Ngày tạo", viewable: false, sortKey: "created_at" },

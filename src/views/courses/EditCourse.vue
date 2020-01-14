@@ -24,97 +24,14 @@
                   <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in status" />
               </vs-select>
               <!--chương chình học-->
-                  <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
-                      <label class="vs-input--label">Chương trình học</label>
-                      <vue-simple-suggest
-                              v-model="selectedProgram"
-                              mode="select"
-                              ref="suggestComponentPrograms"
-                              placeholder="Search information..."
-                              value-attribute="id"
-                              display-attribute="name"
-                              :list="getPrograms"
-                              :debounce="200"
-                              :filter-by-query="false"
-                              @select="onSuggestSelectProgram">
-                          <div class="g">
-                              <input type="text" :value="coursesGetInfo.program.name" placeholder="Search information...">
-                          </div>
-                          <template slot="misc-item-above" slot-scope="{ suggestions, query }">
-                              <div class="misc-item">
-                                  <span>You're searching for '{{ query }}'.</span>
-                              </div>
-
-                              <template v-if="suggestions.length > 0">
-                                  <div class="misc-item">
-                                      <span>{{ suggestions.length }} suggestions are shown...</span>
-                                  </div>
-                                  <hr>
-                              </template>
-
-                              <div class="misc-item" v-else-if="!loading">
-                                  <span>No results</span>
-                              </div>
-                          </template>
-
-                          <div slot="suggestion-item" slot-scope="{ suggestion, query }">
-                              <div class="text">
-                                  <span>{{ suggestion.name | truncate(40) }}</span>
-                              </div>
-                          </div>
-
-                          <div class="misc-item" slot="misc-item-below" slot-scope="{ suggestions }" v-if="loading">
-                              <span>Loading...</span>
-                          </div>
-                      </vue-simple-suggest>
-                  </div>
-              <!--chin nhánh-->
-              <div v-if="coursesGetInfo.id">
-                  <div class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary">
-                      <label class="vs-input--label">Chi nhánh</label>
-                      <vue-simple-suggest v-model="selectedBranch"
-                                          mode="select"
-                                          ref="suggestComponentBranches"
-                                          placeholder="Search information..."
-                                          value-attribute="id"
-                                          display-attribute="name"
-                                          :list="getBranches"
-                                          :debounce="200"
-                                          :filter-by-query="false"
-                                          @select="onSuggestSelectBranch">
-                          <div class="g">
-                              <input type="text" :value="coursesGetInfo.branch.name" placeholder="Search information...">
-                          </div>
-                          <template slot="misc-item-above" slot-scope="{ suggestions, query }">
-                              <div class="misc-item">
-                                  <span>You're searching for '{{ query }}'.</span>
-                              </div>
-
-                              <template v-if="suggestions.length > 0">
-                                  <div class="misc-item">
-                                      <span>{{ suggestions.length }} suggestions are shown...</span>
-                                  </div>
-                                  <hr>
-                              </template>
-
-                              <div class="misc-item" v-else-if="!loading">
-                                  <span>No results</span>
-                              </div>
-                          </template>
-
-                          <div slot="suggestion-item" slot-scope="{ suggestion, query }">
-                              <div class="text">
-                                  <span>{{ suggestion.name | truncate(40) }}</span>
-                              </div>
-                          </div>
-
-                          <div class="misc-item" slot="misc-item-below" slot-scope="{ suggestions }" v-if="loading">
-                              <span>Loading...</span>
-                          </div>
-                      </vue-simple-suggest>
-                  </div>
-              </div>
-                  <vs-input label="Thời lượng " name="number_of_lessons" v-model="coursesGetInfo.number_of_lessons" type="number" class="mt-5 w-full" />
+              
+              <vx-search-ajax
+                text="Chương trình học "
+                :link-api="`branches/${branchId}/programs`"
+                :change.sync="courses.program_id"
+                get-attribute="id"
+                :data="coursesGetInfo.program" />
+              <vs-input label="Thời lượng " name="number_of_lessons" v-model="coursesGetInfo.number_of_lessons" type="number" class="mt-5 w-full" />
             </div>
         </VuePerfectScrollbar>
 
@@ -144,52 +61,25 @@ export default {
       required: false
     }
   },
-  created (){
-    this.onSuggestSelectProgram();
+  data() {
+    return {
+      language: "vi",
+      languages: lang,
+      disabled: true,
+      settings: { // perfectscrollbar settings
+        maxScrollbarLength: 60,
+        wheelSpeed: .60,
+      },
+      status: this.$store.state.model.courses.status,
+      selectedProgram : null,
+      loading: false,
+      courses : {
+        program_id : null,
+        branch_id :null,
+      }
+    };
   },
   methods: {
-    onSuggestSelectProgram(suggest) {
-      if (suggest) {
-        this.courses.program_id = suggest.id;
-      }
-    },
-    onSuggestSelectBranch(suggest) {
-      if (suggest) {
-        this.courses.branch_id = suggest.id;
-      }
-    },
-    getPrograms(search = '') {
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http.get(`branches/${this.branchId}/programs`, {
-          params: {
-            search: search
-          }
-        })
-          .then(function (response) {
-            resolve(response.data.data);
-          }).catch((e) => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
-    },
-    getBranches(search = ''){
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http.get('branches', {
-          params: {
-            search: search
-          }
-        })
-          .then(function (response) {
-            resolve(response.data.data);
-          }).catch((e) => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
-    },
     updateCourse(course) {
       this.$vs.loading({
         background: '#1E6DB5',
@@ -204,7 +94,6 @@ export default {
         status : course.status,
         end_at : course.end_at,
         program_id : this.courses.program_id || this.coursesGetInfo.program_id,
-        branch_id : this.courses.branch_id || this.coursesGetInfo.branch_id,
         number_of_lessons : course.number_of_lessons
       }, {
       })
@@ -234,29 +123,6 @@ export default {
           this.$vs.loading.close('#button-with-loading > .con-vs-loading');
         });
     },
-  },
-  mounted(){
-    this.getPrograms();
-    this.getBranches();
-  },
-  data() {
-    return {
-      language: "vi",
-      languages: lang,
-      disabled: true,
-      settings: { // perfectscrollbar settings
-        maxScrollbarLength: 60,
-        wheelSpeed: .60,
-      },
-      status: this.$store.state.model.courses.status,
-      selectedProgram : null,
-      selectedBranch : null,
-      loading: false,
-      courses : {
-        program_id : null,
-        branch_id :null,
-      }
-    };
   },
   computed: {
     isSidebarActiveLocal: {

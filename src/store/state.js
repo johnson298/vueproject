@@ -17,6 +17,7 @@ function checkBranch() {
 }
 const state = {
   configuration: null,
+  branches: null,
   getBranchId: checkBranch(),
   isSidebarActive: true,
   breakpoint: null,
@@ -95,12 +96,12 @@ const state = {
     },
     coupons: {
       type: [
-        { text: "Theo tỉ lệ", value: 1 },
+        { text: "Theo tỉ lệ %", value: 1 },
         { text: "Theo số tiền", value: 2 }
       ],
       status: [
-        { text: "Không khả dụng", value: 1 },
-        { text: "Khuyến mại", value: 2 }
+        { text: "Khả dụng", value: 1 },
+        { text: "Không khả dụng", value: 2 }
       ]
     },
     teachers: {

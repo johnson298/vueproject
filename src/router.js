@@ -475,15 +475,6 @@ const router = new Router({
               }
             }
           ]
-        },
-        {
-          path: "/notifications",
-          name: "notificationUser",
-          component: () => import("./views/notification/ListNotification.vue"),
-          meta: {
-            breadcrumb: [{ title: "Thông báo", url: "/" }],
-            pageTitle: "Thông báo"
-          }
         }
       ]
     },

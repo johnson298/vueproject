@@ -13,6 +13,7 @@ import VxCardCustom from "./components/vx-card-custom/VxCardCustom.vue";
 import "vue-simple-suggest/dist/styles.css";
 import VueCard from "./components/vue-card/VueCard.vue";
 import VxUploadImage from "./components/vx-upload-image/VxUploadImage.vue";
+import VxSearchAjax from './components/vs-search-ajax/VxSearchAjax.vue';
 
 Vue.component(VxTooltip.name, VxTooltip);
 Vue.component(VxCard.name, VxCard);
@@ -27,3 +28,4 @@ Vue.component("vs-table-custom", VsTable);
 Vue.component("v-select", vSelect);
 Vue.component("vue-simple-suggest", VueSimpleSuggest);
 Vue.component("vx-upload-image", VxUploadImage);
+Vue.component("vx-search-ajax", VxSearchAjax);

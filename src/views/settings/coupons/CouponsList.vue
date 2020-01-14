@@ -1,15 +1,24 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
 
-    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData" />
-    <edit-coupon-sidebar :isSidebarEditActive="editCouponSidebar" @closeSidebar="editCouponSidebar = false" :couponInfo="couponGetInfo" :getData="getData" />
+    <add-new-data-sidebar
+      :isSidebarActive="addNewDataSidebar"
+      @closeSidebar="addNewDataSidebar = $event"
+      :callback="getData"
+      v-if="addNewDataSidebar"/>
+    <edit-coupon-sidebar
+      :isSidebarEditActive="editCouponSidebar"
+      @closeSidebar="editCouponSidebar = $event"
+      :couponInfo="couponGetInfo"
+      :getData="getData"
+      v-if="editCouponSidebar" />
 
     <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="coupons" search id="table" maxItems="10">
 
       <div slot="header" class="flex flex-wrap-reverse items-center flex-grow justify-between">
 
         <div class="flex flex-wrap-reverse items-center">
-          
+
           <!-- ACTION - DROPDOWN -->
           <vs-dropdown vs-trigger-click class="cursor-pointer mr-4 mb-4">
 
@@ -67,44 +76,21 @@
 
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.type.viewable">
-            <p class="product-name font-medium">{{ tr.type }}</p>
-          </vs-td>
-          <vs-td v-if="views.discount_rate.viewable">
-            <p class="product-name font-medium">{{ tr.discount_rate }}%</p>
-          </vs-td>
-
-          <vs-td v-if="views.discount_amount.viewable">
-            <p class="product-name font-medium">{{ formatPrice(tr.discount_amount) }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.type.viewable">{{ tr.type === 1 ? 'Theo tỷ lệ %' : 'Theo số tiền' }}</vs-td>
+          <vs-td v-if="views.discount_amount.viewable">{{  tr.type === 1 ? `${tr.discount_rate}%`: `${formatPrice(tr.discount_amount)}vnđ` }}</vs-td>
+          <vs-td v-if="views.coupons_limit.viewable">{{ tr.coupons_limit }}</vs-td>
+          <vs-td v-if="views.coupons_code.viewable">{{ tr.coupons_code }}</vs-td>
           <vs-td v-if="views.status.viewable">
-            
-            <p class="product-category">
-              <vs-chip 
-              :color="checkStatus(statusCoupon,tr.status)=='Không khả dụng' ? 'danger' 
-                      : checkStatus(statusCoupon,tr.status)=='Khuyến mại' ? 'success'
-                      : ''">{{ checkStatus(statusCoupon,tr.status) }}</vs-chip>
-
-            </p>
+              <vs-chip
+              :color="checkStatus(statusCoupon,tr.status)==='Khả dụng' ? 'success' : 'danger'">{{ checkStatus(statusCoupon,tr.status) }}</vs-chip>
           </vs-td>
-
-          <vs-td v-if="views.note.viewable">
-            <p class="product-category">{{ tr.note }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.note.viewable">{{ tr.note }}</vs-td>
+          <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
+          <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
           <vs-td v-if="views.action.viewable" class="d-flex-span">
             <vs-button radius color="primary" size="small" @click="getIdCoupon(tr.id)"
             class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
-            <vs-button radius color="danger" size="small" @click="deleteCoupon(tr)" icon="delete_forever"></vs-button>
+            <vs-button radius color="danger" size="small" @click="deleteCoupon(tr)" icon="delete_forever"/>
           </vs-td>
         </vs-tr>
       </template>
