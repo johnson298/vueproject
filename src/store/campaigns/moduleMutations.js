@@ -2,7 +2,7 @@ export default {
 
   // mutations notification
   UPDATE_TABLE(state, payload) {
-    state.campaigns = payload.campaigns;
+    state.notifications = payload.notifications;
     state.pagination = payload.pagination;
   },
   UPDATE_ORDER(state, payload){

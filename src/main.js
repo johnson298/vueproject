@@ -51,10 +51,10 @@ require("./assets/css/iconfont.css");
 // font awesome
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faUserSecret, faSitemap, faPlayCircle, faUsers, faUserTie, faGraduationCap, faHandHoldingUsd, faFileInvoiceDollar, faUserFriends, faTools, faChartPie, faHandshake, faLayerGroup, faListAlt, faHome, faBuilding, faFilePdf, faEnvelope, faUsersCog, faCog, faCodeBranch, faDollarSign, faFilter, faInfoCircle, faWindowRestore, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faUserSecret, faSitemap, faPlayCircle, faUsers, faUserTie, faGraduationCap, faHandHoldingUsd, faFileInvoiceDollar, faUserFriends, faTools, faChartPie, faHandshake, faLayerGroup, faListAlt, faHome, faBuilding, faFilePdf, faEnvelope, faUsersCog, faCog, faCodeBranch, faDollarSign, faFilter, faInfoCircle, faWindowRestore, faEye, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add( faUserSecret, faSitemap, faPlayCircle, faUsers, faUserTie, faGraduationCap, faHandHoldingUsd, faFileInvoiceDollar, faUserFriends, faTools, faChartPie, faHandshake, faLayerGroup, faListAlt, faHome, faBuilding, faFilePdf, faEnvelope, faUsersCog, faCog, faCodeBranch, faDollarSign, faFilter, faInfoCircle, faWindowRestore, faEye );
+library.add( faUserSecret, faSitemap, faPlayCircle, faUsers, faUserTie, faGraduationCap, faHandHoldingUsd, faFileInvoiceDollar, faUserFriends, faTools, faChartPie, faHandshake, faLayerGroup, faListAlt, faHome, faBuilding, faFilePdf, faEnvelope, faUsersCog, faCog, faCodeBranch, faDollarSign, faFilter, faInfoCircle, faWindowRestore, faEye, faPlus );
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 // VeeValidate

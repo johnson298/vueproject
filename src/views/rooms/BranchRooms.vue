@@ -4,12 +4,14 @@
       :isSidebarActive="addNewDataSidebar"
       @closeSidebar="addNewDataSidebar = false"
       :callback="getData"
+      v-if="addNewDataSidebar"
     />
     <edit-sidebar
       :isSidebarEditActive="editSidebar"
       @closeSidebar="editSidebar = false"
       :roomGetInfo="roomGetInfo"
       :getData="getData"
+      v-if="editSidebar"
     />
 
     <vs-table-custom

@@ -1,10 +1,17 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
     <vs-popup class="popup-custom-968" title="Thêm mới đánh giá" :active.sync="addNew">
-      <add-evaluate :active.sync="addNew" @closePopupAdd="addNew = $event"></add-evaluate>
+      <add-evaluate
+        :active.sync="addNew"
+        @closePopupAdd="addNew = $event"
+        v-if="addNew"
+        @callback="getData"></add-evaluate>
     </vs-popup>
-    <vs-popup class="popup-custom-768" title="Chi tiết đánh giá" :active.sync="detailValuate">
-      <detail-evaluate :active.sync="detailValuate" @closePopupDetail="detailValuate = $event"></detail-evaluate>
+    <vs-popup class="popup-custom-768" title="Chi tiết đánh giá" :active.sync="detailValuate" v-if="detailValuate">
+      <detail-evaluate
+        :active.sync="detailValuate"
+        @closePopupDetail="detailValuate = $event"
+        :getInfoEvaluate="evaluateInfo"></detail-evaluate>
     </vs-popup>
     <vs-table-custom
       :sst="true"
@@ -69,7 +76,7 @@
             @click="addNew = true"
           >
             <feather-icon icon="Upload" svgClasses="h-4 w-4" />
-            <span class="ml-2 text-base text-primary">Thêm thông báo</span>
+            <span class="ml-2 text-base text-primary">+ Thêm đánh giá</span>
           </div>
         </div>
       </div>
@@ -83,7 +90,9 @@
       </template>
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
+          <vs-td v-if="viewsEvaluate.code.viewable">{{ tr.code }}</vs-td>
           <vs-td v-if="viewsEvaluate.name.viewable">{{ tr.name }}</vs-td>
+          <vs-td v-if="viewsEvaluate.count_question.viewable">{{ tr.count_question ? tr.count_question : 0 }}</vs-td>
           <vs-td v-if="viewsEvaluate.course_name.viewable">
             <router-link tag="a" :to="{name: 'studentregisters', params: {course: tr.course.id}}">{{ tr.course.name }}</router-link>
           </vs-td>
@@ -93,30 +102,27 @@
           </vs-td>
           <vs-td v-if="viewsEvaluate.ratio.viewable">
             <p class="persent-question">
-              <span>{{ $helpers.toPersent(tr.satisfied, (tr.satisfied+tr.very_pleased+tr.very_very_pleased+tr.unsatisfied+tr.very_unsatisfied)) }}</span>
-              - &nbsp;<span class="text-warning">Bình thường</span>
-            </p>
-            <p class="persent-question">
-              <span>{{ $helpers.toPersent(tr.very_pleased, (tr.satisfied+tr.very_pleased+tr.very_very_pleased+tr.unsatisfied+tr.very_unsatisfied)) }}</span>
-              - &nbsp;<span class="text-primary">Hài lòng</span>
-            </p>
-            <p class="persent-question">
-              <span>{{ $helpers.toPersent(tr.very_very_pleased, (tr.satisfied+tr.very_pleased+tr.very_very_pleased+tr.unsatisfied+tr.very_unsatisfied)) }}</span>
+              <span>{{ $helpers.toPersent(2, 9) }}</span>
               - &nbsp;<span class="text-success">Rất hài lòng</span>
             </p>
             <p class="persent-question">
-              <span>{{ $helpers.toPersent(tr.unsatisfied, (tr.satisfied+tr.very_pleased+tr.very_very_pleased+tr.unsatisfied+tr.very_unsatisfied)) }}</span>
-              - &nbsp;<span class="text-muted">Không hài lòng</span>
+              <span>{{ $helpers.toPersent(1, 9) }}</span>
+              - &nbsp;<span class="text-primary">Hài lòng</span>
             </p>
             <p class="persent-question">
-              <span>{{ $helpers.toPersent(tr.very_unsatisfied, (tr.satisfied+tr.very_pleased+tr.very_very_pleased+tr.unsatisfied+tr.very_unsatisfied)) }}</span>
-              - &nbsp;<span class="text-danger">Rất không hài lòng</span>
+              <span>{{ $helpers.toPersent(4, 9) }}</span>
+              - &nbsp;<span class="text-danger">Không hài lòng</span>
+            </p>
+            <p class="persent-question">
+              <span>{{ $helpers.toPersent(2, 9) }}</span>
+              - &nbsp;<span>Khác</span>
             </p>
           </vs-td>
           <vs-td v-if="viewsEvaluate.status.viewable">
             <vs-chip :color="tr.status === 1 ? 'success' : 'warning'">{{ `${tr.status === 0 ? 'Chưa gửi' : 'Đã gửi'}` }}</vs-chip>
           </vs-td>
           <vs-td v-if="viewsEvaluate.branch_name.viewable">{{ tr.branch.name }}</vs-td>
+          <vs-td v-if="viewsEvaluate.content.viewable">{{ tr.content }}</vs-td>
           <vs-td v-if="viewsEvaluate.created_at.viewable">{{ tr.created_at }}</vs-td>
           <vs-td v-if="viewsEvaluate.updated_at.viewable">{{ tr.updated_at }}</vs-td>
           <vs-td v-if="viewsEvaluate.action.viewable" class="d-flex-span">
@@ -126,9 +132,11 @@
                 <i class="feather icon-copy"></i>
               </button>
             </vx-tooltip>
-            <button class="mt-1 vs-component vs-button vs-button-success vs-button-filled includeIcon includeIconOnly small vs-radius" @click="detailValuate = true" >
-              <i class="feather icon-eye"></i>
-            </button>
+            <vx-tooltip text="Chi tiết các câu hỏi">
+              <button class="mt-1 vs-component vs-button vs-button-success vs-button-filled includeIcon includeIconOnly small vs-radius" @click="getInfoEvaluate(tr.id)" >
+                <i class="feather icon-eye"></i>
+              </button>
+            </vx-tooltip>
           </vs-td>
         </vs-tr>
       </template>
@@ -167,6 +175,7 @@ export default {
     return {
       addNew: false,
       detailValuate: false,
+      evaluateInfo: null,
       range_send: this.$store.state.model.campaign.range_send,
       position: this.$store.state.model.campaign.position,
       activeConfirm: false,
@@ -196,6 +205,22 @@ export default {
     }
   },
   methods: {
+    getInfoEvaluate(id){
+      const thisIns = this;
+      thisIns.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
+      this.$http
+        .get(`branches/${thisIns.branchId}/evaluates/${id}`)
+        .then((response) => {
+          this.evaluateInfo = response.data.data;
+          thisIns.detailValuate = true;
+        })
+        .catch(function(error) {
+          thisIns.checkResponRequest(error.response.data);
+        })
+        .finally(function() {
+          thisIns.$vs.loading.close();
+        });
+    },
     updateViews(index, e) {
       this.$store.dispatch("campaigns/updateViewsEvaluate", {
         index: index,
@@ -207,7 +232,7 @@ export default {
     },
     getData(page = 1) {
       const thisIns = this;
-      thisIns.$vs.loading({ color: "#7367F0", text: "Loading..." });
+      thisIns.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
       this.$http
         .get(`branches/${thisIns.branchId}/evaluates`, {
           params: {
@@ -361,7 +386,7 @@ export default {
   display: flex;
   span{
     &:nth-child(1){
-      width: 45px;
+      width: 50px;
     }
     &:nth-child(2){
       flex: 1;

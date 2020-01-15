@@ -1,6 +1,8 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-
+    <vs-popup class="popup-custom-768" title="Tạo mới điểm danh" :active.sync="viewContent">
+      <div v-html="dataContent"></div>
+    </vs-popup>
     <vs-popup class="popup-custom-968" title="Thêm mới thông báo" :active.sync="addNew">
       <add-notification
         :active.sync="addNew"
@@ -8,7 +10,6 @@
         v-if="addNew"
         :callback="getData" />
     </vs-popup>
-
     <vs-table-custom
       :sst="true"
       ref="table"
@@ -92,13 +93,20 @@
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
           <vs-td v-if="views.title.viewable">{{ tr.title }}</vs-td>
-          <vs-td v-if="views.target_type.viewable">{{ tr.target_type }}</vs-td>
+          <vs-td v-if="views.target_type.viewable">{{ $helpers.filterVia(tr.target_type) }}</vs-td>
           <vs-td v-if="views.user.viewable">{{ tr.user.name }}</vs-td>
           <vs-td v-if="views.schedule_at.viewable">{{ tr.schedule_at }}</vs-td>
           <vs-td v-if="views.via.viewable">{{ tr.via ? tr.via.join(', ') : tr.via }}</vs-td>
           <vs-td v-if="views.focus_on.viewable">{{ tr.focus_on === 1 ? "Học viên" : "Giáo viên" }}</vs-td>
-          <vs-td v-if="views.content.viewable">
-            <div v-html="tr.content"></div>
+          <vs-td v-if="views.content.viewable" class="text-center">
+            <vs-button
+              radius
+              color="success"
+              size="small"
+              @click="viewContent = true; dataContent = tr.content"
+              class="vs-component vs-button vs-button-filled includeIcon includeIconOnly small" >
+              <i class="feather icon-message-circle"></i>
+            </vs-button>
           </vs-td>
           <vs-td v-if="views.perform_at.viewable">{{ tr.perform_at }}</vs-td>
           <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
@@ -133,6 +141,8 @@ import AddNotification from "./AddNotification.vue";
 export default {
   data() {
     return {
+      dataContent: null,
+      viewContent: false,
       activeConfirm: false,
       timer: null,
       selected: [],
