@@ -5,7 +5,7 @@
         :active.sync="addNew"
         @closePopupAdd="addNew = $event"
         v-if="addNew"
-        @callback="getData"></add-evaluate>
+        :callback="getData"></add-evaluate>
     </vs-popup>
     <vs-popup class="popup-custom-768" title="Chi tiết đánh giá" :active.sync="detailValuate" v-if="detailValuate">
       <detail-evaluate

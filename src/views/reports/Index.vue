@@ -49,7 +49,7 @@
             <vs-tr>
               <!-- nhân viên -->
               <vs-td class="bg-success text-white">Hoạt động</vs-td>
-              <vs-td class="bg-danger text-white">Hủy</vs-td>
+              <vs-td class="bg-danger text-white">Nghỉ</vs-td>
               <!-- Học viên -->
               <vs-td class="bg-success text-white">Thêm mới</vs-td>
               <vs-td class="bg-warning text-white">Bảo lưu</vs-td>
