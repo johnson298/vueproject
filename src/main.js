@@ -71,6 +71,9 @@ Vue.use(CKEditor);
 // Mixins global
 import "./helpers/mixins";
 
+// vue plugin
+import './vue-plugin';
+
 new Vue({
   router,
   store,

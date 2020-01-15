@@ -13,7 +13,7 @@
       v-model="selected"
       @search="handleSearch"
       @sort="handleSort"
-      :data="campaigns"
+      :data="evaluates"
       search
       id="table"
       maxItems="10"
@@ -44,19 +44,17 @@
               </vs-dropdown-item>
             </vs-dropdown-menu>
           </vs-dropdown>
-
           <!-- ACTION - DROPDOWN -->
           <vs-dropdown class="cursor-pointer mr-4 mb-4">
             <div
               class="p-4 shadow-drop rounded-lg d-theme-dark-bg cursor-pointer flex items-center justify-center text-lg font-medium w-32"
             >
-              <span class="mr-2">Views</span>
+              <span class="mr-2">Xem</span>
               <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
             </div>
-
             <vs-dropdown-menu>
               <div class="col p-2">
-                <div v-for="(value, index) in views" :key="index" class="p-1">
+                <div v-for="(value, index) in viewsEvaluate" :key="index" class="p-1">
                   <vs-checkbox
                     :value="value.viewable"
                     @change="updateViews(index, $event)"
@@ -66,72 +64,71 @@
             </vs-dropdown-menu>
           </vs-dropdown>
           <!-- ADD NEW -->
-
           <div
             class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary"
             @click="addNew = true"
           >
-            <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
-            <span
-              class="ml-2 text-base text-primary"
-              style="color: #636363 !important;"
-            >Thêm đánh giá</span>
+            <feather-icon icon="Upload" svgClasses="h-4 w-4" />
+            <span class="ml-2 text-base text-primary">Thêm thông báo</span>
           </div>
         </div>
       </div>
-
-      <template style="padding-left: 10px" slot="thead">
-        <vs-th>Mã lớp</vs-th>
-        <vs-th>Tên đánh giá</vs-th>
-        <vs-th>Ngày áp dụng</vs-th>
-        <vs-th>Số câu hỏi</vs-th>
-        <vs-th>Người tạo</vs-th>
-        <vs-th>Tỷ lệ đánh giá</vs-th>
-        <vs-th>hành động</vs-th>
+      <template slot="thead">
+        <vs-th
+          :sort-key="value.sortKey"
+          v-for="(value, index) in viewsEvaluate"
+          :key="index"
+          v-if="value.viewable"
+        >{{ value.text }}</vs-th>
       </template>
-
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td>
-            <p class="product-name font-medium">{{ tr.code }}</p>
+          <vs-td v-if="viewsEvaluate.name.viewable">{{ tr.name }}</vs-td>
+          <vs-td v-if="viewsEvaluate.course_name.viewable">
+            <router-link tag="a" :to="{name: 'studentregisters', params: {course: tr.course.id}}">{{ tr.course.name }}</router-link>
           </vs-td>
-          <vs-td>
-            <p class="product-name font-medium">{{ tr.name }}</p>
+          <vs-td v-if="viewsEvaluate.date.viewable">{{ $helpers.dateDMY(tr.date) }}</vs-td>
+          <vs-td v-if="viewsEvaluate.user_name.viewable">
+            <router-link tag="a" :to="{name: 'infoEmployee', params: {employee: tr.user.id}}">{{ tr.user.name }}</router-link>
           </vs-td>
-          <vs-td>
-            <p class="product-name font-medium">{{ tr.date }}</p>
+          <vs-td v-if="viewsEvaluate.ratio.viewable">
+            <p class="persent-question">
+              <span>{{ $helpers.toPersent(tr.satisfied, (tr.satisfied+tr.very_pleased+tr.very_very_pleased+tr.unsatisfied+tr.very_unsatisfied)) }}</span>
+              - &nbsp;<span class="text-warning">Bình thường</span>
+            </p>
+            <p class="persent-question">
+              <span>{{ $helpers.toPersent(tr.very_pleased, (tr.satisfied+tr.very_pleased+tr.very_very_pleased+tr.unsatisfied+tr.very_unsatisfied)) }}</span>
+              - &nbsp;<span class="text-primary">Hài lòng</span>
+            </p>
+            <p class="persent-question">
+              <span>{{ $helpers.toPersent(tr.very_very_pleased, (tr.satisfied+tr.very_pleased+tr.very_very_pleased+tr.unsatisfied+tr.very_unsatisfied)) }}</span>
+              - &nbsp;<span class="text-success">Rất hài lòng</span>
+            </p>
+            <p class="persent-question">
+              <span>{{ $helpers.toPersent(tr.unsatisfied, (tr.satisfied+tr.very_pleased+tr.very_very_pleased+tr.unsatisfied+tr.very_unsatisfied)) }}</span>
+              - &nbsp;<span class="text-muted">Không hài lòng</span>
+            </p>
+            <p class="persent-question">
+              <span>{{ $helpers.toPersent(tr.very_unsatisfied, (tr.satisfied+tr.very_pleased+tr.very_very_pleased+tr.unsatisfied+tr.very_unsatisfied)) }}</span>
+              - &nbsp;<span class="text-danger">Rất không hài lòng</span>
+            </p>
           </vs-td>
-          <vs-td>
-            <p class="product-name font-medium">{{ tr.count }}</p>
+          <vs-td v-if="viewsEvaluate.status.viewable">
+            <vs-chip :color="tr.status === 1 ? 'success' : 'warning'">{{ `${tr.status === 0 ? 'Chưa gửi' : 'Đã gửi'}` }}</vs-chip>
           </vs-td>
-          <vs-td>
-            <p class="product-name font-medium">{{ tr.memberCreate }}</p>
-          </vs-td>
-          <vs-td>
-            <p class="product-name font-medium" v-html="tr.dg"></p>
-          </vs-td>
-          <vs-td class="d-flex-span">
+          <vs-td v-if="viewsEvaluate.branch_name.viewable">{{ tr.branch.name }}</vs-td>
+          <vs-td v-if="viewsEvaluate.created_at.viewable">{{ tr.created_at }}</vs-td>
+          <vs-td v-if="viewsEvaluate.updated_at.viewable">{{ tr.updated_at }}</vs-td>
+          <vs-td v-if="viewsEvaluate.action.viewable" class="d-flex-span">
             <vx-tooltip text="copy sang bản mới">
-              <div
-                class="mt-1 mr-1 vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small vs-radius"
-                @click="detailValuate = true"
-              >
+              <button class="mt-1 mr-1 vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small vs-radius"
+                @click="detailValuate = true" >
                 <i class="feather icon-copy"></i>
-              </div>
+              </button>
             </vx-tooltip>
-            <div
-              class="mt-1 vs-component vs-button vs-button-success vs-button-filled includeIcon includeIconOnly small vs-radius"
-              @click="detailValuate = true"
-            >
+            <button class="mt-1 vs-component vs-button vs-button-success vs-button-filled includeIcon includeIconOnly small vs-radius" @click="detailValuate = true" >
               <i class="feather icon-eye"></i>
-            </div>
-            <vs-button
-              radius
-              color="danger"
-              size="small"
-              @click="deleteCampaign(tr)"
-              icon="delete_forever"
-            ></vs-button>
+            </button>
           </vs-td>
         </vs-tr>
       </template>
@@ -139,7 +136,7 @@
     <div class="con-vs-pagination vs-pagination-primary">
       <nav class="vs-pagination--nav">
         <paginate
-          :page-count="pagination.totalPages"
+          :page-count="paginationEvaluate.totalPages"
           :page-range="3"
           :margin-pages="2"
           :active-class="'is-current'"
@@ -148,7 +145,7 @@
           :prev-text="prev"
           :next-text="next"
           :click-handler="getData"
-          :value="pagination.currentPage"
+          :value="paginationEvaluate.currentPage"
           ref="paginate"
         />
       </nav>
@@ -170,16 +167,6 @@ export default {
     return {
       addNew: false,
       detailValuate: false,
-      campaigns: [
-        {
-          code: "TA_01",
-          name: "Tiếng anh giao tiếp",
-          date: "21-08-2019",
-          count: 5,
-          memberCreate: "John Smith",
-          dg: "50% - rất hài lòng <br> 30% - hài lòng <br> 20% - không hài lòng"
-        }
-      ],
       range_send: this.$store.state.model.campaign.range_send,
       position: this.$store.state.model.campaign.position,
       activeConfirm: false,
@@ -192,51 +179,25 @@ export default {
         '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-next"><i class="vs-icon notranslate icon-scale material-icons null">chevron_right</i></button>'
     };
   },
+  created(){
+    this.getData();
+  },
   computed: {
     ...mapState("campaigns", [
-      "users",
-      "pagination",
-      "searchTerm",
-      "order",
-      "views",
-      "needReload"
-    ])
+      "evaluates",
+      "paginationEvaluate",
+      "searchTermEvaluate",
+      "orderEvaluate",
+      "viewsEvaluate",
+      "needReloadEvaluate"
+    ]),
+    branchId(){
+      return this.$store.state.getBranchId;
+    }
   },
   methods: {
-    deleteCampaign(user) {
-      this.$vs.dialog({
-        type: "confirm",
-        color: "danger",
-        title: `Xóa nhân viên`,
-        text: "Bạn có chắc muốn xóa " + user.name,
-        accept: this.campaignAlert,
-        parameters: [user.id]
-      });
-    },
-    campaignAlert(user_id) {
-      this.$http
-        .delete("users/" + user_id)
-        .then(() => {
-          this.$vs.notify({
-            color: "success",
-            title: "Xóa nhân viên",
-            text: "Bạn đã xóa thành công",
-            icon: "verified_user"
-          });
-          this.getData();
-        })
-        .catch(() => {
-          this.$vs.notify({
-            title: "Error!",
-            text: "Bạn không xóa thành công",
-            iconPack: "feather",
-            icon: "fa fa-lg fa-exclamation-triangle",
-            color: "danger"
-          });
-        });
-    },
     updateViews(index, e) {
-      this.$store.dispatch("campaigns/updateViews", {
+      this.$store.dispatch("campaigns/updateViewsEvaluate", {
         index: index,
         viewable: e.target.checked
       });
@@ -248,17 +209,17 @@ export default {
       const thisIns = this;
       thisIns.$vs.loading({ color: "#7367F0", text: "Loading..." });
       this.$http
-        .get("users", {
+        .get(`branches/${thisIns.branchId}/evaluates`, {
           params: {
             page: page,
             search: this.searchTerm,
-            orderBy: this.order.orderBy,
-            sortedBy: this.order.orderType
+            orderBy: this.orderEvaluate.orderBy,
+            sortedBy: this.orderEvaluate.orderType
           }
         })
         .then(function(response) {
-          thisIns.$store.dispatch("campaigns/updateTable", {
-            users: thisIns.formatData(response.data.data),
+          thisIns.$store.dispatch("campaigns/updateTableEvaluate", {
+            data: thisIns.formatData(response.data.data),
             pagination: response.data.pagination
           });
         })
@@ -277,11 +238,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch("campaigns/updateNeedReload", true);
+        this.$store.dispatch("campaigns/updateNeedReloadEvaluate", true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch("campaigns/updateSearch", {
+      this.$store.dispatch("campaigns/updateSearchEvaluate", {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -290,24 +251,21 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch("campaigns/updateOrder", {
+      this.$store.dispatch("campaigns/updateOrderEvaluate", {
         order: {
           orderBy: key,
           orderType: active ? "desc" : "asc"
         }
       });
-      this.getData(this.pagination.currentPage);
+      this.getData(this.paginationEvaluate.currentPage);
     }
   },
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.users.length === 0) {
-      this.getData();
-    }
   },
   destroyed() {
-    this.$store.dispatch("campaigns/updateNeedReload", false);
+    this.$store.dispatch("campaigns/updateNeedReloadEvaluate", false);
   }
 };
 </script>
@@ -396,6 +354,17 @@ export default {
     display: flex;
     button {
       margin: 3px;
+    }
+  }
+}
+.persent-question{
+  display: flex;
+  span{
+    &:nth-child(1){
+      width: 45px;
+    }
+    &:nth-child(2){
+      flex: 1;
     }
   }
 }

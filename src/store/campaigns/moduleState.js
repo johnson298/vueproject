@@ -1,5 +1,7 @@
 export default {
-  campaigns: [],
+
+  // notifications
+  notifications: [],
   pagination: {
     count: 0,
     total: 0,
@@ -25,5 +27,35 @@ export default {
     created_at: { text: "ngày tạo", viewable: false, sortKey: "created_at" },
     updated_at: { text: "ngày cập nhật", viewable: false, sortKey: "updated_at" }
   },
-  needReload: false
+  needReload: false,
+
+
+  // evaluatesList
+  evaluates: [],
+  paginationEvaluate: {
+    count: 0,
+    total: 0,
+    perPage: 0,
+    currentPage: 0,
+    totalPages: 0,
+    links: []
+  },
+  searchTermEvaluate: "",
+  orderEvaluate: {
+    orderBy: "id",
+    orderType: "desc"
+  },
+  viewsEvaluate: {
+    name: { text: "Tên đánh giá", viewable: true, sortKey: "title" },
+    course_name: { text: "tên lớp", viewable: true, sortKey: "" },
+    date: { text: "ngày áp dụng", viewable: true, sortKey: "date" },
+    user_name: { text: "người tạo", viewable: false, sortKey: "" },
+    ratio: { text: "tỉ lệ đánh giá", viewable: true, sortKey: "" },
+    status: { text: "trạng thái", viewable: true, sortKey: "status" },
+    branch_name: { text: "chi nhánh", viewable: false, sortKey: "" },
+    created_at: { text: "ngày tạo", viewable: false, sortKey: "created_at" },
+    updated_at: { text: "ngày cập nhật", viewable: false, sortKey: "updated_at" },
+    action: { text: "hành động", viewable: true, sortKey: "" },
+  },
+  needReloadEvaluate: false
 };

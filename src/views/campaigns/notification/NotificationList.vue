@@ -16,7 +16,7 @@
       v-model="selected"
       @search="handleSearch"
       @sort="handleSort"
-      :data="campaigns"
+      :data="notifications"
       search
       id="table"
       maxItems="10"
@@ -149,7 +149,7 @@ export default {
   },
   computed: {
     ...mapState("campaigns", [
-      "campaigns",
+      "notifications",
       "pagination",
       "searchTerm",
       "order",
@@ -187,7 +187,7 @@ export default {
         })
         .then(function(response) {
           thisIns.$store.dispatch("campaigns/updateTable", {
-            campaigns: thisIns.formatData(response.data.data),
+            notifications: thisIns.formatData(response.data.data),
             pagination: response.data.pagination
           });
         })
