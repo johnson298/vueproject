@@ -15,17 +15,18 @@
                   <vs-input label="Học phí" name="price" type="text" v-model="coursesGetInfo.price" class="mt-5 w-full" />
               <!-- ngày bắt đầu học -->
                   <label for="" class="vs-input--label mt-5">Ngày bắt đầu</label>
-                  <datepicker :fullMonthName="true" v-model="formatDateStartAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.start_at" class="w-full picker-custom" placeholder="chọn ngày bắt đầu"></datepicker>
+                  <datepicker :fullMonthName="true" v-model="formatDateStartAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.start_at" class="w-full picker-custom mb-5" placeholder="chọn ngày bắt đầu"></datepicker>
               <!--Ngày kết thúc-->
                   <label for="" class="vs-input--label mt-5">Ngày kết thúc</label>
-                  <datepicker :fullMonthName="true" v-model="formatDateEndAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.end_at" class="w-full picker-custom" placeholder="chọn ngày kết thúc"></datepicker>
+                  <datepicker :fullMonthName="true" v-model="formatDateEndAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.end_at" class="w-full picker-custom mb-5" placeholder="chọn ngày kết thúc"></datepicker>
               <!--trạng thái-->
               <vs-select v-model="coursesGetInfo.status" label="Trạng thái" class="mt-5 w-full">
                   <vs-select-item :key="item.value" :value="item.value" :text="item.text" v-for="item in status" />
               </vs-select>
               <!--chương chình học-->
-              
+
               <vx-search-ajax
+                class="mt-5"
                 text="Chương trình học "
                 :link-api="`branches/${branchId}/programs`"
                 :change.sync="courses.program_id"

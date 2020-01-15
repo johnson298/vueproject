@@ -458,7 +458,7 @@ const router = new Router({
               path: "/",
               name: "campaignsNotification",
               component: () =>
-                import("./views/campaigns/notification/Notification.vue"),
+                import("./views/campaigns/notification/NotificationList.vue"),
               meta: {
                 breadcrumb: [{ title: "Thông báo", url: "/" }],
                 pageTitle: "Thông báo"
@@ -468,7 +468,7 @@ const router = new Router({
               path: "/campaigns/evaluate",
               name: "campaignsEvaluate",
               component: () =>
-                import("./views/campaigns/evaluate/Evaluate.vue"),
+                import("./views/campaigns/evaluate/EvaluatesList.vue"),
               meta: {
                 breadcrumb: [{ title: "Đánh giá", url: "/" }],
                 pageTitle: "Đánh giá"

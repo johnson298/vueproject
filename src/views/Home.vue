@@ -122,16 +122,16 @@ export default {
     analyticsData,
     VueApexCharts,
     StatisticsCardLine,
-    HelloUser: HelloUser,
-    TotalEmployees: TotalEmployees,
-    TotalStudents: TotalStudents,
-    TotalPrograms: TotalPrograms,
-    TotalCourses: TotalCourses,
-    TotalCustomer: TotalCustomer,
-    TableEmployees: TableEmployees,
-    TableStudents: TableStudents,
-    TableCustomer: TableCustomer,
-    TotalRevenueExpenditure: TotalRevenueExpenditure
+    HelloUser,
+    TotalEmployees,
+    TotalStudents,
+    TotalPrograms,
+    TotalCourses,
+    TotalCustomer,
+    TableEmployees,
+    TableStudents,
+    TableCustomer,
+    TotalRevenueExpenditure
   },
   computed: {
     user_displayName() {
