@@ -2,22 +2,26 @@
   <div>
     <div>
       <div class="vs-row">
-        <div class="vs-col sm:w-1/4 w-full mb-5">
-          <vs-input label="Mã đánh giá" placeholder="Mã ID" class="w-full" disabled />
+        <div class="vs-col sm:w-1/3 w-full mb-5">
+          <vs-input label="Tên đánh giá" placeholder="Tên chiến dịch" class="w-full" v-model="evaluate.name"/>
         </div>
-        <div class="vs-col sm:w-1/4 w-full mb-5">
-          <vs-input label="Tên đánh giá" placeholder="Tên chiến dịch" class="w-full" />
+        <div class="vs-col sm:w-1/3 w-full mb-5">
+          <div class="vs-component vs-con-input-label vs-input w-full vs-input-primary">
+            <vx-search-ajax
+              text="Lớp học "
+              :link-api="`branches/${branchId}/courses`"
+              :change.sync="evaluate.course_id"
+              get-attribute="id"
+            />
+          </div>
         </div>
-        <div class="vs-col sm:w-1/4 w-full mb-5">
-          <vs-input label="Lớp đánh giá" placeholder="Chọn lớp đánh giá" class="w-full" />
-        </div>
-        <div class="vs-col sm:w-1/4 w-full mb-5">
+        <div class="vs-col sm:w-1/3 w-full mb-5">
           <label class="vs-input--label">Ngày áp dụng</label>
           <flat-pickr
             class="w-full picker-custom vs-inputx vs-input--input normal"
             style="border: 1px solid rgba(0, 0, 0, 0.2);"
             :config="configdateTimePicker"
-            v-model="datetime"
+            v-model="evaluate.date"
             placeholder="Lên lịch"
           />
         </div>
@@ -25,7 +29,7 @@
       <div class="vs-row">
         <div class="vs-col w-full mb-5">
           <div class="note">
-            <label class="vs-input--label">Nghi chú</label>
+            <label class="vs-input--label">Nội dung đánh giá</label>
           </div>
           <vs-textarea
             style="border: solid 1px #dddddd"
@@ -34,69 +38,19 @@
             type="text"
             class="w-full"
             :rows="4"
+            v-model="evaluate.content"
           />
         </div>
       </div>
-      <h5>Thêm câu hỏi đánh giá:</h5>
-      <div>
-        <div class="vs-row" v-for="(row, index) in questions" :key="index">
-          <div class="vs-col w-full mt-5">
-            <div>
-              <label class="vs-input--label">Câu hỏi: {{index+1}}</label>
-            </div>
-            <div class="vs-row">
-              <div class="vs-col sm:w-5/6 pl-0">
-                <vs-input placeholder="Câu hỏi ..." v-model="row.name" class="w-full" />
-              </div>
-              <div class="vs-col sm:w-1/6 pl-0">
-                <vs-button
-                  color="danger"
-                  class="ml-3"
-                  icon="delete_forever"
-                  @click.prevent="deleteRow(index)"
-                ></vs-button>
-              </div>
-            </div>
-            <div class="vs-row" v-for="(answer, index) in row.answers" :key="index">
-              <div class="vs-col mt-5 w-full">
-                <div class="vs-row">
-                  <label class="vs-input--label">Câu trả lời: {{index+1}}</label>
-                </div>
-                <div class="vs-row">
-                  <div class="vs-col sm:w-1/10 pl-0 pr-0">
-                    <vs-checkbox v-model="answer.check"></vs-checkbox>
-                  </div>
-                  <div class="vs-col sm:w-2/3 pl-0 pr-0">
-                    <vs-input placeholder="Câu trả lời..." v-model="answer.name" class="w-full" />
-                  </div>
-                  <div class="vs-col sm:w-1/10">
-                    <div class="vs-row">
-                      <div class="vs-col sm:w-1/2 pl-0">
-                        <vs-button color="success" @click.prevent="addAnswer(row)">
-                          <i class="feather icon-plus"></i>
-                        </vs-button>
-                      </div>
-                      <div class="vs-col sm:w-1/2 pl-0">
-                        <vs-button
-                          color="danger"
-                          class="ml-3"
-                          icon="delete_forever"
-                          @click.prevent="deleteAnswer(row,index)"
-                        ></vs-button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="vs-row">
-          <div class="vs-col mt-5">
-            <vs-button color="success" @click.prevent="addRow">+ câu hỏi</vs-button>
-          </div>
-        </div>
+      <h5 class="pl-5 mb-5">Thêm câu hỏi:</h5>
+      <div class="mb-5 px-5 d-flex align-end" v-for="(row, index) in evaluate.question" :key="index">
+        <vs-input :label="`Câu hỏi ${index + 1}`" v-model="evaluate.question[index]" class="w-full"></vs-input>
+        <vs-button radius color="danger" class="ml-3" icon="delete_forever" @click.prevent="deleteRow(index)" ></vs-button>
+      </div>
+      <div class="mt-5 px-5">
+        <vs-button color="success" @click.prevent="addRow" size="small">
+          <font-awesome-icon icon="plus" />
+        </vs-button>
       </div>
     </div>
     <div class="flex flex-wrap items-center flex-row-reverse p-6 action-footer">
@@ -106,14 +60,15 @@
           type="filled"
           color="primary"
           ref="addButton"
-          id="btn-loading"
-        >Thêm</vs-button>
+          id="button-with-loading"
+          @click="createEvaluate"
+        >Thêm </vs-button>
         <vs-button
           class="ml-3"
           type="filled"
           color="danger"
           @click="$emit('closePopupAdd', false)"
-        >Hủy</vs-button>
+        >Hủy </vs-button>
       </vs-col>
     </div>
   </div>
@@ -124,7 +79,6 @@ import vSelect from "vue-select";
 import Datepicker from "vuejs-datepicker";
 import * as lang from "vuejs-datepicker/src/locale";
 import "video.js/dist/video-js.css";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import flatPickr from "vue-flatpickr-component";
 import "@/assets/css/flatpickr.css";
 
@@ -137,43 +91,23 @@ export default {
   },
   data() {
     return {
-      questions: [
-        {
-          name: "",
-          answers: [
-            {
-              name: "",
-              check: false
-            }
-          ]
-        }
-      ],
-      radios2: "1",
-      datetime: null,
       configdateTimePicker: {
         enableTime: true,
-        dateFormat: "d-m-Y H:i"
+        dateFormat: "Y-m-d"
       },
       date: null,
-      editor: ClassicEditor,
-      editorData: "",
-      editorConfig: {
-        // The configuration of the rich-text editor.
-      },
       language: "vi",
       languages: lang,
       disabled: "disabled",
-      selectedBranch: null,
       loading: false,
-      campaign: {
-        birthday: "",
-        range_send: 1,
-        position: 1
-      },
-      selectedProgram: null,
-      selectedCourses: null,
-      range_send: this.$store.state.model.campaign.range_send,
-      position: this.$store.state.model.campaign.position
+      evaluate: {
+        name: null,
+        course_id: null,
+        user_id: JSON.parse(localStorage.getItem('user')).id,
+        date: null,
+        question: ["Giáo viên dạy nhiệt tình ?"],
+        content: null
+      }
     };
   },
   computed: {
@@ -195,159 +129,48 @@ export default {
     flatPickr
   },
   methods: {
-    backPage: function() {
-      window.history.back();
-    },
     addRow() {
-      this.questions.push({ name: "", answers: [{ name: "", check: false }] });
+      this.evaluate.question.push("");
     },
-    addAnswer(row) {
-      row.answers.push({ name: "", check: false });
-    },
-    deleteRow: function(index) {
-      this.questions.splice(index, 1);
-    },
-    deleteAnswer(row, index) {
-      if (index > 0) {
-        row.answers.splice(index, 1);
-      }
-    },
-    onSuggestSelectProgram(suggest) {
-      if (suggest) {
-        this.courses.program_id = suggest.id;
-      }
-    },
-    onSuggestSelectBranch(suggest) {
-      if (suggest) {
-        this.courses.branch_id = suggest.id;
-      }
-    },
-    onSuggestSelectCourses(suggest) {
-      if (suggest) {
-        this.courses.branch_id = suggest.id;
-      }
-    },
-    getCourses(search = "") {
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http
-          .get(`branches/${this.branchId}/courses`, {
-            params: {
-              search: search
-            }
-          })
-          .then(function(response) {
-            resolve(response.data.data);
-          })
-          .catch(e => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
-    },
-    getBranches(search = "") {
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http
-          .get("branches", {
-            params: {
-              search: search
-            }
-          })
-          .then(function(response) {
-            resolve(response.data.data);
-          })
-          .catch(e => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
-    },
-    getPrograms(search = "") {
-      let vm = this;
-      return new Promise((resolve, reject) => {
-        this.$http
-          .get(`branches/${this.branchId}/programs`, {
-            params: {
-              search: search
-            }
-          })
-          .then(function(response) {
-            resolve(response.data.data);
-          })
-          .catch(e => {
-            vm.loading = false;
-            reject(e);
-          });
-      });
+    deleteRow: function (index) {
+      this.evaluate.question.splice(index, 1);
     },
     initValues() {
-      this.invoices = {
-        student_id: null,
-        courses: {
-          course_id: "",
-          price: ""
-        },
-        note: "",
-        source: 3,
-        amount: 0
+      this.evaluate = {
+        name: null,
+        course_id: null,
+        user_id: JSON.parse(localStorage.getItem('user')).id,
+        date: null,
+        question: ["Giáo viên dạy nhiệt tình ?"],
+        content: null
       };
-      null;
     },
-    createCampaign() {
-      this.$vs.loading({
+    createEvaluate(){
+      const thisIns = this;
+      thisIns.$vs.loading({
         background: "#1E6DB5",
         color: "#fff",
-        container: "#btn-loading",
+        container: "#button-with-loading",
         scale: 0.45
       });
-      this.$http
-        .post("invoices", {
-          student_id: this.selectedStudent.id,
-          course_id: this.invoices.courses.id,
-          note: this.invoices.note,
-          source: this.invoices.source,
-          amount: this.invoices.amount
-        })
+      this.$http.post(`branches/${thisIns.branchId}/evaluates`, this.evaluate)
         .then(() => {
-          this.$vs.notify({
+          thisIns.$vs.notify({
             title: "Đã thêm mới thành công",
             text: "OK",
             iconPack: "feather",
             icon: "fa fa-lg fa-check-circle",
             color: "success"
           });
-          this.callback();
-          this.initValues();
+          thisIns.$emit('closePopupAdd', false);
+          thisIns.callback();
+          thisIns.initValues();
         })
-        .catch(error => {
-          if (
-            error.response.status === 500 &&
-            error.response.data.error.hasOwnProperty("validation")
-          ) {
-            let message =
-              error.response.data.error.validation[
-                Object.keys(error.response.data.error.validation)[0]
-              ][0];
-            this.$vs.notify({
-              title: "Validation error!",
-              text: message,
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          } else {
-            this.$vs.notify({
-              title: "Error!",
-              text: "Thêm mới thất bại",
-              iconPack: "feather",
-              icon: "fa fa-lg fa-exclamation-triangle",
-              color: "danger"
-            });
-          }
+        .catch((error) => {
+          thisIns.checkResponRequest(error.response.data, null, null, 'Thêm mới đánh giá thất bại');
         })
         .finally(() => {
-          this.$vs.loading.close("#btn-loading > .con-vs-loading");
+          this.$vs.loading.close("#button-with-loading > .con-vs-loading");
         });
     }
   }
@@ -355,42 +178,44 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.table-border {
-  .vs-table--tbody {
-    border: none;
-    table {
-      th {
-        border: 1px solid #ccc;
-      }
+  .table-border {
+    .vs-table--tbody {
+      border: none;
 
-      td {
-        border: 1px solid #ccc;
+      table {
+        th {
+          border: 1px solid #ccc;
+        }
+
+        td {
+          border: 1px solid #ccc;
+        }
       }
     }
   }
-}
 
-.d-flex {
-  display: flex;
-}
+  .d-flex {
+    display: flex;
+  }
 
-.d-block {
-  display: block;
-}
+  .d-block {
+    display: block;
+  }
 
-.pl-0 {
-  padding-left: 0;
-}
+  .pl-0 {
+    padding-left: 0;
+  }
 
-.border {
-  border: 1px solid #ccc;
-}
+  .border {
+    border: 1px solid #ccc;
+  }
 </style>
 <style>
-.vdp-datepicker.picker-custom input {
-  width: 100% !important;
-}
-.ck-editor__editable_inline {
-  min-height: 200px !important;
-}
+  .vdp-datepicker.picker-custom input {
+    width: 100% !important;
+  }
+
+  .ck-editor__editable_inline {
+    min-height: 200px !important;
+  }
 </style>

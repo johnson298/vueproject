@@ -81,29 +81,14 @@
       </template>
       <template slot-scope="{data}">
         <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-          <vs-td v-if="views.code.viewable">
-            <p class="product-name font-medium">{{ tr.student.code }}</p>
-          </vs-td>
+          <vs-td v-if="views.code.viewable">{{ tr.student.code }}</vs-td>
           <vs-td v-if="views.avatar.viewable">
             <vs-avatar size="55px" :src="tr.student.avatar" :alt="tr.student.avatar" />
           </vs-td>
-
-          <vs-td v-if="views.name.viewable">
-            <p class="product-name font-medium">{{ tr.student.name }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.note.viewable">
-            <p class="product-category">{{ tr.note }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.updated_at.viewable">
-            <p class="product-category">{{ tr.updated_at }}</p>
-          </vs-td>
-
-          <vs-td v-if="views.created_at.viewable">
-            <p class="product-category">{{ tr.created_at }}</p>
-          </vs-td>
-
+          <vs-td v-if="views.name.viewable">{{ tr.student.name }}</vs-td>
+          <vs-td v-if="views.note.viewable">{{ tr.note }}</vs-td>
+          <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
+          <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
           <vs-td v-if="views.action.viewable" class="d-flex-span">
             <label class="vs-component con-vs-radio mr-5 vs-radio-success" checked="true">
               <input
