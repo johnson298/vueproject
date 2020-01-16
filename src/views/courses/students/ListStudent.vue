@@ -125,18 +125,24 @@
           <vs-td v-if="views.name.viewable">{{ tr.student.name }}</vs-td>
           <vs-td v-if="views.status.viewable">
             <div class="d-flex justify-start">
-              <span class="flex items-center px-2 py-1 rounded">
-              <div class="h-3 w-3 rounded-full mr-2 bg-success" ></div>
-              {{ tr.present || 0 }}
-            </span>
-            <span class="flex items-center px-2 py-1 rounded">
-              <div class="h-3 w-3 rounded-full mr-2 bg-warning" ></div>
-              {{ tr.late || 0 }}
-            </span>
-            <span class="flex items-center px-2 py-1 rounded">
-              <div class="h-3 w-3 rounded-full mr-2 bg-danger" ></div>
-              {{ tr.absent || 0 }}
-            </span>
+              <vx-tooltip text="Có mặt">
+                <span class="flex items-center px-2 py-1 rounded">
+                  {{ tr.present || 0 }}
+                  <div class="h-3 w-3 rounded-full ml-2 bg-success" ></div>
+                </span>
+              </vx-tooltip> -
+              <vx-tooltip text="Đi trễ">
+                <span class="flex items-center px-2 py-1 rounded">
+                  {{ tr.late || 0 }}
+                  <div class="h-3 w-3 rounded-full ml-2 bg-warning" ></div>
+                </span>
+              </vx-tooltip> -
+              <vx-tooltip text="Vắng mặt">
+                <span class="flex items-center px-2 py-1 rounded">
+                  {{ tr.absent || 0 }}
+                  <div class="h-3 w-3 rounded-full ml-2 bg-danger" ></div>
+                </span>
+              </vx-tooltip>
             </div>
           </vs-td>
           <vs-td v-if="views.note.viewable">{{ tr.student.note }}</vs-td>
