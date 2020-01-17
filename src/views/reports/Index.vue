@@ -9,25 +9,19 @@
         <div class="d-flex">
           <flat-pickr v-model="fromDate" placeholder="Từ ngày" />
           <flat-pickr v-model="toDate" placeholder="Đến ngày" class="mx-2" />
-          <vs-button
-                color="primary"
-                class="px-3"
-                icon="replay"
-                @click="resetDate()"
-                v-if="fromDate !== '' || toDate !== ''"></vs-button>
+          <div class="d-flex" v-if="!switchBranch && branchesAll">
+            <v-select
+              :options="branchesName(branchesAll)"
+              :dir="$vs.rtl ? 'rtl' : 'ltr'"
+              placeholder="Chọn chi nhánh"
+              class="min-w-300"
+              @input="getBranchId($event)"
+            />
+          </div>
+          <vs-button color="success" class="ml-5 px-3" @click="getAllData()">
+            <font-awesome-icon icon="filter" />
+          </vs-button>
         </div>
-        <div class="d-flex" v-if="!switchBranch && branchesAll">
-          <v-select
-            :options="branchesName(branchesAll)"
-            :dir="$vs.rtl ? 'rtl' : 'ltr'"
-            placeholder="Chọn chi nhánh"
-            class="min-w-300"
-            @input="getBranchId($event)"
-          />
-        </div>
-        <vs-button color="success" class="ml-5 px-3" @click="getAllData()">
-          <font-awesome-icon icon="filter" />
-        </vs-button>
       </vs-col>
     </vs-row>
     <vue-card>
@@ -63,7 +57,7 @@
               <vs-td>Chi tiêu</vs-td>
               <!-- khách hàng -->
               <vs-td class="bg-warning text-white">Chờ CS</vs-td>
-              <vs-td class="bg-success text-white">Đang CS</vs-td>
+              <vs-td class="bg-primary text-white">Đang CS</vs-td>
               <vs-td class="bg-success text-white">CS thành công</vs-td>
               <vs-td class="bg-danger text-white">Hủy</vs-td>
               <!-- chiến dịch -->
@@ -135,6 +129,40 @@
         </vs-table>
       </div>
     </vue-card>
+    <vue-card class="mt-5">
+      <div slot="title">
+        <h4>KPI Giáo viên</h4>
+      </div>
+      <div class="table-custom p-5" slot="card-body">
+        <vs-table :data="users">
+          <template slot="thead">
+            <vs-th bgcolor="#dfe2e5">TÊN GIÁO VIÊN</vs-th>
+            <vs-th bgcolor="#dfe2e5" colspan="5">THÔNG SỐ PHIẾU</vs-th>
+          </template>
+
+          <template>
+            <vs-tr>
+              <vs-td></vs-td>
+              <vs-td class="bg-success text-white">Rất hài lòng</vs-td>
+              <vs-td class="bg-primary text-white">Hài lòng</vs-td>
+              <vs-td class="bg-danger text-white">Không hài lòng</vs-td>
+              <vs-td class="bg-warning text-white">Khác</vs-td>
+              <vs-td>Tên đánh gía</vs-td>
+            </vs-tr>
+            <vs-tr v-for="(item, index) in dataKpiTeachers" :key="index">
+              <vs-td>
+                <router-link tag="a" :to="'/employees/' + item.user.id">{{ item.user.name }} ({{ item.user.code }})</router-link>
+              </vs-td>
+              <vs-td>{{ item.very_pleased }}</vs-td>
+              <vs-td>{{ item.satisfied }}</vs-td>
+              <vs-td>{{ item.unsatisfied }}</vs-td>
+              <vs-td>{{ item.further }}</vs-td>
+              <vs-td>{{ item.evaluate.name }} ({{ item.evaluate.code }})</vs-td>
+            </vs-tr>
+          </template>
+        </vs-table>
+      </div>
+    </vue-card>
   </div>
 </template>
 
@@ -198,7 +226,28 @@ export default {
           money: 0,
           day: null,
           created_at: null,
-          updated_at: null
+          updated_at: null,
+          user: {
+            id: null
+          }
+        }
+      ],
+      dataKpiTeachers: [
+        {
+          further: 0,
+          unsatisfied: 0,
+          very_pleased: 0,
+          satisfied: 0,
+          user: {
+            id: null,
+            code: null,
+            name: null,
+          },
+          evaluate: {
+            id: null,
+            name: null,
+            code: null,
+          }
         }
       ]
     };
@@ -212,23 +261,34 @@ export default {
     this.getAllData();
   },
   methods: {
-    resetDate(){
-      this.fromDate = '';
-      this.toDate = '';
-    },
     getAllData() {
-      axios.all([this.getData(), this.getKpi()]);
+      axios.all([this.getData(), this.getKpi(), this.getKpiTeachers()]);
     },
     getKpi() {
       const thisIns = this;
       let url = thisIns.switchBranch
         ? `report_kpi?from=${thisIns.fromDate}&to=${thisIns.toDate}`
-        : `report?branch=${thisIns.branchId}&from=${thisIns.fromDate}&to=${thisIns.toDate}`;
+        : `report_kpi?branch=${thisIns.branchId}&from=${thisIns.fromDate}&to=${thisIns.toDate}`;
 
       this.$http
         .get(url)
         .then(response => {
           thisIns.dataKpi = response.data.data;
+        })
+        .catch(function(error) {
+          thisIns.checkResponRequest(error.response.data);
+        });
+    },
+    getKpiTeachers() {
+      const thisIns = this;
+      let url = thisIns.switchBranch
+        ? `report_kpi_teacher?from=${thisIns.fromDate}&to=${thisIns.toDate}`
+        : `report_kpi_teacher?branch=${thisIns.branchId}&from=${thisIns.fromDate}&to=${thisIns.toDate}`;
+
+      this.$http
+        .get(url)
+        .then(response => {
+          thisIns.dataKpiTeachers = response.data.data;
         })
         .catch(function(error) {
           thisIns.checkResponRequest(error.response.data);

@@ -392,7 +392,7 @@ const router = new Router({
         // THU HỌC PHÍ
         {
           path: "/invoices/revenues",
-          component: () => import("./views/invoices/Invoices.vue"),
+          component: () => import("./views/invoices/InvoiceList.vue"),
           meta: {
             breadcrumb: [
               { title: "Thu học phí", url: "/invoices/revenues" },

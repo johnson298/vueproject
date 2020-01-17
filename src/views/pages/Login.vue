@@ -26,6 +26,8 @@
                     class="w-full no-icon-border"
                     autocomplete="email"
                     tabindex="1"
+                    @keyup.enter="login"
+                    required
                   />
 
                   <vs-input
@@ -40,6 +42,8 @@
                     v-model="password"
                     class="w-full mt-6 no-icon-border"
                     tabindex="2"
+                    @keyup.enter="login"
+                    required
                   />
                 </form>
 
@@ -58,7 +62,7 @@
 
                 <!-- <div class="social-login flex flex-wrap justify-between">
                   <div class="social-login-buttons flex flex-wrap items-center mt-4">
-                    
+
                     <div class="bg-facebook pt-3 pb-2 px-4 rounded-lg cursor-pointer mr-4">
                       <svg
                         aria-hidden="true"
@@ -77,7 +81,7 @@
                       </svg>
                     </div>
 
-                    
+
                     <div class="bg-twitter pt-3 pb-2 px-4 rounded-lg cursor-pointer mr-4">
                       <svg
                         aria-hidden="true"
@@ -96,7 +100,7 @@
                       </svg>
                     </div>
 
-                    
+
                     <div class="bg-google pt-3 pb-2 px-4 rounded-lg cursor-pointer mr-4">
                       <svg
                         aria-hidden="true"
@@ -115,7 +119,7 @@
                       </svg>
                     </div>
 
-                    
+
                     <div class="bg-github pt-3 pb-2 px-4 rounded-lg cursor-pointer mr-4">
                       <svg
                         aria-hidden="true"
