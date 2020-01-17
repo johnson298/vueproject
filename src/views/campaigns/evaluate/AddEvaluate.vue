@@ -87,6 +87,16 @@ export default {
     callback: {
       type: Function,
       required: false
+    },
+    getInfoEvaluate: {
+      require: true,
+      type: Object
+    }
+  },
+  created() {
+    if (this.getInfoEvaluate){
+      this.evaluate.question = this.getInfoEvaluate.evaluate_item.map(item => item.question);
+      this.evaluate.content = this.getInfoEvaluate.evaluates.content;
     }
   },
   data() {

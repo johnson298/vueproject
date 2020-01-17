@@ -5,6 +5,7 @@
         :active.sync="addNew"
         @closePopupAdd="addNew = $event"
         v-if="addNew"
+        :getInfoEvaluate="evaluateInfo"
         :callback="getData"></add-evaluate>
     </vs-popup>
     <vs-popup class="popup-custom-768" title="Chi tiết đánh giá" :active.sync="detailValuate" v-if="detailValuate">
@@ -73,11 +74,17 @@
           <!-- ADD NEW -->
           <div
             class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary"
-            @click="addNew = true"
+            @click="addNew = true; evaluateInfo = null"
           >
             <feather-icon icon="Upload" svgClasses="h-4 w-4" />
             <span class="ml-2 text-base text-primary">+ Thêm đánh giá</span>
           </div>
+        </div>
+        <div class="d-flex">
+          <div class="mr-3 d-flex"><div class="h-3 w-3 rounded-full mr-2 bg-success" ></div> <span>Rất hài lòng</span></div>
+          <div class="mr-3 d-flex"><div class="h-3 w-3 rounded-full mr-2 bg-primary" ></div> <span>Hài lòng</span></div>
+          <div class="mr-3 d-flex"><div class="h-3 w-3 rounded-full mr-2 bg-danger" ></div> <span>Không hài lòng</span></div>
+          <div class="mr-3 d-flex"><div class="h-3 w-3 rounded-full mr-2 bg-warning" ></div> <span>Khác</span></div>
         </div>
       </div>
       <template slot="thead">
@@ -101,22 +108,32 @@
             <router-link tag="a" :to="{name: 'infoEmployee', params: {employee: tr.user.id}}">{{ tr.user.name }}</router-link>
           </vs-td>
           <vs-td v-if="viewsEvaluate.ratio.viewable">
-            <p class="persent-question">
-              <span>{{ $helpers.toPersent(2, 9) }}</span>
-              - &nbsp;<span class="text-success">Rất hài lòng</span>
-            </p>
-            <p class="persent-question">
-              <span>{{ $helpers.toPersent(1, 9) }}</span>
-              - &nbsp;<span class="text-primary">Hài lòng</span>
-            </p>
-            <p class="persent-question">
-              <span>{{ $helpers.toPersent(4, 9) }}</span>
-              - &nbsp;<span class="text-danger">Không hài lòng</span>
-            </p>
-            <p class="persent-question">
-              <span>{{ $helpers.toPersent(2, 9) }}</span>
-              - &nbsp;<span>Khác</span>
-            </p>
+            <div class="d-flex justify-start">
+              <vx-tooltip text="Rất hài lòng">
+                <span class="flex items-center px-2 py-1 rounded">
+                  {{ $helpers.toPersent(tr.very_pleased, (tr.very_pleased+tr.satisfied+tr.unsatisfied+tr.further)) }}
+                  <div class="h-3 w-3 rounded-full ml-2 bg-success" ></div>
+                </span>
+              </vx-tooltip> -
+              <vx-tooltip text="Hài lòng">
+                <span class="flex items-center px-2 py-1 rounded">
+                  {{ $helpers.toPersent(tr.satisfied, (tr.very_pleased+tr.satisfied+tr.unsatisfied+tr.further)) }}
+                  <div class="h-3 w-3 rounded-full ml-2 bg-primary" ></div>
+                </span>
+              </vx-tooltip> -
+              <vx-tooltip text="Không hài lòng">
+                <span class="flex items-center px-2 py-1 rounded">
+                  {{ $helpers.toPersent(tr.unsatisfied, (tr.very_pleased+tr.satisfied+tr.unsatisfied+tr.further)) }}
+                  <div class="h-3 w-3 rounded-full ml-2 bg-danger" ></div>
+                </span>
+              </vx-tooltip> -
+              <vx-tooltip text="Khác">
+                <span class="flex items-center px-2 py-1 rounded">
+                  {{ $helpers.toPersent(tr.further, (tr.very_pleased+tr.satisfied+tr.unsatisfied+tr.further)) }}
+                  <div class="h-3 w-3 rounded-full ml-2 bg-warning" ></div>
+                </span>
+              </vx-tooltip>
+            </div>
           </vs-td>
           <vs-td v-if="viewsEvaluate.status.viewable">
             <vs-chip :color="tr.status === 1 ? 'success' : 'warning'">{{ `${tr.status === 0 ? 'Chưa gửi' : 'Đã gửi'}` }}</vs-chip>
@@ -128,12 +145,12 @@
           <vs-td v-if="viewsEvaluate.action.viewable" class="d-flex-span">
             <vx-tooltip text="copy sang bản mới">
               <button class="mt-1 mr-1 vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly small vs-radius"
-                @click="detailValuate = true" >
+                @click="getInfoEvaluate(tr.id, 'copy')" >
                 <i class="feather icon-copy"></i>
               </button>
             </vx-tooltip>
             <vx-tooltip text="Chi tiết các câu hỏi">
-              <button class="mt-1 vs-component vs-button vs-button-success vs-button-filled includeIcon includeIconOnly small vs-radius" @click="getInfoEvaluate(tr.id)" >
+              <button class="mt-1 vs-component vs-button vs-button-success vs-button-filled includeIcon includeIconOnly small vs-radius" @click="getInfoEvaluate(tr.id, 'create')" >
                 <i class="feather icon-eye"></i>
               </button>
             </vx-tooltip>
@@ -205,14 +222,18 @@ export default {
     }
   },
   methods: {
-    getInfoEvaluate(id){
+    getInfoEvaluate(id, type){
       const thisIns = this;
       thisIns.$vs.loading({ color: "#1E6DB5", text: "Loading..." });
       this.$http
         .get(`branches/${thisIns.branchId}/evaluates/${id}`)
         .then((response) => {
           this.evaluateInfo = response.data.data;
-          thisIns.detailValuate = true;
+          if (type === 'create'){
+            thisIns.detailValuate = true;
+          } else {
+            thisIns.addNew = true;
+          }
         })
         .catch(function(error) {
           thisIns.checkResponRequest(error.response.data);
@@ -379,17 +400,6 @@ export default {
     display: flex;
     button {
       margin: 3px;
-    }
-  }
-}
-.persent-question{
-  display: flex;
-  span{
-    &:nth-child(1){
-      width: 50px;
-    }
-    &:nth-child(2){
-      flex: 1;
     }
   }
 }

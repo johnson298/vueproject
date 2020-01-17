@@ -81,6 +81,7 @@
                               : ''"
               >{{ checkStatus(sourceInvoices,tr.source) }}</vs-chip>
           </vs-td>
+          <vs-td v-if="viewsInvoice.coupon.viewable">{{ tr.coupon ? `Mã: ${tr.coupon.coupons_code} - ${formatPrice(tr.amount_coupon)} vnđ` : 'Không có KM' }}</vs-td>
           <vs-td v-if="viewsInvoice.note.viewable">{{ tr.note }}</vs-td>
           <vs-td v-if="viewsInvoice.updated_at.viewable">{{ tr.updated_at }}</vs-td>
           <vs-td v-if="viewsInvoice.created_at.viewable">{{ tr.created_at }}</vs-td>
@@ -208,9 +209,6 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTermInvoice;
     this.isMounted = true;
-    if (this.studentsInvoice.length === 0) {
-      this.getData();
-    }
   },
   destroyed() {
     this.$store.dispatch("students/updateNeedReloadInvoice", false);

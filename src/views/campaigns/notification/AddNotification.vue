@@ -167,7 +167,8 @@ export default {
         schedule_at: null,
         target_type: "",
         target_id: null,
-        via: []
+        via: [],
+        status: 0
       }
     };
   },
@@ -201,7 +202,8 @@ export default {
         schedule_at: null,
         target_type: "",
         target_id: null,
-        via: []
+        via: [],
+        status: 0
       };
     },
 

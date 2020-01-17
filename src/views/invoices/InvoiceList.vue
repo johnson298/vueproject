@@ -117,8 +117,7 @@
               <button
                 @click="sendMail(tr.id)"
                 name="button"
-                class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small"
-              >
+                class="vs-component vs-button vs-button-primary vs-button-filled includeIcon includeIconOnly vs-radius small" >
                 <font-awesome-icon icon="envelope" />
               </button>
             </vx-tooltip>

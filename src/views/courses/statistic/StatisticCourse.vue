@@ -5,7 +5,7 @@
         <NumberOfPupils :students_count="data.students_count" />
       </vs-col>
       <vs-col vs-w="6" class="pl-0">
-        <NumberOffDay />
+        <NumberOffDay :day_off="data.day_off" />
       </vs-col>
     </vs-row>
 
@@ -45,7 +45,8 @@ export default {
       courseId: this.$route.params.course,
       data: {
         progress: 0,
-        students_count: 0
+        students_count: 0,
+        day_off: 0
       }
     };
   },

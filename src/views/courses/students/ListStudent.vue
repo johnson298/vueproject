@@ -33,12 +33,10 @@
       :data="registers"
       search
       id="table"
-      maxItems="10"
-    >
+      maxItems="10" >
       <div
         slot="header"
-        class="flex flex-wrap-reverse items-center flex-grow justify-between"
-      >
+        class="flex flex-wrap-reverse items-center flex-grow justify-between" >
         <div class="flex flex-wrap-reverse items-center">
           <!-- ACTION - DROPDOWN -->
           <vs-dropdown vs-trigger-click class="cursor-pointer mr-4 mb-4">
@@ -96,6 +94,11 @@
             <span class="ml-2 text-base text-primary">Thêm học viên</span>
           </div>
         </div>
+        <div class="d-flex">
+          <div class="mr-3 d-flex"><div class="h-3 w-3 rounded-full mr-2 bg-success" ></div> <span>Có mặt</span></div>
+          <div class="mr-3 d-flex"><div class="h-3 w-3 rounded-full mr-2 bg-warning" ></div> <span>Đi trễ</span></div>
+          <div class="mr-3 d-flex"><div class="h-3 w-3 rounded-full mr-2 bg-danger" ></div> <span>Vắng mặt</span></div>
+        </div>
       </div>
 
       <template slot="thead">
@@ -104,8 +107,7 @@
           v-for="(value, index) in views"
           :key="index"
           v-if="value.viewable"
-          >{{ value.text }}</vs-th
-        >
+          >{{ value.text }}</vs-th>
       </template>
       <template slot-scope="{ data }">
         <vs-tr

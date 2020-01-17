@@ -62,6 +62,7 @@ export default {
       sortKey: "amount"
     },
     source: { text: "PT THANH TOÁN", viewable: true, sortKey: "source" },
+    coupon: { text: "khuyến mại", viewable: true, sortKey: "" },
     note: { text: "ghi chú", viewable: true, sortKey: "note" },
     created_at: { text: "ngày tạo", viewable: false, sortKey: "created_at" },
     updated_at: {

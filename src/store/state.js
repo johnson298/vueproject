@@ -138,8 +138,8 @@ const state = {
         { text: "Toàn bộ trung tâm", value: "" },
         { text: "1 chi nhánh", value: "App\\Entities\\Branch" },
         { text: "1 lớp học", value: "App\\Entities\\Course" },
-        { text: "1 học viên", value: "App\\Entities\\Student" },
-        { text: "1 giáo viên", value: "App\\Entities\\User" }
+        // { text: "1 học viên", value: "App\\Entities\\Student" },
+        // { text: "1 giáo viên", value: "App\\Entities\\User" }
       ],
       position: [
         { text: "Giáo viên", value: 1 },
