@@ -68,11 +68,15 @@
 
             <template slot-scope="{data}">
                 <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" class="col">
-                    <vs-td v-if="views.name.viewable">{{ tr.name }}</vs-td>
-                    <vs-td v-if="views.display_name.viewable">{{ tr.display_name }}</vs-td>
+                    <vs-td v-if="views.name.viewable">{{ tr.name === "consultant" ? "marketing" : tr.name  }}</vs-td>
+                    <vs-td v-if="views.display_name.viewable">{{ tr.display_name === "Tư vấn viên" ? "Marketing" : tr.display_name }}</vs-td>
                     <vs-td v-if="views.action.viewable" class="d-flex-span text-center">
-                        <vs-button radius color="success" size="small" @click="getInfoRole(tr.id)"
-                                   class="vs-component vs-button vs-button-success vs-button-filled includeIcon includeIconOnly small"><i class="feather icon-edit"></i></vs-button>
+                        <vs-button
+                         radius color="success" size="small"
+                         @click="getInfoRole(tr.id)"
+                         class="vs-component vs-button vs-button-success vs-button-filled includeIcon includeIconOnly small">
+                          <i class="feather icon-edit"></i>
+                        </vs-button>
                         <!-- <vs-button radius color="danger" size="small" @click="deleteCustomer(tr)" icon="delete_forever"></vs-button> -->
                     </vs-td>
                 </vs-tr>
@@ -293,12 +297,6 @@ export default {
             button {
                 margin: 3px;
             }
-        }
-    }
-
-    .vs-component {
-        .vs-popup {
-            width: 1000px;
         }
     }
 

@@ -29,14 +29,11 @@ export default {
     amount: { text: "thanh toán (vnđ)", viewable: true, sortKey: "amount" },
     total: { text: "tiền khách đưa", viewable: false, sortKey: "total" },
     coupon: { text: "khuyến mại", viewable: true, sortKey: "" },
-    note: { text: "ghi chú", viewable: false, sortKey: "note" },
+    course: { text: "đóng cho lớp", viewable: true, sortKey: "" },
     source: { text: "pt thanh toán", viewable: true, sortKey: "source" },
+    note: { text: "ghi chú", viewable: false, sortKey: "note" },
     created_at: { text: "Ngày tạo", viewable: false, sortKey: "created_at" },
-    updated_at: {
-      text: "Ngày cập nhật",
-      viewable: false,
-      sortKey: "updated_at"
-    },
+    updated_at: { text: "Ngày cập nhật", viewable: false, sortKey: "updated_at" },
     action: { text: "hành động", viewable: true, sortKey: "" }
   },
   needReload: false

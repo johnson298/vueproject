@@ -136,7 +136,12 @@
             </div>
           </vs-td>
           <vs-td v-if="viewsEvaluate.status.viewable">
-            <vs-chip :color="tr.status === 1 ? 'success' : 'warning'">{{ `${tr.status === 0 ? 'Chưa gửi' : 'Đã gửi'}` }}</vs-chip>
+            <vx-tooltip text="Đang gửi" v-if="tr.status === 0" key="checkStatus" position="left">
+              <font-awesome-icon icon="spinner" class="text-warning" />
+            </vx-tooltip>
+            <vx-tooltip text="Đã gửi" key="checkStatus" v-else position="left">
+              <font-awesome-icon icon="check-circle" class="text-success" />
+            </vx-tooltip>
           </vs-td>
           <vs-td v-if="viewsEvaluate.branch_name.viewable">{{ tr.branch.name }}</vs-td>
           <vs-td v-if="viewsEvaluate.content.viewable">{{ tr.content }}</vs-td>

@@ -1,27 +1,8 @@
 <template>
-  <vs-sidebar
-    click-not-close
-    position-right
-    parent="body"
-    default-index="1"
-    color="primary"
-    class="add-new-data-sidebar items-no-padding"
-    spacer
-    v-model="isSidebarActiveLocal"
-  >
-    <div class="mt-6 flex items-center justify-between px-6">
-      <h4>Thêm phòng học</h4>
-      <feather-icon icon="XIcon" @click.stop="isSidebarActiveLocal = false" class="cursor-pointer"></feather-icon>
-    </div>
-    <vs-divider class="mb-0"></vs-divider>
-
+  <div>
     <VuePerfectScrollbar class="scroll-area--data-list-add-new pt-4 pb-6" :settings="settings">
       <div class="p-6">
-        <form>
-          <div>
             <h4 class="text-center uppercase">Thông tin phòng học</h4>
-            <!--tên phòng học -->
-            <div>
               <vs-input
                 label="Tên phòng học"
                 name="name"
@@ -29,12 +10,8 @@
                 class="mt-5 w-full"
                 v-validate="'required'"
               />
-            </div>
-          </div>
-        </form>
       </div>
     </VuePerfectScrollbar>
-
     <div class="flex flex-wrap items-center justify-center p-6" slot="footer">
       <vs-button
         class="mr-6 vs-con-loading__container"
@@ -45,7 +22,7 @@
       >Thêm</vs-button>
       <vs-button type="border" color="danger" @click="isSidebarActiveLocal = false">Trở lại</vs-button>
     </div>
-  </vs-sidebar>
+  </div>
 </template>
 
 <script>

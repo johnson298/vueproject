@@ -128,14 +128,12 @@
               {{ checkStatus(statusReserves, tr.type) }}</span>
           </vs-td>
           <vs-td v-if="views.course_new.viewable">
-              <router-link
-              tag="a"
-              v-if="tr.course_new"
-              :to="`/courses/${tr.course_new.id}`"
-              key="course_new"
-              >
-              <font-awesome-icon icon="eye" color="#1e6db5" class="mr-2" />{{ tr.course_new.name }}</router-link
-            >
+            <router-link
+            tag="a"
+            v-if="tr.course_new"
+            :to="`/courses/${tr.course_new.id}`"
+            key="course_new">
+                {{ tr.course_new.name }}</router-link>
             <p v-else key="course_new">Chưa có lớp mới</p>
           </vs-td>
           <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>

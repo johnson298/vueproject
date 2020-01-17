@@ -101,7 +101,11 @@
           <vs-td v-if="views.coupon.viewable">
             {{ tr.coupon ? `Mã: ${tr.coupon.coupons_code} - ${formatPrice(tr.amount_coupon)} vnđ` : 'Không có KM' }}
           </vs-td>
-          <vs-td v-if="views.note.viewable">{{ tr.note }}</vs-td>
+          <vs-td v-if="views.course.viewable">
+            <router-link tag="a" :to="`/courses/${tr.course.id}`">
+              {{ tr.course.name }}
+            </router-link>
+          </vs-td>
           <vs-td v-if="views.source.viewable">
               <vs-chip
                 :color="checkStatus(sourceInvoices,tr.source)==='Momo' ? 'primary'
@@ -110,6 +114,7 @@
                               : ''"
               >{{ checkStatus(sourceInvoices,tr.source) }}</vs-chip>
           </vs-td>
+          <vs-td v-if="views.note.viewable">{{ tr.note }}</vs-td>
           <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
           <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
           <vs-td v-if="views.action.viewable" class="d-flex-span">

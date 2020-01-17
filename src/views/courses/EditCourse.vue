@@ -10,14 +10,14 @@
             <div class="p-6">
               <h4 class="text-center uppercase">Thông tin lớp học</h4>
               <!--Ten chương trình-->
-                  <vs-input label="Tên lớp học" name="name" type="text" v-model="coursesGetInfo.name" class="mt-5 w-full" />
+                  <vs-input label="Tên lớp học" name="name" type="text" v-model="coursesGetInfo.name" class="mb-5 w-full" />
               <!--học phí-->
-                  <vs-input label="Học phí" name="price" type="text" v-model="coursesGetInfo.price" class="mt-5 w-full" />
+                  <vs-input label="Học phí" name="price" type="text" v-model="coursesGetInfo.price" class="mb-5 w-full" />
               <!-- ngày bắt đầu học -->
-                  <label for="" class="vs-input--label mt-5">Ngày bắt đầu</label>
+                  <label class="vs-input--label mt-5">Ngày bắt đầu</label>
                   <datepicker :fullMonthName="true" v-model="formatDateStartAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.start_at" class="w-full picker-custom mb-5" placeholder="chọn ngày bắt đầu"></datepicker>
               <!--Ngày kết thúc-->
-                  <label for="" class="vs-input--label mt-5">Ngày kết thúc</label>
+                  <label class="vs-input--label mt-5">Ngày kết thúc</label>
                   <datepicker :fullMonthName="true" v-model="formatDateEndAt" :language="languages[language]" format="d MMMM yyyy" :value="courses.end_at" class="w-full picker-custom mb-5" placeholder="chọn ngày kết thúc"></datepicker>
               <!--trạng thái-->
               <vs-select v-model="coursesGetInfo.status" label="Trạng thái" class="mt-5 w-full">

@@ -1,8 +1,17 @@
 <template>
 <div id="data-list-list-view" class="data-list-container">
 
-    <add-new-data-sidebar :isSidebarActive="addNewDataSidebar" @closeSidebar="addNewDataSidebar = false" :callback="getData" />
-    <edit-program-sidebar :isSidebarEditActive="editProgramSidebar" @closeSidebar="editProgramSidebar = false" :programInfo="programGetInfo" :getData="getData" />
+    <add-new-data-sidebar
+      v-if="addNewDataSidebar"
+      :isSidebarActive="addNewDataSidebar"
+      @closeSidebar="addNewDataSidebar = false"
+      :callback="getData" />
+    <edit-program-sidebar
+      v-if="editProgramSidebar"
+      :isSidebarEditActive="editProgramSidebar"
+      @closeSidebar="editProgramSidebar = false"
+      :programInfo="programGetInfo"
+      :getData="getData" />
 
     <vs-table-custom :sst="true" ref="table" multiple v-model="selected" @search="handleSearch" @sort="handleSort" :data="programs" search id="table" maxItems="10">
 

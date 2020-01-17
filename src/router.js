@@ -198,7 +198,7 @@ const router = new Router({
         {
           path: "/rooms",
           name: "branch",
-          component: () => import("./views/rooms/BranchRooms.vue"),
+          component: () => import("./views/rooms/RoomList.vue"),
           meta: {
             breadcrumb: [
               { title: "Phòng học", url: "/" },

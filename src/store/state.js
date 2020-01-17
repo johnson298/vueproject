@@ -55,7 +55,7 @@ const state = {
       ],
       positions: [
         { text: "Admin", value: 1 },
-        { text: "Tư vấn", value: 2 },
+        { text: "Marketing", value: 2 },
         { text: "Quản lý", value: 3 },
         { text: "Kế toán", value: 4 },
         { text: "Giáo viên", value: 5 }

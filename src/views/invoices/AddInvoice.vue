@@ -176,7 +176,7 @@
                     <strong class="pt-2 d-block text-primary">Bằng chữ:</strong>
                   </div>
                   <div class="vx-col pl-0 sm:w-3/4 w-full">
-                    <span class="mt-2 d-block">{{ DOCSO(invoices.amount) }}</span>
+                    <span class="mt-2 d-block">{{ $helpers.DOCSO(invoices.amount) }}</span>
                   </div>
                 </div>
               </vs-col>

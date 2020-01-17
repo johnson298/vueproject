@@ -137,9 +137,6 @@ export default {
 </script>
 
 <style>
-.con-vs-popup .vs-popup {
-    width: 1000px !important;
-}
 </style><style lang="scss">
 @import "@/assets/scss/vuesax/apps/simple-calendar.scss";
 </style>

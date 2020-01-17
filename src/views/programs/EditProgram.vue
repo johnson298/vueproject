@@ -7,35 +7,13 @@
     <vs-divider class="mb-0"></vs-divider>
 
     <VuePerfectScrollbar class="scroll-area--data-list-add-new pt-4 pb-6" :settings="settings">
-
         <div class="p-6">
-            <form>
-
-                <div>
-                    <h4 class="text-center uppercase">Thông tin chương trình</h4>
-                    <!--Ten chương trình-->
-                    <div>
-                        <vs-input label="Tên chương trình" name="name" type="text" v-model="programInfo.name" class="mt-5 w-full" />
-                    </div>
-
-                    <!--Số bài học-->
-                    <div>
-                        <vs-input label="Số bài học" name="nanumber_of_lessonsme" type="text" v-model="programInfo.number_of_lessons" class="mt-5 w-full" />
-                    </div>
-
-                    <!--Giá tiền-->
-                    <div>
-                        <vs-input label="Giá tiền" name="description" type="text" v-model="programInfo.price" class="mt-5 w-full" />
-                    </div>
-                    <!--Mô tả-->
-                    <div>
-                        <div class="note mt-5"><label class="vs-input--label">Note</label></div>
-                        <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="programInfo.description" class="w-full" :rows="5" />
-                    </div>
-
-                </div>
-
-            </form>
+            <h4 class="text-center uppercase">Thông tin chương trình</h4>
+            <vs-input label="Tên chương trình" name="name" type="text" v-model="programInfo.name" class="mt-5 w-full" />
+            <vs-input label="Số bài học" name="nanumber_of_lessonsme" type="text" v-model="programInfo.number_of_lessons" class="mt-5 w-full" />
+            <vs-input label="Giá tiền" name="description" type="text" v-model="programInfo.price" class="mt-5 w-full" />
+            <div class="note mt-5"><label class="vs-input--label">Note</label></div>
+            <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="programInfo.description" class="w-full" :rows="5" />
         </div>
     </VuePerfectScrollbar>
 
@@ -85,7 +63,6 @@ export default {
         },
       })
         .then(() => {
-          this.getData();
           this.$vs.notify({
             title: 'Đã sửa thành công',
             text: 'OK',
@@ -93,6 +70,8 @@ export default {
             icon: 'fa fa-lg fa-check-circle',
             color: 'success'
           });
+          this.getData();
+          this.$emit('closeSidebar');
         })
         .catch((error) => {
           this.checkResponRequest(error.response.data, null, null, "Chỉnh sửa thất bại");

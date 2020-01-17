@@ -1,18 +1,28 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    <add-new-data-sidebar
-      :isSidebarActive="addNewDataSidebar"
-      @closeSidebar="addNewDataSidebar = false"
-      :callback="getData"
+    <vs-popup
+      title="Thêm mới phòng học"
+      :active.sync="addNewDataSidebar"
       v-if="addNewDataSidebar"
-    />
-    <edit-sidebar
-      :isSidebarEditActive="editSidebar"
-      @closeSidebar="editSidebar = false"
-      :roomGetInfo="roomGetInfo"
-      :getData="getData"
+    >
+      <add-new-data-sidebar
+        :isSidebarActive="addNewDataSidebar"
+        @closeSidebar="addNewDataSidebar = false"
+        :callback="getData"
+      />
+    </vs-popup>
+    <vs-popup
+      title="Sửa phòng học"
+      :active.sync="editSidebar"
       v-if="editSidebar"
-    />
+    >
+      <edit-sidebar
+        :isSidebarEditActive="editSidebar"
+        @closeSidebar="editSidebar = false"
+        :roomGetInfo="roomGetInfo"
+        :getData="getData"
+      />
+    </vs-popup>
 
     <vs-table-custom
       :sst="true"

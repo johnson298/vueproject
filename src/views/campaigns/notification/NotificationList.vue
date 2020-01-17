@@ -109,6 +109,14 @@
             </vs-button>
           </vs-td>
           <vs-td v-if="views.perform_at.viewable">{{ tr.perform_at }}</vs-td>
+          <vs-td v-if="views.status.viewable" >
+            <vx-tooltip text="Đang gửi" v-if="tr.status === 0" key="checkStatus" position="left">
+              <font-awesome-icon icon="spinner" class="text-warning" />
+            </vx-tooltip>
+            <vx-tooltip text="Đã gửi" key="checkStatus" v-else position="left">
+              <font-awesome-icon icon="check-circle" class="text-success" />
+            </vx-tooltip>
+          </vs-td>
           <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
           <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
         </vs-tr>

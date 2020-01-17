@@ -1,7 +1,7 @@
 <template>
 <div>
     <h5 class="text-center">
-        <strong>Tên quyền: </strong> <span>{{ role.name }}</span>
+        <strong>Tên quyền: </strong> <span>{{ role.name === "consultant" ? 'marketing' : role.name }}</span>
     </h5>
     <vs-row class="mt-2" v-for="(name, index) in Object.keys(grouObject(permission))" :key="index">
         <vs-col vs-w="12">

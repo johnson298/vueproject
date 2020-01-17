@@ -6,7 +6,9 @@
       class="w-100 mb-2"
       v-model="note"
     />
-    <p class="text-center text-danger mb-5">Lưu ý: khi bảo lưu học viên <strong>{{ courseInfo.name }}</strong> sẽ bị xóa ở lớp học này !</p>
+    <p class="text-center text-danger mb-5">
+      <font-awesome-icon icon="exclamation-triangle"/> Lưu ý: khi bảo lưu học viên <strong>{{ courseInfo.name }}</strong> sẽ bị xóa ở lớp học này !
+    </p>
     <div class="flex flex-wrap items-center flex-row-reverse">
       <vs-button
         color="danger"

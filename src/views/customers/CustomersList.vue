@@ -379,12 +379,6 @@ export default {
     }
 }
 
-.vs-component {
-    .vs-popup {
-        width: 1000px;
-    }
-}
-
 .import-file {
     .custom-file-upload {
         border: 1px solid #ccc;

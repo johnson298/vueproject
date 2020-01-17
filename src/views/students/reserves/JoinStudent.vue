@@ -3,7 +3,7 @@
     <vs-row vs-w="12">
       <vs-col vs-w="12">
         <div
-          class="vs-component vs-con-input-label vs-input mt-5 w-full vs-input-primary"
+          class="vs-component vs-con-input-label vs-input w-full vs-input-primary"
         >
           <vx-search-ajax
             text="Lớp học "
@@ -13,13 +13,15 @@
           />
         </div>
       </vs-col>
+      <p class="text-center text-danger mt-5 px-5">
+        <font-awesome-icon icon="exclamation-triangle"/> Lưu ý: Chỉ được chuyển học viên sang lớp có cùng chương trình học cũ !
+      </p>
 
       <vs-col
         class="mt-5 absolute bottom-0"
         vs-w="12"
         vs-type="flex"
-        vs-justify="flex-end"
-      >
+        vs-justify="flex-end" >
         <vs-button
           class="ml-3 vs-con-loading__container"
           type="filled"

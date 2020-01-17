@@ -22,7 +22,7 @@
               <p class="product-name font-medium">
                 <vs-chip
                   :color="checkStatus(positions,tr.position)=='Giáo viên' ? 'danger'
-                      : checkStatus(positions,tr.position)=='Tư vấn' ? 'warning'
+                      : checkStatus(positions,tr.position)=='Marketing' ? 'warning'
                       : checkStatus(positions,tr.position)=='Kế toán' ? 'primary'
                       : checkStatus(positions,tr.position)=='Quản lý' ? 'success'
                       : ''"

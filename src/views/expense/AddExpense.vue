@@ -26,7 +26,7 @@
       <vs-col vs-w="12">
         <h5>
           <span class="text-primary">Thành tiền:</span>
-          {{ DOCSO(expense.amount) }}
+          {{ $helpers.DOCSO(expense.amount) }}
         </h5>
       </vs-col>
 

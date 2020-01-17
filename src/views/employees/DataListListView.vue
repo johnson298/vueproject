@@ -96,7 +96,7 @@
           <vs-td v-if="views.position.viewable">
               <vs-chip
                 :color="checkStatus(positions,tr.position)==='Giáo viên' ? 'primary'
-                      : checkStatus(positions,tr.position)==='Tư vấn' ? 'warning'
+                      : checkStatus(positions,tr.position)==='Marketing' ? 'warning'
                       : checkStatus(positions,tr.position)==='Kế toán' ? '#34495e'
                       : checkStatus(positions,tr.position)==='Quản lý' ? 'success'
                       : ''"

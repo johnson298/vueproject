@@ -33,11 +33,11 @@
             name="price"
             v-model="courses.price"
             type="number"
-            class="mb-5 w-full"
+            class="mb-5 ddda w-full"
             v-validate="'required'"
           />
         <!-- ngày bắt đầu học -->
-          <label for class="vs-input--label mb-5">Ngày bắt đầu *</label>
+          <label for class="vs-input--label">Ngày bắt đầu *</label>
           <datepicker
             :fullMonthName="true"
             v-model="formatDateStartAt"
@@ -77,7 +77,7 @@
           name="price"
           v-model="courses.number_of_lessons"
           type="number"
-          class="mt-5 w-full"
+          class="w-full"
           v-validate="'required'"
         />
       </div>
