@@ -138,7 +138,7 @@ Vue.mixin({
     translateRoles(val){
       let result;
       const type = ['employee', 'student', 'course', 'register', 'schedule', 'attendance', 'teacher', 'program', 'lesson', 'invoice', 'customer', 'campaign', 'evaluate', 'report', 'room', 'branch', 'role', 'coupon'];
-      const convert = ['Nhân viên', 'Học viên', 'Lớp học', 'Học viên trong lớp', 'Lịch học', 'Điểm danh', 'Giáo viên trong lớp', 'Chương trình học', 'Bài học', 'Hóa đơn', 'Khách hàng', 'Chiến dịch', 'Đánh giá', 'Báo cáo', 'Phòng học', 'Chi nhánh', 'Khuyến mại', 'Phân quyền' ];
+      const convert = ['Nhân viên', 'Học viên', 'Lớp học', 'Học viên trong lớp', 'Lịch học', 'Điểm danh', 'Giáo viên trong lớp', 'Chương trình học', 'Bài học', 'Hóa đơn', 'Khách hàng', 'Chiến dịch', 'Đánh giá', 'Báo cáo', 'Phòng học', 'Chi nhánh', 'Phân quyền' , 'Khuyến mại'];
       for (let i = 0; i < type.length; i++) {
         if (type[i] === val) result = convert[i];
       }

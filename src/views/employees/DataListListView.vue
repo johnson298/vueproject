@@ -187,6 +187,9 @@ export default {
     ]),
     statusEmployee() {
       return this.$store.state.model.employees.status;
+    },
+    branchId() {
+      return this.$store.state.getBranchId;
     }
   },
   methods: {
@@ -202,7 +205,7 @@ export default {
     },
     employeeAlert(user_id) {
       this.$http
-        .delete("users/" + user_id)
+        .delete(`branches/${this.branchId}/users/` + user_id)
         .then(() => {
           this.$vs.notify({
             color: "success",
@@ -233,7 +236,7 @@ export default {
         text: "Loading..."
       });
       this.$http
-        .get("users", {
+        .get(`branches/${this.branchId}/users`, {
           params: {
             page: page,
             search: this.searchTerm,

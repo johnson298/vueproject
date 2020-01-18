@@ -9,6 +9,7 @@
               :rolePermission="roleGetInfo.rolePermission"
               :role="roleGetInfo.role"
               :idRole="idRole"
+              :rolePermissionComit.sync="roleGetInfo.rolePermission"
               @closePopup="popupEditRole = $event"/>
         </vs-popup>
 

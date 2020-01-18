@@ -427,6 +427,10 @@ const router = new Router({
             pageTitle: "Báo cáo"
           }
         },
+        {
+          path: "/export",
+          component: () => import("./views/reports/export.vue")
+        },
         // KHÁCH HÀNG
         {
           path: "/customers",

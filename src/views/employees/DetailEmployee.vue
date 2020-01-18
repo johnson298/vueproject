@@ -3,7 +3,7 @@
 
     <!-- PROFILE HEADER -->
     <div class="cover-container rounded-t-lg img-profile-cus">
-        <img v-if="employeeInfo.avatar" key="checkImage" :src="employeeInfo.avatar" class="user-profile-img" />
+        <img v-if="employeeInfo.avatar" key="checkImage" :src="employeeInfo.avatar" class="user-profile-img" ref="avatar_employee" />
         <img v-else key="checkImage" :src="require(`@/assets/images/portrait/small/${activeUserImg}`)" class="user-profile-img" />
     </div>
     <h2 class="text-center m-5 d-flex">{{employeeInfo.name}}</h2>
@@ -67,6 +67,9 @@ export default {
   computed: {
     activeUserImg() {
       return this.$store.state.AppActiveUser.img;
+    },
+    branchId() {
+      return this.$store.state.getBranchId;
     }
   },
   created() {
@@ -85,7 +88,7 @@ export default {
         color: "#1E6DB5",
         text: "Loading..."
       });
-      this.$http.get(`/users/${this.employee_id}`).then(function (response) {
+      this.$http.get(`branches/${this.branchId}/users/${this.employee_id}`).then(function (response) {
         vm.employeeInfo = response.data.data;
       }).catch((error) => {
         if(error.response.data.status === 404){

@@ -168,6 +168,9 @@ export default {
       set(val) {
         this.user.birthday = this.formatDateUTC(val);
       }
+    },
+    branchId() {
+      return this.$store.state.getBranchId;
     }
   },
   filters: {
@@ -188,7 +191,7 @@ export default {
     userInfo() {
       let vm = this;
       this.$http
-        .get("users/" + this.employeeId)
+        .get(`branches/${this.branchId}/users/` + this.employeeId)
         .then(function(response) {
           vm.user = response.data.data;
         })
@@ -226,7 +229,7 @@ export default {
         scale: 0.45
       });
       this.$http
-        .post("users/" + user.id, this.formData(), {
+        .post(`branches/${this.branchId}/users/` + user.id, this.formData(), {
           headers: {
             "Content-Type": "multipart/form-data"
           }

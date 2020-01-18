@@ -3,7 +3,7 @@
     <statistics-card-line
       color="success"
       icon="UsersIcon"
-      :statistic="day_off"
+      :statistic="day_off || 0"
       statisticTitle="Ngày nghỉ"
       :chartData="analyticsData.subscribersGained"
       type="area"
@@ -18,9 +18,7 @@ import analyticsData from "./ui-elements/card/analyticsData.js";
 export default {
   props: {
     day_off: {
-      type: Number,
-      require: true,
-      default: 0
+      type: Number
     }
   },
   data() {

@@ -84,7 +84,7 @@ export const DOCSO = (s) => {
   if (x != s.length) {
     let y = s.length;
     str += "point ";
-    for (i = x + 1; i < y; i++) str += dg[n[i]] + " ";
+    for (let i = x + 1; i < y; i++) str += dg[n[i]] + " ";
   }
   return str.replace(/\s+/g, " ") + "đồng";
 };

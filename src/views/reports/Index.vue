@@ -1,5 +1,21 @@
 <template>
   <div>
+    <vs-prompt
+      title="Export To Excel"
+      class="export-options"
+      @cancle="clearFields"
+      @accept="exportToExcel"
+      accept-text="Export"
+      @close="clearFields"
+      :active.sync="activePrompt">
+      <vs-input v-model="fileName" placeholder="Enter File Name.." class="w-full" />
+      <v-select v-model="selectedFormat" :options="formats" class="my-4" />
+      <div class="flex">
+        <span class="mr-4">Cell Auto Width:</span>
+        <vs-switch v-model="cellAutoWidth">Cell Auto Width</vs-switch>
+      </div>
+    </vs-prompt>
+
     <vs-row class="mb-5">
       <vs-col vs-type="flex" vs-justify="space-between" vs-align="flex-end">
         <vs-switch color="success" v-model="switchBranch">
@@ -29,7 +45,7 @@
         <h4>THÔNG SỐ</h4>
       </div>
       <div class="table-custom p-5" slot="card-body">
-        <vs-table :data="users">
+        <vs-table :data="usersData">
           <template slot="thead">
             <vs-th bgcolor="#dfe2e5" colspan="2">NHÂN VIÊN</vs-th>
             <vs-th bgcolor="#dfe2e5" colspan="2">HỌC VIÊN</vs-th>
@@ -96,8 +112,13 @@
       <div slot="title">
         <h4>KPI Marketing</h4>
       </div>
+      <template slot="card-actions">
+        <vx-tooltip text="Xuất dữ liệu">
+          <vs-button @click="activePrompt=true; typeExport = 'kpiMarketing'" color="success" size="small"> <vs-icon icon="local_printshop"></vs-icon></vs-button>
+        </vx-tooltip>
+      </template>
       <div class="table-custom p-5" slot="card-body">
-        <vs-table :data="users">
+        <vs-table :data="usersData">
           <template slot="thead">
             <vs-th bgcolor="#dfe2e5">TÊN NHÂN VIÊN</vs-th>
             <vs-th bgcolor="#dfe2e5" colspan="5">THÔNG SỐ</vs-th>
@@ -108,16 +129,13 @@
               <vs-td></vs-td>
               <vs-td class="bg-warning text-white">Chờ chăm sóc</vs-td>
               <vs-td class="bg-primary text-white">Đang chăm sóc</vs-td>
-              <vs-td class="bg-success text-white"
-                >Thành công <br />
-                (chỉ tăng khi học viên đó đóng tiền)</vs-td
-              >
+              <vs-td class="bg-success text-white">Thành công</vs-td>
               <vs-td class="bg-danger text-white">Hủy tư vấn</vs-td>
               <vs-td>Số tiền (vnđ)</vs-td>
             </vs-tr>
             <vs-tr v-for="(item, index) in dataKpi" :key="index">
               <vs-td rowspan="1">
-                <router-link tag="a" :to="'/employees/' + item.user.id">{{ item.user.name }} ({{ item.user.code }})</router-link>
+                <router-link tag="a" :to="'/employees/' + item.userId">{{ item.userName }} ({{ item.userCode }})</router-link>
               </vs-td>
               <vs-td>{{ item.wait_for_care }}</vs-td>
               <vs-td>{{ item.taking_care_of }}</vs-td>
@@ -133,8 +151,13 @@
       <div slot="title">
         <h4>KPI Giáo viên</h4>
       </div>
+      <template slot="card-actions">
+        <vx-tooltip text="Xuất dữ liệu">
+          <vs-button @click="activePrompt=true; typeExport = 'kpiTeacher'" color="success" size="small"> <vs-icon icon="local_printshop"></vs-icon></vs-button>
+        </vx-tooltip>
+      </template>
       <div class="table-custom p-5" slot="card-body">
-        <vs-table :data="users">
+        <vs-table :data="usersData">
           <template slot="thead">
             <vs-th bgcolor="#dfe2e5">TÊN GIÁO VIÊN</vs-th>
             <vs-th bgcolor="#dfe2e5" colspan="5">THÔNG SỐ PHIẾU</vs-th>
@@ -143,21 +166,21 @@
           <template>
             <vs-tr>
               <vs-td></vs-td>
+              <vs-td>Tên đánh gía</vs-td>
               <vs-td class="bg-success text-white">Rất hài lòng</vs-td>
               <vs-td class="bg-primary text-white">Hài lòng</vs-td>
               <vs-td class="bg-danger text-white">Không hài lòng</vs-td>
               <vs-td class="bg-warning text-white">Khác</vs-td>
-              <vs-td>Tên đánh gía</vs-td>
             </vs-tr>
             <vs-tr v-for="(item, index) in dataKpiTeachers" :key="index">
               <vs-td>
-                <router-link tag="a" :to="'/employees/' + item.user.id">{{ item.user.name }} ({{ item.user.code }})</router-link>
+                <router-link tag="a" :to="'/employees/' + item.userId">{{ item.userName }} ({{ item.userCode }})</router-link>
               </vs-td>
+              <vs-td>{{ item.evaluateName }} ({{ item.evaluateCode }})</vs-td>
               <vs-td>{{ item.very_pleased }}</vs-td>
               <vs-td>{{ item.satisfied }}</vs-td>
               <vs-td>{{ item.unsatisfied }}</vs-td>
               <vs-td>{{ item.further }}</vs-td>
-              <vs-td>{{ item.evaluate.name }} ({{ item.evaluate.code }})</vs-td>
             </vs-tr>
           </template>
         </vs-table>
@@ -167,15 +190,29 @@
 </template>
 
 <script>
+import vSelect from 'vue-select';
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 import axios from "axios";
 export default {
   components: {
-    flatPickr
+    flatPickr,
+    vSelect
   },
   data() {
     return {
+      // export
+      typeExport: null,
+      fileName: "",
+      formats:["xlsx", "csv", "txt"] ,
+      cellAutoWidth: true,
+      selectedFormat: "xlsx",
+      headerTitleKpiMarketing: ['Id nhân viên', 'Mã NV', 'Tên NV','Chờ chăm sóc', 'Đang chăm sóc', 'Thành công', 'Hủy tư vấn', 'Số tiền'],
+      headerValKpiMarketing: ["userId", "userCode", "userName","wait_for_care", "taking_care_of", "successful_care", "cancel_care", "money"],
+      headerTitleKpiTeacher: ['Id giáo viên', 'Mã giáo viên', 'Tên giáo viên', 'Tên Đánh giá', 'Rất hài lòng', 'Hài lòng', 'Không hài lòng', 'Khác'],
+      headerValKpiTeacher: ['userId', "userCode", "userName", "evaluateName", "very_pleased","satisfied", "unsatisfied", "further"],
+      // return data
+      activePrompt: false,
       switchBranch: true,
       changeBranchPopup: false,
       branchName: null,
@@ -183,7 +220,7 @@ export default {
       fromDate: "",
       toDate: "",
       branchId: "",
-      users: [
+      usersData: [
         {
           id: 8,
           name: "Nicholas Runolfsdottir V",
@@ -224,12 +261,9 @@ export default {
           successful_care: 0,
           cancel_care: 0,
           money: 0,
-          day: null,
-          created_at: null,
-          updated_at: null,
-          user: {
-            id: null
-          }
+          userId: null,
+          userName: null,
+          userCode: null
         }
       ],
       dataKpiTeachers: [
@@ -238,16 +272,12 @@ export default {
           unsatisfied: 0,
           very_pleased: 0,
           satisfied: 0,
-          user: {
-            id: null,
-            code: null,
-            name: null,
-          },
-          evaluate: {
-            id: null,
-            name: null,
-            code: null,
-          }
+          userId: null,
+          userName: null,
+          userCode: null,
+          evaluateId: null,
+          evaluateName: null,
+          evaluateCode: null
         }
       ]
     };
@@ -261,6 +291,58 @@ export default {
     this.getAllData();
   },
   methods: {
+    exportToExcel() {
+      switch (this.typeExport) {
+      case "kpiMarketing":
+        import('../../vendor/Export2Excel').then(excel => {
+          const list = this.dataKpi;
+          const data = this.formatJson(this.headerValKpiMarketing, list);
+          excel.export_json_to_excel({
+            header: this.headerTitleKpiMarketing,
+            data,
+            filename: this.fileName,
+            autoWidth: this.cellAutoWidth,
+            bookType: this.selectedFormat
+          });
+          this.clearFields();
+        });
+        break;
+      case 'kpiTeacher':
+        import('../../vendor/Export2Excel').then(excel => {
+          const list = this.dataKpiTeachers;
+          const data = this.formatJson(this.headerValKpiTeacher, list);
+          excel.export_json_to_excel({
+            header: this.headerTitleKpiTeacher,
+            data,
+            filename: this.fileName,
+            autoWidth: this.cellAutoWidth,
+            bookType: this.selectedFormat
+          });
+          this.clearFields();
+        });
+        break;
+      default:
+        break;
+      }
+
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        // Add col name which needs to be translated
+        // if (j === 'timestamp') {
+        //   return parseTime(v[j])
+        // } else {
+        //   return v[j]
+        // }
+
+        return v[j];
+      }));
+    },
+    clearFields() {
+      this.filename = "";
+      this.cellAutoWidth = true;
+      this.selectedFormat = "xlsx";
+    },
     getAllData() {
       axios.all([this.getData(), this.getKpi(), this.getKpiTeachers()]);
     },
@@ -273,7 +355,16 @@ export default {
       this.$http
         .get(url)
         .then(response => {
-          thisIns.dataKpi = response.data.data;
+          thisIns.dataKpi = response.data.data.map(item => ({
+            wait_for_care: item.wait_for_care,
+            taking_care_of: item.taking_care_of,
+            successful_care: item.successful_care,
+            cancel_care: item.cancel_care,
+            money: item.money,
+            userId: item.user.id,
+            userName: item.user.name,
+            userCode: item.user.code
+          }));
         })
         .catch(function(error) {
           thisIns.checkResponRequest(error.response.data);
@@ -288,7 +379,18 @@ export default {
       this.$http
         .get(url)
         .then(response => {
-          thisIns.dataKpiTeachers = response.data.data;
+          thisIns.dataKpiTeachers = response.data.data.map(item => ({
+            further: item.further,
+            unsatisfied: item.unsatisfied,
+            very_pleased: item.very_pleased,
+            satisfied: item.satisfied,
+            userId: item.user.id,
+            userName: item.user.name,
+            userCode: item.user.code,
+            evaluateId: item.evaluate.id,
+            evaluateName: item.evaluate.name,
+            evaluateCode: item.evaluate.code
+          }));
         })
         .catch(function(error) {
           thisIns.checkResponRequest(error.response.data);

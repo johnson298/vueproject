@@ -24,3 +24,8 @@ npm run test
 ```
 npm run lint
 ```
+### deploy
+cd public_html/
+cd /home/dgs.edu.vn/public_html/
+. build-app.sh 
+

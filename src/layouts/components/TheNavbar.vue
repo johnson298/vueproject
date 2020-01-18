@@ -64,11 +64,14 @@
         </template>
 
         <vs-spacer></vs-spacer>
-
-        <vs-button type="line" @click="changeBranchPopup = true">
+        <vs-button type="line" @click="changeBranchPopup = true" v-if="currentUser.getPosition===1" key="checkPosition">
           <font-awesome-icon icon="sitemap" />
           {{ branchName }}
         </vs-button>
+        <p type="line" v-else key="checkPosition" class="mr-3 text-primary">
+          <font-awesome-icon icon="sitemap" />
+          {{ branchName }}
+        </p>
         <vs-popup class="popup-custom-768" title="Chọn chi nhánh" :active.sync="changeBranchPopup">
           <div class="vx-col w-full">
             <h5 class="mt-3 mb-3 text-center">Danh sách chi nhánh</h5>
@@ -86,7 +89,7 @@
           </div>
         </vs-popup>
         <!-- NOTIFICATIONS -->
-        <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer ml-4">
+        <!--<vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer ml-4">
           <feather-icon
             icon="BellIcon"
             class="cursor-pointer mt-1 sm:mr-6 mr-2"
@@ -99,7 +102,7 @@
 
             <VuePerfectScrollbar
               ref="mainSidebarPs"
-              class="scroll-area--nofications-dropdown p-0 mb-10"
+              class="scroll-area&#45;&#45;nofications-dropdown p-0 mb-10"
               :settings="settings"
             >
               <ul class="bordered-items">
@@ -138,7 +141,7 @@
               <router-link tag="span" to="/notifications">Xem tất cả thông báo</router-link>
             </div>
           </vs-dropdown-menu>
-        </vs-dropdown>
+        </vs-dropdown>-->
 
         <!-- USER META -->
         <div class="the-navbar__user-meta flex items-center">
