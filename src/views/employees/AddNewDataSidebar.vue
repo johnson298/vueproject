@@ -251,6 +251,9 @@ export default {
       set(val) {
         this.employee.birthday = this.formatDateUTC(val);
       }
+    },
+    branchId(){
+      return this.$store.state.getBranchId;
     }
   },
   components: {
@@ -294,7 +297,7 @@ export default {
         scale: 0.45
       });
       this.$http
-        .post("users", this.formData(), {
+        .post(`branches/${this.branchId}/users`, this.formData(), {
           headers: {
             "Content-Type": "multipart/form-data"
           }

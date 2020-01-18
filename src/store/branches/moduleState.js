@@ -8,10 +8,10 @@ export default {
     totalPages: 0,
     links: []
   },
-  searchTerm: '',
+  searchTerm: "",
   order: {
-    orderBy: 'id',
-    orderType: 'desc',
+    orderBy: "id",
+    orderType: "desc"
   },
   views: {
     name: { text: 'Tên chi nhánh', viewable: true, sortKey: 'name' },

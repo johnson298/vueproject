@@ -165,8 +165,11 @@ export default {
         '<button class="vs-pagination--buttons btn-prev-pagination vs-pagination--button-next"><i class="vs-icon notranslate icon-scale material-icons null">chevron_right</i></button>'
     };
   },
+  created(){
+    this.getData();
+  },
   computed: {
-    ...mapState("branches", [
+    ...mapState("branchesJohn", [
       "branches",
       "pagination",
       "searchTerm",
@@ -230,7 +233,7 @@ export default {
       }
     },
     updateViews(index, e) {
-      this.$store.dispatch("branches/updateViews", {
+      this.$store.dispatch("branchesJohn/updateViews", {
         index: index,
         viewable: e.target.checked
       });
@@ -251,7 +254,7 @@ export default {
           }
         })
         .then(function(response) {
-          thisIns.$store.dispatch("branches/updateTable", {
+          thisIns.$store.dispatch("branchesJohn/updateTable", {
             branches: thisIns.formatData(response.data.data),
             pagination: response.data.pagination
           });
@@ -265,11 +268,11 @@ export default {
     },
     handleSearch(searching) {
       if (!this.needReload) {
-        this.$store.dispatch("branches/updateNeedReload", true);
+        this.$store.dispatch("branchesJohn/updateNeedReload", true);
         return false;
       }
       let thisInt = this;
-      this.$store.dispatch("branches/updateSearch", {
+      this.$store.dispatch("branchesJohn/updateSearch", {
         searchTerm: searching
       });
       clearTimeout(this.timer);
@@ -278,7 +281,7 @@ export default {
       }, 500);
     },
     handleSort(key, active) {
-      this.$store.dispatch("branches/updateOrder", {
+      this.$store.dispatch("branchesJohn/updateOrder", {
         order: {
           orderBy: key,
           orderType: active ? "desc" : "asc"
@@ -290,12 +293,9 @@ export default {
   mounted() {
     this.$refs.table.searchx = this.searchTerm;
     this.isMounted = true;
-    if (this.branches.length === 0) {
-      this.getData();
-    }
   },
   destroyed() {
-    this.$store.dispatch("branches/updateNeedReload", false);
+    this.$store.dispatch("branchesJohn/updateNeedReload", false);
   }
 };
 </script>

@@ -9,7 +9,6 @@ import moduleAuth from "./auth/moduleAuth.js";
 import moduleEmployees from "./employees/module";
 import moduleStudents from "./students/module";
 import modulePrograms from "./programs/module";
-import moduleBranches from "./branches/module";
 import moduleCoupons from "./coupons/module";
 import moduleCourses from "./courses/module";
 import moduleTeachers from "./teachers/module";
@@ -27,6 +26,7 @@ import moduleRegisterAttendance from "./registersAttendance/module";
 import moduleLessons from "./lessons/module";
 import moduleReports from "./reports/module";
 import moduleRoles from './roles/module';
+import moduleBranches from './branches/module';
 
 Vue.use(Vuex);
 
@@ -40,7 +40,6 @@ export default new Vuex.Store({
     employees: moduleEmployees,
     students: moduleStudents,
     programs: modulePrograms,
-    branches: moduleBranches,
     coupons: moduleCoupons,
     courses: moduleCourses,
     teachers: moduleTeachers,
@@ -57,7 +56,8 @@ export default new Vuex.Store({
     registersAttendance: moduleRegisterAttendance,
     lessons: moduleLessons,
     reports: moduleReports,
-    roles: moduleRoles
+    roles: moduleRoles,
+    branchesJohn: moduleBranches
   },
   strict: process.env.NODE_ENV !== "production"
 });
