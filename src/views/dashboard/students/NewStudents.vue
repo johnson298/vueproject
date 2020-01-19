@@ -21,7 +21,7 @@
             <vs-td>
               <p class="product-category">
                 <vs-chip
-                  :color="checkStatus(sourceStudent,tr.source)=='Facebook' ? 'primary' 
+                  :color="checkStatus(sourceStudent,tr.source)=='Facebook' ? 'primary'
                       : checkStatus(sourceStudent,tr.source)=='Bạn bè' ? 'warning'
                       : checkStatus(sourceStudent,tr.source)=='Trang chủ' ? 'success'
                       : ''"
@@ -29,7 +29,7 @@
               </p>
             </vs-td>
             <vs-td>{{ tr.address}}</vs-td>
-            <vs-td>{{ tr.birthday}}</vs-td>
+            <vs-td>{{ tr.created_at}}</vs-td>
           </vs-tr>
         </template>
       </vs-table>

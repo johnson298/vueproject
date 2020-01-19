@@ -28,9 +28,9 @@
             <div class="vs-col sm:w-1/3 pl-0">
               <vs-checkbox vs-value="app" v-model="newCaimpaign.via">App</vs-checkbox>
             </div>
-            <div class="vs-col sm:w-1/3 pl-0">
-              <vs-checkbox vs-value="sms" v-model="newCaimpaign.via">SMS</vs-checkbox>
-            </div>
+<!--            <div class="vs-col sm:w-1/3 pl-0">-->
+<!--              <vs-checkbox vs-value="sms" v-model="newCaimpaign.via">SMS</vs-checkbox>-->
+<!--            </div>-->
             <div class="vs-col sm:w-1/3 pl-0">
               <vs-checkbox vs-value="email" v-model="newCaimpaign.via">Email</vs-checkbox>
             </div>

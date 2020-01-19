@@ -290,6 +290,12 @@ export default {
   },
   destroyed() {
     this.$store.dispatch("employees/updateNeedReload", false);
+  },
+  watch: {
+    branchId() {
+      this.getData();
+      this.$store.dispatch("courses/updateNeedReload", true);
+    }
   }
 };
 </script>

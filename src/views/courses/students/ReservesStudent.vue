@@ -56,7 +56,8 @@ export default {
           student_id: this.courseInfo.student_id,
           progress: this.courseInfo.progress,
           note: this.note,
-          branch_id: this.branchId
+          branch_id: this.branchId,
+          user_id: JSON.parse(localStorage.getItem('user').id)
         })
         .then(() => {
           this.$vs.notify({

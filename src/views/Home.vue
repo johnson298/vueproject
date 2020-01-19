@@ -191,6 +191,19 @@ export default {
           thisIns.$vs.loading.close();
         });
     }
+  },
+  beforeMount() {
+    let infoUser = JSON.parse(localStorage.getItem('user'));
+    if (infoUser.position !== 1){
+      this.$vs.notify({
+        title: "Lỗi phân quyền !",
+        text: 'Bạn không có quyền xem trang thống kê',
+        color: "danger",
+        iconPack: "feather",
+        icon: "icon-alert-circle"
+      });
+      this.$router.push(`/employees/${infoUser.id}`);
+    }
   }
 };
 </script>

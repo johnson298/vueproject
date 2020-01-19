@@ -108,6 +108,12 @@ export default {
     beforeDestroy() {
       if (!this.wasSidebarOpen) this.$store.commit('TOGGLE_REDUCE_BUTTON', false);
     },
+  },
+  watch: {
+    branchId() {
+      this.$router.push("/employees");
+      this.$store.dispatch("courses/updateNeedReload", true);
+    }
   }
 };
 </script>

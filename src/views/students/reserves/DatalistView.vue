@@ -105,6 +105,11 @@
             <vs-avatar size="55px" :src="tr.student.avatar" />
           </vs-td>
           <vs-td v-if="views.name.viewable">{{ tr.student.name }}</vs-td>
+          <vs-td v-if="views.user_create.viewable">
+            <router-link tag="a" :to="`employees/${tr.user.id}`">
+              {{ tr.user.name }}
+            </router-link>
+          </vs-td>
           <vs-td v-if="views.email.viewable">{{ tr.student.email }}</vs-td>
           <vs-td v-if="views.birthday.viewable">{{ tr.student.birthday }}</vs-td>
           <vs-td v-if="views.phone.viewable">{{ tr.student.phone }}</vs-td>

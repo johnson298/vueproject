@@ -17,6 +17,7 @@ export default {
     code: { text: "Mã hv", viewable: false, sortKey: "code", active: ['students', 'reserves'] },
     avatar: { text: "ảnh", viewable: true, sortKey: "", active: ['students', 'reserves'] },
     name: { text: "tên hv", viewable: true, sortKey: "name", active: ['students', 'reserves'] },
+    user_create: { text: "người bảo lưu hv", viewable: true, sortKey: "", active: ['reserves'] },
     email: { text: "Email", viewable: false, sortKey: "email", active: ['students', 'reserves'] },
     birthday: { text: "ngày sinh", viewable: false, sortKey: "birthday", active: ['students', 'reserves'] },
     phone: { text: "điện thoại", viewable: true, sortKey: "phone", active: ['students', 'reserves'] },
@@ -56,11 +57,7 @@ export default {
   },
   viewsInvoice: {
     course: { text: "đóng cho lớp", viewable: true, sortKey: "course" },
-    amount: {
-      text: "số tiền đã đóng (vnđ)",
-      viewable: true,
-      sortKey: "amount"
-    },
+    amount: { text: "số tiền đã đóng (vnđ)", viewable: true, sortKey: "amount" },
     source: { text: "PT THANH TOÁN", viewable: true, sortKey: "source" },
     coupon: { text: "khuyến mại", viewable: true, sortKey: "" },
     note: { text: "ghi chú", viewable: true, sortKey: "note" },

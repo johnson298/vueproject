@@ -18,7 +18,7 @@
             <vs-td>{{ tr.name}}</vs-td>
             <vs-td>{{ tr.phone}}</vs-td>
             <vs-td>{{ tr.address}}</vs-td>
-            <vs-td>{{ tr.birthday}}</vs-td>
+            <vs-td>{{ tr.created_at}}</vs-td>
           </vs-tr>
         </template>
       </vs-table>

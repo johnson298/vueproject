@@ -21,9 +21,9 @@
                         <vs-input label="Số bài học *" name="number_of_lessons" type="number" v-model="program.number_of_lessons" class="mt-5 w-full"/>
                     </div>
                     <!--Giá tiền-->
-                    <div>
-                        <vs-input label="Giá tiền (vnđ) *" name="price" type="number" v-model="program.price" class="mt-5 w-full" />
-                    </div>
+<!--                    <div>-->
+<!--                        <vs-input label="Giá tiền (vnđ) *" name="price" type="number" v-model="program.price" class="mt-5 w-full" />-->
+<!--                    </div>-->
                     <!--mô tả-->
                     <div>
                         <div class="mt-5 note"><label class="vs-input--label">Ghi chú</label></div>
@@ -61,7 +61,7 @@ export default {
       program: {
         name: '',
         description: '',
-        price: null,
+        price: 0,
         number_of_lessons: null
       },
       disabled: true,

@@ -11,7 +11,7 @@
             <h4 class="text-center uppercase">Thông tin chương trình</h4>
             <vs-input label="Tên chương trình" name="name" type="text" v-model="programInfo.name" class="mt-5 w-full" />
             <vs-input label="Số bài học" name="nanumber_of_lessonsme" type="text" v-model="programInfo.number_of_lessons" class="mt-5 w-full" />
-            <vs-input label="Giá tiền" name="description" type="text" v-model="programInfo.price" class="mt-5 w-full" />
+<!--            <vs-input label="Giá tiền" name="description" type="text" v-model="programInfo.price" class="mt-5 w-full" />-->
             <div class="note mt-5"><label class="vs-input--label">Note</label></div>
             <vs-textarea style="border: solid 1px #dddddd" name="note" type="text" v-model="programInfo.description" class="w-full" :rows="5" />
         </div>

@@ -44,6 +44,11 @@
       <div slot="title" id="hihi">
         <h4>THÔNG SỐ</h4>
       </div>
+      <template slot="card-actions">
+        <vx-tooltip text="Xuất dữ liệu">
+          <vs-button @click="activePrompt=true; typeExport = 'reportAll'" color="success" size="small"> <vs-icon icon="local_printshop"></vs-icon></vs-button>
+        </vx-tooltip>
+      </template>
       <div class="table-custom p-5" slot="card-body">
         <vs-table :data="usersData">
           <template slot="thead">
@@ -88,21 +93,21 @@
               <vs-td>{{ dataMain.students }}</vs-td>
               <vs-td>{{ dataMain.reserve }}</vs-td>
               <!-- lớp -->
-              <vs-td>{{ dataMain.classes.open }}</vs-td>
-              <vs-td>{{ dataMain.classes.in_progress }}</vs-td>
-              <vs-td>{{ dataMain.classes.finished }}</vs-td>
-              <vs-td>{{ dataMain.classes.closed }}</vs-td>
+              <vs-td>{{ dataMain.classesOpen }}</vs-td>
+              <vs-td>{{ dataMain.classesProgress }}</vs-td>
+              <vs-td>{{ dataMain.classesFinished }}</vs-td>
+              <vs-td>{{ dataMain.classesClosed }}</vs-td>
               <!-- tài chính -->
-              <vs-td>{{ dataMain.money.revenues }}</vs-td>
-              <vs-td>{{ dataMain.money.expenditures }}</vs-td>
+              <vs-td>{{ dataMain.moneyRevenues }}</vs-td>
+              <vs-td>{{ dataMain.moneyExpenditures }}</vs-td>
               <!-- khách hàng -->
-              <vs-td>{{ dataMain.customer.wait_for_care }}</vs-td>
-              <vs-td>{{ dataMain.customer.taking_care_of }}</vs-td>
-              <vs-td>{{ dataMain.customer.successful_care }}</vs-td>
-              <vs-td>{{ dataMain.customer.cancel_care }}</vs-td>
+              <vs-td>{{ dataMain.customerWait_for_care }}</vs-td>
+              <vs-td>{{ dataMain.customerTaking_care_of }}</vs-td>
+              <vs-td>{{ dataMain.customerSuccessful_care }}</vs-td>
+              <vs-td>{{ dataMain.customerCancel_care }}</vs-td>
               <!-- chiến dịch -->
-              <vs-td>{{ dataMain.campaign.notification }}</vs-td>
-              <vs-td>0</vs-td>
+              <vs-td>{{ dataMain.campaignNotification }}</vs-td>
+              <vs-td>{{ dataMain.campaignEvaluate }}</vs-td>
             </vs-tr>
           </template>
         </vs-table>
@@ -207,6 +212,8 @@ export default {
       formats:["xlsx", "csv", "txt"] ,
       cellAutoWidth: true,
       selectedFormat: "xlsx",
+      headerTitleReportAll: ['Nhân viên hoạt động', 'Nhân viên nghỉ', 'Học viên thêm mới', 'Học viên bảo lưu', 'Lớp mở', 'Lớp hoạt động', 'Lớp hoàn thành', 'Lớp hủy', 'Doanh thu', 'Chi tiêu', 'KH chờ chăm sóc', 'KH đang  chăm sóc', 'KH chăm sóc thành công', 'KH hủy', 'Số thông báo', 'Số đánh giá'],
+      headerValReportAll: ["employee", "employee_inactive", "students", "reserve", "classesOpen", "classesProgress", "classesFinished", "classesClosed", "moneyRevenues", "moneyExpenditures", "customerWait_for_care", "customerTaking_care_of", "customerSuccessful_care", "customerCancel_care", "campaignNotification", "campaignEvaluate"],
       headerTitleKpiMarketing: ['Id nhân viên', 'Mã NV', 'Tên NV','Chờ chăm sóc', 'Đang chăm sóc', 'Thành công', 'Hủy tư vấn', 'Số tiền'],
       headerValKpiMarketing: ["userId", "userCode", "userName","wait_for_care", "taking_care_of", "successful_care", "cancel_care", "money"],
       headerTitleKpiTeacher: ['Id giáo viên', 'Mã giáo viên', 'Tên giáo viên', 'Tên Đánh giá', 'Rất hài lòng', 'Hài lòng', 'Không hài lòng', 'Khác'],
@@ -220,6 +227,7 @@ export default {
       fromDate: "",
       toDate: "",
       branchId: "",
+      dataExportAll: null,
       usersData: [
         {
           id: 8,
@@ -234,25 +242,18 @@ export default {
         employee_inactive: 0,
         students: 0,
         reserve: 0,
-        classes: {
-          open: 0,
-          in_progress: 0,
-          finished: 0,
-          closed: 0
-        },
-        money: {
-          revenues: 0,
-          expenditures: 0
-        },
-        customer: {
-          wait_for_care: 0,
-          taking_care_of: 0,
-          successful_care: 0,
-          cancel_care: 0
-        },
-        campaign: {
-          notification: 0
-        }
+        classesOpen: 0,
+        classesProgress: 0,
+        classesFinished: 0,
+        classesClosed: 0,
+        moneyRevenues: 0,
+        moneyExpenditures: 0,
+        customerWait_for_care: 0,
+        customerTaking_care_of: 0,
+        customerSuccessful_care: 0,
+        customerCancel_care: 0,
+        campaignNotification: 0,
+        campaignEvaluate: 0
       },
       dataKpi: [
         {
@@ -313,6 +314,20 @@ export default {
           const data = this.formatJson(this.headerValKpiTeacher, list);
           excel.export_json_to_excel({
             header: this.headerTitleKpiTeacher,
+            data,
+            filename: this.fileName,
+            autoWidth: this.cellAutoWidth,
+            bookType: this.selectedFormat
+          });
+          this.clearFields();
+        });
+        break;
+      case 'reportAll':
+        import('../../vendor/Export2Excel').then(excel => {
+          const list = this.dataExportAll;
+          const data = this.formatJson(this.headerValReportAll, list);
+          excel.export_json_to_excel({
+            header: this.headerTitleReportAll,
             data,
             filename: this.fileName,
             autoWidth: this.cellAutoWidth,
@@ -409,7 +424,45 @@ export default {
       this.$http
         .get(url)
         .then(response => {
-          thisIns.dataMain = response.data.data;
+          let resData = response.data.data;
+          thisIns.dataMain = {
+            employee: resData.employee,
+            employee_inactive: resData.employee_inactive,
+            students: resData.students,
+            reserve: resData.reserve,
+            classesOpen: resData.classes.open,
+            classesProgress: resData.classes.in_progress,
+            classesFinished: resData.classes.finished,
+            classesClosed: resData.classes.closed,
+            moneyRevenues: resData.money.revenues,
+            moneyExpenditures: resData.money.expenditures,
+            customerWait_for_care: resData.customer.wait_for_care,
+            customerTaking_care_of: resData.customer.taking_care_of,
+            customerSuccessful_care: resData.customer.successful_care,
+            customerCancel_care: resData.customer.cancel_care,
+            campaignNotification: resData.campaign.notification,
+            campaignEvaluate:resData.campaign.evaluates
+          };
+          this.dataExportAll = [
+            {
+              employee: resData.employee,
+              employee_inactive: resData.employee_inactive,
+              students: resData.students,
+              reserve: resData.reserve,
+              classesOpen: resData.classes.open,
+              classesProgress: resData.classes.in_progress,
+              classesFinished: resData.classes.finished,
+              classesClosed: resData.classes.closed,
+              moneyRevenues: resData.money.revenues,
+              moneyExpenditures: resData.money.expenditures,
+              customerWait_for_care: resData.customer.wait_for_care,
+              customerTaking_care_of: resData.customer.taking_care_of,
+              customerSuccessful_care: resData.customer.successful_care,
+              customerCancel_care: resData.customer.cancel_care,
+              campaignNotification: resData.campaign.notification,
+              campaignEvaluate:resData.campaign.evaluates
+            }
+          ]
         })
         .catch(function(error) {
           thisIns.checkResponRequest(error.response.data);

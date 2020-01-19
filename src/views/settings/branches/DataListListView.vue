@@ -1,16 +1,26 @@
 <template>
   <div id="data-list-list-view" class="data-list-container">
-    <add-new-data-sidebar
-      :isSidebarActive="addNewDataSidebar"
-      @closeSidebar="addNewDataSidebar = false"
-      :callback="getData"
-    />
-    <edit-branches-sidebar
-      :isSidebarEditActive="editBranchesSidebar"
-      @closeSidebar="editBranchesSidebar = false"
-      :branchesGetInfo="branchesGetInfo"
-      :getData="getData"
-    />
+    <vs-popup
+      title="Thêm mới chi nhánh"
+      :active.sync="addNewDataSidebar"
+      v-if="addNewDataSidebar">
+      <add-new-data-sidebar
+        :isSidebarActive="addNewDataSidebar"
+        @closeSidebar="addNewDataSidebar = false"
+        :callback="getData"/>
+    </vs-popup>
+
+    <vs-popup
+      title="Chỉnh sửa chi nhánh"
+      :active.sync="editBranchesSidebar"
+      v-if="editBranchesSidebar">
+      <edit-branches-sidebar
+        :isSidebarEditActive="editBranchesSidebar"
+        @closeSidebar="editBranchesSidebar = false"
+        :branchesGetInfo="branchesGetInfo"
+        :getData="getData"
+      />
+    </vs-popup>
 
     <vs-table-custom
       :sst="true"
