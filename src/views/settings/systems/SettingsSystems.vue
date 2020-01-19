@@ -1,6 +1,7 @@
 <template>
   <vx-card class="ml-5">
     <vs-row class="p-0 pr-5">
+      <!--name-->
       <vs-col vs-w="12" class="p-0">
         <div class="vx-card__title mb-3">
           <h5 class="text-dark">Đổi tên hệ thống</h5>
@@ -49,6 +50,7 @@
           </div>
         </div>
       </vs-col>
+      <!--email-->
       <vs-col vs-w="12" class="p-0">
         <div class="vx-card__title mb-3">
           <h5 class="text-dark">Email</h5>
@@ -97,6 +99,7 @@
           </div>
         </div>
       </vs-col>
+      <!--hotline-->
       <vs-col vs-w="12" class="p-0">
         <div class="vx-card__title mb-3">
           <h5 class="text-dark">Hotline</h5>
@@ -145,6 +148,105 @@
           </div>
         </div>
       </vs-col>
+      <!--facebook-->
+      <vs-col vs-w="12" class="p-0">
+        <div class="vx-card__title mb-3">
+          <h5 class="text-dark">Facebook</h5>
+          <div class="mt-3">
+            <div class="d-flex" v-if="edit.facebook" key="facebook">
+              <vs-input
+                class="w-full mr-3"
+                placeholder="Nhập facebook"
+                ref="facebook"
+                v-model="configs.facebook.value"
+                @keyup.enter="updateField('facebook')"
+                @keyup.esc="editField('facebook')"
+              />
+              <vs-button
+                icon="check"
+                size="small"
+                color="success"
+                radius
+                @click="updateField('facebook')"
+              ></vs-button>
+              <vs-button
+                class="ml-2"
+                icon="clear"
+                size="small"
+                color="danger"
+                radius
+                @click="editField('facebook')"
+              ></vs-button>
+            </div>
+            <div class="d-flex justify-start" v-else key="hotline">
+              <p class="min-w-200 mr-3">{{ configs.facebook.value }}</p>
+              <vs-button
+                size="small"
+                type="flat"
+                radius
+                @click="editField('facebook')"
+                class="p-0 btn--no-hover"
+                color="white"
+              >
+                <feather-icon
+                  icon="Edit3Icon"
+                  svgClasses="text-warning w-5 h-5"
+                />
+              </vs-button>
+            </div>
+          </div>
+        </div>
+      </vs-col>
+      <!--website-->
+      <vs-col vs-w="12" class="p-0">
+        <div class="vx-card__title mb-3">
+          <h5 class="text-dark">Website</h5>
+          <div class="mt-3">
+            <div class="d-flex" v-if="edit.website" key="website">
+              <vs-input
+                class="w-full mr-3"
+                placeholder="Nhập website"
+                ref="website"
+                v-model="configs.website.value"
+                @keyup.enter="updateField('website')"
+                @keyup.esc="editField('website')"
+              />
+              <vs-button
+                icon="check"
+                size="small"
+                color="success"
+                radius
+                @click="updateField('website')"
+              ></vs-button>
+              <vs-button
+                class="ml-2"
+                icon="clear"
+                size="small"
+                color="danger"
+                radius
+                @click="editField('website')"
+              ></vs-button>
+            </div>
+            <div class="d-flex justify-start" v-else key="website">
+              <p class="min-w-200 mr-3">{{ configs.website.value }}</p>
+              <vs-button
+                size="small"
+                type="flat"
+                radius
+                @click="editField('website')"
+                class="p-0 btn--no-hover"
+                color="white"
+              >
+                <feather-icon
+                  icon="Edit3Icon"
+                  svgClasses="text-warning w-5 h-5"
+                />
+              </vs-button>
+            </div>
+          </div>
+        </div>
+      </vs-col>
+      <!--address-->
       <vs-col vs-w="12" class="p-0">
         <div class="vx-card__title mb-3">
           <h5 class="text-dark">Địa chỉ (trụ sở chính)</h5>
@@ -193,6 +295,7 @@
           </div>
         </div>
       </vs-col>
+      <!--Copyright-->
       <vs-col vs-w="12" class="p-0">
         <div class="vx-card__title mb-3">
           <h5 class="text-dark">Copyright</h5>
@@ -241,10 +344,61 @@
           </div>
         </div>
       </vs-col>
+      <!--time-->
+      <vs-col vs-w="12" class="p-0">
+        <div class="vx-card__title mb-3">
+          <h5 class="text-dark">Thời gian nhắc nhở học sinh trước khi đi học (phút)</h5>
+          <div class="mt-3">
+            <div class="d-flex" v-if="edit.time" key="time">
+              <vs-input
+                class="w-full mr-3"
+                placeholder="Nhập số phút"
+                ref="copyright"
+                v-model="configs.time.value"
+                @keyup.enter="updateField('time')"
+                @keyup.esc="editField('time')"
+                type="number"
+              />
+              <vs-button
+                icon="check"
+                size="small"
+                color="success"
+                radius
+                @click="updateField('time')"
+              ></vs-button>
+              <vs-button
+                class="ml-2"
+                icon="clear"
+                size="small"
+                color="danger"
+                radius
+                @click="editField('time')"
+              ></vs-button>
+            </div>
+            <div class="d-flex justify-start" v-else key="time">
+              <p class="min-w-200 mr-3">{{ configs.time.value }}</p>
+              <vs-button
+                size="small"
+                type="flat"
+                radius
+                @click="editField('time')"
+                class="p-0 btn--no-hover"
+                color="white"
+              >
+                <feather-icon
+                  icon="Edit3Icon"
+                  svgClasses="text-warning w-5 h-5"
+                />
+              </vs-button>
+            </div>
+          </div>
+        </div>
+      </vs-col>
+      <!--image-->
       <vs-col vs-w="12" class="d-flex p-0">
         <div class="md:w-1/2 d-flex align-center flex-direction-colum">
           <div class="vx-row mb-6">
-            <vx-upload-image 
+            <vx-upload-image
               text="Đổi logo"
               :v-model-show="configs.logo.image"
               :src-image="srcLogo"
@@ -264,7 +418,7 @@
         </div>
         <div class="md:w-1/2 d-flex align-center flex-direction-colum">
           <div class="vx-row mb-6">
-            <vx-upload-image 
+            <vx-upload-image
               text="Đổi favicon"
               :v-model-show="configs.favicon.image"
               :src-image="srcFavicon"
@@ -306,7 +460,10 @@ export default {
         hotline: false,
         email: false,
         address: false,
-        copyright: false
+        copyright: false,
+        time: false,
+        facebook: false,
+        website: false
       },
 
       configs: {
@@ -344,6 +501,21 @@ export default {
         favicon: {
           name: "favicon",
           value: "@/assets/images/logo/etado-favicon.ico",
+          image: ""
+        },
+        time: {
+          name: "favicon",
+          value: 0,
+          image: ""
+        },
+        facebook: {
+          name: "facebook",
+          value: "https://www.facebook.com/etadovn/",
+          image: ""
+        },
+        website: {
+          name: "website",
+          value: "https://etado.vn/",
           image: ""
         }
       }
@@ -426,11 +598,11 @@ export default {
               return this.srcLogo;
             case "favicon":
               return this.srcFavicon;
-            default: 
+            default:
               return objParam.value;
             }
           };
-          field == "name" ? document.title = checkField(field) : false;
+          field === "name" ? document.title = checkField(field) : false;
 
           if(field == "favicon"){
             var link = document.querySelector("link[rel*='icon']") ||
@@ -440,7 +612,7 @@ export default {
             link.href = this.srcFavicon;
             document.getElementsByTagName("head")[0].appendChild(link);
           }
-          
+
           this.$store.dispatch('changeConfigsField', {
             field: field,
             input: checkField(field)
@@ -485,7 +657,7 @@ export default {
   .img-upload {
     border-radius: 10px;
     transform: scale(0.99);
-    
+
     img {
       width: 70%;
       height: auto;

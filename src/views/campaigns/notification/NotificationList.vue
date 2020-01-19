@@ -119,6 +119,9 @@
           </vs-td>
           <vs-td v-if="views.created_at.viewable">{{ tr.created_at }}</vs-td>
           <vs-td v-if="views.updated_at.viewable">{{ tr.updated_at }}</vs-td>
+          <vs-td v-if="views.action.viewable">
+            <vs-button radius color="danger" size="small" @click="deleteNotification(tr)" icon="delete_forever"></vs-button>
+          </vs-td>
         </vs-tr>
       </template>
     </vs-table-custom>
@@ -179,6 +182,41 @@ export default {
     }
   },
   methods: {
+    deleteNotification(noti){
+      this.$vs.dialog({
+        type: "confirm",
+        color: "danger",
+        title: `Xóa lớp học`,
+        text: "Bạn có chắc muốn xóa " + noti.title,
+        accept: this.courseAlert,
+        parameters: [noti.id]
+      });
+    },
+    courseAlert(id) {
+      this.$http
+        .delete(`campaigns/${id}`)
+        .then(() => {
+          this.$vs.notify({
+            color: "success",
+            title: "Xóa lớp học",
+            text: "Bạn đã xóa thành công",
+            icon: "verified_user"
+          });
+          this.getData();
+        })
+        .catch((error) => {
+          let thisIns = this;
+          thisIns.checkResponRequest(error.response.data, ()=>{
+            thisIns.$vs.notify({
+              title: "Lỗi !",
+              text: "Xóa không thành công",
+              iconPack: "feather",
+              icon: "fa fa-lg fa-exclamation-triangle",
+              color: "danger"
+            });
+          });
+        });
+    },
     updateViews(index, e) {
       this.$store.dispatch("campaigns/updateViews", {
         index: index,

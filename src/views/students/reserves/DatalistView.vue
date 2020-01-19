@@ -338,7 +338,12 @@ export default {
   },
   created() {
     this.getData();
-  }
+  },
+  watch: {
+    branchId(){
+      this.getData();
+    }
+  },
 };
 </script>
 

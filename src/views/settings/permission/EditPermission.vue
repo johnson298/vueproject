@@ -21,7 +21,7 @@
     </vs-row>
     <vs-col class="action-footer p-6 " vs-w='12' vs-type="flex" vs-justify="flex-end">
         <vs-button class="mr-2" color="primary" @click="checkAll">Chọn tất cả</vs-button>
-        <vs-button class="mr-2" color="warning" @click="resetPermission">Reset mặc định</vs-button>
+<!--        <vs-button class="mr-2" color="warning" @click="resetPermission">Reset mặc định</vs-button>-->
         <vs-button class="ml-3 vs-con-loading__container" type="filled" color="success" @click="updatePermission()" ref="addButton" id="button-with-loading">Cập nhật</vs-button>
         <vs-button class="ml-3" type="filled" color="danger" @click="$emit('update:active',false)">Hủy</vs-button>
     </vs-col>
