@@ -74,16 +74,16 @@
               <vs-td class="bg-success text-white">Hoàn thành</vs-td>
               <vs-td class="bg-danger text-white">Hủy</vs-td>
               <!-- tài chính -->
-              <vs-td>Doanh thu</vs-td>
-              <vs-td>Chi tiêu</vs-td>
+              <vs-td class="bg-success text-white">Doanh thu</vs-td>
+              <vs-td class="bg-primary text-white">Chi tiêu</vs-td>
               <!-- khách hàng -->
               <vs-td class="bg-warning text-white">Chờ CS</vs-td>
               <vs-td class="bg-primary text-white">Đang CS</vs-td>
               <vs-td class="bg-success text-white">CS thành công</vs-td>
               <vs-td class="bg-danger text-white">Hủy</vs-td>
               <!-- chiến dịch -->
-              <vs-td>Thông báo</vs-td>
-              <vs-td>Đánh giá</vs-td>
+              <vs-td class="bg-success text-white">Thông báo</vs-td>
+              <vs-td class="bg-warning text-white">Đánh giá</vs-td>
             </vs-tr>
             <vs-tr>
               <!-- nhân viên -->
@@ -179,9 +179,12 @@
             </vs-tr>
             <vs-tr v-for="(item, index) in dataKpiTeachers" :key="index">
               <vs-td>
-                <router-link tag="a" :to="'/employees/' + item.userId">{{ item.userName }} ({{ item.userCode }})</router-link>
+                <router-link
+                  tag="a"
+                  :to="'/employees/' + item.userId"
+                  v-if="item.userCode">{{ item.userName }} ({{ item.userCode }})</router-link>
               </vs-td>
-              <vs-td>{{ item.evaluateName }} ({{ item.evaluateCode }})</vs-td>
+              <vs-td>{{ item.evaluateCode ? `${item.evaluateName} (${item.evaluateCode})` : '' }}</vs-td>
               <vs-td>{{ item.very_pleased }}</vs-td>
               <vs-td>{{ item.satisfied }}</vs-td>
               <vs-td>{{ item.unsatisfied }}</vs-td>
@@ -257,11 +260,11 @@ export default {
       },
       dataKpi: [
         {
-          wait_for_care: 0,
-          taking_care_of: 0,
-          successful_care: 0,
-          cancel_care: 0,
-          money: 0,
+          wait_for_care: null,
+          taking_care_of: null,
+          successful_care: null,
+          cancel_care: null,
+          money: null,
           userId: null,
           userName: null,
           userCode: null
@@ -269,10 +272,10 @@ export default {
       ],
       dataKpiTeachers: [
         {
-          further: 0,
-          unsatisfied: 0,
-          very_pleased: 0,
-          satisfied: 0,
+          further: null,
+          unsatisfied: null,
+          very_pleased: null,
+          satisfied: null,
           userId: null,
           userName: null,
           userCode: null,
